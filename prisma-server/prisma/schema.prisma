@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String     @id @default(uuid()) // auto-inc
+  name        String
+  email       String     @unique // should be unique
+  phone       String
+  password    String
+  designation String
+  dateOfBirth DateTime?
+  institute   String?
+  degree      String?
+  starting    DateTime?
+  ending      DateTime?
+  role        Role
+  campus      Campus
+  department  Department
+
+  @@index([email]) // sorting
+}
+
+// model Observartion {}
+
+enum Role {
+  Admin
+  Campus_Director
+  Hod
+  Faculty
+  Observer
+}
+
+enum Department {
+  Fest
+  Aifd
+  Media
+  Business
+}
+
+enum Campus {
+  Main_Campus
+  Gulshan
+  North
+  Airport
+  Bahria
+  Islamabad
+}

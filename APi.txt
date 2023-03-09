@@ -1,0 +1,24 @@
+SOTL SYSTEM APIs
+
+Authentication -> Register Role (userID*, email, password , name, designation, roleID**, phone, dateOfBirth, institute, degree, starting, ending?, departmentID**, campusID**) -> 
+Login Role (email, password)
+
+Observation -> Faculty reuqest Observation (reqID*, HodID**, userID**, email, name, designation, message, teachingPlan, courseName) -> 
+HOD create Observation (observationID*, facultID**, observerID**, HodID**,  timeSlot, courseName, observationStatus: false, observationProgress: 0, meeting: meetingID**) -> 
+Meeting Details (meetingID*, observationID**, meetingName: Pre-Obs, meetingFeedbacks, meetingScore, rubric)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

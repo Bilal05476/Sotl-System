@@ -1,0 +1,33 @@
+.dashboard {
+  background-color: crimson;
+}
+.admin-view,
+.role-view,
+.faculty-view,
+.observer-view,
+.meeting {
+  background-color: var(--dashBg--);
+  padding: 3rem 2rem;
+  padding-top: 1rem;
+}
+.admin-view.dark,
+.role-view.dark,
+.faculty-view.dark,
+.observer-view.dark,
+.meeting.dark {
+  background-color: #242424;
+}
+.role-view {
+  padding: 1rem 3rem;
+}
+.admin-feed {
+  background-color: #f9f9f9;
+}
+.admin-feed.dark {
+  background-color: #1e1e1e;
+}
+/* .admin-dash,
+.faculty-dash,
+.observer-dash {
+  display: flex;
+} */

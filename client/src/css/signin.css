@@ -1,0 +1,130 @@
+.signin {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  padding: 0 20vw;
+  background-color: var(--dashBg--);
+}
+.signin.dark {
+  background-color: #1e1e1e;
+}
+.wrapper,
+.logo-desc {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 6rem 2rem;
+  height: 600px;
+  justify-content: center;
+  box-shadow: 0.01rem 0.01rem 0.5rem var(--baseC--);
+}
+/* .signin.dark .wrapper,
+.signin.dark .logo-desc {
+  box-shadow: 0.01rem 0.01rem 0.5rem #333;
+} */
+.logo-desc {
+  background-color: var(--baseC--);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  z-index: 1;
+}
+.logo-desc {
+  margin-left: 15rem;
+}
+.logo-desc.visible {
+  margin-left: 0;
+}
+.wrapper {
+  background-color: #fff;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: relative;
+  margin-left: -28.4rem;
+  visibility: hidden;
+}
+.wrapper.visible {
+  margin-left: 0rem;
+  visibility: visible;
+}
+.signin.dark .wrapper {
+  background-color: #323232;
+}
+.wrapper .heading {
+  color: var(--baseC--);
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.wrapper .btn {
+  background-color: var(--baseC--);
+  color: #fff;
+  outline: none;
+}
+.wrapper .btn:hover {
+  transform: translateY(1px);
+  transition: 0.5s ease-in-out;
+}
+.logo-desc {
+  align-items: center;
+}
+.logo-desc p {
+  color: #fff;
+}
+.logo-desc img {
+  width: 80%;
+  height: 80%;
+}
+.role-select {
+  padding: 0.5rem;
+  padding-left: 1rem;
+  background-color: transparent;
+  outline: none !important;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.role-select.alert {
+  background-color: crimson;
+  border: 1px solid pink;
+  display: none;
+}
+.role-select.alert.show {
+  display: block;
+}
+.signin.dark .role-select,
+.signin.dark .wrapper .heading {
+  color: var(--dashBg--);
+}
+.signin .role-select.alert {
+  color: pink !important;
+}
+.role-select:focus {
+  border: 1px solid var(--baseC--);
+}
+.role-select.round {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.role-select.round:focus {
+  background-image: linear-gradient(45deg, transparent 50%, #fff 50%),
+    linear-gradient(135deg, #fff 50%, transparent 50%),
+    radial-gradient(var(--baseC--) 70%, transparent 72%);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px), calc(100% - 0.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
+  background-repeat: no-repeat;
+}
+.signin.dark .role-select.round option {
+  background-color: #1e1e1e;
+}
+
+.wrapper .toggle-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  margin: 2rem auto;
+  margin-right: 2rem;
+  cursor: pointer;
+}

@@ -1,0 +1,37 @@
+.sidebar {
+  background-color: var(--baseC--);
+  padding: 0;
+}
+.menu-bar {
+  display: flex;
+  height: 100vh;
+  overflow-y: auto;
+  flex-direction: column;
+  padding-top: 2rem;
+}
+.menu-bar .img-fluid {
+  display: flex;
+  justify-content: center;
+}
+.menu-bar .img-fluid img {
+  width: 70%;
+}
+.menu-bar .link {
+  color: rgb(218, 218, 255);
+  padding: 0.7rem 1.5rem;
+  margin: 0 !important;
+  width: 100%;
+  text-decoration: none !important;
+  font-size: 0.9rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  margin: 0.2rem 0rem !important;
+}
+.menu-bar .link:hover,
+.menu-bar .link.active {
+  background-color: rgb(229, 229, 255);
+  font-weight: 500;
+  color: var(--baseC--);
+  box-shadow: 0.1rem 0.2rem 0.3rem var(--baseC--);
+}

@@ -1,0 +1,214 @@
+/* user detail component */
+.admin-detail {
+  padding: 1rem 2rem;
+  background-color: rgba(255, 255, 255, 0.287);
+  box-shadow: var(--shadow--);
+  margin-bottom: 2rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-view.dark .admin-detail {
+  background-color: #1e1e1e;
+  box-shadow: 0.1rem 0.1rem 0.1rem #333;
+}
+.admin-detail .admin-name {
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin-bottom: -0.6rem;
+}
+.admin-view.dark .admin-detail .admin-name,
+.admin-view.dark .admin-detail .admin-name span,
+.admin-view.dark .admin-detail .greeting,
+.admin-view.dark .admin-detail .admin-icon {
+  color: #fff;
+}
+.admin-detail .admin-name span {
+  color: var(--baseC--);
+  font-weight: 600;
+  font-size: 1.7rem;
+}
+
+.admin-detail .greeting {
+  font-weight: 300;
+  font-size: 1rem;
+  margin-bottom: 0;
+  margin-left: 3.6rem;
+  word-spacing: 0.05rem;
+}
+.observations-list {
+  padding: 0;
+}
+.admin-view .observations-headers {
+  margin: 1rem 0rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-view .observations-headers .heading {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  color: var(--baseC--);
+  font-weight: 500;
+}
+.admin-view .observations-headers .observation-filter {
+  background-color: transparent;
+  outline: none !important;
+  border: 0px;
+  color: var(--baseC--);
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.observation .table {
+  box-shadow: var(--shadow--);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.observation .table th,
+.observation .table td {
+  background-color: #fff;
+  padding: 0.5rem 0.1rem;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+.observation .table td {
+  max-width: 80px;
+}
+.observation .table th {
+  padding: 0.4rem 0.1rem;
+  background-color: var(--baseC--);
+  color: #fff;
+}
+.observation .table .meet-detail .btn {
+  background-color: var(--baseC--);
+  color: #fff;
+  text-decoration: none !important;
+  border-radius: 5px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.notifications {
+  padding: 0.8rem 2rem;
+  padding-right: 2rem;
+  display: flex;
+  /* box-shadow: var(--shadow--); */
+  align-items: center;
+  /* justify-content: space-between; */
+  padding-top: 1.5rem;
+}
+.notifications .notify-icon,
+.notifications .setting-icon {
+  background-color: #c1bbeb;
+  box-shadow: var(--shadow--);
+  padding: 0.4rem;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.notifications .notify-icon:hover,
+.notifications .setting-icon:hover {
+  box-shadow: 0.5rem 0.5rem 0.5rem #ccc;
+}
+.notifications .profile-icon {
+  display: flex;
+  align-items: center;
+}
+.notifications .profile-icon p {
+  font-size: 0.6rem;
+  margin: 0;
+  font-weight: 300;
+  padding-left: 2rem;
+}
+.notifications .profile-icon p.profile-name,
+.recent-roles .role-box p.role-name,
+.todays-meeting p.meet-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--baseC--);
+}
+.notifications .profile-icon .profile-img,
+.recent-roles .role-box .role-img {
+  min-width: 50px;
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: var(--shadow--);
+}
+
+.recent-roles,
+.todays-meeting {
+  padding: 2rem 1.5rem;
+  box-shadow: var(--shadow--);
+}
+.recent-roles .heading,
+.todays-meeting .heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+.todays-meeting .heading {
+  margin-bottom: 1rem;
+}
+.recent-roles p,
+.todays-meeting p {
+  font-weight: 300;
+  font-size: 0.7rem;
+  margin: 0;
+}
+.recent-roles p span {
+  font-weight: 600;
+}
+.recent-roles .role-box,
+.todays-meeting .meet-box {
+  display: flex;
+  align-items: center;
+  /* background-color: #ccc; */
+  padding: 0.2rem;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+.todays-meeting .meet-box {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.recent-roles .role-box .role-text {
+  margin-left: 0.5rem;
+  max-width: 200px;
+  /* background-color: aliceblue; */
+}
+.recent-roles .role-box p {
+  margin-bottom: 0;
+}
+.view-more {
+  box-shadow: var(--shadow--);
+  margin-top: 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: rgba(204, 204, 204, 0.419);
+}
+.view-more .view {
+  color: var(--baseC--);
+  padding: 0.7rem 0rem;
+  width: 100%;
+  text-align: center;
+  text-decoration: none !important;
+  font-size: 1rem;
+  font-weight: 600;
+}

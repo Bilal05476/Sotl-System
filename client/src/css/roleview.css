@@ -1,0 +1,117 @@
+.role-view .headers,
+.headers .left,
+.headers .right {
+  display: flex;
+  align-items: center;
+}
+.role-view .headers {
+  justify-content: space-between;
+  padding: 1rem 0rem;
+}
+.headers .left .heading {
+  margin-bottom: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-right: 1.5rem;
+}
+.headers .left .link,
+.headers .right .role-filters {
+  background-color: var(--baseC--);
+  padding: 0.5rem 2rem;
+  color: #fff;
+  border-radius: 5px;
+  text-decoration: none;
+}
+.headers .left .link .icon,
+.headers .right .role-filters .icon {
+  margin-right: 0.5rem;
+}
+.headers .right .search-box {
+  background-color: transparent;
+  outline: none;
+  padding: 0.5rem 1rem;
+  padding-left: 1.5rem;
+  padding-right: 2.5rem;
+  border-radius: 5px;
+  margin-right: 0.5rem;
+  border: 1px solid var(--baseC--);
+}
+.headers .right .search-icon {
+  margin-right: 1rem;
+  margin-left: -2.5rem;
+  color: var(--baseC--);
+  cursor: pointer;
+}
+.filters-deck {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  display: none;
+}
+.filters-deck.open {
+  display: block;
+}
+.role-view-deck {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  padding-top: 1rem;
+  align-items: center;
+  justify-content: space-around;
+}
+.role-view-deck .no-data {
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  color: var(--baseC--);
+}
+.roleviewbox {
+  display: flex;
+  background-color: #fff;
+  flex-direction: column;
+  color: #000;
+  text-decoration: none;
+  align-items: center;
+  border-radius: 5px;
+  width: 250px;
+  box-shadow: var(--shadow--);
+  margin-bottom: 2rem;
+  padding: 2rem 1rem;
+}
+.roleviewbox:hover {
+  box-shadow: 0.5rem 0.5rem 0.5rem #ccc;
+}
+.roleviewbox .role-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--dashBg--);
+  margin-bottom: 1rem;
+}
+.roleviewbox .heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--baseC--);
+}
+.roleviewbox .role-details {
+  text-align: center !important;
+  font-size: 0.8rem;
+  font-weight: 300;
+}
+.roleviewbox .contact {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.roleviewbox .contact .one {
+  background-color: var(--baseC--);
+  color: #fff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 10px;
+  margin: 0.2rem;
+}
