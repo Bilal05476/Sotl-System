@@ -1,8 +1,7 @@
 export const initialState = {
-  // user: JSON.parse(localStorage.getItem("user")) || null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   // for testting
-  user: true,
-  darkTheme: true,
+  darkTheme: false,
 };
 
 const reducer = (state, action) => {
@@ -17,7 +16,7 @@ const reducer = (state, action) => {
     case "SET_USER":
       return {
         ...state,
-        user: !state.user,
+        user: action.payload,
       };
     case "TOGGLE_THEME":
       return {

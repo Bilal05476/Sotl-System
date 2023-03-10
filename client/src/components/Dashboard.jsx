@@ -14,11 +14,13 @@ import { FaUserTie } from "react-icons/fa";
 import { HiUserPlus, HiUser } from "react-icons/hi2";
 import RolesView from "./RolesView";
 import { facultiesData } from "../Data";
+import { useStateValue } from "../StateProvider";
 
-const Dashboard = ({ role }) => {
+const Dashboard = () => {
+  const [{ user }] = useStateValue();
   return (
     <div className="container-fluid dashboard">
-      {role === "faculty" && (
+      {user.role === "Faculty" && (
         <div className="row faculty-dash">
           <Sidebar
             menus={[
@@ -34,7 +36,7 @@ const Dashboard = ({ role }) => {
           </Routes>
         </div>
       )}
-      {role === "admin" && (
+      {user.role === "Admin" && (
         <div className="row admin-dash">
           <Sidebar
             menus={[
@@ -135,7 +137,7 @@ const Dashboard = ({ role }) => {
           </Routes>
         </div>
       )}
-      {role === "observer" && (
+      {user.role === "Observer" && (
         <div className="row observer-dash">
           <Sidebar
             menus={[

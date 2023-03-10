@@ -2,41 +2,42 @@ import "../css/signin.css";
 import { useStateValue } from "../StateProvider";
 import { BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import { useState } from "react";
-const Signin = ({ role, setRole }) => {
+const Signin = () => {
   const [{ darkTheme }, dispatch] = useStateValue();
   const [loginVisible, setLoginVisible] = useState(false);
-  const [alert, setAlert] = useState(null);
+  const [alert, setAlert] = useState("");
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = state;
 
   setTimeout(() => {
     setLoginVisible(true);
   }, 1000);
-  const options = [
-    {
-      label: "Select",
-      value: "select",
-    },
-    {
-      label: "Admin",
-      value: "admin",
-    },
-    {
-      label: "Faculty",
-      value: "faculty",
-    },
-    {
-      label: "Observer",
-      value: "observer",
-    },
-  ];
+
   const handleSignin = () => {
-    if (role !== "select") {
-      setAlert("");
-      dispatch({
-        type: "SET_USER",
+    console.log(email, password);
+    async function fetchData() {
+      const res = await fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
       });
-    } else {
-      setAlert("Please select your role!");
+      const data = await res.json();
+      console.log(data);
+      if (data.error) {
+        setAlert(data.error);
+      } else {
+        dispatch({
+          type: "SET_USER",
+          payload: data,
+        });
+      }
     }
+    fetchData();
   };
   const toggleTheme = () => {
     dispatch({
@@ -69,25 +70,31 @@ const Signin = ({ role, setRole }) => {
           value={alert}
           className={`role-select alert ${alert && "show"}`}
         />
-        <input className="role-select" type="email" placeholder="Enter Email" />
+        <input
+          className="role-select"
+          type="email"
+          value={email}
+          onChange={(e) =>
+            setState({
+              ...state,
+              email: e.target.value,
+            })
+          }
+          placeholder="Enter Email"
+        />
         <input
           className="role-select"
           type="password"
           placeholder="Enter Password"
+          value={password}
+          onChange={(e) =>
+            setState({
+              ...state,
+              password: e.target.value,
+            })
+          }
         />
-        <select
-          id="role"
-          name="role"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="role-select round"
-        >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+
         <button className="btn" onClick={() => handleSignin()}>
           Login
         </button>
