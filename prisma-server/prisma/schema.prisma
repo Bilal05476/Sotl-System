@@ -29,7 +29,14 @@ model User {
   @@index([email]) // sorting
 }
 
-// model Observartion {}
+model ObsRequest {
+  id           String @id @default(uuid()) // auto-inc
+  facultyId    String // foreign key
+  hodId        String // foreign key
+  message      String
+  teachingPlan String
+  courseName   String
+}
 
 enum Role {
   Admin

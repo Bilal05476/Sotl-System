@@ -8,36 +8,48 @@ import jwt from "jsonwebtoken";
 // @route  POST api/register
 // @access Private (Parent Role Like (Admin, Campus Director, HOD))
 export const createUser = asyncHandler(async (req, res) => {
-  // const {name, email, password, phone, designation, role, campus, department} = req.body;
+  const {
+    name,
+    email,
+    password,
+    phone,
+    designation,
+    role,
+    campus,
+    department,
+  } = req.body;
 
   // Validate if user exist in our database
   const [existedUser] = await prisma.user.findMany({
     where: {
-      email: "bilal1@gmail.com",
+      email,
     },
   });
 
   if (existedUser) {
     res.status(400).send({ error: "User Already Exist" });
   } else {
-    const hashedPassword = await bcrypt.hash("123456", 10);
+    // hash password from plain to encrypted
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // user data object
+    const newUserData = {
+      name,
+      email,
+      password: hashedPassword,
+      phone,
+      designation,
+      role: Role[role],
+      campus: Campus[campus],
+      department: Department[department],
+    };
+    // create new user in database
     const newUser = await prisma.user.create({
-      data: {
-        name: "Bilal",
-        email: "bilal1@gmail.com",
-        password: hashedPassword,
-        phone: "28229292",
-        designation: "Associate CS",
-        role: Role["Faculty"],
-        campus: Campus["Main_Campus"],
-        department: Department["Fest"],
-      },
+      data: newUserData,
     });
-    console.log(newUser);
     if (newUser) {
       // create user session token
       const token = generateJWT(newUser.id);
-      user.token = token;
+      newUser.token = token;
       res.status(200).send(newUser);
     }
   }
@@ -56,6 +68,7 @@ export const getUser = asyncHandler(async (req, res) => {
     },
   });
   if (user) {
+    // hash password compare database password with plain password
     const checkPassword = await bcrypt.compare(password, user.password);
     if (checkPassword) {
       // create user session token
@@ -65,6 +78,32 @@ export const getUser = asyncHandler(async (req, res) => {
     } else {
       res.status(400).send({ error: "Invalid Credentials" });
     }
+  } else {
+    res.status(404).send({ error: "No User Exist" });
+  }
+});
+
+// @desc   Update User
+// @route  POST api/update-user
+// @access Private (only user update their own data)
+export const updateUser = asyncHandler(async (req, res) => {
+  const { id, dateOfBirth, institute, degree, starting, ending } = req.body;
+
+  // Validate if user exist in our database
+  const user = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      dateOfBirth,
+      institute,
+      degree,
+      starting,
+      ending,
+    },
+  });
+  if (user) {
+    res.status(200).send(user);
   } else {
     res.status(404).send({ error: "No User Exist" });
   }
