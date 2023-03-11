@@ -22,6 +22,7 @@ model User {
   degree          String?
   starting        DateTime?
   ending          DateTime?
+  profDevPlan     Bytes?
   role            Role
   campus          Campus
   department      Department
@@ -37,14 +38,15 @@ model User {
 }
 
 model ObsRequests {
-  id           String @id @default(uuid()) // auto-inc
-  faculty      User   @relation("Faculty", fields: [facultyId], references: [id])
+  id           String  @id @default(uuid()) // auto-inc
+  faculty      User    @relation("Faculty", fields: [facultyId], references: [id])
   facultyId    String
-  hod          User   @relation("Hod", fields: [hodId], references: [id])
+  hod          User    @relation("Hod", fields: [hodId], references: [id])
   hodId        String
   message      String
   teachingPlan String
-  courseName   String
+  course       Courses @relation(fields: [coursesId], references: [id])
+  coursesId    String
 }
 
 model Observations {
@@ -65,12 +67,14 @@ model Observations {
 
 model Courses {
   id           String         @id @default(uuid()) // auto-inc
+  courseName   String
   faculty      User           @relation("Faculty", fields: [facultyId], references: [id])
   facultyId    String
   hod          User           @relation("Hod", fields: [hodId], references: [id])
   hodId        String
   department   Department
   Observations Observations[]
+  ObsRequests  ObsRequests[]
 }
 
 model Meetings {
