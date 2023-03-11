@@ -8,10 +8,10 @@ const DashColumn = ({ column, to, icon, heading, count, col }) => {
   return (
     <NavLink
       to={to}
-      // className={`col-md-${col ? col : "3"} column ${column} ${
-      //   darkTheme && "dark"
-      // }`}
-      className={`column ${column} ${darkTheme && "dark"}`}
+      className={`col-md-${col ? col : "3"} column ${column} ${
+        darkTheme && "dark"
+      }`}
+      // className={`column ${column} ${darkTheme && "dark"}`}
     >
       <div className="icon">
         <span>{icon}</span>

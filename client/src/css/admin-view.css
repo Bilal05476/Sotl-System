@@ -1,42 +1,3 @@
-/* user detail component */
-.admin-detail {
-  padding: 1rem 2rem;
-  background-color: rgba(255, 255, 255, 0.287);
-  box-shadow: var(--shadow--);
-  margin-bottom: 2rem;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.admin-view.dark .admin-detail {
-  background-color: #1e1e1e;
-  box-shadow: 0.1rem 0.1rem 0.1rem #333;
-}
-.admin-detail .admin-name {
-  font-weight: 500;
-  font-size: 1.5rem;
-  margin-bottom: -0.6rem;
-}
-.admin-view.dark .admin-detail .admin-name,
-.admin-view.dark .admin-detail .admin-name span,
-.admin-view.dark .admin-detail .greeting,
-.admin-view.dark .admin-detail .admin-icon {
-  color: #fff;
-}
-.admin-detail .admin-name span {
-  color: var(--baseC--);
-  font-weight: 600;
-  font-size: 1.7rem;
-}
-
-.admin-detail .greeting {
-  font-weight: 300;
-  font-size: 1rem;
-  margin-bottom: 0;
-  margin-left: 3.6rem;
-  word-spacing: 0.05rem;
-}
 .observations-list {
   padding: 0;
 }
@@ -90,19 +51,17 @@
   padding: 0.5rem;
   font-size: 0.8rem;
 }
-
+/* 
 .notifications {
   padding: 0.8rem 2rem;
   padding-right: 2rem;
   display: flex;
-  /* box-shadow: var(--shadow--); */
   align-items: center;
-  /* justify-content: space-between; */
   padding-top: 1.5rem;
-}
-.notifications .notify-icon,
+} */
+/* .notifications .notify-icon,
 .notifications .setting-icon {
-  background-color: #c1bbeb;
+  background-color: var(--dashBg--);
   box-shadow: var(--shadow--);
   padding: 0.4rem;
   margin-right: 0.4rem;
@@ -115,11 +74,11 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-}
+} */
 
-.notifications .notify-icon:hover,
+/* .notifications .notify-icon:hover,
 .notifications .setting-icon:hover {
-  box-shadow: 0.5rem 0.5rem 0.5rem #ccc;
+  box-shadow: 0.2rem 0.2rem 0.2rem #ccc;
 }
 .notifications .profile-icon {
   display: flex;
@@ -130,15 +89,15 @@
   margin: 0;
   font-weight: 300;
   padding-left: 2rem;
-}
-.notifications .profile-icon p.profile-name,
+} */
+/* .notifications .profile-icon p.profile-name, */
 .recent-roles .role-box p.role-name,
 .todays-meeting p.meet-name {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--baseC--);
 }
-.notifications .profile-icon .profile-img,
+/* .notifications .profile-icon .profile-img, */
 .recent-roles .role-box .role-img {
   min-width: 50px;
   min-height: 50px;

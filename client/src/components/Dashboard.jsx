@@ -15,6 +15,7 @@ import { HiUserPlus, HiUser } from "react-icons/hi2";
 import RolesView from "./RolesView";
 import { facultiesData } from "../Data";
 import { useStateValue } from "../StateProvider";
+import Notifications from "./Notifications";
 
 const Dashboard = () => {
   const [{ user }] = useStateValue();
@@ -35,6 +36,11 @@ const Dashboard = () => {
             <Route path="/" exact element={<FacultyView />} />
             <Route path="/observations" exact element={<Observations />} />
           </Routes>
+          <div className="col-md-2 ">
+            <div className="row">
+              <Notifications roleimg="https://th.bing.com/th/id/OIP.FjFkHghHK8HFQygVn_zzjwHaIQ?pid=ImgDet&rs=1" />
+            </div>
+          </div>
         </div>
       )}
       {user.role === "Campus_Director" && (
@@ -136,6 +142,11 @@ const Dashboard = () => {
             <Route path="/observations" exact element={<Observations />} />
             <Route path="/add-role" exact element={<AddUser />} />
           </Routes>
+          <div className="col-md-2 ">
+            <div className="row">
+              <Notifications roleimg="https://th.bing.com/th/id/OIP.FjFkHghHK8HFQygVn_zzjwHaIQ?pid=ImgDet&rs=1" />
+            </div>
+          </div>
         </div>
       )}
       {user.role === "Observer" && (
