@@ -27,6 +27,7 @@ const Dashboard = () => {
               { name: "Home", to: "/" },
               { name: "Meetings", to: "/meetings" },
               { name: "Profile", to: "/profile" },
+              { name: "Request Observation", to: "/req-observation" },
             ]}
           />
 
@@ -36,7 +37,7 @@ const Dashboard = () => {
           </Routes>
         </div>
       )}
-      {user.role === "Admin" && (
+      {user.role === "Campus_Director" && (
         <div className="row admin-dash">
           <Sidebar
             menus={[

@@ -5,7 +5,7 @@
   font-family: "Poppins", sans-serif;
   margin: 0;
   scroll-behavior: smooth;
-  transition: 0.5s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 :root {
   --baseC--: #040b5b;
@@ -39,4 +39,31 @@
 .max-height {
   max-height: 100vh;
   overflow: auto;
+}
+
+.role-select {
+  padding: 0.5rem;
+  padding-left: 1rem;
+  background-color: transparent;
+  outline: none !important;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.role-select:focus {
+  border: 1px solid var(--baseC--);
+}
+.role-select.round {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.role-select.round:focus {
+  background-image: linear-gradient(45deg, transparent 50%, #fff 50%),
+    linear-gradient(135deg, #fff 50%, transparent 50%),
+    radial-gradient(var(--baseC--) 70%, transparent 72%);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px), calc(100% - 0.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
+  background-repeat: no-repeat;
 }

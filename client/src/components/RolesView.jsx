@@ -10,10 +10,11 @@ import { BsEmojiFrown } from "react-icons/bs";
 
 const RolesView = ({ roleData, role, heading, btnText }) => {
   const [searchRole, setSearchRole] = useState("");
-  const [data, setData] = useState(roleData);
+  const [data, setData] = useState();
   const [openFilter, setOpenFilter] = useState(false);
 
   useEffect(() => {
+    async function fetchData() {}
     setData(roleData);
   }, []);
 

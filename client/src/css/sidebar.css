@@ -30,7 +30,7 @@
 }
 .menu-bar .link:hover,
 .menu-bar .link.active {
-  background-color: rgb(229, 229, 255);
+  background-color: var(--dashBg--);
   font-weight: 500;
   color: var(--baseC--);
   box-shadow: 0.1rem 0.2rem 0.3rem var(--baseC--);

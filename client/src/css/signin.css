@@ -74,20 +74,13 @@
   width: 80%;
   height: 80%;
 }
-.role-select {
-  padding: 0.5rem;
-  padding-left: 1rem;
-  background-color: transparent;
-  outline: none !important;
-  border: 1px solid #ccc;
-  color: #333;
-  border-radius: 5px;
-  margin-bottom: 1rem;
-}
+
 .role-select.alert {
-  background-color: crimson;
-  border: 1px solid pink;
+  background-color: pink;
   display: none;
+  color: crimson;
+  border-radius: 5px;
+  border: none;
 }
 .role-select.alert.show {
   display: block;
@@ -96,25 +89,7 @@
 .signin.dark .wrapper .heading {
   color: var(--dashBg--);
 }
-.signin .role-select.alert {
-  color: pink !important;
-}
-.role-select:focus {
-  border: 1px solid var(--baseC--);
-}
-.role-select.round {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-.role-select.round:focus {
-  background-image: linear-gradient(45deg, transparent 50%, #fff 50%),
-    linear-gradient(135deg, #fff 50%, transparent 50%),
-    radial-gradient(var(--baseC--) 70%, transparent 72%);
-  background-position: calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px), calc(100% - 0.5em) 0.5em;
-  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
-  background-repeat: no-repeat;
-}
+
 .signin.dark .role-select.round option {
   background-color: #1e1e1e;
 }

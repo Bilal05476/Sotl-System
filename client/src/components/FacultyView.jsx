@@ -10,22 +10,24 @@ const FacultyView = () => {
         <div className="faculty-view col-md-9">
           <div className="row">
             <UserDetails username={"Asif Ali"} />
-            <DashColumn
-              to="/"
-              column="column-1"
-              heading="Observation Score"
-              icon={<HiUserGroup size={30} />}
-              count="80%"
-              col="6"
-            />
-            <DashColumn
-              to="/faculties"
-              column="column-4"
-              heading="Current Observation Meeting"
-              icon={<HiUserGroup size={30} />}
-              count="Post Observation"
-              col="6"
-            />
+            <div className="d-flex">
+              <DashColumn
+                to="/"
+                column="column-1"
+                heading="Observation Score"
+                icon={<HiUserGroup size={30} />}
+                count="0%"
+                col="5"
+              />
+              <DashColumn
+                to="/faculties"
+                column="column-4"
+                heading="Current Observation Meeting"
+                icon={<HiUserGroup size={30} />}
+                count="Post Observation"
+                col="6"
+              />
+            </div>
           </div>
         </div>
         <div className="col-md-3 faculty-feed">

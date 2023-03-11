@@ -18,13 +18,13 @@ const UserDetails = ({ username }) => {
         </h3>
         <h5 className="heading greeting">Have a nice day at work</h5>
       </div>
-      <span className="toggle-btn" onClick={() => toggleTheme()}>
+      {/* <span className="toggle-btn" onClick={() => toggleTheme()}>
         {darkTheme ? (
           <BsSunFill size={28} color="var(--dashBg--)" />
         ) : (
           <BsFillMoonFill size={28} color="var(--baseC--)" />
         )}
-      </span>
+      </span> */}
     </div>
   );
 };

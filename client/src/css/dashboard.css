@@ -1,8 +1,9 @@
-.dashboard {
+/* .dashboard {
   background-color: crimson;
-}
+} */
 .admin-view,
 .role-view,
+.add-user,
 .faculty-view,
 .observer-view,
 .meeting {

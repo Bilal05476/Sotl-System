@@ -12,41 +12,44 @@ import DashColumn from "./DashColumn";
 import { useStateValue } from "../StateProvider";
 const AdminView = () => {
   const [obsFilter, setObsFilter] = useState("all");
-  const [{ darkTheme }] = useStateValue();
+  const [{ darkTheme, user }] = useStateValue();
   return (
     <div className="max-height col-md-10">
       <div className="row">
         <div className={`admin-view col-md-9 ${darkTheme && "dark"}`}>
           <div className="row">
-            <UserDetails username={"Dr. Fariha"} />
-            <DashColumn
-              to="/faculties"
-              column="column-1"
-              heading="Faculties"
-              icon={<HiUserGroup size={30} />}
-              count="200"
-            />
-            <DashColumn
-              to="/observers"
-              column="column-2"
-              heading="Obsevers"
-              icon={<FaUserTie size={30} />}
-              count="150"
-            />
-            <DashColumn
-              to="/head-of-departments"
-              column="column-3"
-              heading="Head of Departments"
-              icon={<ImUserTie size={30} />}
-              count="100"
-            />
-            <DashColumn
-              to="/campus-directors"
-              column="column-4"
-              heading="Campus Directors"
-              icon={<ImUserTie size={30} />}
-              count="5"
-            />
+            <UserDetails username={user?.name} />
+            <div className="d-flex flex-wrap">
+              <DashColumn
+                to="/faculties"
+                column="column-1"
+                heading="Faculties"
+                icon={<HiUserGroup size={30} />}
+                count="200"
+              />
+              <DashColumn
+                to="/observers"
+                column="column-2"
+                heading="Obsevers"
+                icon={<FaUserTie size={30} />}
+                count="150"
+              />
+              <DashColumn
+                to="/head-of-departments"
+                column="column-3"
+                heading="Head of Departments"
+                icon={<ImUserTie size={30} />}
+                count="100"
+              />
+              <DashColumn
+                to="/campus-directors"
+                column="column-4"
+                heading="Campus Directors"
+                icon={<ImUserTie size={30} />}
+                count="5"
+              />
+            </div>
+
             <div className="col-md-12">
               <BarChart />
             </div>
@@ -71,12 +74,12 @@ const AdminView = () => {
         </div>
         <div className={`col-md-3 admin-feed ${darkTheme && "dark"}`}>
           <div className="row">
-            <Notifications
+            {/* <Notifications
               col="12"
-              rolename="Dr. Fariha Hayat"
-              rolerole="Admin"
+              rolename={user?.name}
+              rolerole={user?.role}
               roleimg="https://i.pinimg.com/564x/a6/58/32/a65832155622ac173337874f02b218fb--people-icon-avatar.jpg"
-            />
+            /> */}
             <div className="col-md-12 recent-roles">
               <h5 className="heading">Recent Roles</h5>
               <p className="mb-3">

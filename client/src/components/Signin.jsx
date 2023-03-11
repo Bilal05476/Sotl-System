@@ -16,8 +16,13 @@ const Signin = () => {
     setLoginVisible(true);
   }, 1000);
 
+  function validateEmail(email) {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
   const handleSignin = () => {
-    console.log(email, password);
     async function fetchData() {
       const res = await fetch("http://localhost:8080/api/login", {
         method: "POST",
@@ -27,7 +32,6 @@ const Signin = () => {
         },
       });
       const data = await res.json();
-      console.log(data);
       if (data.error) {
         setAlert(data.error);
       } else {
@@ -37,7 +41,11 @@ const Signin = () => {
         });
       }
     }
-    fetchData();
+    if (!validateEmail(email)) {
+      setAlert("Enter Valid Email Address");
+    } else {
+      fetchData();
+    }
   };
   const toggleTheme = () => {
     dispatch({
