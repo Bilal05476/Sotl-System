@@ -2489,17 +2489,19 @@ ul.notification-dropdown.onhover-show-div {
       .main-header-left {
         display: inline-flex;
         width: 100%;
-        height: $header-size;
+        // height: $header-size;
+        height: auto;
         padding: $main-header-padding;
         align-items: center;
-        background-color: $main-header-left-bg-color;
+        // background-color: $main-header-left-bg-color;
         z-index: $main-header-z-index;
-        box-shadow: -3px 1px 3px 1px rgba(68, 102, 242, 0.1);
+        // box-shadow: -3px 1px 3px 1px rgba(68, 102, 242, 0.1);
         .logo-wrapper {
-          padding-left: 10px;
+          // padding-left: 10px;
           height: 100%;
           display: flex;
           align-items: center;
+          justify-content: center;
         }
       }
       .sidebar-user {

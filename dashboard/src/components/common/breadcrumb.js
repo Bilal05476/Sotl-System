@@ -19,7 +19,7 @@ const Breadcrumb = ({ title, parent }) => {
           <Col lg="6">
             <ol className="breadcrumb pull-right">
               <li className="breadcrumb-item">
-                <Link to="mutikart-admin/dashboard">
+                <Link to="/">
                   <Home />
                 </Link>
               </li>

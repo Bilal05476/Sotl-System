@@ -12,7 +12,7 @@ import {
 } from "react-feather";
 
 //images
-import logo from "../../../assets/images/dashboard/multikart-logo.png";
+import logo from "../../../assets/images/dashboard/blue-version.png";
 
 const Header = () => {
   const [sidebar, setSidebar] = useState(true);

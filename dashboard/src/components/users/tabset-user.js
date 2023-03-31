@@ -1,333 +1,259 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 
 const TabsetUser = () => {
-	return (
-		<Fragment>
-			<Tabs>
-				<TabList className="nav nav-tabs tab-coupon">
-					<Tab className="nav-link">Account</Tab>
-					<Tab className="nav-link">Permission</Tab>
-				</TabList>
-				<TabPanel>
-					<Form className="needs-validation user-add" noValidate="">
-						<h4>Account Details</h4>
-						<FormGroup className="row">
-							<Label className="col-xl-3 col-md-4">
-								<span>*</span> First Name
-							</Label>
-							<div className="col-xl-8 col-md-7">
-								<Input
-									className="form-control"
-									id="validationCustom0"
-									type="text"
-									required=""
-								/>
-							</div>
-						</FormGroup>
-						<FormGroup className="row">
-							<Label className="col-xl-3 col-md-4">
-								<span>*</span> Last Name
-							</Label>
-							<div className="col-xl-8 col-md-7">
-								<Input
-									className="form-control"
-									id="validationCustom1"
-									type="text"
-									required=""
-								/>
-							</div>
-						</FormGroup>
-						<FormGroup className="row">
-							<Label className="col-xl-3 col-md-4">
-								<span>*</span> Email
-							</Label>
-							<div className="col-xl-8 col-md-7">
-								<Input
-									className="form-control"
-									id="validationCustom2"
-									type="text"
-									required=""
-								/>
-							</div>
-						</FormGroup>
-						<FormGroup className="row">
-							<Label className="col-xl-3 col-md-4">
-								<span>*</span> Password
-							</Label>
-							<div className="col-xl-8 col-md-7">
-								<Input
-									className="form-control"
-									id="validationCustom3"
-									type="password"
-									required=""
-								/>
-							</div>
-						</FormGroup>
-						<FormGroup className="row">
-							<Label className="col-xl-3 col-md-4">
-								<span>*</span> Confirm Password
-							</Label>
-							<div className="col-xl-8 col-md-7">
-								<Input
-									className="form-control"
-									id="validationCustom4"
-									type="password"
-									required=""
-								/>
-							</div>
-						</FormGroup>
-					</Form>
-				</TabPanel>
-				<TabPanel>
-					<Form className="needs-validation user-add" noValidate="">
-						<div className="permission-block">
-							<div className="attribute-blocks">
-								<h5 className="f-w-600 mb-3">Product Related Permission </h5>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="form-label">Add Product</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani1"
-													type="radio"
-													name="rdo-ani"
-												/>
-												Allow
-											</Label>
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani2"
-													type="radio"
-													name="rdo-ani"
-													defaultChecked
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="form-label">Update Product</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani3"
-													type="radio"
-													name="rdo-ani1"
-													defaultChecked
-												/>
-												Allow
-											</Label>
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani4"
-													type="radio"
-													name="rdo-ani1"
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="form-label">Delete Product</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className=" m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani5"
-													type="radio"
-													name="rdo-ani2"
-												/>
-												Allow
-											</Label>
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani6"
-													type="radio"
-													name="rdo-ani2"
-													defaultChecked
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="mb-0 sm-label-radio">
-											Apply Discount
-										</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated pb-0">
-											<Label className="d-block mb-0">
-												<Input
-													className="radio_animated"
-													id="edo-ani7"
-													type="radio"
-													name="rdo-ani3"
-												/>
-												Allow
-											</Label>
-											<Label className="d-block mb-0">
-												<Input
-													className="radio_animated"
-													id="edo-ani8"
-													type="radio"
-													name="rdo-ani3"
-													defaultChecked
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-							</div>
-							<div className="attribute-blocks">
-								<h5 className="f-w-600 mb-3">Category Related Permission </h5>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="form-label">Add Category</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani9"
-													type="radio"
-													name="rdo-ani4"
-												/>
-												Allow
-											</Label>
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani10"
-													type="radio"
-													name="rdo-ani4"
-													defaultChecked
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="form-label">Update Category</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani11"
-													type="radio"
-													name="rdo-ani5"
-												/>
-												Allow
-											</Label>
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani12"
-													type="radio"
-													name="rdo-ani5"
-													defaultChecked
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="form-label">Delete Category</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani13"
-													type="radio"
-													name="rdo-ani6"
-												/>
-												Allow
-											</Label>
-											<Label className="d-block">
-												<Input
-													className="radio_animated"
-													id="edo-ani14"
-													type="radio"
-													name="rdo-ani6"
-													defaultChecked
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-								<Row>
-									<Col xl="3" sm="4">
-										<Label className="mb-0 sm-label-radio">
-											Apply Discount
-										</Label>
-									</Col>
-									<Col xl="9" sm="8">
-										<FormGroup className="m-checkbox-inline custom-radio-ml d-flex radio-animated pb-0">
-											<Label className="d-block mb-0">
-												<Input
-													className="radio_animated"
-													id="edo-ani15"
-													type="radio"
-													name="rdo-ani7"
-												/>
-												Allow
-											</Label>
-											<Label className="d-block mb-0">
-												<Input
-													className="radio_animated"
-													id="edo-ani16"
-													type="radio"
-													name="rdo-ani7"
-													defaultChecked
-												/>
-												Deny
-											</Label>
-										</FormGroup>
-									</Col>
-								</Row>
-							</div>
-						</div>
-					</Form>
-				</TabPanel>
-			</Tabs>
-			<div className="pull-right">
-				<Button type="button" color="primary">
-					Save
-				</Button>
-			</div>
-		</Fragment>
-	);
+  const [createUser, setCreateUser] = useState({
+    fullname: "",
+    email: "",
+    role: "",
+    campus: "",
+    department: "",
+    password: "",
+    cPassword: "",
+    error: "",
+  });
+  const {
+    fullname,
+    email,
+    password,
+    role,
+    campus,
+    department,
+    cPassword,
+    error,
+  } = createUser;
+
+  const onCreateUser = () => {
+    const userDetail = { fullname, email, password, role, campus, department };
+    if (password.length < 8) {
+      setCreateUser({
+        ...createUser,
+        error: "Password should be minimum 8 character long",
+      });
+    } else if (password !== cPassword) {
+      setCreateUser({
+        ...createUser,
+        error: "Passwords should be same",
+      });
+    } else if (!email.includes("@iqra.edu.pk")) {
+      setCreateUser({
+        ...createUser,
+        error: "Only @iqra.edu.pk domain allowed",
+      });
+    } else {
+      console.log(userDetail);
+      setCreateUser({
+        ...createUser,
+        error: "",
+      });
+    }
+  };
+
+  return (
+    <Fragment>
+      <Tabs>
+        <TabList className="nav nav-tabs tab-coupon">
+          <Tab className="nav-link">Create User</Tab>
+        </TabList>
+        <TabPanel>
+          <Form className="needs-validation user-add" noValidate="">
+            <h4>User Details</h4>
+            {error && (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  <span></span>
+                </Label>
+                <div className="col-xl-8 col-md-7">
+                  <span
+                    style={{
+                      background: "pink",
+                      color: "crimson",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }}
+                  >
+                    {error}
+                  </span>
+                </div>
+              </FormGroup>
+            )}
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Full Name
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom0"
+                  type="text"
+                  placeholder="John Smith"
+                  required={true}
+                  value={fullname}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      fullname: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </FormGroup>
+
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Email
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom2"
+                  type="text"
+                  placeholder="john@iqra.edu.pk"
+                  required={true}
+                  value={email}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      email: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Campus
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom3"
+                  type="select"
+                  required={true}
+                  value={campus}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      campus: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Select">Select</option>
+                  <option value="Main_Campus">Main Campus</option>
+                  <option value="Gulshan">Gulshan Campus</option>
+                  <option value="North">North Campus</option>
+                  <option value="Airport">Airport Campus</option>
+                  <option value="Bahria">Bahria Campus</option>
+                  <option value="Islamabad">Islamabad Campus</option>
+                </Input>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Department
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom4"
+                  type="select"
+                  required={true}
+                  value={department}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      department: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Select">Select</option>
+                  <option value="Fest">FEST</option>
+                  <option value="Aifd">AIFD</option>
+                  <option value="Media">Media</option>
+                  <option value="Business">Business</option>
+                </Input>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Role
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom5"
+                  type="select"
+                  required={true}
+                  value={role}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      role: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Select">Select</option>
+                  <option value="Campus_Director">Campus Director</option>
+                  <option value="Hod">Head of Department</option>
+                  <option value="Observer">Observer</option>
+                  <option value="Faculty">Faculty</option>
+                </Input>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Password
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom6"
+                  type="password"
+                  placeholder="*********"
+                  required={true}
+                  value={password}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      password: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Confirm Password
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom7"
+                  type="password"
+                  placeholder="*********"
+                  required={true}
+                  value={cPassword}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      cPassword: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </FormGroup>
+          </Form>
+        </TabPanel>
+      </Tabs>
+      <div className="pull-right">
+        <Button onClick={() => onCreateUser()} type="button" color="primary">
+          Add User
+        </Button>
+      </div>
+    </Fragment>
+  );
 };
 
 export default TabsetUser;

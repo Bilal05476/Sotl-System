@@ -37,6 +37,7 @@ const LoginTabset = () => {
         });
         setLoginState({ ...loginState, alert: "", email: "", password: "" });
         // console.log(data);
+        localStorage.setItem("user", JSON.stringify(data));
       }
     }
     if (!validateEmail(email)) {

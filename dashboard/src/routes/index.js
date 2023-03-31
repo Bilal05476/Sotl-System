@@ -11,7 +11,7 @@ const Routers = () => {
     <Fragment>
       <Routes>
         {user ? (
-          <Route path={`/`} element={<LayoutRoutes />} />
+          <Route path={`/*`} element={<LayoutRoutes />} />
         ) : (
           <Route
             exact

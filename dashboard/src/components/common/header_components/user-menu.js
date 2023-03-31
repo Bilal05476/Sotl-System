@@ -1,9 +1,16 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //images import
 import man from "../../../assets/images/dashboard/man.png";
 
 const UserMenu = () => {
+  const navigate = useNavigate();
+  const onLogout = () => {
+    navigate("/");
+    setTimeout(() => {
+      localStorage.clear();
+    }, 1000);
+  };
   return (
     <Fragment>
       <li className="onhover-dropdown">
@@ -31,14 +38,9 @@ const UserMenu = () => {
           </li>
 
           <li>
-            <a href="#javaScript">
-              <i data-feather="settings"></i>Settings
-            </a>
-          </li>
-          <li>
-            <Link to={`${process.env.PUBLIC_URL}/`}>
+            <a onClick={() => onLogout()}>
               <i data-feather="log-out"></i>Logout
-            </Link>
+            </a>
           </li>
         </ul>
       </li>
