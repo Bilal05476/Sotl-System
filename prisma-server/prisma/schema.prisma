@@ -11,43 +11,43 @@ datasource db {
 }
 
 model User {
-  id              String         @id @default(uuid()) // auto-inc
-  name            String
-  email           String         @unique // should be unique
-  phone           String
-  password        String
-  designation     String
-  dateOfBirth     DateTime?
-  institute       String?
-  degree          String?
-  starting        DateTime?
-  ending          DateTime?
-  profDevPlan     Bytes?
-  role            Role
-  campus          Campus
-  department      Department
-  facultyrequests ObsRequests[]  @relation("Faculty")
-  hodrequests     ObsRequests[]  @relation("Hod")
-  facultyObs      Observations[] @relation("Faculty")
-  hodObs          Observations[] @relation("Hod")
-  ObserverObs     Observations[] @relation("Observer")
-  facultyCourses  Courses[]      @relation("Faculty")
-  hodCourses      Courses[]      @relation("Hod")
+  id             String         @id @default(uuid()) // auto-inc
+  name           String
+  email          String         @unique // should be unique
+  phone          String?
+  password       String
+  designation    String?
+  dateOfBirth    DateTime?
+  institute      String?
+  degree         String?
+  starting       DateTime?
+  ending         DateTime?
+  profDevPlan    Bytes?
+  role           Role
+  campus         Campus
+  department     Department
+  // facultyrequests ObsRequests[]  @relation("Faculty")
+  // hodrequests     ObsRequests[]  @relation("Hod")
+  facultyObs     Observations[] @relation("Faculty")
+  hodObs         Observations[] @relation("Hod")
+  ObserverObs    Observations[] @relation("Observer")
+  facultyCourses Courses[]      @relation("Faculty")
+  hodCourses     Courses[]      @relation("Hod")
 
   @@index([email]) // sorting
 }
 
-model ObsRequests {
-  id           String  @id @default(uuid()) // auto-inc
-  faculty      User    @relation("Faculty", fields: [facultyId], references: [id])
-  facultyId    String
-  hod          User    @relation("Hod", fields: [hodId], references: [id])
-  hodId        String
-  message      String
-  teachingPlan String
-  course       Courses @relation(fields: [coursesId], references: [id])
-  coursesId    String
-}
+// model ObsRequests {
+//   id           String  @id @default(uuid()) // auto-inc
+//   faculty      User    @relation("Faculty", fields: [facultyId], references: [id])
+//   facultyId    String
+//   hod          User    @relation("Hod", fields: [hodId], references: [id])
+//   hodId        String
+//   message      String
+//   teachingPlan String
+//   course       Courses @relation(fields: [coursesId], references: [id])
+//   coursesId    String
+// }
 
 model Observations {
   id                  String     @id @default(uuid()) // auto-inc
@@ -74,7 +74,7 @@ model Courses {
   hodId        String
   department   Department
   Observations Observations[]
-  ObsRequests  ObsRequests[]
+  // ObsRequests  ObsRequests[]
 }
 
 model Meetings {

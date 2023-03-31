@@ -8,16 +8,7 @@ import jwt from "jsonwebtoken";
 // @route  POST api/register
 // @access Private (Parent Role Like (Admin, Campus Director, HOD))
 export const createUser = asyncHandler(async (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    phone,
-    designation,
-    role,
-    campus,
-    department,
-  } = req.body;
+  const { name, email, password, role, campus, department } = req.body;
 
   // Validate if user exist in our database
   const [existedUser] = await prisma.user.findMany({
@@ -36,8 +27,6 @@ export const createUser = asyncHandler(async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      phone,
-      designation,
       role: Role[role],
       campus: Campus[campus],
       department: Department[department],
@@ -87,23 +76,31 @@ export const getUser = asyncHandler(async (req, res) => {
 // @route  POST api/update-user
 // @access Private (only user update their own data)
 export const updateUser = asyncHandler(async (req, res) => {
-  const { id, dateOfBirth, institute, degree, starting, ending } = req.body;
+  const { id, name, dateOfBirth, institute, degree, starting, ending } =
+    req.body;
 
   // Validate if user exist in our database
-  const user = await prisma.user.update({
+  const [user] = await prisma.user.findMany({
     where: {
       id,
     },
-    data: {
-      dateOfBirth,
-      institute,
-      degree,
-      starting,
-      ending,
-    },
   });
+
   if (user) {
-    res.status(200).send(user);
+    const updateUser = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        dateOfBirth,
+        institute,
+        degree,
+        starting,
+        ending,
+        name,
+      },
+    });
+    res.status(200).send(updateUser);
   } else {
     res.status(404).send({ error: "No User Exist" });
   }

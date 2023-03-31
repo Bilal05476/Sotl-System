@@ -1,23 +1,27 @@
-import React,{ Fragment } from "react"
-import { Route, Routes } from "react-router-dom"
-import Login from "../components/auth/login"
-import LayoutRoutes from "./LayoutRoutes"
+import React, { Fragment } from "react";
+import { Route, Routes } from "react-router-dom";
+import Login from "../components/auth/login";
+import LayoutRoutes from "./LayoutRoutes";
+import { useStateValue } from "../StateProvider";
 
-const Routers =() =>{
+const Routers = () => {
+  const [{ user }] = useStateValue();
+  console.log(user);
+  return (
+    <Fragment>
+      <Routes>
+        {user ? (
+          <Route path={`/`} element={<LayoutRoutes />} />
+        ) : (
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/`}
+            element={<Login />}
+          />
+        )}
+      </Routes>
+    </Fragment>
+  );
+};
 
-    return(
-        <Fragment>
-            <Routes>
-                <Route exact path={`${process.env.PUBLIC_URL}/`} element={<Login />} />
-					<Route
-						exact
-						path={`${process.env.PUBLIC_URL}/auth/login`}
-						element={<Login />}
-					/>
-                    <Route path={`/*`} element={<LayoutRoutes />} />
-            </Routes>
-        </Fragment>
-    )
-}
-
-export default Routers
+export default Routers;
