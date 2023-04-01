@@ -31,6 +31,8 @@ import Createuser from "../components/users/create-user";
 import Listuser from "../components/users/list-user";
 import Createvendors from "../components/vendors/create.vendors";
 import Listvendors from "../components/vendors/list-vendors";
+import Listobservation from "../components/observations/list-observation";
+import Createobservation from "../components/observations/create-observation";
 
 const LayoutRoutes = () => {
   return (
@@ -43,7 +45,7 @@ const LayoutRoutes = () => {
             element={<Dashboard />}
           />
 
-          <Route
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/products/physical/category`}
             element={<Category />}
           />
@@ -62,9 +64,9 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/products/physical/add-product`}
             element={<Addproduct />}
-          />
+          /> */}
 
-          <Route
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/products/digital/digital-category`}
             element={<Digitalcategory />}
           />
@@ -79,9 +81,9 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/products/digital/digital-add-product`}
             element={<Digitaladdpro />}
-          />
+          /> */}
 
-          <Route
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/sales/orders`}
             element={<Orders />}
           />
@@ -97,9 +99,9 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/coupons/create-coupons`}
             element={<Createcoupons />}
-          />
+          /> */}
 
-          <Route
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/pages/list-page`}
             element={<ListPages />}
           />
@@ -117,7 +119,7 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/menus/create-menu`}
             element={<Createmenu />}
-          />
+          /> */}
 
           <Route
             path={`${process.env.PUBLIC_URL}/users/list-user`}
@@ -127,8 +129,16 @@ const LayoutRoutes = () => {
             path={`${process.env.PUBLIC_URL}/users/create-user`}
             element={<Createuser />}
           />
-
           <Route
+            path={`${process.env.PUBLIC_URL}/observations/list-observation`}
+            element={<Listobservation />}
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/observations/create-observation`}
+            element={<Createobservation />}
+          />
+
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/vendors/list_vendors`}
             element={<Listvendors />}
           />
@@ -144,8 +154,8 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/localization/currency-rates`}
             element={<Rates />}
-          />
-          <Route
+          /> */}
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/localization/taxes`}
             element={<Taxes />}
           />
@@ -153,22 +163,22 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/reports/report`}
             element={<Reports />}
-          />
+          /> */}
 
           <Route
             path={`${process.env.PUBLIC_URL}/settings/profile`}
             element={<Profile />}
           />
 
-          <Route
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/invoice`}
             element={<Invoice />}
-          />
+          /> */}
 
-          <Route
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/data-table`}
             element={<Datatable />}
-          />
+          /> */}
         </Route>
       </Routes>
     </Fragment>

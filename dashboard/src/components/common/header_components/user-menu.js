@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 //images import
-import man from "../../../assets/images/dashboard/man.png";
+import avatar from "../../../assets/images/dashboard/avatar.png";
+import { useStateValue } from "../../../StateProvider";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -11,13 +12,14 @@ const UserMenu = () => {
       localStorage.clear();
     }, 1000);
   };
+  const [{ user }] = useStateValue();
   return (
     <Fragment>
       <li className="onhover-dropdown">
         <div className="media align-items-center">
           <img
             className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded"
-            src={man}
+            src={user?.avatar ? user.avatar : avatar}
             alt="header-user"
           />
           <div className="dotted-animation">

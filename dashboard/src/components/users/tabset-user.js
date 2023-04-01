@@ -6,12 +6,13 @@ const TabsetUser = () => {
   const [createUser, setCreateUser] = useState({
     fullname: "",
     email: "",
-    role: "",
-    campus: "",
-    department: "",
+    role: "Select",
+    campus: "Select",
+    department: "Select",
     password: "",
     cPassword: "",
     error: "",
+    success: "",
   });
   const {
     fullname,
@@ -22,31 +23,94 @@ const TabsetUser = () => {
     department,
     cPassword,
     error,
+    success,
   } = createUser;
 
+  function validateEmail(email) {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
   const onCreateUser = () => {
-    const userDetail = { fullname, email, password, role, campus, department };
-    if (password.length < 8) {
+    const userDetail = {
+      name: fullname,
+      email,
+      password,
+      role,
+      campus,
+      department,
+    };
+    async function postUser() {
+      const res = await fetch("http://localhost:8080/api/create", {
+        method: "POST",
+        body: JSON.stringify(userDetail),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const data = await res.json();
+      if (data.error) {
+        setCreateUser({
+          ...createUser,
+          error: data.error,
+          success: "",
+        });
+      } else {
+        setCreateUser({
+          ...createUser,
+          success: "User created successfully",
+        });
+
+        setTimeout(() => {
+          setCreateUser({
+            ...createUser,
+            error: "",
+            fullname: "",
+            email: "",
+            password: "",
+            cPassword: "",
+            role: "Select",
+            campus: "Select",
+            department: "Select",
+            success: "",
+          });
+        }, 2000);
+      }
+    }
+    if (role === "Select" || department === "Select" || campus === "Select") {
+      setCreateUser({
+        ...createUser,
+        error: "Missing some details",
+        success: "",
+      });
+    } else if (password.length < 8) {
       setCreateUser({
         ...createUser,
         error: "Password should be minimum 8 character long",
+        success: "",
       });
     } else if (password !== cPassword) {
       setCreateUser({
         ...createUser,
         error: "Passwords should be same",
+        success: "",
       });
-    } else if (!email.includes("@iqra.edu.pk")) {
+    } else if (!email.includes("iqra.edu.pk")) {
       setCreateUser({
         ...createUser,
         error: "Only @iqra.edu.pk domain allowed",
+        success: "",
+      });
+    } else if (!validateEmail(email)) {
+      setCreateUser({
+        ...createUser,
+        error: "Please enter valid email address",
+        success: "",
       });
     } else {
       console.log(userDetail);
-      setCreateUser({
-        ...createUser,
-        error: "",
-      });
+      postUser();
     }
   };
 
@@ -72,9 +136,31 @@ const TabsetUser = () => {
                       padding: "0.5rem 1rem",
                       borderRadius: "5px",
                       width: "100%",
+                      fontWeight: "600",
                     }}
                   >
                     {error}
+                  </span>
+                </div>
+              </FormGroup>
+            )}
+            {success && (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  <span></span>
+                </Label>
+                <div className="col-xl-8 col-md-7">
+                  <span
+                    style={{
+                      background: "greenyellow",
+                      color: "green",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "5px",
+                      width: "100%",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {success}
                   </span>
                 </div>
               </FormGroup>
@@ -142,11 +228,11 @@ const TabsetUser = () => {
                 >
                   <option value="Select">Select</option>
                   <option value="Main_Campus">Main Campus</option>
-                  <option value="Gulshan">Gulshan Campus</option>
-                  <option value="North">North Campus</option>
-                  <option value="Airport">Airport Campus</option>
-                  <option value="Bahria">Bahria Campus</option>
-                  <option value="Islamabad">Islamabad Campus</option>
+                  <option value="Gulshan_Campus">Gulshan Campus</option>
+                  <option value="North_Campus">North Campus</option>
+                  <option value="Airport_Campus">Airport Campus</option>
+                  <option value="Bahria_Campus">Bahria Campus</option>
+                  <option value="Islamabad_Campus">Islamabad Campus</option>
                 </Input>
               </div>
             </FormGroup>
@@ -196,7 +282,7 @@ const TabsetUser = () => {
                 >
                   <option value="Select">Select</option>
                   <option value="Campus_Director">Campus Director</option>
-                  <option value="Hod">Head of Department</option>
+                  <option value="Head_of_Department">Head of Department</option>
                   <option value="Observer">Observer</option>
                   <option value="Faculty">Faculty</option>
                 </Input>

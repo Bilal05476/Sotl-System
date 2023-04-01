@@ -4,6 +4,14 @@ import bcrypt from "bcryptjs";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 
+// @desc   Get all users
+// @route  POST api/all-users
+// @access Private
+export const getUsers = asyncHandler(async (req, res) => {
+  const allUsers = await prisma.user.findMany();
+  res.status(200).send(allUsers);
+});
+
 // @desc   Register or Add any Role
 // @route  POST api/register
 // @access Private (Parent Role Like (Admin, Campus Director, HOD))

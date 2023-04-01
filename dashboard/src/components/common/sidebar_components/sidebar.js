@@ -1,13 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
 import UserPanel from "./user-panel";
 import { Link } from "react-router-dom";
-import { MENUITEMS } from "../../../constants/menu";
+import { HODMENU, MENUITEMS } from "../../../constants/menu";
 
 // image import
 import logo from "../../../assets/images/dashboard/blue-version.png";
+import { useStateValue } from "../../../StateProvider";
 
 const Sidebar = () => {
-  const [mainmenu, setMainMenu] = useState(MENUITEMS);
+  const [{ user }] = useStateValue();
+  const [mainmenu, setMainMenu] = useState(
+    user.role === "Campus_Director" || user.role === "Admin"
+      ? MENUITEMS
+      : HODMENU
+  );
   const [isChange, setIsChange] = useState(false);
 
   useEffect(() => {
@@ -34,13 +40,17 @@ const Sidebar = () => {
       return items;
     });
     return () => {
-      setMainMenu(MENUITEMS);
+      setMainMenu(
+        user.role === "Campus_Director" || user.role === "Admin"
+          ? MENUITEMS
+          : HODMENU
+      );
     };
   }, [isChange]);
 
   const setNavActive = (item) => {
     setIsChange(!isChange);
-    MENUITEMS.filter((menuItem) => {
+    mainmenu.filter((menuItem) => {
       if (menuItem !== item) menuItem.active = false;
       if (menuItem.children && menuItem.children.includes(item))
         menuItem.active = true;
@@ -64,7 +74,11 @@ const Sidebar = () => {
       return false;
     });
     item.active = !item.active;
-    setMainMenu(MENUITEMS);
+    setMainMenu(
+      user.role === "Campus_Director" || user.role === "Admin"
+        ? MENUITEMS
+        : HODMENU
+    );
   };
 
   const mainMenu = mainmenu.map((menuItem, i) => (

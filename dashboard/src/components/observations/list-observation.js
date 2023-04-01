@@ -4,21 +4,23 @@ import Breadcrumb from "../common/breadcrumb";
 import data from "../../assets/data/listUser";
 import Datatable from "../common/datatable";
 import { Card, CardBody, CardHeader, Container } from "reactstrap";
-import { useStateValue } from "../../StateProvider";
 
-const List_user = () => {
+const List_observation = () => {
   return (
     <Fragment>
-      <Breadcrumb title="User List" parent="Users" />
+      <Breadcrumb title="Observation List" parent="Observations" />
       <Container fluid={true}>
         <Card>
           <CardHeader>
-            <h5>User Details</h5>
+            <h5>Observation Details</h5>
           </CardHeader>
           <CardBody>
             <div className="btn-popup pull-right">
-              <Link to="/users/create-user" className="btn btn-primary">
-                Create User
+              <Link
+                to="/observations/create-observation"
+                className="btn btn-primary"
+              >
+                Create Observation
               </Link>
             </div>
             <div className="clearfix"></div>
@@ -41,4 +43,4 @@ const List_user = () => {
   );
 };
 
-export default List_user;
+export default List_observation;

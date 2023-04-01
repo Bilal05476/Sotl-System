@@ -1,3 +1,25 @@
+// {
+//     title: 'Products', icon: Box, type: 'sub', active: false, children: [
+//         {
+//             title: 'Physical', type: 'sub', active: false, children: [
+//                 { path: '/products/physical/category', title: 'Category', type: 'link' },
+//                 { path: '/products/physical/sub-category', title: 'Sub Category', type: 'link' },
+//                 { path: '/products/physical/product-list', title: 'Product List', type: 'link' },
+//                 { path: '/products/physical/product-detail', title: 'Product Detail', type: 'link' },
+//                 { path: '/products/physical/add-product', title: 'Add Product', type: 'link' },
+//             ]
+//         },
+//         {
+//             title: 'digital', type: 'sub', active: false, children: [
+//                 { path: '/products/digital/digital-category', title: 'Category', type: 'link' },
+//                 { path: '/products/digital/digital-sub-category', title: 'Sub Category', type: 'link' },
+//                 { path: '/products/digital/digital-product-list', title: 'Product List', type: 'link' },
+//                 { path: '/products/digital/digital-add-product', title: 'Add Product', type: 'link' },
+//             ]
+//         },
+//     ]
+// },
+
 import {
   Home,
   Box,
@@ -24,27 +46,15 @@ export const MENUITEMS = [
     badgeType: "primary",
     active: false,
   },
-  // {
-  //     title: 'Products', icon: Box, type: 'sub', active: false, children: [
-  //         {
-  //             title: 'Physical', type: 'sub', active: false, children: [
-  //                 { path: '/products/physical/category', title: 'Category', type: 'link' },
-  //                 { path: '/products/physical/sub-category', title: 'Sub Category', type: 'link' },
-  //                 { path: '/products/physical/product-list', title: 'Product List', type: 'link' },
-  //                 { path: '/products/physical/product-detail', title: 'Product Detail', type: 'link' },
-  //                 { path: '/products/physical/add-product', title: 'Add Product', type: 'link' },
-  //             ]
-  //         },
-  //         {
-  //             title: 'digital', type: 'sub', active: false, children: [
-  //                 { path: '/products/digital/digital-category', title: 'Category', type: 'link' },
-  //                 { path: '/products/digital/digital-sub-category', title: 'Sub Category', type: 'link' },
-  //                 { path: '/products/digital/digital-product-list', title: 'Product List', type: 'link' },
-  //                 { path: '/products/digital/digital-add-product', title: 'Add Product', type: 'link' },
-  //             ]
-  //         },
-  //     ]
-  // },
+
+  {
+    path: "/observations/list-observation",
+    title: "Observations",
+    icon: Clipboard,
+    type: "link",
+    badgeType: "primary",
+    active: false,
+  },
 
   {
     title: "Users",
@@ -65,7 +75,7 @@ export const MENUITEMS = [
       },
       {
         path: "/users/observers",
-        title: "Observers",
+        title: "Faculty Observers",
         type: "link",
       },
       {
@@ -74,6 +84,67 @@ export const MENUITEMS = [
         type: "link",
       },
       { path: "/users/create-user", title: "Create User", type: "link" },
+    ],
+  },
+
+  {
+    title: "Settings",
+    icon: Settings,
+    type: "sub",
+    children: [
+      { path: "/settings/profile", title: "Your Profile", type: "link" },
+      { path: "/settings/logout", title: "Logout", type: "link" },
+    ],
+  },
+];
+
+export const HODMENU = [
+  {
+    path: "/dashboard",
+    title: "Dashboard",
+    icon: Home,
+    type: "link",
+    badgeType: "primary",
+    active: false,
+  },
+
+  {
+    title: "Users",
+    icon: UserPlus,
+    type: "sub",
+    active: false,
+    children: [
+      { path: "/users/list-user", title: "All Users", type: "link" },
+      {
+        path: "/users/observers",
+        title: "Faculty Observers",
+        type: "link",
+      },
+      {
+        path: "/users/faculty",
+        title: "Faculty Members",
+        type: "link",
+      },
+      { path: "/users/create-user", title: "Create User", type: "link" },
+    ],
+  },
+
+  {
+    title: "Observations",
+    icon: Clipboard,
+    type: "sub",
+    active: false,
+    children: [
+      {
+        path: "/observations/list-observation",
+        title: "All Observations",
+        type: "link",
+      },
+      {
+        path: "/observations/create-observation",
+        title: "Create Observation",
+        type: "link",
+      },
     ],
   },
 

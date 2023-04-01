@@ -2,17 +2,17 @@ export const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   // for testting
   darkTheme: false,
+  users: [],
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    // case "SET_USER":
-    //   return {
-    //     ...state,
-    //     user: action.user,
-    //   };
+    case "SET_USERS":
+      return {
+        ...state,
+        users: action.payload,
+      };
 
-    // for testing
     case "SET_USER":
       return {
         ...state,

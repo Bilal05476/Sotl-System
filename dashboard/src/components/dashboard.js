@@ -52,6 +52,7 @@ import {
   Row,
   Table,
 } from "reactstrap";
+import { useStateValue } from "../StateProvider";
 
 ChartJS.register(
   CategoryScale,
@@ -214,62 +215,76 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
+  const [{ user }] = useStateValue();
   return (
     <Fragment>
       <Breadcrumb title="Dashboard" parent="Dashboard" />
       <Container fluid={true}>
         <Row>
-          <Col xl="3 xl-50" md="6">
-            <Card className=" o-hidden widget-cards">
-              <CardBody className="bg-warning">
-                <Media className="static-top-widget row">
-                  <div className="icons-widgets col-4">
-                    <div className="align-self-center text-center">
-                      <Navigation className="font-warning" />
-                    </div>
-                  </div>
-                  <Media body className="col-8">
-                    <span className="m-0">Campus Directors</span>
-                    <h3 className="mb-0">
-                      <CountUp className="counter" end={5} />
-                      <small> Currently</small>
-                    </h3>
-                  </Media>
-                </Media>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col xl="3 xl-50" md="6">
-            <Card className=" o-hidden  widget-cards">
-              <CardBody className="bg-secondary ">
-                <Media className="static-top-widget row">
-                  <div className="icons-widgets col-4">
-                    <div className="align-self-center text-center">
-                      <Box className="font-secondary" />
-                    </div>
-                  </div>
-                  <Media body className="col-8">
-                    <span className="m-0">Head of Departments</span>
-                    <h3 className="mb-0">
-                      <CountUp className="counter" end={18} />
-                      <small> Currently</small>
-                    </h3>
-                  </Media>
-                </Media>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col xl="3 xl-50" md="6">
+          {user.role === "Admin" || user.role === "Campus_Director" ? (
+            <>
+              <Col xl="3 xl-25" md="6">
+                <Card className=" o-hidden widget-cards">
+                  <CardBody className="bg-warning">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Users className="font-warning" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Campus Directors</span>
+                        <h3 className="mb-0">
+                          <CountUp className="counter" end={5} />
+                          <small> Currently</small>
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xl="3 xl-25" md="6">
+                <Card className=" o-hidden  widget-cards">
+                  <CardBody className="bg-secondary ">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Users className="font-secondary" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Head of Departments</span>
+                        <h3 className="mb-0">
+                          <CountUp className="counter" end={18} />
+                          <small> Currently</small>
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+            </>
+          ) : (
+            <></>
+          )}
+          <Col
+            xl={`3 ${
+              user.role === "Campus_Director" || user.role === "Admin"
+                ? "xl-25"
+                : "xl-50"
+            }`}
+            md="6"
+          >
             <Card className="o-hidden widget-cards">
               <CardBody className="bg-primary">
                 <Media className="static-top-widget row">
                   <div className="icons-widgets col-4">
                     <div className="align-self-center text-center">
-                      <MessageSquare className="font-primary" />
+                      <Users className="font-primary" />
                     </div>
                   </div>
                   <Media body className="col-8">
-                    <span className="m-0">Observers</span>
+                    <span className="m-0">Faculty Observers</span>
                     <h3 className="mb-0">
                       <CountUp className="counter" end={20} />
                       <small> Currently</small>
@@ -279,7 +294,14 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col>
-          <Col xl="3 xl-50" md="6">
+          <Col
+            xl={`3 ${
+              user.role === "Campus_Director" || user.role === "Admin"
+                ? "xl-25"
+                : "xl-50"
+            }`}
+            md="6"
+          >
             <Card className=" o-hidden widget-cards">
               <CardBody className="bg-danger ">
                 <Media className="static-top-widget row">
@@ -1120,7 +1142,5 @@ const Dashboard = () => {
     </Fragment>
   );
 };
-
-// javascript:void(0)
 
 export default Dashboard;

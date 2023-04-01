@@ -1,5 +1,5 @@
 import React from "react";
-import man from "../../../assets/images/dashboard/man.png";
+import avatar from "../../../assets/images/dashboard/avatar.png";
 import { useStateValue } from "../../../StateProvider";
 
 const UserPanel = () => {
@@ -10,7 +10,7 @@ const UserPanel = () => {
         <div>
           <img
             className="img-60 rounded-circle lazyloaded blur-up"
-            src={man}
+            src={user?.avatar ? user.avatar : avatar}
             alt="#"
           />
         </div>
