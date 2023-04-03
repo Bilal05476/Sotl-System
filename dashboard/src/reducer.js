@@ -18,6 +18,12 @@ const reducer = (state, action) => {
         ...state,
         user: action.payload,
       };
+
+    case "CLEAR_USER":
+      return {
+        ...state,
+        user: null,
+      };
     case "TOGGLE_THEME":
       return {
         ...state,

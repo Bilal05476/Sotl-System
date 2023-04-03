@@ -6,13 +6,17 @@ import { useStateValue } from "../../../StateProvider";
 
 const UserMenu = () => {
   const navigate = useNavigate();
+  const [{ user }, dispatch] = useStateValue();
+
   const onLogout = () => {
     navigate("/");
     setTimeout(() => {
       localStorage.clear();
+      dispatch({
+        type: "CLEAR_USER",
+      });
     }, 1000);
   };
-  const [{ user }] = useStateValue();
   return (
     <Fragment>
       <li className="onhover-dropdown">

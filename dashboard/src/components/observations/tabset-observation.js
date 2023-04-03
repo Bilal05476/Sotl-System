@@ -6,8 +6,8 @@ import { useStateValue } from "../../StateProvider";
 const TabsetObservation = () => {
   const [{ user, users }] = useStateValue();
   const [createObs, setCreateObs] = useState({
-    facultyId: "Select",
-    observerId: "Select",
+    facultyId: 0,
+    observerId: 0,
     error: "",
     success: "",
   });
@@ -15,8 +15,8 @@ const TabsetObservation = () => {
 
   const onCreateObservation = () => {
     const obsDetail = {
-      facultyId,
-      observerId,
+      facultyId: Number(facultyId),
+      observerId: Number(observerId),
       hodId: user.id,
     };
     async function postObs() {
@@ -44,14 +44,14 @@ const TabsetObservation = () => {
           setCreateObs({
             ...createObs,
             error: "",
-            facultyId: "Select",
-            observerId: "Select",
+            facultyId: 0,
+            observerId: 0,
             success: "",
           });
         }, 2000);
       }
     }
-    if (facultyId === "Select" || observerId === "Select") {
+    if (facultyId === 0 || observerId === 0) {
       setCreateObs({
         ...createObs,
         error: "Provide both faculty and observer",
@@ -132,7 +132,7 @@ const TabsetObservation = () => {
                     })
                   }
                 >
-                  <option value="Select">Select</option>
+                  <option value={0}>Select</option>
                   {users.map(
                     (item) =>
                       item.role === "Observer" && (
@@ -162,7 +162,7 @@ const TabsetObservation = () => {
                     })
                   }
                 >
-                  <option value="Select">Select</option>
+                  <option value={0}>Select</option>
                   {users.map(
                     (item) =>
                       item.role === "Faculty" && (
