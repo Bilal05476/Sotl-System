@@ -3,6 +3,7 @@ export const initialState = {
   // for testting
   darkTheme: false,
   users: [],
+  allObs: [],
 };
 
 const reducer = (state, action) => {
@@ -23,6 +24,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         user: null,
+      };
+    case "SET_OBS":
+      return {
+        ...state,
+        allObs: action.payload,
       };
     case "TOGGLE_THEME":
       return {

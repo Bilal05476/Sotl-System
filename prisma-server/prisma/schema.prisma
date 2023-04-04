@@ -11,85 +11,114 @@ datasource db {
 }
 
 model User {
-  id             Int           @id @default(autoincrement()) // auto-inc
-  name           String
-  email          String        @unique // should be unique
-  phone          String?
-  password       String
-  avatar         String?
-  designation    String?
-  dateOfBirth    DateTime?
-  institute      String?
-  degree         String?
-  starting       DateTime?
-  ending         DateTime?
-  role           Role
-  campus         Campus
-  department     Department
-  observations   Observations? @relation(fields: [observationIds], references: [id])
-  observationIds Int?
-  obsRequests    ObsRequests?  @relation(fields: [obsRequestIds], references: [id])
-  obsRequestIds  Int?
-  courses        Courses?      @relation(fields: [courseIds], references: [id])
-  courseIds      Int?
-  feedbacks      FeedBacks?    @relation(fields: [feedbackIds], references: [id])
-  feedbackIds    Int?
-  messages       Messages?     @relation(fields: [messageIds], references: [id])
-  messageIds     Int?
+  id                   Int            @id @default(autoincrement()) // auto-inc
+  name                 String
+  email                String         @unique // should be unique
+  phone                String?
+  password             String
+  avatar               String?
+  designation          String?
+  dateOfBirth          DateTime?
+  institute            String?
+  degree               String?
+  starting             DateTime?
+  ending               DateTime?
+  role                 Role
+  campus               Campus
+  department           Department
+  //observations
+  faclutyObservations  Observations[] @relation("Faculty")
+  hodObservations      Observations[] @relation("Hod")
+  observerObservations Observations[] @relation("Observer")
+  //observation request
+  facultyRequest       ObsRequests[]  @relation("Faculty")
+  observerRequest      ObsRequests[]  @relation("Observer")
+  //courses
+  facultyCourses       Courses[]      @relation("Faculty")
+  observerCourses      Courses[]      @relation("Observer")
+  //feebacks
+  facultyFeedback      FeedBacks[]    @relation("Faculty")
+  observerFeedback     FeedBacks[]    @relation("Observer")
+  //messages
+  facultyMessages      Messages[]     @relation("Faculty")
+  observerMessages     Messages[]     @relation("Observer")
+  hodMessages          Messages[]     @relation("Hod")
 
   @@index([email]) // sorting
 }
 
 model ObsRequests {
-  id           Int     @id @default(autoincrement()) // auto-inc
-  message      String
-  teachingPlan String
-  course       Courses @relation(fields: [courseId], references: [id])
-  courseId     Int
-  User         User[]
+  id                Int          @id @default(autoincrement()) // auto-inc
+  // message      String
+  teachingPlan      String?
+  observationRubric String?
+  observer          User?        @relation("Observer", fields: [observerId], references: [id])
+  observerId        Int?
+  faculty           User?        @relation("Faculty", fields: [facultyId], references: [id])
+  facultyId         Int?
+  observation       Observations @relation(fields: [observationId], references: [id])
+  observationId     Int
+  obsReqStatus      Status       @default(Pending)
 }
 
 model Observations {
-  id                  Int       @id @default(autoincrement()) // auto-inc
+  id                  Int           @id @default(autoincrement()) // auto-inc
   timeSlot            DateTime?
-  course              Courses?  @relation(fields: [courseId], references: [id])
+  observationStatus   Status        @default(Pending)
+  observationProgress Int           @default(0)
+  meetings            Meetings[]
+  faculty             User?         @relation("Faculty", fields: [facultyId], references: [id])
+  facultyId           Int?
+  hod                 User?         @relation("Hod", fields: [hodId], references: [id])
+  hodId               Int?
+  observer            User?         @relation("Observer", fields: [observerId], references: [id])
+  observerId          Int?
+  course              Courses?      @relation(fields: [courseId], references: [id])
   courseId            Int?
-  observationStatus   Boolean   @default(false)
-  observationProgress Int       @default(0)
-  meetings            Meetings? @relation(fields: [meetingIds], references: [id])
-  meetingIds          Int?
-  User                User[]
+  ObsRequests         ObsRequests[]
 }
 
 model Courses {
   id           Int            @id @default(autoincrement()) // auto-inc
   courseName   String
   department   Department
-  observations Observations[]
-  ObsRequests  ObsRequests[]
-  User         User[]
+  observer     User?          @relation("Observer", fields: [observerId], references: [id])
+  observerId   Int?
+  faculty      User?          @relation("Faculty", fields: [facultyId], references: [id])
+  facultyId    Int?
+  Observations Observations[]
 }
 
 model Meetings {
-  id           Int            @id @default(autoincrement()) // auto-inc
-  meetingName  String         @default("Pre-Obs") //default Pre Observation
-  meetingScore Int            @default(0)
-  rubric       Bytes? // image file bytes
-  profDevPlan  Bytes?
-  Observations Observations[]
-  feedbacks    FeedBacks?     @relation(fields: [feedbackIds], references: [id])
-  feedbackIds  Int?
+  id            Int           @id @default(autoincrement()) // auto-inc
+  meetingName   String        @default("Pre-Obs") //default Pre Observation
+  meetingScore  Int           @default(0)
+  rubric        Bytes? // image file bytes
+  profDevPlan   Bytes?
+  observations  Observations? @relation(fields: [observationId], references: [id])
+  observationId Int?
+  feedbacks     FeedBacks[]
 }
 
 model FeedBacks {
-  id       Int        @id @default(autoincrement()) // auto-inc
-  User     User[]
-  Meetings Meetings[]
+  id         Int      @id @default(autoincrement()) // auto-inc
+  observer   User?    @relation("Observer", fields: [observerId], references: [id])
+  observerId Int?
+  faculty    User?    @relation("Faculty", fields: [facultyId], references: [id])
+  facultyId  Int?
+  meeting    Meetings @relation(fields: [meetingId], references: [id])
+  meetingId  Int
 }
 
 model Messages {
-  id   Int    @id @default(autoincrement()) // auto-inc
-  User User[]
+  id         Int    @id @default(autoincrement()) // auto-inc
+  message    String
+  observer   User?  @relation("Observer", fields: [observerId], references: [id])
+  observerId Int?
+  faculty    User?  @relation("Faculty", fields: [facultyId], references: [id])
+  facultyId  Int?
+  hod        User?  @relation("Hod", fields: [hodId], references: [id])
+  hodId      Int?
 }
 
 enum Role {
@@ -114,4 +143,10 @@ enum Campus {
   Airport_Campus
   Bahria_Campus
   Islamabad_Campus
+}
+
+enum Status {
+  Pending
+  Ongoing
+  Completed
 }

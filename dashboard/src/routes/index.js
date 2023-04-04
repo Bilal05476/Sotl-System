@@ -18,8 +18,21 @@ const Routers = () => {
       payload: data,
     });
   };
+  const getAllObs = async () => {
+    const res = await fetch("http://localhost:8080/api/all-obs", {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+    dispatch({
+      type: "SET_OBS",
+      payload: data,
+    });
+  };
   useEffect(() => {
     getAllUsers();
+    getAllObs();
   }, []);
   return (
     <Fragment>

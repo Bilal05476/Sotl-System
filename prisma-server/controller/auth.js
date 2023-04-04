@@ -12,6 +12,22 @@ export const getUsers = asyncHandler(async (req, res) => {
   res.status(200).send(allUsers);
 });
 
+// @desc   Get User by id
+// @route  POST api/get-user/:id
+// @access Public
+export const userById = asyncHandler(async (req, res) => {
+  const [user] = await prisma.user.findMany({
+    where: {
+      id: Number(req.params.id),
+    },
+  });
+  if (user) {
+    res.status(200).send(user);
+  } else {
+    res.status(404).send({ error: "No user found" });
+  }
+});
+
 // @desc   Register or Add any Role
 // @route  POST api/register
 // @access Private (Parent Role Like (Admin, Campus Director, HOD))
@@ -39,6 +55,8 @@ export const createUser = asyncHandler(async (req, res) => {
       campus: Campus[campus],
       department: Department[department],
     };
+    // res.status(200).send(newUserData);
+    // return;
     // create new user in database
     const newUser = await prisma.user.create({
       data: newUserData,

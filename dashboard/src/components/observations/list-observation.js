@@ -1,11 +1,45 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import data from "../../assets/data/listUser";
 import Datatable from "../common/datatable";
 import { Card, CardBody, CardHeader, Container } from "reactstrap";
+import { useStateValue } from "../../StateProvider";
 
 const List_observation = () => {
+  const [{ allObs }] = useStateValue();
+  const [obsUsers, setObsUsers] = useState({
+    facultyName: "",
+    observerName: "",
+    hodName: "",
+  });
+  // console.log(allObs);
+  const { facultyName, observerName, hodName } = obsUsers;
+  const getUserForObs = async (fid, oid, hid) => {
+    const fres = await fetch(`http://localhost:8080/api/get-user/${fid}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const ores = await fetch(`http://localhost:8080/api/get-user/${oid}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const hres = await fetch(`http://localhost:8080/api/get-user/${hid}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const faculty = await fres.json();
+    const observer = await ores.json();
+    const hod = await hres.json();
+    setObsUsers({
+      facultyName: faculty.name,
+      observerName: observer.name,
+      hodName: hod.name,
+    });
+  };
   return (
     <Fragment>
       <Breadcrumb title="Observation List" parent="Observations" />
@@ -28,13 +62,50 @@ const List_observation = () => {
               id="batchDelete"
               className="category-table user-list order-table coupon-list-delete"
             >
-              <Datatable
+              {/* <Datatable
                 multiSelectOption={true}
                 myData={data}
                 pageSize={10}
                 pagination={true}
-                class="-striped -highlight"
-              />
+                // className="-striped -highlight"
+              /> */}
+              <table>
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Faculty</th>
+                    <th>Observer</th>
+                    <th>Head of department</th>
+                    <th>Date&amp;Time</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allObs.map((item) => {
+                    getUserForObs(item.facultyId, item.observerId, item.hodId);
+                    return (
+                      <tr>
+                        <td>{item.id}</td>
+                        <td>{facultyName}</td>
+                        <td>{observerName}</td>
+                        <td>{hodName}</td>
+                        <td>
+                          {item.timeSlot ? item.timeSlot : "Not Allocated"}
+                        </td>
+                        <td>{item.observationProgress}%</td>
+                        <td>
+                          {item.observationStatus === false
+                            ? "Ongoing"
+                            : item.observationStatus === true
+                            ? "Completed"
+                            : "Pending"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </CardBody>
         </Card>
