@@ -14,8 +14,8 @@ import {
 obsRoutes.route("/initiate-obs").post(initateObs);
 
 obsRoutes.route("/pre-obs-by-observer").post(preObsByObserver);
-obsRoutes.route("/pre-obs-by-faculty").post(preObsByFaculty);
-obsRoutes.route("/pre-obs-accepted").post(preObsAcceptedByObserver);
+obsRoutes.route("/pre-obs-by-faculty/:id").post(preObsByFaculty);
+obsRoutes.route("/pre-obs-accepted/:id").post(preObsAcceptedByObserver);
 
 obsRoutes.route("/all-obs").get(getAllObs);
 

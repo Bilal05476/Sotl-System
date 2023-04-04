@@ -51,7 +51,7 @@ const TabsetObservation = () => {
         }, 2000);
       }
     }
-    if (facultyId === 0 || observerId === 0) {
+    if (!facultyId || !observerId) {
       setCreateObs({
         ...createObs,
         error: "Provide both faculty and observer",
@@ -116,7 +116,7 @@ const TabsetObservation = () => {
 
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
-                <span>*</span> Faculty Observer
+                <span>*</span> Observer
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input
@@ -146,7 +146,7 @@ const TabsetObservation = () => {
             </FormGroup>
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
-                <span>*</span> Faculty Member
+                <span>*</span> Faculty
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input

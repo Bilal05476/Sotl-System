@@ -51,6 +51,7 @@ model ObsRequests {
   id                Int          @id @default(autoincrement()) // auto-inc
   // message      String
   teachingPlan      String?
+  timeSlot          Json?
   observationRubric String?
   observer          User?        @relation("Observer", fields: [observerId], references: [id])
   observerId        Int?

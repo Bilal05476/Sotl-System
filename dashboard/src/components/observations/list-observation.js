@@ -12,10 +12,11 @@ const List_observation = () => {
     facultyName: "",
     observerName: "",
     hodName: "",
+    courseName: "",
   });
   // console.log(allObs);
-  const { facultyName, observerName, hodName } = obsUsers;
-  const getUserForObs = async (fid, oid, hid) => {
+  const { facultyName, observerName, hodName, courseName } = obsUsers;
+  const getUserForObs = async (fid, oid, hid, cid) => {
     const fres = await fetch(`http://localhost:8080/api/get-user/${fid}`, {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -31,13 +32,20 @@ const List_observation = () => {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
+    const cres = await fetch(`http://localhost:8080/api/get-course/${cid}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
     const faculty = await fres.json();
     const observer = await ores.json();
     const hod = await hres.json();
+    // const course = await cres.json();
     setObsUsers({
       facultyName: faculty.name,
       observerName: observer.name,
       hodName: hod.name,
+      // courseName: course.courseName,
     });
   };
   return (
@@ -73,6 +81,7 @@ const List_observation = () => {
                 <thead>
                   <tr>
                     <th>Id</th>
+                    <th>Course</th>
                     <th>Faculty</th>
                     <th>Observer</th>
                     <th>Head of department</th>
@@ -83,10 +92,16 @@ const List_observation = () => {
                 </thead>
                 <tbody>
                   {allObs.map((item) => {
-                    getUserForObs(item.facultyId, item.observerId, item.hodId);
+                    getUserForObs(
+                      item.facultyId,
+                      item.observerId,
+                      item.hodId,
+                      item?.courseId
+                    );
                     return (
                       <tr>
                         <td>{item.id}</td>
+                        <td>{item.courseId ? courseName : "Not Assigned"}</td>
                         <td>{facultyName}</td>
                         <td>{observerName}</td>
                         <td>{hodName}</td>
@@ -95,9 +110,9 @@ const List_observation = () => {
                         </td>
                         <td>{item.observationProgress}%</td>
                         <td>
-                          {item.observationStatus === false
+                          {item.observationStatus === "Ongoing"
                             ? "Ongoing"
-                            : item.observationStatus === true
+                            : item.observationStatus === "Completed"
                             ? "Completed"
                             : "Pending"}
                         </td>

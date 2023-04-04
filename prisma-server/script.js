@@ -29,6 +29,10 @@ app.use("/api", authRoutes);
 import obsRoutes from "./routes/observation.js";
 app.use("/api", obsRoutes);
 
+// courses
+import courseRoutes from "./routes/courses.js";
+app.use("/api", courseRoutes);
+
 const port = 8080;
 
 app.listen(port, () => {
