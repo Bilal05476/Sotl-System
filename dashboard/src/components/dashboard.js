@@ -9,6 +9,7 @@ import {
   CreditCard,
   ShoppingCart,
   Calendar,
+  Eye,
 } from "react-feather";
 import CountUp from "react-countup";
 import { Chart } from "react-google-charts";
@@ -71,23 +72,25 @@ ChartJS.register(
 
 const Dashboard = () => {
   const lineData = {
-    labels: ["100", "200", "300", "400", "500", "600", "700", "800"],
+    labels: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug"],
     datasets: [
       {
-        data: [2.5, 3, 3, 0.9, 1.3, 1.8, 3.8, 1.5],
-        borderColor: "#ff8084",
-        backgroundColor: "#ff8084",
+        data: [2, 3, 0, 1, 3, 1, 1, 3],
+        borderColor: "#040b5b",
+        backgroundColor: "lightblue",
         borderWidth: 2,
         barPercentage: 0.7,
         categoryPercentage: 0.4,
+        label: "Ongoing",
       },
       {
-        data: [3.8, 1.8, 4.3, 2.3, 3.6, 2.8, 2.8, 2.8],
-        borderColor: "#a5a5a5",
-        backgroundColor: "#a5a5a5",
+        data: [3, 5, 3, 1, 3, 7, 2, 2],
+        borderColor: "lightblue",
+        backgroundColor: "#040b5b",
         borderWidth: 2,
         barPercentage: 0.7,
         categoryPercentage: 0.4,
+        label: "Completed",
       },
     ],
   };
@@ -247,7 +250,7 @@ const Dashboard = () => {
                 <Card className=" o-hidden  widget-cards">
                   <CardBody className="bg-secondary ">
                     <Media className="static-top-widget row">
-                      <div className="icons-widgets col-4">
+                      <div className="-widgets col-4">
                         <div className="align-self-center text-center">
                           <Users className="font-secondary" />
                         </div>
@@ -324,7 +327,7 @@ const Dashboard = () => {
           <Col xl="6 xl-100">
             <Card>
               <CardHeader>
-                <h5>Market Value</h5>
+                <h5>Observations Stream</h5>
               </CardHeader>
               <CardBody>
                 <div className="market-chart">
@@ -341,54 +344,57 @@ const Dashboard = () => {
           <Col xl="6 xl-100">
             <Card>
               <CardHeader>
-                <h5>Latest Orders</h5>
+                <h5>Observations</h5>
               </CardHeader>
               <CardBody>
                 <div className="user-status table-responsive latest-order-table">
                   <Table borderless>
                     <thead>
                       <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Order Total</th>
-                        <th scope="col">Payment Method</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Faculty</th>
+                        <th scope="col">Observer</th>
+                        <th scope="col">Head of department</th>
+                        <th scope="col">Date&amp;Time</th>
+                        <th scope="col">Progress</th>
                         <th scope="col">Status</th>
+                        <th scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>1</td>
-                        <td className="digits">$120.00</td>
-                        <td className="font-danger">Bank Transfers</td>
-                        <td className="digits">On Way</td>
+                        <td className="digits">DAA</td>
+                        <td className="digits">Bilal Ahmed</td>
+                        {/* // font-danger */}
+                        <td className="digits">Krish Kanojia</td>
+                        <td className="digits">Sheraz Ahmed</td>
+                        <td className="digits">Tue, 11:30 am</td>
+                        <td className="digits">20%</td>
+                        <td className="digits text-primary">Ongoing</td>
+                        <td className="digits font-primary">
+                          <Eye size={20} />
+                        </td>
                       </tr>
                       <tr>
                         <td>2</td>
-                        <td className="digits">$90.00</td>
-                        <td className="font-secondary">Ewallets</td>
-                        <td className="digits">Delivered</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td className="digits">$240.00</td>
-                        <td className="font-warning">Cash</td>
-                        <td className="digits">Delivered</td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td className="digits">$120.00</td>
-                        <td className="font-primary">Direct Deposit</td>
-                        <td className="digits">$6523</td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td className="digits">$50.00</td>
-                        <td className="font-primary">Bank Transfers</td>
-                        <td className="digits">Delivered</td>
+                        <td className="digits">DBMS</td>
+                        <td className="digits">Bilal Ahmed</td>
+                        {/* // font-danger */}
+                        <td className="digits">Krish Kanojia</td>
+                        <td className="digits">Sheraz Ahmed</td>
+                        <td className="digits">Thurs, 11:30 am</td>
+                        <td className="digits">100%</td>
+                        <td className="digits text-success">Completed</td>
+                        <td className="digits font-primary">
+                          <Eye size={20} />
+                        </td>
                       </tr>
                     </tbody>
                   </Table>
                   <a href="#javaScript" className="btn btn-primary">
-                    View All Orders
+                    View All Observerions
                   </a>
                 </div>
               </CardBody>
