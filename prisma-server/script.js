@@ -9,13 +9,13 @@ dotenv.config();
 
 app.use(
   bodyParser.json({
-    limit: "50mb",
+    limit: "250mb",
   })
 );
 
 app.use(
   bodyParser.urlencoded({
-    limit: "50mb",
+    limit: "250mb",
     parameterLimit: 100000,
     extended: true,
   })
@@ -33,7 +33,7 @@ app.use("/api", obsRoutes);
 import courseRoutes from "./routes/courses.js";
 app.use("/api", courseRoutes);
 
-// const port = 8080;
+const port = 8080;
 
 app.use("/", (req, res) => {
   res.status(200).json({
@@ -41,4 +41,6 @@ app.use("/", (req, res) => {
   });
 });
 
-app.listen();
+app.listen(port, () => {
+  console.log("Server Running");
+});
