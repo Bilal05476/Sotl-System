@@ -35,6 +35,10 @@ app.use("/api", courseRoutes);
 
 const port = 8080;
 
-app.listen(port, () => {
-  console.log(`Server Started at port: ${port}`);
+app.use("/", (req, res) => {
+  res.status(200).json({
+    message: "Server Running",
+  });
 });
+
+app.listen(port);

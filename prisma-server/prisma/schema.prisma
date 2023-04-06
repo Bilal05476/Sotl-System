@@ -92,7 +92,7 @@ model Courses {
 
 model Meetings {
   id            Int           @id @default(autoincrement()) // auto-inc
-  meetingName   String        @default("Pre-Obs") //default Pre Observation
+  meetingName   Json?
   meetingScore  Int           @default(0)
   rubric        Bytes? // image file bytes
   profDevPlan   Bytes?
