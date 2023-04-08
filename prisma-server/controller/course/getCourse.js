@@ -3,19 +3,27 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
 // @desc   Get course by id
-// @route  POST api/get-course/:id
+// @route  POST api/course/:id
 // @access Public
 export const getCourse = asyncHandler(async (req, res) => {
-  const getCourseById = await prisma.courses.findMany({
+  const getCourseById = await prisma.courses.findFirst({
     where: {
-      id: req.params.id,
+      id: Number(req.params.id),
     },
   });
   res.status(200).send(getCourseById);
 });
 
+// @desc   Get courses
+// @route  POST api/courses
+// @access Public
+export const getCourses = asyncHandler(async (req, res) => {
+  const getCourseById = await prisma.courses.findMany();
+  res.status(200).send(getCourseById);
+});
+
 // @desc   Create course
-// @route  POST api/create-course/
+// @route  POST api/courses
 // @access Public
 export const createCourse = asyncHandler(async (req, res) => {
   const { courseName, department } = req.body;

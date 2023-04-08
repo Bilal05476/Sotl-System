@@ -5,18 +5,20 @@ import {
   initateObs,
 } from "../controller/Observation/initiateObs.js";
 import {
-  preObsAcceptedByObserver,
-  preObsByFaculty,
-  preObsByObserver,
+  // preObsAcceptedByObserver,
+  // preObsByFaculty,
+  obsScheculeCreate,
+  obsScheduleCycle,
+  // preObsByObserver,
 } from "../controller/Observation/preObs.js";
 // import { protect } from "../middleware/authMiddleware.js";
 
-// obsRoutes.route("/initiate-obs").post(initateObs);
+obsRoutes.route("/observation/initiate").post(initateObs);
 
-// obsRoutes.route("/pre-obs-by-observer").post(preObsByObserver);
-// obsRoutes.route("/pre-obs-by-faculty/:id").post(preObsByFaculty);
+obsRoutes.route("/observation/scheduling").post(obsScheculeCreate);
+obsRoutes.route("/observation/scheduling/:id").post(obsScheduleCycle);
 // obsRoutes.route("/pre-obs-accepted/:id").post(preObsAcceptedByObserver);
 
-// obsRoutes.route("/all-obs").get(getAllObs);
+obsRoutes.route("/observations").get(getAllObs);
 
 export default obsRoutes;

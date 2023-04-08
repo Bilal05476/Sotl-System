@@ -5,7 +5,7 @@ import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 
 // @desc   Get all users
-// @route  POST api/get-users
+// @route  POST api/users
 // @access Private
 export const getUsers = asyncHandler(async (req, res) => {
   const allUsers = await prisma.user.findMany();
@@ -13,7 +13,7 @@ export const getUsers = asyncHandler(async (req, res) => {
 });
 
 // @desc   Get User by id
-// @route  POST api/get-user/:id
+// @route  POST api/user/:id
 // @access Public
 export const userById = asyncHandler(async (req, res) => {
   const [user] = await prisma.user.findMany({
@@ -29,7 +29,7 @@ export const userById = asyncHandler(async (req, res) => {
 });
 
 // @desc   Register or Add any Role
-// @route  POST api/register
+// @route  POST api/create
 // @access Private (Parent Role Like (Admin, Campus Director, HOD))
 export const createUser = asyncHandler(async (req, res) => {
   const { name, email, password, role, campus, department, courses } = req.body;
@@ -103,37 +103,36 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 // @desc   Update User
-// @route  POST api/update-user
+// @route  POST api/update/:id
 // @access Private (only user update their own data)
 export const updateUser = asyncHandler(async (req, res) => {
-  const { id, name, dateOfBirth, institute, degree, starting, ending } =
-    req.body;
+  const { name, dateOfBirth, institute, degree, starting, ending } = req.body;
 
   // Validate if user exist in our database
-  const [user] = await prisma.user.findMany({
+  // const [user] = await prisma.user.findMany({
+  //   where: {
+  //     id: Number(req.params.id),
+  //   },
+  // });
+
+  // if (user) {
+  const updateUser = await prisma.user.update({
     where: {
-      id,
+      id: Number(req.params.id),
+    },
+    data: {
+      dateOfBirth,
+      institute,
+      degree,
+      starting,
+      ending,
+      name,
     },
   });
-
-  if (user) {
-    const updateUser = await prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        dateOfBirth,
-        institute,
-        degree,
-        starting,
-        ending,
-        name,
-      },
-    });
-    res.status(200).send(updateUser);
-  } else {
-    res.status(404).send({ error: "No User Exist" });
-  }
+  res.status(200).send(updateUser);
+  // } else {
+  //   res.status(404).send({ error: "No User Exist" });
+  // }
 });
 
 // Generate JWT

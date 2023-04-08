@@ -198,6 +198,7 @@ model Observations {
   course              Int?
   obsRequest          Int?
   semester            String
+  observationScore    Int       @default(0)
 }
 
 // -> Observations -> ObsRequests
@@ -212,7 +213,6 @@ model ObsRequests {
   timeSlotsByObserver       Json?
   obsReqStatus              Status  @default(Pending)
   courseByFaculty           Int?
-  observationScore          Int     @default(0)
 }
 
 // -> Observations -> Meetings

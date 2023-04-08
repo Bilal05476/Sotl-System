@@ -2,14 +2,31 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
-export const preObsByObserver = asyncHandler(async (req, res) => {
-  const { observationRubric, facultyId, observationId, observerId } = req.body;
+export const obsScheculeCreate = asyncHandler(async (req, res) => {
+  const {
+    teachingPlanByFaculty,
+    teachingPlanByObserver,
+    refelectionPlanByFaculty,
+    refelectionPlanByObserver,
+    artifcats,
+    timeSlotsByFaculty,
+    timeSlotsByObserver,
+    obsReqStatus,
+    courseByFaculty,
+  } = req.body;
 
   const reqData = {
-    observationRubric,
-    facultyId,
-    observationId,
-    observerId,
+    teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
+    teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
+    refelectionPlanByFaculty:
+      refelectionPlanByFaculty && refelectionPlanByFaculty,
+    refelectionPlanByObserver:
+      refelectionPlanByObserver && refelectionPlanByObserver,
+    artifcats: artifcats && artifcats,
+    timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
+    timeSlotsByObserver: timeSlotsByObserver && timeSlotsByObserver,
+    obsReqStatus,
+    courseByFaculty: courseByFaculty && courseByFaculty,
   };
 
   const createdReq = await prisma.obsRequests.create({
@@ -66,4 +83,63 @@ export const preObsAcceptedByObserver = asyncHandler(async (req, res) => {
     });
     res.status(200).send(updatedReq);
   }
+});
+
+export const obsScheduleCycle = asyncHandler(async (req, res) => {
+  const {
+    teachingPlanByFaculty,
+    teachingPlanByObserver,
+    refelectionPlanByFaculty,
+    refelectionPlanByObserver,
+    artifcats,
+    timeSlotsByFaculty,
+    timeSlotsByObserver,
+    obsReqStatus,
+    courseByFaculty,
+  } = req.body;
+
+  const reqData = {
+    teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
+    teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
+    refelectionPlanByFaculty:
+      refelectionPlanByFaculty && refelectionPlanByFaculty,
+    refelectionPlanByObserver:
+      refelectionPlanByObserver && refelectionPlanByObserver,
+    artifcats: artifcats && artifcats,
+    timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
+    timeSlotsByObserver: timeSlotsByObserver && timeSlotsByObserver,
+    obsReqStatus,
+    courseByFaculty: courseByFaculty && courseByFaculty,
+  };
+
+  const [existedReq] = await prisma.obsRequests.findMany({
+    where: {
+      id: Number(req.params.id),
+    },
+  });
+  // if(
+  //   existedReq.
+  // )
+
+  // const updatedReq = await prisma.obsRequests.update({
+  //   where: {
+  //     id: Number(req.params.id),
+  //   },
+  //   data: {
+  //     obsReqStatus: "Completed",
+  //   },
+  // });
+  // if (updatedReq) {
+  //   await prisma.observations.update({
+  //     where: {
+  //       id: observationId,
+  //     },
+  //     data: {
+  //       observationStatus: "Ongoing",
+  //       timeSlot,
+  //     },
+  //   });
+  //   res.status(200).send(updatedReq);
+  // }
+  res.status(200).send(existedReq);
 });
