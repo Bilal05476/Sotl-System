@@ -35,12 +35,16 @@ app.use("/api", courseRoutes);
 
 const port = 8080;
 
-app.use("/", (req, res) => {
-  res.status(200).json({
-    message: "Server Running",
-  });
-});
-
 app.listen(port, () => {
   console.log("Server Running");
 });
+
+// const meetings = {
+//   informed: {
+//     score: 38,
+//   },
+//   postObservation: {},
+//   uninformed: {},
+//   pdp: {},
+// };
+// console.log(meetings);

@@ -5,7 +5,7 @@ import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 
 // @desc   Get all users
-// @route  POST api/all-users
+// @route  POST api/get-users
 // @access Private
 export const getUsers = asyncHandler(async (req, res) => {
   const allUsers = await prisma.user.findMany();
@@ -32,7 +32,7 @@ export const userById = asyncHandler(async (req, res) => {
 // @route  POST api/register
 // @access Private (Parent Role Like (Admin, Campus Director, HOD))
 export const createUser = asyncHandler(async (req, res) => {
-  const { name, email, password, role, campus, department } = req.body;
+  const { name, email, password, role, campus, department, courses } = req.body;
 
   // Validate if user exist in our database
   const [existedUser] = await prisma.user.findMany({
@@ -54,6 +54,10 @@ export const createUser = asyncHandler(async (req, res) => {
       role: Role[role],
       campus: Campus[campus],
       department: Department[department],
+      observations: [],
+      courses,
+      messages: [],
+      feedbacks: [],
     };
     // res.status(200).send(newUserData);
     // return;

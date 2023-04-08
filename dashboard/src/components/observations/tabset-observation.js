@@ -6,18 +6,21 @@ import { useStateValue } from "../../StateProvider";
 const TabsetObservation = () => {
   const [{ user, users }] = useStateValue();
   const [createObs, setCreateObs] = useState({
-    facultyId: 0,
-    observerId: 0,
+    facultyId: "Select",
+    observerId: "Select",
+    semester: "",
     error: "",
     success: "",
+    loader: false,
   });
-  const { facultyId, observerId, error, success } = createObs;
+  const { facultyId, observerId, error, success, semester, loader } = createObs;
 
   const onCreateObservation = () => {
     const obsDetail = {
       facultyId: Number(facultyId),
       observerId: Number(observerId),
       hodId: user.id,
+      semester,
     };
     async function postObs() {
       const res = await fetch("http://localhost:8080/api/initiate-obs", {
@@ -33,33 +36,47 @@ const TabsetObservation = () => {
           ...createObs,
           error: data.error,
           success: "",
+          loader: false,
         });
       } else {
         setCreateObs({
           ...createObs,
           success: "Observation initiated successfully",
+          loader: false,
         });
 
         setTimeout(() => {
           setCreateObs({
             ...createObs,
             error: "",
-            facultyId: 0,
-            observerId: 0,
+            facultyId: "Select",
+            observerId: "Select",
             success: "",
+            semester: "",
           });
         }, 2000);
       }
     }
-    if (!facultyId || !observerId) {
-      setCreateObs({
-        ...createObs,
-        error: "Provide both faculty and observer",
-        success: "",
-      });
-    } else {
-      postObs();
-    }
+
+    setCreateObs({
+      ...createObs,
+      error: "",
+      success: "",
+      loader: true,
+    });
+
+    setTimeout(() => {
+      if (facultyId === "Select" || observerId === "Select" || !semester) {
+        setCreateObs({
+          ...createObs,
+          error: "Provide fill all the fields",
+          success: "",
+          loader: false,
+        });
+      } else {
+        postObs();
+      }
+    }, 1500);
   };
 
   return (
@@ -132,7 +149,7 @@ const TabsetObservation = () => {
                     })
                   }
                 >
-                  <option value={0}>Select</option>
+                  <option value="Select">Select</option>
                   {users.map(
                     (item) =>
                       item.role === "Observer" && (
@@ -162,7 +179,7 @@ const TabsetObservation = () => {
                     })
                   }
                 >
-                  <option value={0}>Select</option>
+                  <option value="Select">Select</option>
                   {users.map(
                     (item) =>
                       item.role === "Faculty" && (
@@ -174,17 +191,44 @@ const TabsetObservation = () => {
                 </Input>
               </div>
             </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Semester
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom4"
+                  placeholder="Fall 2023"
+                  type="text"
+                  required={true}
+                  value={semester}
+                  onChange={(e) =>
+                    setCreateObs({
+                      ...createObs,
+                      semester: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </FormGroup>
           </Form>
         </TabPanel>
       </Tabs>
       <div className="pull-right">
-        <Button
-          onClick={() => onCreateObservation()}
-          type="button"
-          color="primary"
-        >
-          Initiate
-        </Button>
+        {loader ? (
+          <Button type="button" color="primary" style={{ cursor: "progress" }}>
+            Processing...
+          </Button>
+        ) : (
+          <Button
+            onClick={() => onCreateObservation()}
+            type="button"
+            color="primary"
+          >
+            Initiate
+          </Button>
+        )}
       </div>
     </Fragment>
   );

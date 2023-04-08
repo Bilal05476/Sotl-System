@@ -7,7 +7,7 @@ import { useStateValue } from "../StateProvider";
 const Routers = () => {
   const [{ user }, dispatch] = useStateValue();
   const getAllUsers = async () => {
-    const res = await fetch("http://localhost:8080/api/all-users", {
+    const res = await fetch("http://localhost:8080/api/get-users", {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

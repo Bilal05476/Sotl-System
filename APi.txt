@@ -10,7 +10,17 @@ Meeting Details (meetingID*, observationID**, meetingName: Pre-Obs, meetingFeedb
 
 
 
-
+user 
+    -> Observations [1,2,3]
+        -> ObsRequest
+        -> Meetings [1,2,3,4]
+            -> Informed
+            -> Post
+            -> Uninformed
+            -> PDP 
+    -> Courses [1,2,3]
+    -> Messages [1,2,3]
+    -> Feedbacks [1,2,3]
 
 
 
