@@ -1,0 +1,55 @@
+:root {
+  --themeColor--: #040b5b;
+}
+* {
+  margin: 0;
+  transition: 0.3s ease-in-out;
+}
+.home-component {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5rem 1rem;
+}
+.home-component .link {
+  border: 1px solid var(--themeColor--);
+  color: var(--themeColor--);
+  outline: none !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  min-width: 300px;
+  text-align: center;
+}
+.home-component .link:hover {
+  background-color: var(--themeColor--);
+  color: #fff;
+  box-shadow: 1px 1px 3px var(--themeColor--);
+}
+.users {
+  display: flex;
+  padding: 0;
+}
+.users .sidebar {
+  background-color: var(--themeColor--);
+  display: flex;
+  flex-direction: column;
+  padding: 6rem;
+  padding-left: 2rem;
+  /* padding-right: 6rem; */
+  height: 100vh;
+  box-shadow: 1px 1px 6px var(--themeColor--);
+}
+.users .sidebar .options {
+  color: #fff;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+@media (max-width: 820px) {
+  .home-component .link {
+    width: 100%;
+  }
+}
