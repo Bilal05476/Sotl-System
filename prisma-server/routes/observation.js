@@ -4,14 +4,14 @@ import {
   getAllObs,
   getObs,
   initateObs,
-} from "../controller/Observation/initiateObs.js";
+} from "../controller/observation/initiateObs.js";
 import {
   // preObsAcceptedByObserver,
   // preObsByFaculty,
   obsScheculeCreate,
   obsScheduleCycle,
   // preObsByObserver,
-} from "../controller/Observation/preObs.js";
+} from "../controller/observation/preObs.js";
 // import { protect } from "../middleware/authMiddleware.js";
 
 obsRoutes.route("/observation/initiate").post(initateObs);

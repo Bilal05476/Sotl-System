@@ -28,7 +28,7 @@ model User {
   campus           Campus
   department       Department
   //observations
-  faclutyObs       Observations[] @relation("Faculty")
+  facultyObs       Observations[] @relation("Faculty")
   hodObs           Observations[] @relation("Hod")
   observerObs      Observations[] @relation("Observer")
   //courses
@@ -44,25 +44,27 @@ model User {
 
 // -> User => Observations
 model Observations {
-  id                  Int           @id @default(autoincrement()) // auto-inc
-  timeSlot            DateTime?
-  observationStatus   Status        @default(Pending)
-  observationProgress Int           @default(0)
+  id                  Int            @id @default(autoincrement()) // auto-inc
+  timeSlot            Json?
+  observationStatus   Status         @default(Pending)
+  observationProgress Int            @default(0)
   course              Int?
   semester            String
-  observationScore    Int           @default(0)
-  faculty             User          @relation("Faculty", fields: [facultyId], references: [id])
+  observationScore    Int            @default(0)
+  faculty             User           @relation("Faculty", fields: [facultyId], references: [id])
   facultyId           Int
-  hod                 User          @relation("Hod", fields: [hodId], references: [id])
+  hod                 User           @relation("Hod", fields: [hodId], references: [id])
   hodId               Int
-  observer            User          @relation("Observer", fields: [observerId], references: [id])
+  observer            User           @relation("Observer", fields: [observerId], references: [id])
   observerId          Int
-  obsRequest          ObsRequests[]
+  obsRequest          ObsScheduling?
   meetings            Meetings[]
+  Course              Courses?       @relation(fields: [courseId], references: [id])
+  courseId            Int?
 }
 
-// -> Observations => ObsRequests
-model ObsRequests {
+// -> Observations => ObsScheduling
+model ObsScheduling {
   id                        Int          @id @default(autoincrement()) // auto-inc
   teachingPlanByFaculty     String?
   teachingPlanByObserver    String?
@@ -71,10 +73,11 @@ model ObsRequests {
   artifcats                 String?
   timeSlotsByFaculty        Json?
   timeSlotsByObserver       Json?
-  obsReqStatus              Status       @default(Pending)
-  courseByFaculty           Int?
+  status                    Status       @default(Pending)
   observation               Observations @relation(fields: [observationsId], references: [id])
-  observationsId            Int
+  observationsId            Int          @unique
+  Course                    Courses?     @relation(fields: [courseId], references: [id])
+  courseId                  Int?         @unique
 }
 
 // -> Observations => Meetings
@@ -135,14 +138,16 @@ model PDP {
 
 // -> User => Courses
 model Courses {
-  id         Int        @id @default(autoincrement()) // auto-inc
-  courseName String
-  department Department
-  campus     Campus
-  observer   User?      @relation("Observer", fields: [observerId], references: [id])
-  observerId Int?
-  faculty    User?      @relation("Faculty", fields: [facultyId], references: [id])
-  facultyId  Int?
+  id          Int             @id @default(autoincrement()) // auto-inc
+  courseName  String
+  department  Department
+  campus      Campus
+  observer    User?           @relation("Observer", fields: [observerId], references: [id])
+  observerId  Int?
+  faculty     User?           @relation("Faculty", fields: [facultyId], references: [id])
+  facultyId   Int?
+  scheduling  ObsScheduling[]
+  observation Observations[]
 }
 
 // -> User => Feedbacks

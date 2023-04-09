@@ -4,29 +4,18 @@ import asyncHandler from "express-async-handler";
 
 export const obsScheculeCreate = asyncHandler(async (req, res) => {
   const {
-    teachingPlanByFaculty,
     teachingPlanByObserver,
-    refelectionPlanByFaculty,
     refelectionPlanByObserver,
     artifcats,
-    timeSlotsByFaculty,
-    timeSlotsByObserver,
-    obsReqStatus,
-    courseByFaculty,
+    observationsId,
   } = req.body;
 
   const reqData = {
-    teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
     teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
-    refelectionPlanByFaculty:
-      refelectionPlanByFaculty && refelectionPlanByFaculty,
     refelectionPlanByObserver:
       refelectionPlanByObserver && refelectionPlanByObserver,
     artifcats: artifcats && artifcats,
-    timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
-    timeSlotsByObserver: timeSlotsByObserver && timeSlotsByObserver,
-    obsReqStatus,
-    courseByFaculty: courseByFaculty && courseByFaculty,
+    observationsId,
   };
 
   const createdReq = await prisma.obsRequests.create({
@@ -88,10 +77,7 @@ export const preObsAcceptedByObserver = asyncHandler(async (req, res) => {
 export const obsScheduleCycle = asyncHandler(async (req, res) => {
   const {
     teachingPlanByFaculty,
-    teachingPlanByObserver,
     refelectionPlanByFaculty,
-    refelectionPlanByObserver,
-    artifcats,
     timeSlotsByFaculty,
     timeSlotsByObserver,
     obsReqStatus,
@@ -100,46 +86,52 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 
   const reqData = {
     teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
-    teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
     refelectionPlanByFaculty:
       refelectionPlanByFaculty && refelectionPlanByFaculty,
-    refelectionPlanByObserver:
-      refelectionPlanByObserver && refelectionPlanByObserver,
-    artifcats: artifcats && artifcats,
     timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
     timeSlotsByObserver: timeSlotsByObserver && timeSlotsByObserver,
-    obsReqStatus,
+    obsReqStatus: obsReqStatus && obsReqStatus,
     courseByFaculty: courseByFaculty && courseByFaculty,
   };
 
-  const [existedReq] = await prisma.obsRequests.findMany({
+  const existedReq = await prisma.obsRequests.findFirst({
     where: {
       id: Number(req.params.id),
     },
   });
-  // if(
-  //   existedReq.
-  // )
-
-  // const updatedReq = await prisma.obsRequests.update({
-  //   where: {
-  //     id: Number(req.params.id),
-  //   },
-  //   data: {
-  //     obsReqStatus: "Completed",
-  //   },
-  // });
-  // if (updatedReq) {
-  //   await prisma.observations.update({
-  //     where: {
-  //       id: observationId,
-  //     },
-  //     data: {
-  //       observationStatus: "Ongoing",
-  //       timeSlot,
-  //     },
-  //   });
-  //   res.status(200).send(updatedReq);
-  // }
-  res.status(200).send(existedReq);
+  if (existedReq) {
+    const updatedReq = await prisma.obsRequests.update({
+      where: {
+        id: Number(req.params.id),
+      },
+      data: reqData,
+    });
+    if (updatedReq.obsReqStatus === "Completed") {
+      await prisma.observations.update({
+        where: {
+          id: updatedReq.observationsId,
+        },
+        data: {
+          observationStatus: "Ongoing",
+          timeSlot: updatedReq.timeSlotsByObserver,
+          course: updatedReq.courseByFaculty,
+        },
+      });
+      res.status(200).send({ message: "Meeting Scheduled Successfully!" });
+    } else {
+      res.status(200).send(updatedReq);
+    }
+  } else {
+    res.status(404).send({ error: "Request not exist!" });
+  }
+  // res.status(200).send(existedReq);
 });
+
+// {
+//   "teachingPlanByFaculty": "teaching",
+//   "courseByFaculty": 2,
+//   "timeSlotsByFaculty": ["2023-05-01:11:45:00Z", "2023-05-02:11:45:00Z"],
+//   "refelectionPlanByFaculty": "",
+//   "obsReqStatus": "Pending",
+//   "timeSlotsByObserver": []
+// }

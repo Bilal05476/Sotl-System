@@ -26,12 +26,14 @@ export const getCourses = asyncHandler(async (req, res) => {
 // @route  POST api/courses
 // @access Public
 export const createCourse = asyncHandler(async (req, res) => {
-  const { courseName, department, campus } = req.body;
+  const { courseName, department, campus, observerId, facultyId } = req.body;
   const newCourse = await prisma.courses.create({
     data: {
       department,
       courseName,
       campus,
+      observerId,
+      facultyId,
     },
   });
   res.status(200).send(newCourse);

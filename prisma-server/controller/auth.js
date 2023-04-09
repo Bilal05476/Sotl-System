@@ -21,40 +21,31 @@ export const userById = asyncHandler(async (req, res) => {
       id: Number(req.params.id),
     },
     include: {
-      faclutyObs: true || false,
-      observerObs: false || true,
-      hodObs: true || false,
+      facultyObs: true,
+      observerObs: true,
+      hodObs: true,
     },
   });
-  const exclude = ["observerObs", "hodObs", "faclutyObs"];
+  const exclude = ["observerObs", "hodObs", "facultyObs"];
+  const filtered = Object.keys(user).reduce((acc, key) => {
+    if (!exclude.includes(key)) {
+      acc[key] = user[key];
+    }
+    return acc;
+  }, {});
   if (user.role == "Faculty") {
-    const observations = user.faclutyObs;
-    const filtered = Object.keys(user).reduce((acc, key) => {
-      if (!exclude.includes(key)) {
-        acc[key] = user[key];
-      }
-      return acc;
-    }, {});
+    const observations = user.facultyObs;
+    //filtered
     filtered.observations = observations;
     res.status(200).send(filtered);
   } else if (user.role == "Observer") {
     const observations = user.observerObs;
-    const filtered = Object.keys(user).reduce((acc, key) => {
-      if (!exclude.includes(key)) {
-        acc[key] = user[key];
-      }
-      return acc;
-    }, {});
+    //filtered
     filtered.observations = observations;
     res.status(200).send(filtered);
   } else if (user.role == "Head_of_Department") {
-    const observations = user.observerObs;
-    const filtered = Object.keys(user).reduce((acc, key) => {
-      if (!exclude.includes(key)) {
-        acc[key] = user[key];
-      }
-      return acc;
-    }, {});
+    const observations = user.hodObs;
+    //filtered
     filtered.observations = observations;
     res.status(200).send(filtered);
   } else {
@@ -132,10 +123,10 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 // @desc   Update User
-// @route  POST api/update/:id
+// @route  POST api/user-update/:id
 // @access Private (only user update their own data)
 export const updateUser = asyncHandler(async (req, res) => {
-  const { name, dateOfBirth, institute, degree, starting, ending } = req.body;
+  const { dateOfBirth, institute, degree, starting, ending, phone } = req.body;
 
   // Validate if user exist in our database
   const user = await prisma.user.findFirst({
@@ -155,7 +146,7 @@ export const updateUser = asyncHandler(async (req, res) => {
         degree,
         starting,
         ending,
-        name,
+        phone,
       },
     });
     res.status(200).send(updateUser);
