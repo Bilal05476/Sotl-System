@@ -12,7 +12,7 @@ const App = () => {
         <Header />
         <div className="page-body-wrapper">
           <Sidebar />
-          <RightSidebar />
+          {/* <RightSidebar /> */}
           <div className="page-body">
             <Outlet />
           </div>

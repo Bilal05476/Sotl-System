@@ -39,12 +39,26 @@ app.listen(port, () => {
   console.log("Server Running");
 });
 
-// const meetings = {
-//   informed: {
-//     score: 38,
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+
+// async function main() {
+// const film = await prisma.film.findMany({
+//   include: {
+//     Producer: true,
+//     Director: true,
 //   },
-//   postObservation: {},
-//   uninformed: {},
-//   pdp: {},
-// };
-// console.log(meetings);
+// });
+// console.log(film);
+// const person = await prisma.person.findFirst({
+//   where: {
+//     id: 1,
+//   },
+//   include: {
+//     filmD: true,
+//     filmP: true,
+//   },
+// });
+// console.log(person);
+// }
+// main();

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { HODMENU, MENUITEMS } from "../../../constants/menu";
 
 // image import
-import logo from "../../../assets/images/dashboard/blue-version.png";
+import logo from "../../../assets/images/dashboard/white-version.png";
 import { useStateValue } from "../../../StateProvider";
 
 const Sidebar = () => {

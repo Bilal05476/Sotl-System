@@ -4,35 +4,15 @@ import asyncHandler from "express-async-handler";
 // import nodemailer from "nodemailer";
 
 // @desc   Initiate Observation by Head of department
-// @route  POST api/initiate-obs
+// @route  POST api/observation/initiate
 // @access Private (only hod will initiate)
 export const initateObs = asyncHandler(async (req, res) => {
   const { facultyId, semester, observerId, hodId } = req.body;
-
-  const obsUsers = [facultyId, observerId, hodId];
-
+  // const obsUsers = [facultyId, observerId, hodId];
   const newObservation = await prisma.observations.create({
-    data: { semester, meetings: [] },
+    data: { semester, facultyId, observerId, hodId },
   });
   if (newObservation) {
-    for (let u = 0; u < obsUsers.length; u++) {
-      const jsonData = await prisma.user.findFirst({
-        where: {
-          id: obsUsers[u],
-        },
-        select: {
-          observations: true,
-        },
-      });
-      jsonData.observations.push(newObservation.id);
-      await prisma.user.update({
-        where: { id: obsUsers[u] },
-        data: {
-          observations: jsonData.observations,
-        },
-      });
-    }
-
     res.status(200).send(newObservation);
   }
 
@@ -52,9 +32,26 @@ export const initateObs = asyncHandler(async (req, res) => {
 });
 
 // @desc   Get all observations
-// @route  POST api/get-observations
+// @route  POST api/observations
 // @access Private
 export const getAllObs = asyncHandler(async (req, res) => {
   const allObs = await prisma.observations.findMany();
   res.status(200).send(allObs);
+});
+
+// @desc   Get observation by id
+// @route  POST api/observation/:id
+// @access Private
+export const getObs = asyncHandler(async (req, res) => {
+  const Obs = await prisma.observations.findFirst({
+    where: { id: Number(req.params.id) },
+    include: {
+      faculty: true,
+      observer: true,
+      hod: true,
+      obsRequest: true,
+      meetings: true,
+    },
+  });
+  res.status(200).send(Obs);
 });

@@ -1,14 +1,16 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
-
+import { XCircle } from "react-feather";
 const TabsetUser = () => {
+  const [allCourses, setAllCourses] = useState([]);
   const [createUser, setCreateUser] = useState({
     fullname: "",
     email: "",
     role: "Select",
     campus: "Select",
     department: "Select",
+    courses: [],
     password: "",
     cPassword: "",
     error: "",
@@ -22,6 +24,7 @@ const TabsetUser = () => {
     campus,
     department,
     cPassword,
+    courses,
     error,
     success,
   } = createUser;
@@ -40,6 +43,7 @@ const TabsetUser = () => {
       role,
       campus,
       department,
+      courses,
     };
     async function postUser() {
       const res = await fetch("http://localhost:8080/api/create", {
@@ -70,6 +74,7 @@ const TabsetUser = () => {
             email: "",
             password: "",
             cPassword: "",
+            courses: [],
             role: "Select",
             campus: "Select",
             department: "Select",
@@ -113,6 +118,20 @@ const TabsetUser = () => {
       postUser();
     }
   };
+
+  useEffect(() => {
+    getAllCourses();
+  }, []);
+
+  async function getAllCourses() {
+    const res = await fetch("http://localhost:8080/api/courses", {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+    setAllCourses(data);
+  }
 
   return (
     <Fragment>
@@ -286,6 +305,63 @@ const TabsetUser = () => {
                   <option value="Observer">Observer</option>
                   <option value="Faculty">Faculty</option>
                 </Input>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Courses
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom5"
+                  type="select"
+                  required={true}
+                  value={courses}
+                  onChange={(e) =>
+                    setCreateUser({
+                      ...createUser,
+                      courses: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Select">Select</option>
+                  {allCourses.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.courseName}
+                    </option>
+                  ))}
+                </Input>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4"></Label>
+              <div className="col-xl-8 col-md-7 d-flex">
+                {allCourses.map((item) => (
+                  <span
+                    style={{
+                      backgroundColor: "#040b5b",
+                      color: "#fff",
+                      padding: "0.2rem 0.5rem",
+                      borderRadius: "5px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "auto",
+                      marginRight: "0.2rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#fff",
+                        marginRight: "0.5rem",
+                      }}
+                    >
+                      {item?.courseName}
+                    </span>
+                    <XCircle onClick={() => {}} size={20} />
+                  </span>
+                ))}
               </div>
             </FormGroup>
             <FormGroup className="row">

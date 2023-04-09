@@ -16,13 +16,47 @@ export const getUsers = asyncHandler(async (req, res) => {
 // @route  POST api/user/:id
 // @access Public
 export const userById = asyncHandler(async (req, res) => {
-  const [user] = await prisma.user.findMany({
+  const user = await prisma.user.findFirst({
     where: {
       id: Number(req.params.id),
     },
+    include: {
+      faclutyObs: true || false,
+      observerObs: false || true,
+      hodObs: true || false,
+    },
   });
-  if (user) {
-    res.status(200).send(user);
+  const exclude = ["observerObs", "hodObs", "faclutyObs"];
+  if (user.role == "Faculty") {
+    const observations = user.faclutyObs;
+    const filtered = Object.keys(user).reduce((acc, key) => {
+      if (!exclude.includes(key)) {
+        acc[key] = user[key];
+      }
+      return acc;
+    }, {});
+    filtered.observations = observations;
+    res.status(200).send(filtered);
+  } else if (user.role == "Observer") {
+    const observations = user.observerObs;
+    const filtered = Object.keys(user).reduce((acc, key) => {
+      if (!exclude.includes(key)) {
+        acc[key] = user[key];
+      }
+      return acc;
+    }, {});
+    filtered.observations = observations;
+    res.status(200).send(filtered);
+  } else if (user.role == "Head_of_Department") {
+    const observations = user.observerObs;
+    const filtered = Object.keys(user).reduce((acc, key) => {
+      if (!exclude.includes(key)) {
+        acc[key] = user[key];
+      }
+      return acc;
+    }, {});
+    filtered.observations = observations;
+    res.status(200).send(filtered);
   } else {
     res.status(404).send({ error: "No user found" });
   }
@@ -35,7 +69,7 @@ export const createUser = asyncHandler(async (req, res) => {
   const { name, email, password, role, campus, department, courses } = req.body;
 
   // Validate if user exist in our database
-  const [existedUser] = await prisma.user.findMany({
+  const existedUser = await prisma.user.findFirst({
     where: {
       email,
     },
@@ -54,13 +88,8 @@ export const createUser = asyncHandler(async (req, res) => {
       role: Role[role],
       campus: Campus[campus],
       department: Department[department],
-      observations: [],
-      courses,
-      messages: [],
-      feedbacks: [],
     };
-    // res.status(200).send(newUserData);
-    // return;
+
     // create new user in database
     const newUser = await prisma.user.create({
       data: newUserData,
@@ -81,7 +110,7 @@ export const getUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   // Validate if user exist in our database
-  const [user] = await prisma.user.findMany({
+  const user = await prisma.user.findFirst({
     where: {
       email,
     },
@@ -109,30 +138,30 @@ export const updateUser = asyncHandler(async (req, res) => {
   const { name, dateOfBirth, institute, degree, starting, ending } = req.body;
 
   // Validate if user exist in our database
-  // const [user] = await prisma.user.findMany({
-  //   where: {
-  //     id: Number(req.params.id),
-  //   },
-  // });
-
-  // if (user) {
-  const updateUser = await prisma.user.update({
+  const user = await prisma.user.findFirst({
     where: {
       id: Number(req.params.id),
     },
-    data: {
-      dateOfBirth,
-      institute,
-      degree,
-      starting,
-      ending,
-      name,
-    },
   });
-  res.status(200).send(updateUser);
-  // } else {
-  //   res.status(404).send({ error: "No User Exist" });
-  // }
+
+  if (user) {
+    const updateUser = await prisma.user.update({
+      where: {
+        id: Number(req.params.id),
+      },
+      data: {
+        dateOfBirth,
+        institute,
+        degree,
+        starting,
+        ending,
+        name,
+      },
+    });
+    res.status(200).send(updateUser);
+  } else {
+    res.status(404).send({ error: "No User Exist" });
+  }
 });
 
 // Generate JWT
