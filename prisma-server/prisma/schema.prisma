@@ -48,7 +48,6 @@ model Observations {
   timeSlot            Json?
   observationStatus   Status         @default(Pending)
   observationProgress Int            @default(0)
-  course              Int?
   semester            String
   observationScore    Int            @default(0)
   faculty             User           @relation("Faculty", fields: [facultyId], references: [id])
@@ -59,7 +58,7 @@ model Observations {
   observerId          Int
   obsRequest          ObsScheduling?
   meetings            Meetings[]
-  Course              Courses?       @relation(fields: [courseId], references: [id])
+  course              Courses?       @relation(fields: [courseId], references: [id])
   courseId            Int?
 }
 
@@ -76,7 +75,7 @@ model ObsScheduling {
   status                    Status       @default(Pending)
   observation               Observations @relation(fields: [observationsId], references: [id])
   observationsId            Int          @unique
-  Course                    Courses?     @relation(fields: [courseId], references: [id])
+  course                    Courses?     @relation(fields: [courseId], references: [id])
   courseId                  Int?         @unique
 }
 

@@ -81,7 +81,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     timeSlotsByFaculty,
     timeSlotsByObserver,
     obsReqStatus,
-    courseByFaculty,
+    course,
   } = req.body;
 
   const reqData = {
@@ -91,7 +91,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
     timeSlotsByObserver: timeSlotsByObserver && timeSlotsByObserver,
     obsReqStatus: obsReqStatus && obsReqStatus,
-    courseByFaculty: courseByFaculty && courseByFaculty,
+    courseId: course && course,
   };
 
   const existedReq = await prisma.obsRequests.findFirst({
@@ -114,7 +114,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
         data: {
           observationStatus: "Ongoing",
           timeSlot: updatedReq.timeSlotsByObserver,
-          course: updatedReq.courseByFaculty,
+          courseId: updatedReq.courseByFaculty,
         },
       });
       res.status(200).send({ message: "Meeting Scheduled Successfully!" });

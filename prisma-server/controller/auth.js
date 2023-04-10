@@ -126,7 +126,8 @@ export const getUser = asyncHandler(async (req, res) => {
 // @route  POST api/user-update/:id
 // @access Private (only user update their own data)
 export const updateUser = asyncHandler(async (req, res) => {
-  const { dateOfBirth, institute, degree, starting, ending, phone } = req.body;
+  const { avatar, dateOfBirth, institute, degree, starting, ending, phone } =
+    req.body;
 
   // Validate if user exist in our database
   const user = await prisma.user.findFirst({
@@ -147,6 +148,7 @@ export const updateUser = asyncHandler(async (req, res) => {
         starting,
         ending,
         phone,
+        avatar,
       },
     });
     res.status(200).send(updateUser);
