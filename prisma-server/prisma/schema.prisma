@@ -32,7 +32,7 @@ model User {
   hodObs           Observations[] @relation("Hod")
   observerObs      Observations[] @relation("Observer")
   //courses
-  observerCourse   Courses[]      @relation("Observer")
+  observerCourses  Courses[]      @relation("Observer")
   facultyCourses   Courses[]      @relation("Faculty")
   //feedbacks
   feedbackAuthor   FeedBacks[]    @relation("Author")
@@ -57,9 +57,9 @@ model Observations {
   observer            User           @relation("Observer", fields: [observerId], references: [id])
   observerId          Int
   obsRequest          ObsScheduling?
-  meetings            Meetings[]
+  meetings            Meetings?
   course              Courses?       @relation(fields: [courseId], references: [id])
-  courseId            Int?
+  courseId            Int?           @unique
 }
 
 // -> Observations => ObsScheduling
@@ -87,17 +87,17 @@ model Meetings {
   uninformedObservation Uninformed?
   professionalDPlan     PDP?
   observation           Observations @relation(fields: [observationsId], references: [id])
-  observationsId        Int
+  observationsId        Int          @unique
 }
 
 // -> Meetings => Informed/Post/Uninformed/PDP
 model Informed {
-  id         Int       @id @default(autoincrement()) // auto-inc
-  finalScore Int
-  draftScore Int
-  status     Status    @default(Ongoing)
-  meeting    Meetings? @relation(fields: [meetingId], references: [id])
-  meetingId  Int?      @unique
+  id         Int      @id @default(autoincrement()) // auto-inc
+  finalScore Int?     @default(0)
+  draftScore Int?     @default(0)
+  status     Status   @default(Ongoing)
+  meeting    Meetings @relation(fields: [meetingId], references: [id])
+  meetingId  Int      @unique
 }
 
 model Rubrics {
@@ -115,38 +115,38 @@ model Rubric {
 }
 
 model Post {
-  id        Int       @id @default(autoincrement()) // auto-inc
-  status    Status    @default(Ongoing)
-  meeting   Meetings? @relation(fields: [meetingId], references: [id])
-  meetingId Int?      @unique
+  id        Int      @id @default(autoincrement()) // auto-inc
+  status    Status   @default(Ongoing)
+  meeting   Meetings @relation(fields: [meetingId], references: [id])
+  meetingId Int      @unique
 }
 
 model Uninformed {
-  id        Int       @id @default(autoincrement()) // auto-inc
-  status    Status    @default(Ongoing)
-  meeting   Meetings? @relation(fields: [meetingId], references: [id])
-  meetingId Int?      @unique
+  id        Int      @id @default(autoincrement()) // auto-inc
+  status    Status   @default(Ongoing)
+  meeting   Meetings @relation(fields: [meetingId], references: [id])
+  meetingId Int      @unique
 }
 
 model PDP {
-  id        Int       @id @default(autoincrement()) // auto-inc
+  id        Int      @id @default(autoincrement()) // auto-inc
   pdpDoc    String
-  meeting   Meetings? @relation(fields: [meetingId], references: [id])
-  meetingId Int?      @unique
+  meeting   Meetings @relation(fields: [meetingId], references: [id])
+  meetingId Int      @unique
 }
 
 // -> User => Courses
 model Courses {
-  id          Int             @id @default(autoincrement()) // auto-inc
+  id          Int            @id @default(autoincrement()) // auto-inc
   courseName  String
   department  Department
   campus      Campus
-  observer    User?           @relation("Observer", fields: [observerId], references: [id])
+  observer    User?          @relation("Observer", fields: [observerId], references: [id])
   observerId  Int?
-  faculty     User?           @relation("Faculty", fields: [facultyId], references: [id])
+  faculty     User?          @relation("Faculty", fields: [facultyId], references: [id])
   facultyId   Int?
-  scheduling  ObsScheduling[]
-  observation Observations[]
+  scheduling  ObsScheduling?
+  observation Observations?
 }
 
 // -> User => Feedbacks

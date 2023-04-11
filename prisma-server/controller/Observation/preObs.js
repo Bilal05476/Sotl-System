@@ -18,7 +18,7 @@ export const obsScheculeCreate = asyncHandler(async (req, res) => {
     observationsId,
   };
 
-  const createdReq = await prisma.obsRequests.create({
+  const createdReq = await prisma.obsScheduling.create({
     data: reqData,
   });
   res.status(200).send(createdReq);
@@ -80,7 +80,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     refelectionPlanByFaculty,
     timeSlotsByFaculty,
     timeSlotsByObserver,
-    obsReqStatus,
+    status,
     course,
   } = req.body;
 
@@ -90,23 +90,23 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
       refelectionPlanByFaculty && refelectionPlanByFaculty,
     timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
     timeSlotsByObserver: timeSlotsByObserver && timeSlotsByObserver,
-    obsReqStatus: obsReqStatus && obsReqStatus,
+    status: status && status,
     courseId: course && course,
   };
 
-  const existedReq = await prisma.obsRequests.findFirst({
+  const existedReq = await prisma.obsScheduling.findFirst({
     where: {
       id: Number(req.params.id),
     },
   });
   if (existedReq) {
-    const updatedReq = await prisma.obsRequests.update({
+    const updatedReq = await prisma.obsScheduling.update({
       where: {
         id: Number(req.params.id),
       },
       data: reqData,
     });
-    if (updatedReq.obsReqStatus === "Completed") {
+    if (updatedReq.status === "Completed") {
       await prisma.observations.update({
         where: {
           id: updatedReq.observationsId,
@@ -114,10 +114,39 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
         data: {
           observationStatus: "Ongoing",
           timeSlot: updatedReq.timeSlotsByObserver,
-          courseId: updatedReq.courseByFaculty,
+          courseId: updatedReq.courseId,
         },
       });
-      res.status(200).send({ message: "Meeting Scheduled Successfully!" });
+      const newMeeting = await prisma.meetings.create({
+        data: {
+          observationsId: updatedReq.observationsId,
+        },
+      });
+      if (newMeeting) {
+        await prisma.informed.create({
+          data: {
+            meetingId: newMeeting.id,
+          },
+        });
+        const Obs = await prisma.observations.findFirst({
+          where: { id: updatedReq.observationsId },
+          include: {
+            faculty: true,
+            observer: true,
+            hod: true,
+            obsRequest: true,
+            meetings: {
+              include: {
+                informedObservation: true,
+                postObservation: true,
+                uninformedObservation: true,
+                professionalDPlan: true,
+              },
+            },
+          },
+        });
+        res.status(200).send(Obs);
+      }
     } else {
       res.status(200).send(updatedReq);
     }

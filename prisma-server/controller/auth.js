@@ -24,9 +24,17 @@ export const userById = asyncHandler(async (req, res) => {
       facultyObs: true,
       observerObs: true,
       hodObs: true,
+      facultyCourses: true,
+      observerCourses: true,
     },
   });
-  const exclude = ["observerObs", "hodObs", "facultyObs"];
+  const exclude = [
+    "observerObs",
+    "hodObs",
+    "facultyObs",
+    "facultyCourses",
+    "observerCourses",
+  ];
   const filtered = Object.keys(user).reduce((acc, key) => {
     if (!exclude.includes(key)) {
       acc[key] = user[key];
@@ -35,18 +43,28 @@ export const userById = asyncHandler(async (req, res) => {
   }, {});
   if (user.role == "Faculty") {
     const observations = user.facultyObs;
+    const courses = user.facultyCourses;
+
     //filtered
     filtered.observations = observations;
+    filtered.courses = courses;
+
     res.status(200).send(filtered);
   } else if (user.role == "Observer") {
     const observations = user.observerObs;
+    const courses = user.observerCourses;
+
     //filtered
     filtered.observations = observations;
+    filtered.courses = courses;
+
     res.status(200).send(filtered);
   } else if (user.role == "Head_of_Department") {
     const observations = user.hodObs;
+
     //filtered
     filtered.observations = observations;
+
     res.status(200).send(filtered);
   } else {
     res.status(404).send({ error: "No user found" });

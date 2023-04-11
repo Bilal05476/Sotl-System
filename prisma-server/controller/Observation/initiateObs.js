@@ -50,7 +50,15 @@ export const getObs = asyncHandler(async (req, res) => {
       observer: true,
       hod: true,
       obsRequest: true,
-      meetings: true,
+      course: true,
+      meetings: {
+        include: {
+          informedObservation: true,
+          postObservation: true,
+          uninformedObservation: true,
+          professionalDPlan: true,
+        },
+      },
     },
   });
   res.status(200).send(Obs);
