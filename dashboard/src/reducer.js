@@ -4,6 +4,7 @@ export const initialState = {
   darkTheme: false,
   users: [],
   allObs: [],
+  courses: [],
 };
 
 const reducer = (state, action) => {
@@ -29,6 +30,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         allObs: action.payload,
+      };
+    case "SET_COURSES":
+      return {
+        ...state,
+        courses: action.payload,
       };
     case "TOGGLE_THEME":
       return {

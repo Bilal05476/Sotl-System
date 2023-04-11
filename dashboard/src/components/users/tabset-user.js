@@ -2,15 +2,16 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import { XCircle } from "react-feather";
+import { useStateValue } from "../../StateProvider";
 const TabsetUser = () => {
-  const [allCourses, setAllCourses] = useState([]);
+  const [{ courses }] = useStateValue();
   const [createUser, setCreateUser] = useState({
     fullname: "",
     email: "",
     role: "Select",
     campus: "Select",
     department: "Select",
-    courses: [],
+    coursesIds: [],
     password: "",
     cPassword: "",
     error: "",
@@ -24,7 +25,7 @@ const TabsetUser = () => {
     campus,
     department,
     cPassword,
-    courses,
+    coursesIds,
     error,
     success,
   } = createUser;
@@ -43,7 +44,7 @@ const TabsetUser = () => {
       role,
       campus,
       department,
-      courses,
+      courses: coursesIds,
     };
     async function postUser() {
       const res = await fetch("http://localhost:8080/api/create", {
@@ -113,25 +114,30 @@ const TabsetUser = () => {
         error: "Please enter valid email address",
         success: "",
       });
+    } else if (role === "Faculty" || role === "Observer") {
+      if (coursesIds.length < 1) {
+        setCreateUser({
+          ...createUser,
+          error: `Assign Courses to ${role}`,
+          success: "",
+        });
+      } else {
+        console.log(userDetail);
+        postUser();
+      }
     } else {
       console.log(userDetail);
       postUser();
     }
   };
 
-  useEffect(() => {
-    getAllCourses();
-  }, []);
-
-  async function getAllCourses() {
-    const res = await fetch("http://localhost:8080/api/courses", {
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
+  const handleCourseRemove = (id) => {
+    const deleteCourse = coursesIds.filter((item) => item !== id);
+    setCreateUser({
+      ...createUser,
+      coursesIds: deleteCourse,
     });
-    const data = await res.json();
-    setAllCourses(data);
-  }
+  };
 
   return (
     <Fragment>
@@ -307,63 +313,89 @@ const TabsetUser = () => {
                 </Input>
               </div>
             </FormGroup>
-            <FormGroup className="row">
-              <Label className="col-xl-3 col-md-4">
-                <span>*</span> Courses
-              </Label>
-              <div className="col-xl-8 col-md-7">
-                <Input
-                  className="form-control"
-                  id="validationCustom5"
-                  type="select"
-                  required={true}
-                  value={courses}
-                  onChange={(e) =>
-                    setCreateUser({
-                      ...createUser,
-                      courses: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Select">Select</option>
-                  {allCourses.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.courseName}
-                    </option>
-                  ))}
-                </Input>
-              </div>
-            </FormGroup>
-            <FormGroup className="row">
-              <Label className="col-xl-3 col-md-4"></Label>
-              <div className="col-xl-8 col-md-7 d-flex">
-                {allCourses.map((item) => (
-                  <span
-                    style={{
-                      backgroundColor: "#040b5b",
-                      color: "#fff",
-                      padding: "0.2rem 0.5rem",
-                      borderRadius: "5px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      width: "auto",
-                      marginRight: "0.2rem",
-                    }}
+            {role === "Faculty" || role === "Observer" ? (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  <span>*</span> Courses
+                </Label>
+                <div className="col-xl-8 col-md-7">
+                  <Input
+                    className="form-control"
+                    id="validationCustom5"
+                    type="select"
+                    required={true}
+                    value={coursesIds}
+                    onChange={(e) =>
+                      setCreateUser({
+                        ...createUser,
+                        coursesIds: [...coursesIds, Number(e.target.value)],
+                      })
+                    }
                   >
-                    <span
-                      style={{
-                        color: "#fff",
-                        marginRight: "0.5rem",
-                      }}
-                    >
-                      {item?.courseName}
-                    </span>
-                    <XCircle onClick={() => {}} size={20} />
-                  </span>
-                ))}
-              </div>
-            </FormGroup>
+                    <option value="Select">Select</option>
+                    {courses.map((item) => (
+                      <>
+                        {!coursesIds.includes(item.id) && (
+                          <option key={item.id} value={item.id}>
+                            {item.courseName} {"->"} {item.day} {"->"}{" "}
+                            {item.timeSlot} {"->"} {item.room}
+                          </option>
+                        )}
+                      </>
+                    ))}
+                  </Input>
+                </div>
+              </FormGroup>
+            ) : (
+              ""
+            )}
+
+            {role === "Faculty" || role === "Observer" ? (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4"></Label>
+                <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                  {courses.map((item) => (
+                    <>
+                      {coursesIds.includes(item.id) && (
+                        <span
+                          style={{
+                            backgroundColor: "#040b5b",
+                            color: "#fff",
+                            padding: "0.2rem 0.5rem",
+                            borderRadius: "5px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "auto",
+                            marginRight: "0.2rem",
+                            marginBottom: "0.2rem",
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: "#fff",
+                              marginRight: "0.5rem",
+                            }}
+                          >
+                            {item.courseName} {"->"} {item.day} {"->"}{" "}
+                            {item.timeSlot} {"->"} {item.room}
+                          </span>
+                          <XCircle
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            onClick={() => handleCourseRemove(item.id)}
+                            size={20}
+                          />
+                        </span>
+                      )}
+                    </>
+                  ))}
+                </div>
+              </FormGroup>
+            ) : (
+              ""
+            )}
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Password

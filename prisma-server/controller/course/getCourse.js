@@ -10,6 +10,10 @@ export const getCourse = asyncHandler(async (req, res) => {
     where: {
       id: Number(req.params.id),
     },
+    include: {
+      faculty: true,
+      observer: true,
+    },
   });
   res.status(200).send(getCourseById);
 });
@@ -26,14 +30,26 @@ export const getCourses = asyncHandler(async (req, res) => {
 // @route  POST api/courses
 // @access Public
 export const createCourse = asyncHandler(async (req, res) => {
-  const { courseName, department, campus, observerId, facultyId } = req.body;
+  const {
+    courseName,
+    department,
+    campus,
+    observerId,
+    facultyId,
+    day,
+    timeSlot,
+    room,
+  } = req.body;
   const newCourse = await prisma.courses.create({
     data: {
       department,
       courseName,
       campus,
-      observerId,
-      facultyId,
+      observerId: observerId && observerId,
+      facultyId: facultyId && facultyId,
+      day,
+      timeSlot,
+      room,
     },
   });
   res.status(200).send(newCourse);

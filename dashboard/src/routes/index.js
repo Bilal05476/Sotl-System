@@ -5,9 +5,9 @@ import LayoutRoutes from "./LayoutRoutes";
 import { useStateValue } from "../StateProvider";
 
 const Routers = () => {
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user, courses }, dispatch] = useStateValue();
   const getAllUsers = async () => {
-    const res = await fetch("http://localhost:8080/api/get-users", {
+    const res = await fetch("http://localhost:8080/api/users", {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -19,7 +19,7 @@ const Routers = () => {
     });
   };
   const getAllObs = async () => {
-    const res = await fetch("http://localhost:8080/api/all-obs", {
+    const res = await fetch("http://localhost:8080/api/observations", {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -30,9 +30,22 @@ const Routers = () => {
       payload: data,
     });
   };
+  const getAllCourses = async () => {
+    const res = await fetch("http://localhost:8080/api/courses", {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+    dispatch({
+      type: "SET_COURSES",
+      payload: data,
+    });
+  };
   useEffect(() => {
     getAllUsers();
     getAllObs();
+    getAllCourses();
   }, []);
   return (
     <Fragment>

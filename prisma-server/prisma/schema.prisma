@@ -14,7 +14,7 @@ datasource db {
 model User {
   id               Int            @id @default(autoincrement()) // auto-inc
   name             String
-  email            String         @unique // should be unique
+  email            String
   phone            String?
   password         String
   avatar           String?
@@ -141,12 +141,17 @@ model Courses {
   courseName  String
   department  Department
   campus      Campus
-  observer    User?          @relation("Observer", fields: [observerId], references: [id])
-  observerId  Int?
-  faculty     User?          @relation("Faculty", fields: [facultyId], references: [id])
-  facultyId   Int?
+  // observer    User?          @relation("Observer", fields: [observerId], references: [id])
+  // observerId  Int?
+  // faculty     User?          @relation("Faculty", fields: [facultyId], references: [id])
+  // facultyId   Int?
+  observer    User[]         @relation("Observer")
+  faculty     User[]         @relation("Faculty")
   scheduling  ObsScheduling?
   observation Observations?
+  timeSlot    String?
+  room        String?
+  day         String?
 }
 
 // -> User => Feedbacks

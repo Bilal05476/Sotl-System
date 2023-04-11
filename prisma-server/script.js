@@ -36,7 +36,7 @@ app.use("/api", courseRoutes);
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
-  console.log("Server Running");
+  console.log(`Server Running at port: ${port}`);
 });
 
 // import { PrismaClient } from "@prisma/client";
