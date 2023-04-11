@@ -33,7 +33,7 @@ app.use("/api", obsRoutes);
 import courseRoutes from "./routes/courses.js";
 app.use("/api", courseRoutes);
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
   console.log("Server Running");
