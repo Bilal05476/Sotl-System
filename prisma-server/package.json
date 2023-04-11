@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "devStart": "nodemon script.js",
-    "start": "script.js"
+    "start": "node script.js"
   },
   "keywords": [],
   "author": "",
