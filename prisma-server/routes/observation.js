@@ -12,9 +12,9 @@ import {
   obsScheduleCycle,
   // preObsByObserver,
 } from "../controller/observation/preObs.js";
-// import { protect } from "../middleware/authMiddleware.js";
+import { protectInitiateObs } from "../middleware/initiate.js";
 
-obsRoutes.route("/observation/initiate").post(initateObs);
+obsRoutes.route("/observation/initiate").post(protectInitiateObs, initateObs);
 obsRoutes.route("/observation/scheduling").post(obsScheculeCreate);
 obsRoutes.route("/observation/scheduling/:id").post(obsScheduleCycle);
 

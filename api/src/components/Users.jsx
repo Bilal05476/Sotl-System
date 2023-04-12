@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { EndPoint, Parameters, SidebarOptions } from "./utils";
 const Users = () => {
   return (
@@ -24,7 +23,10 @@ const Users = () => {
         <div id="create" className="mb-5">
           <h4>Create User</h4>
           <EndPoint endpoint="url/api/create" method="POST" />
-          <h4>Available Parameters</h4>
+          <h4>
+            Available Parameters + User Token in header (Only
+            Head_of_Department, Campus_Director, Admin) e.g: Bearer eyJh.....
+          </h4>
           <Parameters
             params={[
               {

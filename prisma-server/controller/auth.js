@@ -67,7 +67,7 @@ export const userById = asyncHandler(async (req, res) => {
 
     res.status(200).send(filtered);
   } else {
-    res.status(404).send({ error: "No user found" });
+    res.status(404).send(filtered);
   }
 });
 

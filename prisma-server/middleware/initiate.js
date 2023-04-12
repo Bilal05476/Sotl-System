@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export const protect = asyncHandler(async (req, res, next) => {
+export const protectInitiateObs = asyncHandler(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -17,18 +17,28 @@ export const protect = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
 
       // get user from database
-      await prisma.user.findMany({
+      const user = await prisma.user.findFirst({
         where: {
           id: decoded.id,
         },
       });
 
-      next();
+      // only head_of_department have access to initiate a observation
+      if (user.role === "Head_of_Department") {
+        next();
+      } else {
+        res.status(400).send({
+          error: "You are not authorized person to initiate a observation!",
+        });
+      }
     } catch (err) {
-      res.status(400).send("Not Authorized");
+      res.status(400).send({ error: "Not authorized, invalid token!" });
     }
   }
   if (!token) {
-    res.status(401).send("No authorized, no token");
+    res.status(401).send({
+      error:
+        "No authorized, no token, please provide user token in request header!",
+    });
   }
 });
