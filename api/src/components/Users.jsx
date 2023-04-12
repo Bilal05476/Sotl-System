@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { EndPoint, Parameters, SidebarOptions } from "./utils";
 const Users = () => {
   return (
     <div className="users container-fluid">
@@ -24,28 +25,60 @@ const Users = () => {
           <h4>Create User</h4>
           <EndPoint endpoint="url/api/create" method="POST" />
           <h4>Available Parameters</h4>
-
           <Parameters
-            params="
-          name,
-      email,
-      password,
-      role: Campus_Director ||
-  Head_of_Department ||
-  Faculty ||
-  Observer,
-      campus: Main_Campus ||
-  Gulshan_Campus ||
-  North_Campus ||
-  Airport_Campus ||
-  Bahria_Campus ||
-  Islamabad_Campus,
-      department: Fest ||
-  Aifd ||
-  Media_Studies ||
-  Business ||
-  Education,
-          "
+            params={[
+              {
+                name: "name",
+                type: "string",
+                def: "",
+                avail: "",
+                req: true,
+              },
+              {
+                name: "email",
+                type: "string",
+                def: "",
+                avail: "",
+                req: true,
+              },
+              {
+                name: "password",
+                type: "string",
+                def: "",
+                avail: "",
+                req: true,
+              },
+              {
+                name: "role",
+                type: "string",
+                def: "",
+                avail:
+                  "Campus_Director | Head_of_Department | Faculty | Observer",
+                req: true,
+              },
+              {
+                name: "campus",
+                type: "string",
+                def: "",
+                avail:
+                  "Main_Campus | Gulshan_Campus | North_Campus | Airport_Campus | Bahria_Campus | Islamabad_Campus",
+                req: true,
+              },
+              {
+                name: "department",
+                type: "string",
+                def: "",
+                avail: "Fest | Aifd | Media_Studies | Business | Education",
+                req: true,
+              },
+              {
+                name: "courses",
+                type: "array",
+                def: "",
+                avail: "Required for Obsever | Faculty, array of courses id",
+                req: false,
+              },
+            ]}
           />
         </div>
 
@@ -53,7 +86,24 @@ const Users = () => {
           <h4>Login User</h4>
           <EndPoint endpoint="url/api/login" method="POST" />
           <h4>Available Parameters</h4>
-          <Parameters params="email, password" />
+          <Parameters
+            params={[
+              {
+                name: "email",
+                type: "string",
+                def: "",
+                avail: "",
+                req: true,
+              },
+              {
+                name: "password",
+                type: "string",
+                def: "",
+                avail: "",
+                req: true,
+              },
+            ]}
+          />
         </div>
         <div id="users" className="mb-5">
           <h4>Get All Users</h4>
@@ -68,39 +118,62 @@ const Users = () => {
           <EndPoint endpoint="url/api/update/:id" method="PUT" />
           <h4>Available Parameters</h4>
           <Parameters
-            params="dateOfBirth,
-        institute,
-        degree,
-        starting,
-        ending,
-        phone, 
-        avatar"
+            params={[
+              {
+                name: "phone",
+                type: "string",
+                def: "null",
+                avail: "",
+                req: false,
+              },
+              {
+                name: "dateOfBirth",
+                type: "dateTime",
+                def: "null",
+                avail: "",
+                req: false,
+              },
+              {
+                name: "institute",
+                type: "string",
+                def: "null",
+                avail: "",
+                req: false,
+              },
+              {
+                name: "degree",
+                type: "string",
+                def: "null",
+                avail: "",
+                req: false,
+              },
+              {
+                name: "starting",
+                type: "dateTime",
+                def: "null",
+                avail: "",
+                req: false,
+              },
+              {
+                name: "ending",
+                type: "dateTime",
+                def: "null",
+                avail: "",
+                req: false,
+              },
+              {
+                name: "avatar",
+                type: "string",
+                def: "null",
+                avail: "",
+                req: false,
+              },
+            ]}
           />
         </div>
       </div>
     </div>
   );
-};
-
-const SidebarOptions = ({ optionName, href }) => {
-  return (
-    <a href={href} className="options">
-      {optionName}
-    </a>
-  );
-};
-
-const EndPoint = ({ endpoint, method }) => {
-  return (
-    <div className="endpoint">
-      <span className="method">{method}</span>
-      {endpoint}
-    </div>
-  );
-};
-
-const Parameters = ({ params }) => {
-  return <div className="parameters">{`{${params}}`}</div>;
 };
 
 export default Users;

@@ -69,6 +69,21 @@
   border-radius: 5px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.51);
 }
+.parameters {
+  background-color: aliceblue;
+  color: var(--themeColor--);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-shadow: 1px 1px 1px rgba(208, 208, 208, 0.51);
+}
+.parameters th,
+.parameters td {
+  padding-right: 2rem;
+}
+.parameters td {
+  padding: 1rem 0rem;
+}
 .method {
   color: greenyellow;
   margin-right: 1rem;

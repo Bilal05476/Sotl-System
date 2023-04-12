@@ -89,6 +89,7 @@ export const createUser = asyncHandler(async (req, res) => {
   } else {
     // hash password from plain to encrypted
     const hashedPassword = await bcrypt.hash(password, 10);
+
     // user data object
     const newUserData = {
       name,
@@ -104,48 +105,35 @@ export const createUser = asyncHandler(async (req, res) => {
       data: newUserData,
     });
 
+    let ids;
+    if (courses) {
+      ids = courses.map((item) => ({ id: item }));
+    }
+
     // uncheck func // check by morning
     if (newUser) {
       if (newUser.role === "Observer") {
-        for (let c = 0; c < courses.length; c++) {
-          const jsonData = await prisma.courses.findFirst({
-            where: {
-              id: courses[c],
+        await prisma.user.update({
+          where: {
+            id: newUser.id,
+          },
+          data: {
+            observerCourses: {
+              set: ids,
             },
-            select: {
-              observer,
+          },
+        });
+      } else if (newUser.role === "Faculty") {
+        await prisma.user.update({
+          where: {
+            id: newUser.id,
+          },
+          data: {
+            facultyCourses: {
+              set: ids,
             },
-          });
-          jsonData.observer.push(newUser.id);
-          await prisma.courses.update({
-            where: {
-              id: courses[c],
-            },
-            data: {
-              observer: jsonData.observer,
-            },
-          });
-        }
-      } else {
-        for (let c = 0; c < courses.length; c++) {
-          const jsonData = await prisma.courses.findFirst({
-            where: {
-              id: courses[c],
-            },
-            select: {
-              faculty,
-            },
-          });
-          jsonData.faculty.push(newUser.id);
-          await prisma.courses.update({
-            where: {
-              id: courses[c],
-            },
-            data: {
-              faculty: jsonData.faculty,
-            },
-          });
-        }
+          },
+        });
       }
       // create user session token
       const token = generateJWT(newUser.id);

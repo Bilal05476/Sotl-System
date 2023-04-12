@@ -123,11 +123,11 @@ const TabsetUser = () => {
         });
       } else {
         console.log(userDetail);
-        postUser();
+        // postUser();
       }
     } else {
       console.log(userDetail);
-      postUser();
+      // postUser();
     }
   };
 
