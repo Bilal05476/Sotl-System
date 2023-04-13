@@ -54,6 +54,7 @@ import {
   Table,
 } from "reactstrap";
 import { useStateValue } from "../StateProvider";
+import { NavLink } from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -228,10 +229,7 @@ const Dashboard = () => {
         },
       });
       const data = await res.json();
-      // const specificData = {
-      //   observations: data.observations,
-      //   courses: data.courses,
-      // };
+
       // dispatch({
       //   type: "SET_USER_DATA",
       //   payload: specificData,
@@ -246,7 +244,7 @@ const Dashboard = () => {
       <Breadcrumb title="Dashboard" parent="Dashboard" />
       <Container fluid={true}>
         <Row>
-          {user.role === "Admin" || user.role === "Campus_Director" ? (
+          {/* {user.role === "Admin" || user.role === "Campus_Director" ? (
             <>
               <Col xl="3 xl-25" md="6">
                 <Card className=" o-hidden widget-cards">
@@ -291,8 +289,8 @@ const Dashboard = () => {
             </>
           ) : (
             <></>
-          )}
-          <Col
+          )} */}
+          {/* <Col
             xl={`3 ${
               user.role === "Campus_Director" || user.role === "Admin"
                 ? "xl-25"
@@ -345,24 +343,113 @@ const Dashboard = () => {
                 </Media>
               </CardBody>
             </Card>
-          </Col>
-          <Col xl="6 xl-100">
-            <Card>
-              <CardHeader>
-                <h5>Observations Stream</h5>
-              </CardHeader>
-              <CardBody>
-                <div className="market-chart">
-                  <Bar
-                    data={lineData}
-                    options={lineOptions}
-                    width={778}
-                    height={308}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
+          </Col> */}
+
+          {user.role === "Faculty" && (
+            <>
+              <Col xl="3 xl-25" md="6">
+                <Card className="o-hidden widget-cards">
+                  <CardBody className="bg-primary">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Users className="font-primary" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Observations</span>
+                        <h3 className="mb-0">
+                          <CountUp
+                            className="counter"
+                            end={userData.observations.length}
+                          />
+                          <small> Currently</small>
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xl="3 xl-25" md="6">
+                <Card className="o-hidden widget-cards">
+                  <CardBody className="bg-primary">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Users className="font-primary" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Courses</span>
+                        <h3 className="mb-0">
+                          <CountUp
+                            className="counter"
+                            end={userData.courses.length}
+                          />
+                          <small> Assinged</small>
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xl="3 xl-50" md="6">
+                <Card className="o-hidden widget-cards">
+                  <CardBody className="bg-primary">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Users className="font-primary" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Observation Step</span>
+                        <h3 className="mb-0">
+                          <span className="counter">
+                            {userData.observations[0].meetings
+                              ?.informedObservation?.status === "Ongoing" &&
+                              "Informed"}
+                            {userData.observations[0].meetings?.postObservation
+                              ?.status === "Ongoing" && "Post Informed"}
+                            {userData.observations[0].meetings
+                              ?.uninformedObservation?.status === "Ongoing" &&
+                              "Uniformed"}
+                            {userData.observations[0].meetings
+                              ?.professionalDPlan?.status === "Ongoing" &&
+                              "Professional Development"}
+                          </span>
+                          {/* <small> Currently</small> */}
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+            </>
+          )}
+
+          {user.role === "Faculty" || user.role === "Observer" ? (
+            <></>
+          ) : (
+            <Col xl="6 xl-100">
+              <Card>
+                <CardHeader>
+                  <h5>Observations Stream</h5>
+                </CardHeader>
+                <CardBody>
+                  <div className="market-chart">
+                    <Bar
+                      data={lineData}
+                      options={lineOptions}
+                      width={778}
+                      height={308}
+                    />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
+
           <Col xl="6 xl-100">
             <Card>
               <CardHeader>
@@ -419,14 +506,66 @@ const Dashboard = () => {
                       ))}
                     </tbody>
                   </Table>
-                  <a href="#javaScript" className="btn btn-primary">
-                    View All Observerions
-                  </a>
+                  {userData?.observations.length > 0 && (
+                    <NavLink
+                      to="/observations/list-observation"
+                      className="btn btn-primary"
+                    >
+                      View All Observerions
+                    </NavLink>
+                  )}
                 </div>
               </CardBody>
             </Card>
           </Col>
-          <Col xl="3 xl-50" md="6">
+          {user.role === "Faculty" || user.role === "Observer" ? (
+            <Col xl="6 xl-100">
+              <Card>
+                <CardHeader>
+                  <h5>Courses</h5>
+                </CardHeader>
+                <CardBody>
+                  <div className="user-status table-responsive latest-order-table">
+                    <Table borderless>
+                      <thead>
+                        <tr>
+                          <th scope="col">Id</th>
+                          <th scope="col">Course</th>
+                          <th scope="col">TimeSlot</th>
+                          <th scope="col">Room</th>
+                          <th scope="col">Campus</th>
+                          <th scope="col">Department</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {userData?.courses.map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td className="digits">{item.courseName}</td>
+                            <td className="digits">
+                              {item.day} {item.timeSlot}
+                            </td>
+                            <td className="digits">{item.room}</td>
+                            <td className="digits">{item.campus}</td>
+                            {/* // font-danger */}
+                            <td className="digits">{item.department}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    {userData.courses.length > 0 && (
+                      <a href="#javaScript" className="btn btn-primary">
+                        View All Courses
+                      </a>
+                    )}
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          ) : (
+            <></>
+          )}
+          {/* <Col xl="3 xl-50" md="6">
             <Card className=" order-graph sales-carousel">
               <CardHeader>
                 <h6>Total Sales</h6>
@@ -493,8 +632,8 @@ const Dashboard = () => {
                 </Media>
               </CardBody>
             </Card>
-          </Col>
-          <Col xl="3 xl-50" md="6">
+          </Col> */}
+          {/* <Col xl="3 xl-50" md="6">
             <Card className=" order-graph sales-carousel">
               <CardHeader>
                 <h6>Total purchase</h6>
@@ -571,8 +710,8 @@ const Dashboard = () => {
                 </Media>
               </CardBody>
             </Card>
-          </Col>
-          <Col xl="3 xl-50" md="6">
+          </Col> */}
+          {/* <Col xl="3 xl-50" md="6">
             <Card className="order-graph sales-carousel">
               <CardHeader>
                 <h6>Total cash transaction</h6>
@@ -649,8 +788,8 @@ const Dashboard = () => {
                 </Media>
               </CardBody>
             </Card>
-          </Col>
-          <Col xl="3 xl-50" md="6">
+          </Col> */}
+          {/* <Col xl="3 xl-50" md="6">
             <Card className="order-graph sales-carousel">
               <CardHeader>
                 <h6>Daily Deposits</h6>
@@ -727,8 +866,8 @@ const Dashboard = () => {
                 </Media>
               </CardBody>
             </Card>
-          </Col>
-          <Col sm="12">
+          </Col> */}
+          {/* <Col sm="12">
             <Card>
               <CardHeader>
                 <h5>Buy / Sell</h5>
@@ -742,8 +881,8 @@ const Dashboard = () => {
                 />
               </CardBody>
             </Card>
-          </Col>
-          <Col xl="6 xl-100">
+          </Col> */}
+          {/* <Col xl="6 xl-100">
             <Card className="height-equal">
               <CardHeader>
                 <h5>Products Cart</h5>
@@ -807,8 +946,8 @@ const Dashboard = () => {
                 </div>
               </CardBody>
             </Card>
-          </Col>
-          <Col xl="6 xl-100">
+          </Col> */}
+          {/* <Col xl="6 xl-100">
             <Card className="height-equal">
               <CardHeader>
                 <h5>Empolyee Status</h5>
@@ -1015,8 +1154,8 @@ const Dashboard = () => {
                 </div>
               </CardBody>
             </Card>
-          </Col>
-          <Col sm="12">
+          </Col> */}
+          {/* <Col sm="12">
             <Card>
               <CardHeader>
                 <h5>Sales Status</h5>
@@ -1168,7 +1307,7 @@ const Dashboard = () => {
                 </Row>
               </CardBody>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </Fragment>
