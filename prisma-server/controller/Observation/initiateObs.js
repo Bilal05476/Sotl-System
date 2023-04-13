@@ -13,7 +13,7 @@ export const initateObs = asyncHandler(async (req, res) => {
     data: { semester, facultyId, observerId, hodId },
   });
   if (newObservation) {
-    res.status(200).send(newObservation);
+    res.status(200).json(newObservation);
   }
 
   // let obsUsers = [facultyId, observerId, hodId];
@@ -27,7 +27,7 @@ export const initateObs = asyncHandler(async (req, res) => {
   //     });
   //     toSendMail.push(findemail[0].email);
   //   }
-  //   res.status(200).send(toSendMail);
+  //   res.status(200).json(toSendMail);
   // }
 });
 
@@ -35,8 +35,32 @@ export const initateObs = asyncHandler(async (req, res) => {
 // @route  POST api/observations
 // @access Private
 export const getAllObs = asyncHandler(async (req, res) => {
-  const allObs = await prisma.observations.findMany();
-  res.status(200).send(allObs);
+  const allObs = await prisma.observations.findMany({
+    include: {
+      faculty: true,
+      observer: true,
+      hod: true,
+      course: true,
+    },
+  });
+  const returnObss = [];
+  allObs.map((item) => {
+    returnObss.push({
+      id: item.id,
+      faculty: { name: item.faculty.name, email: item.faculty.email },
+      observer: { name: item.observer.name, email: item.observer.email },
+      hod: { name: item.hod.name, email: item.hod.email },
+      meetings: item.meetings,
+      obsRequest: item.obsRequest,
+      timeSlot: item.timeSlot[0],
+      semester: item.semester,
+      observationProgress: item.observationProgress,
+      observationScore: item.observationScore,
+      observationStatus: item.observationStatus,
+      course: item.course,
+    });
+  });
+  res.status(200).json(returnObss);
 });
 
 // @desc   Get observation by id
@@ -49,7 +73,11 @@ export const getObs = asyncHandler(async (req, res) => {
       faculty: true,
       observer: true,
       hod: true,
-      obsRequest: true,
+      obsRequest: {
+        include: {
+          course: true,
+        },
+      },
       course: true,
       meetings: {
         include: {
@@ -61,5 +89,19 @@ export const getObs = asyncHandler(async (req, res) => {
       },
     },
   });
-  res.status(200).send(Obs);
+  const returnObs = {
+    id: Obs.id,
+    faculty: { name: Obs.faculty.name, email: Obs.faculty.email },
+    observer: { name: Obs.observer.name, email: Obs.observer.email },
+    hod: { name: Obs.hod.name, email: Obs.hod.email },
+    meetings: Obs.meetings,
+    obsRequest: Obs.obsRequest,
+    timeSlot: Obs.timeSlot[0],
+    semester: Obs.semester,
+    observationProgress: Obs.observationProgress,
+    observationScore: Obs.observationScore,
+    observationStatus: Obs.observationStatus,
+    course: Obs.course,
+  };
+  res.status(200).json(returnObs);
 });

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import App from "../components/app";
 import Datatable from "../components/common/datatable";
@@ -33,8 +33,36 @@ import Createvendors from "../components/vendors/create.vendors";
 import Listvendors from "../components/vendors/list-vendors";
 import Listobservation from "../components/observations/list-observation";
 import Createobservation from "../components/observations/create-observation";
+import { useStateValue } from "../StateProvider";
 
 const LayoutRoutes = () => {
+  const [{ user }, dispatch] = useStateValue();
+  async function fetchData() {
+    try {
+      const res = await fetch(`http://localhost:8080/api/user/${user.id}`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const data = await res.json();
+      const specificData = {
+        observations: data.observations,
+        courses: data.courses,
+      };
+      dispatch({
+        type: "SET_USER_DATA",
+        payload: specificData,
+      });
+      console.log(specificData);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  useEffect(() => {
+    if (user) {
+      fetchData();
+    }
+  }, []);
   return (
     <Fragment>
       <Routes>

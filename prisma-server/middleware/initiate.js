@@ -27,16 +27,16 @@ export const protectInitiateObs = asyncHandler(async (req, res, next) => {
       if (user.role === "Head_of_Department") {
         next();
       } else {
-        res.status(400).send({
+        res.status(400).json({
           error: "You are not authorized person to initiate a observation!",
         });
       }
     } catch (err) {
-      res.status(400).send({ error: "Not authorized, invalid token!" });
+      res.status(400).json({ error: "Not authorized, invalid token!" });
     }
   }
   if (!token) {
-    res.status(401).send({
+    res.status(401).json({
       error:
         "No authorized, no token, please provide user token in request header!",
     });

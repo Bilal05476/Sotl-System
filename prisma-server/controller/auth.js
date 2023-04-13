@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 // @access Private
 export const getUsers = asyncHandler(async (req, res) => {
   const allUsers = await prisma.user.findMany();
-  res.status(200).send(allUsers);
+  res.status(200).json(allUsers);
 });
 
 // @desc   Get User by id
@@ -21,9 +21,114 @@ export const userById = asyncHandler(async (req, res) => {
       id: Number(req.params.id),
     },
     include: {
-      facultyObs: true,
-      observerObs: true,
-      hodObs: true,
+      facultyObs: {
+        include: {
+          course: true,
+          faculty: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          observer: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          hod: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          obsRequest: {
+            include: {
+              course: true,
+            },
+          },
+          meetings: {
+            include: {
+              informedObservation: true,
+              postObservation: true,
+              uninformedObservation: true,
+              professionalDPlan: true,
+            },
+          },
+        },
+      },
+      observerObs: {
+        include: {
+          course: true,
+          faculty: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          observer: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          hod: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          obsRequest: {
+            include: {
+              course: true,
+            },
+          },
+          meetings: {
+            include: {
+              informedObservation: true,
+              postObservation: true,
+              uninformedObservation: true,
+              professionalDPlan: true,
+            },
+          },
+        },
+      },
+      hodObs: {
+        include: {
+          course: true,
+          faculty: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          observer: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          hod: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          obsRequest: {
+            include: {
+              course: true,
+            },
+          },
+          meetings: {
+            include: {
+              informedObservation: true,
+              postObservation: true,
+              uninformedObservation: true,
+              professionalDPlan: true,
+            },
+          },
+        },
+      },
       facultyCourses: true,
       observerCourses: true,
     },
@@ -49,7 +154,7 @@ export const userById = asyncHandler(async (req, res) => {
     filtered.observations = observations;
     filtered.courses = courses;
 
-    res.status(200).send(filtered);
+    res.status(200).json(filtered);
   } else if (user.role == "Observer") {
     const observations = user.observerObs;
     const courses = user.observerCourses;
@@ -58,16 +163,16 @@ export const userById = asyncHandler(async (req, res) => {
     filtered.observations = observations;
     filtered.courses = courses;
 
-    res.status(200).send(filtered);
+    res.status(200).json(filtered);
   } else if (user.role == "Head_of_Department") {
     const observations = user.hodObs;
 
     //filtered
     filtered.observations = observations;
 
-    res.status(200).send(filtered);
+    res.status(200).json(filtered);
   } else {
-    res.status(404).send(filtered);
+    res.status(404).json(filtered);
   }
 });
 
@@ -85,7 +190,7 @@ export const createUser = asyncHandler(async (req, res) => {
   });
 
   if (existedUser) {
-    res.status(400).send({ error: "User Already Exist" });
+    res.status(400).json({ error: "User Already Exist" });
   } else {
     // hash password from plain to encrypted
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -138,7 +243,7 @@ export const createUser = asyncHandler(async (req, res) => {
       // create user session token
       const token = generateJWT(newUser.id);
       newUser.token = token;
-      res.status(200).send(newUser);
+      res.status(200).json(newUser);
     }
   }
 });
@@ -146,7 +251,7 @@ export const createUser = asyncHandler(async (req, res) => {
 // @desc   Authenticate Role
 // @route  POST api/login
 // @access Public (anyone login with their authentic credentials)
-export const getUser = asyncHandler(async (req, res) => {
+export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   // Validate if user exist in our database
@@ -155,6 +260,7 @@ export const getUser = asyncHandler(async (req, res) => {
       email,
     },
   });
+
   if (user) {
     // hash password compare database password with plain password
     const checkPassword = await bcrypt.compare(password, user.password);
@@ -162,12 +268,13 @@ export const getUser = asyncHandler(async (req, res) => {
       // create user session token
       const token = generateJWT(user.id);
       user.token = token;
-      res.status(200).send(user);
+
+      res.status(200).json(user);
     } else {
-      res.status(400).send({ error: "Invalid Credentials" });
+      res.status(400).json({ error: "Invalid Credentials" });
     }
   } else {
-    res.status(404).send({ error: "No User Exist" });
+    res.status(404).json({ error: "No User Exist" });
   }
 });
 
@@ -200,9 +307,9 @@ export const updateUser = asyncHandler(async (req, res) => {
         avatar,
       },
     });
-    res.status(200).send(updateUser);
+    res.status(200).json(updateUser);
   } else {
-    res.status(404).send({ error: "No User Exist" });
+    res.status(404).json({ error: "No User Exist" });
   }
 });
 

@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
-import { User } from "react-feather";
+import { User, Loader } from "react-feather";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 
@@ -9,9 +9,10 @@ const LoginTabset = () => {
     email: "",
     password: "",
     alert: "",
+    loader: false,
   });
   const [{}, dispatch] = useStateValue();
-  const { email, password, alert } = loginState;
+  const { email, password, alert, loader } = loginState;
 
   function validateEmail(email) {
     const re =
@@ -20,30 +21,47 @@ const LoginTabset = () => {
   }
   const handleSignin = () => {
     async function fetchData() {
-      const res = await fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const data = await res.json();
-      if (data.error) {
-        setLoginState({ ...loginState, alert: data.error });
-      } else {
-        dispatch({
-          type: "SET_USER",
-          payload: data,
+      try {
+        const res = await fetch("http://localhost:8080/api/login", {
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
         });
-        setLoginState({ ...loginState, alert: "", email: "", password: "" });
-        // console.log(data);
-        localStorage.setItem("user", JSON.stringify(data));
+        const data = await res.json();
+        if (data.error) {
+          setLoginState({ ...loginState, alert: data.error, loader: false });
+        } else {
+          dispatch({
+            type: "SET_USER",
+            payload: data,
+          });
+          setLoginState({
+            ...loginState,
+            alert: "",
+            email: "",
+            password: "",
+            loader: false,
+          });
+          // console.log(data);
+          localStorage.setItem("user", JSON.stringify(data));
+        }
+      } catch (error) {
+        // console.log(error.message);
+        setLoginState({
+          ...loginState,
+          alert: "Server not responding at that time!",
+          loader: false,
+        });
       }
     }
     if (!validateEmail(email)) {
+      // console.log("Invalid");
       setLoginState({ ...loginState, alert: "Enter Valid Email Address" });
     } else {
-      setLoginState({ ...loginState, alert: "" });
+      // console.log("Success");
+      setLoginState({ ...loginState, alert: "", loader: true });
       fetchData();
     }
   };
@@ -130,8 +148,13 @@ const LoginTabset = () => {
                 </div>
               </div> */}
               <div className="form-button">
-                <Button color="primary" onClick={() => handleSignin()}>
-                  Login
+                <Button
+                  className="d-flex align-items-center"
+                  color="primary"
+                  style={{ cursor: loader && "progress" }}
+                  onClick={() => handleSignin()}
+                >
+                  {loader ? <Loader /> : "Login"}
                 </Button>
               </div>
               {/* <div className="form-footer">

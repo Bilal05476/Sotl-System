@@ -5,7 +5,7 @@ import LayoutRoutes from "./LayoutRoutes";
 import { useStateValue } from "../StateProvider";
 
 const Routers = () => {
-  const [{ user, courses }, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
   const getAllUsers = async () => {
     const res = await fetch("http://localhost:8080/api/users", {
       headers: {

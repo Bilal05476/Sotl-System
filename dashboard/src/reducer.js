@@ -5,6 +5,7 @@ export const initialState = {
   users: [],
   allObs: [],
   courses: [],
+  userData: null,
 };
 
 const reducer = (state, action) => {
@@ -19,6 +20,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         user: action.payload,
+      };
+    case "SET_USER_DATA":
+      return {
+        ...state,
+        userData: action.payload,
       };
 
     case "CLEAR_USER":

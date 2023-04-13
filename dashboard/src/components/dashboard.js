@@ -218,7 +218,29 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user }] = useStateValue();
+  const [{ user, userData }] = useStateValue();
+
+  const viewObs = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/observation/${id}`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const data = await res.json();
+      // const specificData = {
+      //   observations: data.observations,
+      //   courses: data.courses,
+      // };
+      // dispatch({
+      //   type: "SET_USER_DATA",
+      //   payload: specificData,
+      // });
+      console.log(data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <Fragment>
       <Breadcrumb title="Dashboard" parent="Dashboard" />
@@ -353,6 +375,7 @@ const Dashboard = () => {
                       <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Course</th>
+                        <th scope="col">Semester</th>
                         <th scope="col">Faculty</th>
                         <th scope="col">Observer</th>
                         <th scope="col">Head of department</th>
@@ -363,34 +386,37 @@ const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td className="digits">DAA</td>
-                        <td className="digits">Bilal Ahmed</td>
-                        {/* // font-danger */}
-                        <td className="digits">Krish Kanojia</td>
-                        <td className="digits">Sheraz Ahmed</td>
-                        <td className="digits">Tue, 11:30 am</td>
-                        <td className="digits">20%</td>
-                        <td className="digits text-primary">Ongoing</td>
-                        <td className="digits font-primary">
-                          <Eye size={20} />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td className="digits">DBMS</td>
-                        <td className="digits">Bilal Ahmed</td>
-                        {/* // font-danger */}
-                        <td className="digits">Krish Kanojia</td>
-                        <td className="digits">Sheraz Ahmed</td>
-                        <td className="digits">Thurs, 11:30 am</td>
-                        <td className="digits">100%</td>
-                        <td className="digits text-success">Completed</td>
-                        <td className="digits font-primary">
-                          <Eye size={20} />
-                        </td>
-                      </tr>
+                      {userData?.observations.map((item) => (
+                        <tr key={item.id}>
+                          <td>{item.id}</td>
+                          <td className="digits">
+                            {item.course ? item.course : "--"}
+                          </td>
+                          <td className="digits">{item.semester}</td>
+                          <td className="digits">{item.faculty.name}</td>
+                          {/* // font-danger */}
+                          <td className="digits">{item.observer.name}</td>
+                          <td className="digits">{item.hod.name}</td>
+                          <td className="digits">{item.timeSlot[0]}</td>
+                          <td className="digits">
+                            {item.observationProgress}%
+                          </td>
+                          <td
+                            className={`digits ${
+                              item.observationStatus === "Ongoing"
+                                ? "text-primary"
+                                : item.observationStatus === "Completed"
+                                ? "text-success"
+                                : "text-danger"
+                            }`}
+                          >
+                            {item.observationStatus}
+                          </td>
+                          <td className="digits font-primary">
+                            <Eye onClick={() => viewObs(item.id)} size={20} />
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                   <a href="#javaScript" className="btn btn-primary">

@@ -21,7 +21,7 @@ export const obsScheculeCreate = asyncHandler(async (req, res) => {
   const createdReq = await prisma.obsScheduling.create({
     data: reqData,
   });
-  res.status(200).send(createdReq);
+  res.status(200).json(createdReq);
 });
 
 export const preObsByFaculty = asyncHandler(async (req, res) => {
@@ -45,7 +45,7 @@ export const preObsByFaculty = asyncHandler(async (req, res) => {
         courseId,
       },
     });
-    res.status(200).send(updatedReq);
+    res.status(200).json(updatedReq);
   }
 });
 
@@ -70,7 +70,7 @@ export const preObsAcceptedByObserver = asyncHandler(async (req, res) => {
         timeSlot,
       },
     });
-    res.status(200).send(updatedReq);
+    res.status(200).json(updatedReq);
   }
 });
 
@@ -145,15 +145,15 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
             },
           },
         });
-        res.status(200).send(Obs);
+        res.status(200).json(Obs);
       }
     } else {
-      res.status(200).send(updatedReq);
+      res.status(200).json(updatedReq);
     }
   } else {
-    res.status(404).send({ error: "Request not exist!" });
+    res.status(404).json({ error: "Request not exist!" });
   }
-  // res.status(200).send(existedReq);
+  // res.status(200).json(existedReq);
 });
 
 // {

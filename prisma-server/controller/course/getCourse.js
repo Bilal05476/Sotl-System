@@ -15,7 +15,7 @@ export const getCourse = asyncHandler(async (req, res) => {
       observer: true,
     },
   });
-  res.status(200).send(getCourseById);
+  res.status(200).json(getCourseById);
 });
 
 // @desc   Get courses
@@ -23,7 +23,7 @@ export const getCourse = asyncHandler(async (req, res) => {
 // @access Public
 export const getCourses = asyncHandler(async (req, res) => {
   const getAllCourses = await prisma.courses.findMany();
-  res.status(200).send(getAllCourses);
+  res.status(200).json(getAllCourses);
 });
 
 // @desc   Create course
@@ -52,5 +52,5 @@ export const createCourse = asyncHandler(async (req, res) => {
       room,
     },
   });
-  res.status(200).send(newCourse);
+  res.status(200).json(newCourse);
 });

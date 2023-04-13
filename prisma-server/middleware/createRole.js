@@ -33,14 +33,14 @@ export const protectCreateRole = asyncHandler(async (req, res, next) => {
       } else {
         res
           .status(400)
-          .send({ error: "You are not authorized person to create a role!" });
+          .json({ error: "You are not authorized person to create a role!" });
       }
     } catch (err) {
-      res.status(400).send({ error: "Not authorized, invalid token!" });
+      res.status(400).json({ error: "Not authorized, invalid token!" });
     }
   }
   if (!token) {
-    res.status(401).send({
+    res.status(401).json({
       error:
         "No authorized, no token, please provide user token in request header!",
     });
