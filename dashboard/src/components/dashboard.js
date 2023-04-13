@@ -219,7 +219,7 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, userData }] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const viewObs = async (id) => {
     try {
@@ -361,7 +361,7 @@ const Dashboard = () => {
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
-                            end={userData.observations.length}
+                            end={user.observations.length}
                           />
                           <small> Currently</small>
                         </h3>
@@ -384,7 +384,7 @@ const Dashboard = () => {
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
-                            end={userData.courses.length}
+                            end={user.courses.length}
                           />
                           <small> Assinged</small>
                         </h3>
@@ -406,16 +406,15 @@ const Dashboard = () => {
                         <span className="m-0">Observation Step</span>
                         <h3 className="mb-0">
                           <span className="counter">
-                            {userData.observations[0].meetings
-                              ?.informedObservation?.status === "Ongoing" &&
-                              "Informed"}
-                            {userData.observations[0].meetings?.postObservation
+                            {user.observations[0].meetings?.informedObservation
+                              ?.status === "Ongoing" && "Informed"}
+                            {user.observations[0].meetings?.postObservation
                               ?.status === "Ongoing" && "Post Informed"}
-                            {userData.observations[0].meetings
+                            {user.observations[0].meetings
                               ?.uninformedObservation?.status === "Ongoing" &&
                               "Uniformed"}
-                            {userData.observations[0].meetings
-                              ?.professionalDPlan?.status === "Ongoing" &&
+                            {user.observations[0].meetings?.professionalDPlan
+                              ?.status === "Ongoing" &&
                               "Professional Development"}
                           </span>
                           {/* <small> Currently</small> */}
@@ -473,7 +472,7 @@ const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {userData?.observations.map((item) => (
+                      {user?.observations.map((item) => (
                         <tr key={item.id}>
                           <td>{item.id}</td>
                           <td className="digits">
@@ -506,7 +505,7 @@ const Dashboard = () => {
                       ))}
                     </tbody>
                   </Table>
-                  {userData?.observations.length > 0 && (
+                  {user?.observations.length > 0 && (
                     <NavLink
                       to="/observations/list-observation"
                       className="btn btn-primary"
@@ -538,7 +537,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {userData?.courses.map((item) => (
+                        {user?.courses.map((item) => (
                           <tr key={item.id}>
                             <td>{item.id}</td>
                             <td className="digits">{item.courseName}</td>
@@ -553,7 +552,7 @@ const Dashboard = () => {
                         ))}
                       </tbody>
                     </Table>
-                    {userData.courses.length > 0 && (
+                    {user.courses.length > 0 && (
                       <a href="#javaScript" className="btn btn-primary">
                         View All Courses
                       </a>

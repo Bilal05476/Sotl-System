@@ -253,23 +253,171 @@ export const createUser = asyncHandler(async (req, res) => {
 // @access Public (anyone login with their authentic credentials)
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
   // Validate if user exist in our database
-  const user = await prisma.user.findFirst({
+  const validate = await prisma.user.findFirst({
     where: {
       email,
     },
+    select: {
+      password: true,
+      role: true,
+    },
   });
 
-  if (user) {
+  if (validate) {
     // hash password compare database password with plain password
-    const checkPassword = await bcrypt.compare(password, user.password);
+    const checkPassword = await bcrypt.compare(password, validate.password);
     if (checkPassword) {
+      const user = await prisma.user.findFirst({
+        where: {
+          email,
+        },
+        include: {
+          facultyObs:
+            validate.role === "Faculty"
+              ? {
+                  include: {
+                    course: true,
+                    faculty: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    observer: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    hod: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    obsRequest: {
+                      include: {
+                        course: true,
+                      },
+                    },
+                    meetings: {
+                      include: {
+                        informedObservation: true,
+                        postObservation: true,
+                        uninformedObservation: true,
+                        professionalDPlan: true,
+                      },
+                    },
+                  },
+                }
+              : false,
+          observerObs:
+            validate.role === "Observer"
+              ? {
+                  include: {
+                    course: true,
+                    faculty: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    observer: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    hod: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    obsRequest: {
+                      include: {
+                        course: true,
+                      },
+                    },
+                    meetings: {
+                      include: {
+                        informedObservation: true,
+                        postObservation: true,
+                        uninformedObservation: true,
+                        professionalDPlan: true,
+                      },
+                    },
+                  },
+                }
+              : false,
+          hodObs:
+            validate.role === "Head_of_Department"
+              ? {
+                  include: {
+                    course: true,
+                    faculty: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    observer: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    hod: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                    obsRequest: {
+                      include: {
+                        course: true,
+                      },
+                    },
+                    meetings: {
+                      include: {
+                        informedObservation: true,
+                        postObservation: true,
+                        uninformedObservation: true,
+                        professionalDPlan: true,
+                      },
+                    },
+                  },
+                }
+              : false,
+          facultyCourses: validate.role === "Faculty" ? true : false,
+          observerCourses: validate.role === "Observer" ? true : false,
+        },
+      });
       // create user session token
       const token = generateJWT(user.id);
-      user.token = token;
-
-      res.status(200).json(user);
+      const loginUser = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        campus: user.campus,
+        department: user.department,
+        role: user.role,
+        token,
+        observations: user.facultyObs
+          ? user.facultyObs
+          : user.observerObs
+          ? user.observerObs
+          : user.hodObs
+          ? user.hodObs
+          : [],
+        courses: user.facultyCourses
+          ? user.facultyCourses
+          : user.observerCourses
+          ? user.observerCourses
+          : [],
+      };
+      res.status(200).json(loginUser);
     } else {
       res.status(400).json({ error: "Invalid Credentials" });
     }

@@ -16,7 +16,7 @@ import { useStateValue } from "../../StateProvider";
 import { Eye } from "react-feather";
 
 const List_observation = () => {
-  const [{ user, userData }] = useStateValue();
+  const [{ user }] = useStateValue();
   const viewObs = async (id) => {
     try {
       const res = await fetch(`http://localhost:8080/api/observation/${id}`, {
@@ -72,7 +72,7 @@ const List_observation = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {userData?.observations.map((item) => (
+                      {user?.observations.map((item) => (
                         <tr key={item.id}>
                           <td>{item.id}</td>
                           <td className="digits">

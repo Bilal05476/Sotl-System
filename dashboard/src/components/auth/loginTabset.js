@@ -37,6 +37,7 @@ const LoginTabset = () => {
             type: "SET_USER",
             payload: data,
           });
+
           setLoginState({
             ...loginState,
             alert: "",
