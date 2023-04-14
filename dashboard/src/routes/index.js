@@ -43,9 +43,9 @@ const Routers = () => {
     });
   };
   useEffect(() => {
-    getAllUsers();
-    getAllObs();
-    getAllCourses();
+    // getAllUsers();
+    // getAllObs();
+    // getAllCourses();
   }, []);
   return (
     <Fragment>

@@ -43,22 +43,16 @@ app.listen(port, () => {
 // const prisma = new PrismaClient();
 
 // async function main() {
-// const film = await prisma.film.findMany({
-//   include: {
-//     Producer: true,
-//     Director: true,
-//   },
-// });
-// console.log(film);
-// const person = await prisma.person.findFirst({
-//   where: {
-//     id: 1,
-//   },
-//   include: {
-//     filmD: true,
-//     filmP: true,
-//   },
-// });
-// console.log(person);
+//   const up = await prisma.user.update({
+//     where: {
+//       id: 2,
+//     },
+//     data: {
+//       facultyCourses: {
+//         set: [{ id: 7, id: 8 }],
+//       },
+//     },
+//   });
+//   console.log(up);
 // }
 // main();

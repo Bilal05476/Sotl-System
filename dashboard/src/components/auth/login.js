@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import LoginTabset from "./loginTabset";
 import Slider from "react-slick";
-import stats from "../../assets/images/dashboard/stats.png";
+import logo from "../../assets/images/dashboard/white-version.png";
 import "../../assets/scss/slick.scss";
 import "../../assets/scss/slick-theme.scss";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
@@ -23,16 +23,17 @@ const Login = () => {
               <Col className="col-md-5 p-0 card-left">
                 <Card className="bg-primary">
                   <div className="svg-icon">
-                    <img alt="" src={stats} className="Img-fluid" />
+                    <img alt="IU Logo" src={logo} className="Img-fluid" />
                   </div>
                   <Slider className="single-item" {...settings}>
                     <div>
                       <div>
                         <h3>What SOTL System?</h3>
-                        <p>
-                          Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy.
+                        <p style={{ fontSize: "0.8rem" }}>
+                          SOTL observation system is a state-of-the-art tool
+                          that addresses the challenges of observing,
+                          evaluating, and improving teaching practices in
+                          today's educational landscape.
                         </p>
                       </div>
                     </div>

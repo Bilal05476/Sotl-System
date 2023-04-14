@@ -158,3 +158,51 @@ export const HODMENU = [
     ],
   },
 ];
+
+export const FACULTYMENU = [
+  {
+    path: "/dashboard",
+    title: "Dashboard",
+    icon: Home,
+    type: "link",
+    badgeType: "primary",
+    active: false,
+  },
+
+  {
+    title: "Observations",
+    icon: Clipboard,
+    type: "link",
+    active: false,
+    path: "/observations/list-observation",
+  },
+  {
+    path: "/",
+    title: "Courses",
+    icon: Home,
+    type: "link",
+    badgeType: "primary",
+    active: false,
+  },
+
+  {
+    title: "Settings",
+    icon: Settings,
+    type: "sub",
+    children: [
+      { path: "/settings/profile", title: "Your Profile", type: "link" },
+      { path: "/settings/logout", title: "Logout", type: "link" },
+    ],
+  },
+];
+
+export const OBSERVERMENU = [
+  {
+    path: "/dashboard",
+    title: "Dashboard",
+    icon: Home,
+    type: "link",
+    badgeType: "primary",
+    active: false,
+  },
+];

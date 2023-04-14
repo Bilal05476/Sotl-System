@@ -403,7 +403,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <Media body className="col-8">
-                        <span className="m-0">Observation Step</span>
+                        <span className="m-0">Current Meeting</span>
                         <h3 className="mb-0">
                           <span className="counter">
                             {user.observations[0].meetings?.informedObservation

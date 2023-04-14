@@ -386,7 +386,7 @@ a {
   margin-right: auto;
   margin-left: auto;
   padding: 50px;
-  border: 2px dashed $theme-deafult;
+  border: 2px dashed $theme-default;
   border-radius: 15px;
   border-image: none;
   background: transparent;
@@ -395,7 +395,7 @@ a {
   position: relative;
   i {
     font-size: 50px;
-    color: $theme-deafult;
+    color: $theme-default;
   }
   .dzu-input {
     border: 1px solid #ddd;
@@ -561,17 +561,17 @@ a {
   top: -86px;
 }
 .datepicker--nav {
-  color: $theme-deafult;
+  color: $theme-default;
 }
 .datepicker--nav-action {
-  color: $theme-deafult;
-  background-color: $theme-deafult;
+  color: $theme-default;
+  background-color: $theme-default;
 }
 .datepicker--nav-action:hover {
-  color: $theme-deafult;
+  color: $theme-default;
 }
 .datepicker--nav-title i {
-  color: $theme-deafult;
+  color: $theme-default;
 }
 .table {
   thead {
@@ -695,7 +695,7 @@ a {
       padding: 50px;
       background-image: url("../../images/dashboard/login-bg.png");
       background-position: center;
-      box-shadow: 1px 5px 24px 0 rgba(255, 128, 132, 0.8);
+      box-shadow: 1px 5px 24px 0 rgba(132, 128, 255, 0.8);
     }
     .form-group {
       margin-bottom: 1.5rem;
@@ -737,6 +737,11 @@ a {
     border-radius: 25px;
     padding: 9px 25px;
     border: 1px solid #eaeaea;
+    outline: none;
+    box-shadow: none;
+  }
+  .form-control:focus {
+    border: 1px solid $theme-default;
   }
 }
 .switch-sm {
@@ -870,7 +875,7 @@ a {
     .lable-block {
       .lable3 {
         border-radius: 100%;
-        background-color: $theme-deafult;
+        background-color: $theme-default;
         text-align: center;
         font-size: 14px;
         font-weight: 700;
@@ -1082,7 +1087,7 @@ a {
     font-weight: 700;
     margin-bottom: 0;
     a {
-      color: $theme-deafult !important;
+      color: $theme-default !important;
       text-decoration: none;
     }
     p {
@@ -2482,7 +2487,7 @@ ul.notification-dropdown.onhover-show-div {
       width: $sidebar-width;
       position: $sidebar-position;
       // background: $sidebar-background-color;
-      background: $theme-deafult;
+      background: $theme-default;
       
       top: 0;
       height: calc(100vh);
@@ -2557,6 +2562,7 @@ ul.notification-dropdown.onhover-show-div {
                   &:before {
                     content: "\f104";
                     transition: $sidebar-transition;
+                    color: $sidebar-font-color; 
                   }
                 }
               }
@@ -2667,7 +2673,7 @@ ul.notification-dropdown.onhover-show-div {
               padding-bottom: 7px;
               padding-top: 7px;
               font-size: 14px;
-              color: $dark-gray;
+              color: $sidebar-font-color;
               transition: $sidebar-transition;
               text-transform: $sidebar-text-transform;
               position: relative;
@@ -2690,15 +2696,16 @@ ul.notification-dropdown.onhover-show-div {
                 }
               }
               &:hover {
-                color: $primary-color;
+                color: $sidebar-hover-txt-color;
                 transition: $sidebar-transition;
               }
               &.active {
-                color: $primary-color;
+                color: $sidebar-hover-txt-color;
+                transition: $sidebar-transition;
               }
             }
             &.active > a {
-              color: $theme-body-font-color;
+              color: $sidebar-hover-txt-color;
               &.active {
                 color: $primary-color;
               }
@@ -3544,7 +3551,7 @@ $i: 1;
     padding: 30px;
     .container {
       .bg-primary {
-        padding: 40px;
+        padding: 20px 40px;
       }
     }
   }
@@ -3664,7 +3671,7 @@ $i: 1;
             align-items: center;
             svg {
               circle {
-                color: $theme-deafult;
+                color: $theme-default;
               }
             }
           }
@@ -4075,7 +4082,7 @@ $i: 1;
               }
               .mobile-search {
                 svg {
-                  color: $theme-deafult;
+                  color: $theme-default;
                 }
               }
             }

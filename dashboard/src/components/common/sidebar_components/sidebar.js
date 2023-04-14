@@ -1,7 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import UserPanel from "./user-panel";
 import { Link } from "react-router-dom";
-import { HODMENU, MENUITEMS } from "../../../constants/menu";
+import {
+  FACULTYMENU,
+  HODMENU,
+  MENUITEMS,
+  OBSERVERMENU,
+} from "../../../constants/menu";
 
 // image import
 import logo from "../../../assets/images/dashboard/white-version.png";
@@ -10,9 +15,13 @@ import { useStateValue } from "../../../StateProvider";
 const Sidebar = () => {
   const [{ user }] = useStateValue();
   const [mainmenu, setMainMenu] = useState(
-    user.role === "Campus_Director" || user.role === "Admin"
-      ? MENUITEMS
-      : HODMENU
+    user.role === "Observer"
+      ? OBSERVERMENU
+      : user.role === "Head_of_Department"
+      ? HODMENU
+      : user.role === "Faculty"
+      ? FACULTYMENU
+      : MENUITEMS
   );
   const [isChange, setIsChange] = useState(false);
 
@@ -41,9 +50,13 @@ const Sidebar = () => {
     });
     return () => {
       setMainMenu(
-        user.role === "Campus_Director" || user.role === "Admin"
-          ? MENUITEMS
-          : HODMENU
+        user.role === "Observer"
+          ? OBSERVERMENU
+          : user.role === "Head_of_Department"
+          ? HODMENU
+          : user.role === "Faculty"
+          ? FACULTYMENU
+          : MENUITEMS
       );
     };
   }, [isChange]);
@@ -75,9 +88,13 @@ const Sidebar = () => {
     });
     item.active = !item.active;
     setMainMenu(
-      user.role === "Campus_Director" || user.role === "Admin"
-        ? MENUITEMS
-        : HODMENU
+      user.role === "Observer"
+        ? OBSERVERMENU
+        : user.role === "Head_of_Department"
+        ? HODMENU
+        : user.role === "Faculty"
+        ? FACULTYMENU
+        : MENUITEMS
     );
   };
 
@@ -90,7 +107,7 @@ const Sidebar = () => {
       )}
       {menuItem.type === "sub" ? (
         <a
-          className="sidebar-header "
+          className="sidebar-header"
           href="#javaScript"
           onClick={(event) => {
             event.preventDefault();
