@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 // @route  POST api/users
 // @access Private
 export const getUsers = asyncHandler(async (req, res) => {
-  const allUsers = await prisma.user.findMany();
+  const allUsers = await prisma.user.findMany({});
   res.status(200).json(allUsers);
 });
 
