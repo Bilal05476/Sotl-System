@@ -2,11 +2,11 @@
   "name": "prisma-server",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "devStart": "nodemon script.js",
-    "start": "node script.js"
+    "devStart": "nodemon index.js",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "SOTL Team",
