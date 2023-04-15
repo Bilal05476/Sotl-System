@@ -21,13 +21,13 @@ app.use(
   })
 );
 
-// login and create role
+// login, create role, and user
 import authRoutes from "./routes/auth.js";
 app.use("/api", authRoutes);
 
 // observation and meetings
-import obsRoutes from "./routes/observation.js";
-app.use("/api", obsRoutes);
+// import obsRoutes from "./routes/observation.js";
+// app.use("/api", obsRoutes);
 
 // courses
 import courseRoutes from "./routes/courses.js";
