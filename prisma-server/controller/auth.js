@@ -16,163 +16,175 @@ export const getUsers = asyncHandler(async (req, res) => {
 // @route  POST api/user/:id
 // @access Public
 export const userById = asyncHandler(async (req, res) => {
-  const user = await prisma.user.findFirst({
+  const validate = await prisma.user.findFirst({
     where: {
       id: Number(req.params.id),
     },
-    include: {
-      facultyObs: {
-        include: {
-          course: true,
-          faculty: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          observer: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          hod: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          obsRequest: {
-            include: {
-              course: true,
-            },
-          },
-          meetings: {
-            include: {
-              informedObservation: true,
-              postObservation: true,
-              uninformedObservation: true,
-              professionalDPlan: true,
-            },
-          },
-        },
-      },
-      observerObs: {
-        include: {
-          course: true,
-          faculty: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          observer: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          hod: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          obsRequest: {
-            include: {
-              course: true,
-            },
-          },
-          meetings: {
-            include: {
-              informedObservation: true,
-              postObservation: true,
-              uninformedObservation: true,
-              professionalDPlan: true,
-            },
-          },
-        },
-      },
-      hodObs: {
-        include: {
-          course: true,
-          faculty: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          observer: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          hod: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          obsRequest: {
-            include: {
-              course: true,
-            },
-          },
-          meetings: {
-            include: {
-              informedObservation: true,
-              postObservation: true,
-              uninformedObservation: true,
-              professionalDPlan: true,
-            },
-          },
-        },
-      },
-      facultyCourses: true,
-      observerCourses: true,
+    select: {
+      id: true,
+      role: true,
     },
   });
-  const exclude = [
-    "observerObs",
-    "hodObs",
-    "facultyObs",
-    "facultyCourses",
-    "observerCourses",
-  ];
-  const filtered = Object.keys(user).reduce((acc, key) => {
-    if (!exclude.includes(key)) {
-      acc[key] = user[key];
-    }
-    return acc;
-  }, {});
-  if (user.role == "Faculty") {
-    const observations = user.facultyObs;
-    const courses = user.facultyCourses;
-
-    //filtered
-    filtered.observations = observations;
-    filtered.courses = courses;
-
-    res.status(200).json(filtered);
-  } else if (user.role == "Observer") {
-    const observations = user.observerObs;
-    const courses = user.observerCourses;
-
-    //filtered
-    filtered.observations = observations;
-    filtered.courses = courses;
-
-    res.status(200).json(filtered);
-  } else if (user.role == "Head_of_Department") {
-    const observations = user.hodObs;
-
-    //filtered
-    filtered.observations = observations;
-
-    res.status(200).json(filtered);
+  if (validate) {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: validate.id,
+      },
+      include: {
+        facultyObs:
+          validate.role === "Faculty"
+            ? {
+                include: {
+                  course: true,
+                  faculty: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  observer: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  hod: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  obsRequest: {
+                    include: {
+                      course: true,
+                    },
+                  },
+                  meetings: {
+                    include: {
+                      informedObservation: true,
+                      postObservation: true,
+                      uninformedObservation: true,
+                      professionalDPlan: true,
+                    },
+                  },
+                },
+              }
+            : false,
+        observerObs:
+          validate.role === "Observer"
+            ? {
+                include: {
+                  course: true,
+                  faculty: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  observer: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  hod: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  obsRequest: {
+                    include: {
+                      course: true,
+                    },
+                  },
+                  meetings: {
+                    include: {
+                      informedObservation: true,
+                      postObservation: true,
+                      uninformedObservation: true,
+                      professionalDPlan: true,
+                    },
+                  },
+                },
+              }
+            : false,
+        hodObs:
+          validate.role === "Head_of_Department"
+            ? {
+                include: {
+                  course: true,
+                  faculty: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  observer: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  hod: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  obsRequest: {
+                    include: {
+                      course: true,
+                    },
+                  },
+                  meetings: {
+                    include: {
+                      informedObservation: true,
+                      postObservation: true,
+                      uninformedObservation: true,
+                      professionalDPlan: true,
+                    },
+                  },
+                },
+              }
+            : false,
+        facultyCourses: validate.role === "Faculty" ? true : false,
+        observerCourses: validate.role === "Observer" ? true : false,
+      },
+    });
+    /// send user data to client side
+    const userData = {
+      // id: validate.id,
+      // name: validate.name,
+      // email: validate.email,
+      // campus: validate.campus?.replaceAll("_", " "),
+      // department: validate.department,
+      // role: validate.role?.replaceAll("_", " "),
+      // avatar: validate.avatar,
+      // phone: validate.phone,
+      // designation: validate.designation,
+      // degree: validate.degree,
+      // starting: validate.starting,
+      // ending: validate.ending,
+      // dateOfBirth: validate.dateOfBirth,
+      // institute: validate.institute,
+      // token,
+      observations: user.facultyObs
+        ? user.facultyObs
+        : user.observerObs
+        ? user.observerObs
+        : user.hodObs
+        ? user.hodObs
+        : [],
+      courses: user.facultyCourses
+        ? user.facultyCourses
+        : user.observerCourses
+        ? user.observerCourses
+        : [],
+    };
+    res.status(200).json(userData);
   } else {
-    res.status(404).json(filtered);
+    res.status(404).json({ error: "No user exists" });
   }
 });
 
@@ -209,13 +221,15 @@ export const createUser = asyncHandler(async (req, res) => {
     const newUser = await prisma.user.create({
       data: newUserData,
     });
+    // const newUser = null;
 
-    let ids;
+    let ids = [];
     if (courses) {
-      ids = courses.map((item) => ({ id: item }));
+      courses.map((item) => ids.push({ id: item }));
     }
 
-    // uncheck func // check by morning
+    // res.status(200).json(ids);
+
     if (newUser) {
       if (newUser.role === "Observer") {
         await prisma.user.update({
@@ -258,164 +272,32 @@ export const loginUser = asyncHandler(async (req, res) => {
     where: {
       email,
     },
-    select: {
-      password: true,
-      role: true,
-    },
   });
 
   if (validate) {
     // hash password compare database password with plain password
     const checkPassword = await bcrypt.compare(password, validate.password);
     if (checkPassword) {
-      const user = await prisma.user.findFirst({
-        where: {
-          email,
-        },
-        include: {
-          facultyObs:
-            validate.role === "Faculty"
-              ? {
-                  include: {
-                    course: true,
-                    faculty: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    observer: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    hod: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    obsRequest: {
-                      include: {
-                        course: true,
-                      },
-                    },
-                    meetings: {
-                      include: {
-                        informedObservation: true,
-                        postObservation: true,
-                        uninformedObservation: true,
-                        professionalDPlan: true,
-                      },
-                    },
-                  },
-                }
-              : false,
-          observerObs:
-            validate.role === "Observer"
-              ? {
-                  include: {
-                    course: true,
-                    faculty: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    observer: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    hod: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    obsRequest: {
-                      include: {
-                        course: true,
-                      },
-                    },
-                    meetings: {
-                      include: {
-                        informedObservation: true,
-                        postObservation: true,
-                        uninformedObservation: true,
-                        professionalDPlan: true,
-                      },
-                    },
-                  },
-                }
-              : false,
-          hodObs:
-            validate.role === "Head_of_Department"
-              ? {
-                  include: {
-                    course: true,
-                    faculty: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    observer: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    hod: {
-                      select: {
-                        name: true,
-                        email: true,
-                      },
-                    },
-                    obsRequest: {
-                      include: {
-                        course: true,
-                      },
-                    },
-                    meetings: {
-                      include: {
-                        informedObservation: true,
-                        postObservation: true,
-                        uninformedObservation: true,
-                        professionalDPlan: true,
-                      },
-                    },
-                  },
-                }
-              : false,
-          facultyCourses: validate.role === "Faculty" ? true : false,
-          observerCourses: validate.role === "Observer" ? true : false,
-        },
-      });
       // create user session token
-      const token = generateJWT(user.id);
+      const token = generateJWT(validate.id);
+
+      /// send user data to client side
       const loginUser = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        campus: user.campus,
-        department: user.department,
-        role: user.role,
+        id: validate.id,
+        name: validate.name,
+        email: validate.email,
+        campus: validate.campus,
+        department: validate.department,
+        role: validate.role,
+        avatar: validate.avatar,
+        phone: validate.phone,
+        designation: validate.designation,
+        degree: validate.degree,
+        starting: validate.starting,
+        ending: validate.ending,
+        dateOfBirth: validate.dateOfBirth,
+        institute: validate.institute,
         token,
-        observations: user.facultyObs
-          ? user.facultyObs
-          : user.observerObs
-          ? user.observerObs
-          : user.hodObs
-          ? user.hodObs
-          : [],
-        courses: user.facultyCourses
-          ? user.facultyCourses
-          : user.observerCourses
-          ? user.observerCourses
-          : [],
       };
       res.status(200).json(loginUser);
     } else {
@@ -467,3 +349,17 @@ const generateJWT = (id) => {
     expiresIn: "30d",
   });
 };
+
+// const exclude = [
+//   "observerObs",
+//   "hodObs",
+//   "facultyObs",
+//   "facultyCourses",
+//   "observerCourses",
+// ];
+// const filtered = Object.keys(user).reduce((acc, key) => {
+//   if (!exclude.includes(key)) {
+//     acc[key] = user[key];
+//   }
+//   return acc;
+// }, {});

@@ -43,14 +43,21 @@ app.listen(port, () => {
 // const prisma = new PrismaClient();
 
 // async function main() {
+//   //update courses for user
 //   const up = await prisma.user.update({
 //     where: {
 //       id: 2,
 //     },
 //     data: {
 //       facultyCourses: {
-//         set: [{ id: 7, id: 8 }],
+//         //connect or disconnect
+//         connect: {
+//           id: 9,
+//         },
 //       },
+//     },
+//     select: {
+//       facultyCourses: true,
 //     },
 //   });
 //   console.log(up);

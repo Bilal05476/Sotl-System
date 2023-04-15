@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 // import data from "../../assets/data/listUser";
 // import Datatable from "../common/datatable";
@@ -16,7 +16,7 @@ import { useStateValue } from "../../StateProvider";
 import { Eye } from "react-feather";
 
 const List_observation = () => {
-  const [{ user }] = useStateValue();
+  const [{ user, userData }] = useStateValue();
   const viewObs = async (id) => {
     try {
       const res = await fetch(`http://localhost:8080/api/observation/${id}`, {
@@ -72,7 +72,7 @@ const List_observation = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {user?.observations.map((item) => (
+                      {userData?.observations.map((item) => (
                         <tr key={item.id}>
                           <td>{item.id}</td>
                           <td className="digits">
@@ -99,7 +99,12 @@ const List_observation = () => {
                             {item.observationStatus}
                           </td>
                           <td className="digits font-primary">
-                            <Eye onClick={() => viewObs(item.id)} size={20} />
+                            <NavLink
+                              className="d-flex align-items-center"
+                              to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
+                            >
+                              <Eye size={20} />
+                            </NavLink>
                           </td>
                         </tr>
                       ))}

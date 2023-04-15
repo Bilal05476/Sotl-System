@@ -2,19 +2,32 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 import { useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { Eye, Loader } from "react-feather";
-import { useStateValue } from "../../StateProvider";
+import { Loader } from "react-feather";
 
 const Detail_observation = () => {
   const { id } = useParams();
-  const [isOpen, setIsOpen] = useState("--");
-  const [{ user }] = useStateValue();
+  const [isOpen, setIsOpen] = useState("scheduling");
   const [obsDetail, setObsDetail] = useState("");
+  const viewObs = async () => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/observation/${id}`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const data = await res.json();
+      if (!data.error) {
+        setObsDetail(data);
+      } else {
+        console.log(data.error);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   useEffect(() => {
-    const [obs] = user.observations.filter((item) => item.id === Number(id));
-    setObsDetail(obs);
+    viewObs();
   }, []);
-  console.log(obsDetail);
   // return null;
   return (
     <Fragment>

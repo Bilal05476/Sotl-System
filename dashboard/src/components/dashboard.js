@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import Breadcrumb from "./common/breadcrumb";
 import {
   Navigation,
@@ -219,26 +219,35 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user }] = useStateValue();
+  const [{ user, userData }, dispatch] = useStateValue();
 
-  const viewObs = async (id) => {
+  async function fetchData() {
     try {
-      const res = await fetch(`http://localhost:8080/api/observation/${id}`, {
+      const res = await fetch(`http://localhost:8080/api/user/${user.id}`, {
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
       const data = await res.json();
 
-      // dispatch({
-      //   type: "SET_USER_DATA",
-      //   payload: specificData,
-      // });
-      console.log(data);
+      if (!data.error) {
+        dispatch({
+          type: "SET_USER_DATA",
+          payload: data,
+        });
+        console.log(data);
+      } else {
+        console.log(data.error);
+      }
     } catch (error) {
       console.log(error.message);
     }
-  };
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // return;
   return (
     <Fragment>
       <Breadcrumb title="Dashboard" parent="Dashboard" />
@@ -361,7 +370,7 @@ const Dashboard = () => {
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
-                            end={user.observations.length}
+                            end={userData?.observations.length}
                           />
                           <small> Currently</small>
                         </h3>
@@ -384,7 +393,7 @@ const Dashboard = () => {
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
-                            end={user.courses.length}
+                            end={userData?.courses.length}
                           />
                           <small> Assinged</small>
                         </h3>
@@ -406,15 +415,16 @@ const Dashboard = () => {
                         <span className="m-0">Current Meeting</span>
                         <h3 className="mb-0">
                           <span className="counter">
-                            {user.observations[0].meetings?.informedObservation
-                              ?.status === "Ongoing" && "Informed"}
-                            {user.observations[0].meetings?.postObservation
+                            {userData?.observations[0].meetings
+                              ?.informedObservation?.status === "Ongoing" &&
+                              "Informed"}
+                            {userData?.observations[0].meetings?.postObservation
                               ?.status === "Ongoing" && "Post Informed"}
-                            {user.observations[0].meetings
+                            {userData?.observations[0].meetings
                               ?.uninformedObservation?.status === "Ongoing" &&
                               "Uniformed"}
-                            {user.observations[0].meetings?.professionalDPlan
-                              ?.status === "Ongoing" &&
+                            {userData?.observations[0].meetings
+                              ?.professionalDPlan?.status === "Ongoing" &&
                               "Professional Development"}
                           </span>
                           {/* <small> Currently</small> */}
@@ -427,9 +437,7 @@ const Dashboard = () => {
             </>
           )}
 
-          {user.role === "Faculty" || user.role === "Observer" ? (
-            <></>
-          ) : (
+          {user.role !== "Faculty" ? (
             <Col xl="6 xl-100">
               <Card>
                 <CardHeader>
@@ -447,6 +455,8 @@ const Dashboard = () => {
                 </CardBody>
               </Card>
             </Col>
+          ) : (
+            <></>
           )}
 
           <Col xl="6 xl-100">
@@ -472,7 +482,7 @@ const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {user?.observations.map((item) => (
+                      {userData?.observations.map((item) => (
                         <tr key={item.id}>
                           <td>{item.id}</td>
                           <td className="digits">
@@ -499,13 +509,18 @@ const Dashboard = () => {
                             {item.observationStatus}
                           </td>
                           <td className="digits font-primary">
-                            <Eye onClick={() => viewObs(item.id)} size={20} />
+                            <NavLink
+                              className="d-flex align-items-center"
+                              to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
+                            >
+                              <Eye size={20} />
+                            </NavLink>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </Table>
-                  {user?.observations.length > 0 && (
+                  {userData?.observations.length > 0 && (
                     <NavLink
                       to="/observations/list-observation"
                       className="btn btn-primary"
@@ -537,7 +552,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {user?.courses.map((item) => (
+                        {userData?.courses.map((item) => (
                           <tr key={item.id}>
                             <td>{item.id}</td>
                             <td className="digits">{item.courseName}</td>
@@ -552,7 +567,7 @@ const Dashboard = () => {
                         ))}
                       </tbody>
                     </Table>
-                    {user.courses.length > 0 && (
+                    {userData?.courses.length > 0 && (
                       <a href="#javaScript" className="btn btn-primary">
                         View All Courses
                       </a>

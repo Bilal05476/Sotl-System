@@ -43,6 +43,7 @@ export const getAllObs = asyncHandler(async (req, res) => {
       course: true,
     },
   });
+
   const returnObss = [];
   allObs.map((item) => {
     returnObss.push({
@@ -50,12 +51,9 @@ export const getAllObs = asyncHandler(async (req, res) => {
       faculty: { name: item.faculty.name, email: item.faculty.email },
       observer: { name: item.observer.name, email: item.observer.email },
       hod: { name: item.hod.name, email: item.hod.email },
-      meetings: item.meetings,
-      obsRequest: item.obsRequest,
-      timeSlot: item.timeSlot[0],
+      timeSlot: item.timeSlot,
       semester: item.semester,
       observationProgress: item.observationProgress,
-      observationScore: item.observationScore,
       observationStatus: item.observationStatus,
       course: item.course,
     });
@@ -89,19 +87,23 @@ export const getObs = asyncHandler(async (req, res) => {
       },
     },
   });
-  const returnObs = {
-    id: Obs.id,
-    faculty: { name: Obs.faculty.name, email: Obs.faculty.email },
-    observer: { name: Obs.observer.name, email: Obs.observer.email },
-    hod: { name: Obs.hod.name, email: Obs.hod.email },
-    meetings: Obs.meetings,
-    obsRequest: Obs.obsRequest,
-    timeSlot: Obs.timeSlot[0],
-    semester: Obs.semester,
-    observationProgress: Obs.observationProgress,
-    observationScore: Obs.observationScore,
-    observationStatus: Obs.observationStatus,
-    course: Obs.course,
-  };
-  res.status(200).json(returnObs);
+  if (Obs) {
+    const returnObs = {
+      id: Obs.id,
+      faculty: { name: Obs.faculty.name, email: Obs.faculty.email },
+      observer: { name: Obs.observer.name, email: Obs.observer.email },
+      hod: { name: Obs.hod.name, email: Obs.hod.email },
+      meetings: Obs.meetings,
+      obsRequest: Obs.obsRequest,
+      timeSlot: Obs.timeSlot,
+      semester: Obs.semester,
+      observationProgress: Obs.observationProgress,
+      observationScore: Obs.observationScore,
+      observationStatus: Obs.observationStatus,
+      course: Obs.course,
+    };
+    res.status(200).json(returnObs);
+  } else {
+    res.status(404).json({ error: "No observation found!" });
+  }
 });
