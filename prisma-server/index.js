@@ -37,7 +37,7 @@ app.use("/api", courseRoutes);
 
 app.use("/", (req, res) => {
   res.status(200).json({
-    message: `Server Running at port: ${port}`,
+    message: `Server Running at port: ${port}!`,
   });
 });
 
