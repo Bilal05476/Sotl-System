@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 const app = express();
 app.use(cors());
 
+const port = process.env.PORT || 8080;
+
 dotenv.config();
 
 app.use(
@@ -33,7 +35,11 @@ app.use("/api", authRoutes);
 import courseRoutes from "./routes/courses.js";
 app.use("/api", courseRoutes);
 
-const port = process.env.PORT || 8080;
+app.use("/", (req, res) => {
+  res.status(200).json({
+    message: `Server Running at port: ${port}`,
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server Running at port: ${port}`);
