@@ -3,7 +3,7 @@ const obsRoutes = express.Router();
 import {
   getAllObs,
   getObs,
-  initateObs,
+  initiate,
 } from "../controller/observation/initiateObs.js";
 import {
   // preObsAcceptedByObserver,
@@ -14,7 +14,7 @@ import {
 } from "../controller/observation/preObs.js";
 import { protectInitiateObs } from "../middleware/initiate.js";
 
-obsRoutes.route("/observation/initiate").post(protectInitiateObs, initateObs);
+obsRoutes.route("/observation/initiate").post(protectInitiateObs, initiate);
 obsRoutes.route("/observation/scheduling").post(obsScheculeCreate);
 obsRoutes.route("/observation/scheduling/:id").post(obsScheduleCycle);
 

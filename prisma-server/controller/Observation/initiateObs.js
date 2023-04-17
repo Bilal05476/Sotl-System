@@ -6,7 +6,7 @@ import asyncHandler from "express-async-handler";
 // @desc   Initiate Observation by Head of department
 // @route  POST api/observation/initiate
 // @access Private (only hod will initiate)
-export const initateObs = asyncHandler(async (req, res) => {
+export const initiate = asyncHandler(async (req, res) => {
   const { facultyId, semester, observerId, hodId } = req.body;
   // const obsUsers = [facultyId, observerId, hodId];
   const newObservation = await prisma.observations.create({
