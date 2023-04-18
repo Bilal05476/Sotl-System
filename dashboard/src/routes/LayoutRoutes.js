@@ -34,6 +34,7 @@ import Listvendors from "../components/vendors/list-vendors";
 import Listobservation from "../components/observations/list-observation";
 import Createobservation from "../components/observations/create-observation";
 import Detailobservation from "../components/observations/detail-observation";
+import Observationrubric from "../components/observations/observation-rubric";
 
 const LayoutRoutes = () => {
   // async function fetchData() {
@@ -163,6 +164,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/observations/detail-observation/:id`}
             element={<Detailobservation />}
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/observations/observation-rubric`}
+            element={<Observationrubric />}
           />
           <Route
             path={`${process.env.PUBLIC_URL}/observations/create-observation`}
