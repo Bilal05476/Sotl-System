@@ -166,7 +166,7 @@ const LayoutRoutes = () => {
             element={<Detailobservation />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/observation-rubric`}
+            path={`${process.env.PUBLIC_URL}/observations/:id/observation-rubric`}
             element={<Observationrubric />}
           />
           <Route

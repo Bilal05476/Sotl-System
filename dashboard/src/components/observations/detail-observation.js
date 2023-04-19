@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { Loader } from "react-feather";
 
@@ -217,6 +217,28 @@ const Detail_observation = () => {
                           </tr>
                         </tbody>
                       </Table>
+                      <NavLink
+                        style={{
+                          backgroundColor: "#040b5b",
+                          outline: "none",
+                          boxShadow: "none",
+                          padding: "15px",
+                          width: "20%",
+                          border: "0",
+                          color: "#fff",
+                          borderRadius: "5px",
+                          marginRight: "1rem",
+                          fontWeight: "700",
+                          display: "block",
+                          marginLeft: "auto",
+                          cursor: "pointer",
+                          textDecoration: "none",
+                          textAlign: "center",
+                        }}
+                        to={`/observations/${id}/observation-rubric`}
+                      >
+                        RUBRICS
+                      </NavLink>
                     </div>
                   )}
                 </>
