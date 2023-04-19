@@ -46,42 +46,26 @@ const Observation_rubric = () => {
               <div className="accordion-body text-center">
                 {/* <div className="d-flex"> */}
                 <div className="d-flex align-items-center justify-content-between">
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Innovating")}
-                    />
-                    Innovating
-                  </strong>
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Applying")}
-                    />
-                    Applying
-                  </strong>
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Developing")}
-                    />
-                    Developing
-                  </strong>
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Not Demonstrating")}
-                    />
-                    Not Demonstrating
-                  </strong>
+                  <RadioInput
+                    value="Innovating"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
+                  <RadioInput
+                    value="Applying"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
+                  <RadioInput
+                    value="Developing"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
+                  <RadioInput
+                    value="Not Demonstrating"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
                 </div>
                 {rubric && <RubricPoints rubric={rubric} />}
                 {/* </div> */}
@@ -117,42 +101,26 @@ const Observation_rubric = () => {
               <div className="accordion-body text-center">
                 {/* <div className="d-flex"> */}
                 <div className="d-flex align-items-center justify-content-between">
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Innovating")}
-                    />
-                    Innovating
-                  </strong>
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Applying")}
-                    />
-                    Applying
-                  </strong>
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Developing")}
-                    />
-                    Developing
-                  </strong>
-                  <strong className="d-flex align-items-center">
-                    <input
-                      type="checkbox"
-                      value={rubric}
-                      style={{ marginRight: "0.5rem" }}
-                      onChange={() => setRubric("Not Demonstrating")}
-                    />
-                    Not Demonstrating
-                  </strong>
+                  <RadioInput
+                    value="Innovating"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
+                  <RadioInput
+                    value="Applying"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
+                  <RadioInput
+                    value="Developing"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
+                  <RadioInput
+                    value="Not Demonstrating"
+                    rubric={rubric}
+                    setRubric={setRubric}
+                  />
                 </div>
                 {rubric && <RubricPoints rubric={rubric} />}
                 {/* </div> */}
@@ -160,11 +128,59 @@ const Observation_rubric = () => {
             )}
           </div>
         </div>
+
+        <button
+          style={{
+            backgroundColor: "#040b5b",
+            outline: "none",
+            boxShadow: "none",
+            padding: "15px",
+            width: "20%",
+            border: "0",
+            color: "#fff",
+            borderRadius: "5px",
+            marginRight: "1rem",
+            fontWeight: "700",
+          }}
+        >
+          DRAFT SCORE
+        </button>
+        <button
+          style={{
+            backgroundColor: "#040b5b",
+            outline: "none",
+            boxShadow: "none",
+            padding: "15px",
+            width: "20%",
+            border: "0",
+            color: "#fff",
+            borderRadius: "5px",
+            marginRight: "1rem",
+            fontWeight: "700",
+          }}
+        >
+          SUBMIT SCORE
+        </button>
       </Container>
     </Fragment>
   );
 };
 export default Observation_rubric;
+
+const RadioInput = ({ value, rubric, setRubric }) => {
+  return (
+    <label className="d-flex align-items-center">
+      <input
+        type="radio"
+        value={value}
+        checked={rubric === value && true}
+        style={{ marginRight: "0.5rem" }}
+        onChange={() => setRubric(value)}
+      />
+      {value}
+    </label>
+  );
+};
 
 const RubricPoints = ({ rubric }) => {
   return (
