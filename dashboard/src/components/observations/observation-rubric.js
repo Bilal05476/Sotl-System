@@ -2,12 +2,21 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 // import { useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { ChevronDown, ChevronsDown, ChevronsUp, Loader } from "react-feather";
+import {
+  ChevronDown,
+  ChevronsDown,
+  ChevronsUp,
+  Loader,
+  Trash,
+  Trash2,
+} from "react-feather";
 import { NavLink, useParams } from "react-router-dom";
 
 const Observation_rubric = () => {
   const [isOpen, setIsOpen] = useState("");
-  const [rubric, setRubric] = useState("");
+  const [selectedRubric, setSelectedRubric] = useState([]);
+  const [rubricScore, setRubricScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
   const { id } = useParams();
 
   return (
@@ -15,9 +24,22 @@ const Observation_rubric = () => {
       <Breadcrumb title="Observation Rubrics" parent="Informed Observations" />
       <Container fluid={true}>
         <Row className="mb-2">
-          <Col className="xl-100">
+          <Col className="xl-100 d-flex align-items-center justify-content-end">
             {" "}
-            <span style={{ fontWeight: "500" }}>Total Score: 0</span>
+            <span
+              className="digits"
+              style={{
+                fontWeight: "500",
+                backgroundColor: "#040b5b",
+                color: "#fff",
+                padding: "0.5rem 1rem",
+                borderRadius: "5px",
+                // fontSize: "0.9rem",
+                fontWeight: "700",
+              }}
+            >
+              TOTAL SCORE: {totalScore.toFixed(2)}
+            </span>
           </Col>
         </Row>
         <div className="accordion">
@@ -42,7 +64,8 @@ const Observation_rubric = () => {
             >
               1.A Demonstrating Knowledge of Content
               <span className="d-flex align-items-center">
-                Rubric Score: 0
+                Rubric Score: {rubricScore.toFixed(2)}
+                {/* Rubric Score: {Math.ceil(rubricScore)} */}
                 {isOpen === "Content" ? (
                   <ChevronsUp style={{ marginLeft: "1.5rem" }} />
                 ) : (
@@ -56,32 +79,16 @@ const Observation_rubric = () => {
                 <Table borderless>
                   <thead>
                     <th className="col">
-                      <RadioInput
-                        rubric={rubric}
-                        setRubric={setRubric}
-                        value={"Innovating"}
-                      />
+                      <RadioInput value={"Innovating"} />
                     </th>
                     <th className="col">
-                      <RadioInput
-                        rubric={rubric}
-                        setRubric={setRubric}
-                        value={"Applying"}
-                      />
+                      <RadioInput value={"Applying"} />
                     </th>
                     <th className="col">
-                      <RadioInput
-                        rubric={rubric}
-                        setRubric={setRubric}
-                        value={"Developing"}
-                      />
+                      <RadioInput value={"Developing"} />
                     </th>
                     <th className="col">
-                      <RadioInput
-                        rubric={rubric}
-                        setRubric={setRubric}
-                        value={"Not Demonstrating"}
-                      />
+                      <RadioInput value={"Not Demonstrating"} />
                     </th>
                   </thead>
                   <tbody>
@@ -89,33 +96,37 @@ const Observation_rubric = () => {
                       <td>
                         <RubricPoints
                           rubricDesc={innovative}
-                          rubric={rubric}
-                          setRubric={setRubric}
-                          title="Innovating"
+                          setSelected={setSelectedRubric}
+                          selected={selectedRubric}
+                          score={rubricScore}
+                          setScore={setRubricScore}
                         />
                       </td>
                       <td>
                         <RubricPoints
                           rubricDesc={applying}
-                          rubric={rubric}
-                          setRubric={setRubric}
-                          title="Applying"
+                          setSelected={setSelectedRubric}
+                          selected={selectedRubric}
+                          score={rubricScore}
+                          setScore={setRubricScore}
                         />
                       </td>
                       <td>
                         <RubricPoints
                           rubricDesc={developing}
-                          rubric={rubric}
-                          setRubric={setRubric}
-                          title="Developing"
+                          setSelected={setSelectedRubric}
+                          selected={selectedRubric}
+                          score={rubricScore}
+                          setScore={setRubricScore}
                         />
                       </td>
                       <td>
                         <RubricPoints
                           rubricDesc={notDemostrating}
-                          rubric={rubric}
-                          setRubric={setRubric}
-                          title="Not Demonstrating"
+                          setSelected={setSelectedRubric}
+                          selected={selectedRubric}
+                          score={rubricScore}
+                          setScore={setRubricScore}
                         />
                       </td>
                     </tr>
@@ -147,7 +158,7 @@ const Observation_rubric = () => {
             >
               1-B. Demonstrating Knowledge of Pedagogy
               <span className="d-flex align-items-center">
-                Rubric Score: 0
+                Rubric Score: {rubricScore.toFixed(2)}
                 {isOpen === "Pedagogy" ? (
                   <ChevronsUp style={{ marginLeft: "1.5rem" }} />
                 ) : (
@@ -216,50 +227,80 @@ const Observation_rubric = () => {
 };
 export default Observation_rubric;
 
-const RadioInput = ({ value, rubric, setRubric }) => {
+const RadioInput = ({ value }) => {
   return (
     <label className="col d-flex align-items-center">
-      <input
+      {/* <input
         type="radio"
         value={value}
         checked={rubric === value && true}
         style={{ marginRight: "0.5rem" }}
         onChange={() => setRubric(value)}
-      />
+      /> */}
       {value}
     </label>
   );
 };
 
-const RubricPoints = ({ rubric, title, rubricDesc }) => {
+const RubricPoints = ({
+  rubricDesc,
+  selected,
+  setSelected,
+  score,
+  setScore,
+}) => {
+  const addSelected = (id, sc) => {
+    setSelected([...selected, id]);
+    let newScore = score + sc;
+    console.log(newScore);
+
+    setScore(newScore);
+  };
+
+  const deleteSelected = (id, sc) => {
+    const dRubric = selected.filter((item) => item !== id);
+    setSelected(dRubric);
+    let newScore = score - sc;
+    console.log(newScore);
+    setScore(newScore);
+  };
+
   return (
     <div className=" my-2 d-flex flex-column flex-wrap align-items-start">
       {/* <RadioInput value={title} rubric={rubric} setRubric={setRubric} /> */}
-      <div
-        className="rubric-points"
-        style={{
-          backgroundColor: rubric === title ? "#6fa2d83e" : "#6fa2d815",
-        }}
-      >
+      <div className="">
         {rubricDesc.map((item) => (
-          <div key={item.id} className="d-flex align-items-start my-2">
-            {/* {rubric === title && ( */}
+          <div
+            key={item.id}
+            className="rubric-points d-flex align-items-start my-2"
+            style={{
+              backgroundColor: selected.includes(item.id) && "#6fa2d875",
+            }}
+          >
             <input
-              type="checkbox"
+              type="radio"
               className="mt-1"
+              checked={selected.includes(item.id) && true}
               style={{ marginRight: "0.5rem" }}
-              onChange={() => console.log(item.score)}
+              // onChange={() => setSelected([...selected, item.id])}
+              onChange={() => addSelected(item.id, item.score)}
             />
-            {/* )} */}
             <span
               className="digits"
               style={{
                 textAlign: "left",
-                fontWeight: rubric === title ? "600" : "300",
               }}
             >
               {item.text}
             </span>
+            {selected.includes(item.id) && (
+              <span
+                onClick={() => deleteSelected(item.id, item.score)}
+                className="rubric-point-delete"
+              >
+                <Trash2 size={18} color="white" />
+              </span>
+            )}
           </div>
         ))}
       </div>
@@ -287,17 +328,17 @@ const innovative = [
 
 const applying = [
   {
-    id: 1,
+    id: 4,
     text: "Sometimes engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
     score: 3.33,
   },
   {
-    id: 2,
+    id: 5,
     text: "Teaching demonstrates reasonable knowledge of the content area, its discipline-specific terminology, and academic language demands.",
     score: 3.33,
   },
   {
-    id: 3,
+    id: 6,
     text: "Content teaching shows partial alignment (50%-90%) with adopted standards, program goals, and CLOs.",
     score: 3.33,
   },
@@ -305,34 +346,34 @@ const applying = [
 
 const developing = [
   {
-    id: 1,
+    id: 7,
     text: "Rarely engages students in learning experiences focused on disciplinary knowledge and content specific skills",
     score: 3.33,
   },
   {
-    id: 2,
+    id: 8,
     text: "Teaching demonstrates partial knowledge of the content area, its discipline-specific terminology, and academic language demands.",
     score: 3.33,
   },
   {
-    id: 3,
+    id: 9,
     text: "Content teaching shows limited alignment (<50%) with adopted standards, program goals, and CLOs.",
     score: 3.33,
   },
 ];
 const notDemostrating = [
   {
-    id: 1,
+    id: 10,
     text: "Does not engage students in learning experiences focused on disciplinary knowledge and content specific skills.",
     score: 3.33,
   },
   {
-    id: 2,
+    id: 11,
     text: "Teaching demonstrates limited knowledge of the content area, its discipline-specific terminology, and academic language demands.",
     score: 3.33,
   },
   {
-    id: 3,
+    id: 12,
     text: "Content teaching shows no alignment with adopted standards, program goals, and CLOs.",
     score: 3.33,
   },
