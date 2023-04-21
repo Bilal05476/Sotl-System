@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "devStart": "nodemon index.js",
-    "start": "node index.js"
+    "start": "prisma generate && node index.js"
   },
   "keywords": [],
   "author": "SOTL Team",
