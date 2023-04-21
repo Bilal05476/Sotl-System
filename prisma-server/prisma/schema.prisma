@@ -2,213 +2,213 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 // -> User => Observations || => Courses || => Feedbacks || => Messages
 model User {
-  id               Int            @id @default(autoincrement()) // auto-inc
-  name             String
-  email            String
-  phone            String?
-  password         String
-  avatar           String?
-  designation      String?
-  dateOfBirth      DateTime?
-  institute        String?
-  degree           String?
-  starting         DateTime?
-  ending           DateTime?
-  role             Role
-  campus           Campus
-  department       Department
-  //observations
-  facultyObs       Observations[] @relation("Faculty")
-  hodObs           Observations[] @relation("Hod")
-  observerObs      Observations[] @relation("Observer")
-  //courses
-  observerCourses  Courses[]      @relation("Observer")
-  facultyCourses   Courses[]      @relation("Faculty")
-  //feedbacks
-  feedbackAuthor   FeedBacks[]    @relation("Author")
-  feedbackReceiver FeedBacks[]    @relation("Receiver")
-  //messages
-  messageSender    Messages[]     @relation("Sender")
-  messageReceiver  Messages[]     @relation("Receiver")
+    id               Int            @id @default(autoincrement()) // auto-inc
+    name             String
+    email            String
+    phone            String?
+    password         String
+    avatar           String?
+    designation      String?
+    dateOfBirth      DateTime?
+    institute        String?
+    degree           String?
+    starting         DateTime?
+    ending           DateTime?
+    role             Role
+    campus           Campus
+    department       Department
+    //observations
+    facultyObs       Observations[] @relation("Faculty")
+    hodObs           Observations[] @relation("Hod")
+    observerObs      Observations[] @relation("Observer")
+    //courses
+    observerCourses  Courses[]      @relation("Observer")
+    facultyCourses   Courses[]      @relation("Faculty")
+    //feedbacks
+    feedbackAuthor   FeedBacks[]    @relation("Author")
+    feedbackReceiver FeedBacks[]    @relation("Receiver")
+    //messages
+    messageSender    Messages[]     @relation("Sender")
+    messageReceiver  Messages[]     @relation("Receiver")
 }
 
 // -> User => Observations
 model Observations {
-  id                  Int            @id @default(autoincrement()) // auto-inc
-  timeSlot            Json?
-  observationStatus   Status         @default(Pending)
-  observationProgress Int            @default(0)
-  semester            String
-  observationScore    Int            @default(0)
-  faculty             User           @relation("Faculty", fields: [facultyId], references: [id])
-  facultyId           Int
-  hod                 User           @relation("Hod", fields: [hodId], references: [id])
-  hodId               Int
-  observer            User           @relation("Observer", fields: [observerId], references: [id])
-  observerId          Int
-  obsRequest          ObsScheduling?
-  meetings            Meetings?
-  course              Courses?       @relation(fields: [courseId], references: [id])
-  courseId            Int?           @unique
+    id                  Int            @id @default(autoincrement()) // auto-inc
+    timeSlot            Json?
+    observationStatus   Status         @default(Pending)
+    observationProgress Int            @default(0)
+    semester            String
+    observationScore    Int            @default(0)
+    faculty             User           @relation("Faculty", fields: [facultyId], references: [id])
+    facultyId           Int
+    hod                 User           @relation("Hod", fields: [hodId], references: [id])
+    hodId               Int
+    observer            User           @relation("Observer", fields: [observerId], references: [id])
+    observerId          Int
+    obsRequest          ObsScheduling?
+    meetings            Meetings?
+    course              Courses?       @relation(fields: [courseId], references: [id])
+    courseId            Int?           @unique
 }
 
 // -> Observations => ObsScheduling
 model ObsScheduling {
-  id                        Int          @id @default(autoincrement()) // auto-inc
-  teachingPlanByFaculty     String?
-  teachingPlanByObserver    String?
-  refelectionPlanByFaculty  String? // optional for faculty
-  refelectionPlanByObserver String?
-  artifcats                 String?
-  timeSlotsByFaculty        Json?
-  timeSlotsByObserver       Json?
-  status                    Status       @default(Pending)
-  observation               Observations @relation(fields: [observationsId], references: [id])
-  observationsId            Int          @unique
-  course                    Courses?     @relation(fields: [courseId], references: [id])
-  courseId                  Int?         @unique
+    id                        Int          @id @default(autoincrement()) // auto-inc
+    teachingPlanByFaculty     String?
+    teachingPlanByObserver    String?
+    refelectionPlanByFaculty  String? // optional for faculty
+    refelectionPlanByObserver String?
+    artifcats                 String?
+    timeSlotsByFaculty        Json?
+    timeSlotsByObserver       Json?
+    status                    Status       @default(Pending)
+    observation               Observations @relation(fields: [observationsId], references: [id])
+    observationsId            Int          @unique
+    course                    Courses?     @relation(fields: [courseId], references: [id])
+    courseId                  Int?         @unique
 }
 
 // -> Observations => Meetings
 model Meetings {
-  id                    Int          @id @default(autoincrement()) // auto-inc 
-  informedObservation   Informed?
-  postObservation       Post?
-  uninformedObservation Uninformed?
-  professionalDPlan     PDP?
-  observation           Observations @relation(fields: [observationsId], references: [id])
-  observationsId        Int          @unique
+    id                    Int          @id @default(autoincrement()) // auto-inc 
+    informedObservation   Informed?
+    postObservation       Post?
+    uninformedObservation Uninformed?
+    professionalDPlan     PDP?
+    observation           Observations @relation(fields: [observationsId], references: [id])
+    observationsId        Int          @unique
 }
 
 // -> Meetings => Informed/Post/Uninformed/PDP
 model Informed {
-  id         Int      @id @default(autoincrement()) // auto-inc
-  finalScore Int?     @default(0)
-  draftScore Int?     @default(0)
-  status     Status   @default(Ongoing)
-  meeting    Meetings @relation(fields: [meetingId], references: [id])
-  meetingId  Int      @unique
+    id         Int      @id @default(autoincrement()) // auto-inc
+    finalScore Int?     @default(0)
+    draftScore Int?     @default(0)
+    status     Status   @default(Ongoing)
+    meeting    Meetings @relation(fields: [meetingId], references: [id])
+    meetingId  Int      @unique
 }
 
 model Rubrics {
-  id          Int      @id @default(autoincrement()) // auto-inc
-  rubricTitle String
-  rubric      Rubric[]
+    id          Int      @id @default(autoincrement()) // auto-inc
+    rubricTitle String
+    rubric      Rubric[]
 }
 
 model Rubric {
-  id          Int      @id @default(autoincrement())
-  rubricText  String
-  rubricScore Float    @default(0)
-  Rubrics     Rubrics? @relation(fields: [rubricsId], references: [id])
-  rubricsId   Int?
+    id          Int      @id @default(autoincrement())
+    rubricText  String
+    rubricScore Float    @default(0)
+    Rubrics     Rubrics? @relation(fields: [rubricsId], references: [id])
+    rubricsId   Int?
 }
 
 model Post {
-  id        Int      @id @default(autoincrement()) // auto-inc
-  status    Status   @default(Ongoing)
-  meeting   Meetings @relation(fields: [meetingId], references: [id])
-  meetingId Int      @unique
+    id        Int      @id @default(autoincrement()) // auto-inc
+    status    Status   @default(Ongoing)
+    meeting   Meetings @relation(fields: [meetingId], references: [id])
+    meetingId Int      @unique
 }
 
 model Uninformed {
-  id        Int      @id @default(autoincrement()) // auto-inc
-  status    Status   @default(Ongoing)
-  meeting   Meetings @relation(fields: [meetingId], references: [id])
-  meetingId Int      @unique
+    id        Int      @id @default(autoincrement()) // auto-inc
+    status    Status   @default(Ongoing)
+    meeting   Meetings @relation(fields: [meetingId], references: [id])
+    meetingId Int      @unique
 }
 
 model PDP {
-  id        Int      @id @default(autoincrement()) // auto-inc
-  pdpDoc    String
-  meeting   Meetings @relation(fields: [meetingId], references: [id])
-  meetingId Int      @unique
+    id        Int      @id @default(autoincrement()) // auto-inc
+    pdpDoc    String
+    meeting   Meetings @relation(fields: [meetingId], references: [id])
+    meetingId Int      @unique
 }
 
 // -> User => Courses
 model Courses {
-  id          Int            @id @default(autoincrement()) // auto-inc
-  courseName  String
-  department  Department
-  campus      Campus
-  // observer    User?          @relation("Observer", fields: [observerId], references: [id])
-  // observerId  Int?
-  // faculty     User?          @relation("Faculty", fields: [facultyId], references: [id])
-  // facultyId   Int?
-  observer    User[]         @relation("Observer")
-  faculty     User[]         @relation("Faculty")
-  scheduling  ObsScheduling?
-  observation Observations?
-  timeSlot    String?
-  room        String?
-  day         String?
+    id          Int            @id @default(autoincrement()) // auto-inc
+    courseName  String
+    department  Department
+    campus      Campus
+    // observer    User?          @relation("Observer", fields: [observerId], references: [id])
+    // observerId  Int?
+    // faculty     User?          @relation("Faculty", fields: [facultyId], references: [id])
+    // facultyId   Int?
+    observer    User[]         @relation("Observer")
+    faculty     User[]         @relation("Faculty")
+    scheduling  ObsScheduling?
+    observation Observations?
+    timeSlot    String?
+    room        String?
+    day         String?
 }
 
 // -> User => Feedbacks
 model FeedBacks {
-  id         Int    @id @default(autoincrement()) // auto-inc
-  comment    String
-  author     User?  @relation("Author", fields: [authorId], references: [id])
-  authorId   Int?
-  receiver   User?  @relation("Receiver", fields: [receiverId], references: [id])
-  receiverId Int?
+    id         Int    @id @default(autoincrement()) // auto-inc
+    comment    String
+    author     User?  @relation("Author", fields: [authorId], references: [id])
+    authorId   Int?
+    receiver   User?  @relation("Receiver", fields: [receiverId], references: [id])
+    receiverId Int?
 }
 
 // -> User => Messages
 model Messages {
-  id         Int    @id @default(autoincrement()) // auto-inc
-  message    String
-  sender     User?  @relation("Sender", fields: [senderId], references: [id])
-  senderId   Int?
-  receiver   User?  @relation("Receiver", fields: [receiverId], references: [id])
-  receiverId Int?
+    id         Int    @id @default(autoincrement()) // auto-inc
+    message    String
+    sender     User?  @relation("Sender", fields: [senderId], references: [id])
+    senderId   Int?
+    receiver   User?  @relation("Receiver", fields: [receiverId], references: [id])
+    receiverId Int?
 }
 
 // enums
 enum Role {
-  Admin
-  Campus_Director
-  Head_of_Department
-  Faculty
-  Observer
+    Admin
+    Campus_Director
+    Head_of_Department
+    Faculty
+    Observer
 }
 
 enum Department {
-  Fest
-  Aifd
-  Media_Studies
-  Business
-  Education
+    Fest
+    Aifd
+    Media_Studies
+    Business
+    Education
 }
 
 enum Campus {
-  Main_Campus
-  Gulshan_Campus
-  North_Campus
-  Airport_Campus
-  Bahria_Campus
-  Islamabad_Campus
+    Main_Campus
+    Gulshan_Campus
+    North_Campus
+    Airport_Campus
+    Bahria_Campus
+    Islamabad_Campus
 }
 
 enum Status {
-  Pending
-  Ongoing
-  Completed
-  Draft
+    Pending
+    Ongoing
+    Completed
+    Draft
 }
 
 enum Semester {
-  Fall
-  Spring
-  Summer
+    Fall
+    Spring
+    Summer
 }

@@ -24,12 +24,12 @@ app.use(
 );
 
 // login, create role, and user
-import authRoutes from "./routes/auth.js";
-app.use("/api", authRoutes);
+// import authRoutes from "./routes/auth.js";
+// app.use("/api", authRoutes);
 
 // observation and meetings
-import obsRoutes from "./routes/observation.js";
-app.use("/api", obsRoutes);
+// import obsRoutes from "./routes/observation.js";
+// app.use("/api", obsRoutes);
 
 // courses
 import courseRoutes from "./routes/courses.js";
@@ -50,22 +50,7 @@ app.listen(port, () => {
 
 // async function main() {
 //   //update courses for user
-//   const up = await prisma.user.update({
-//     where: {
-//       id: 2,
-//     },
-//     data: {
-//       facultyCourses: {
-//         //connect or disconnect
-//         connect: {
-//           id: 9,
-//         },
-//       },
-//     },
-//     select: {
-//       facultyCourses: true,
-//     },
-//   });
+//   const up = await prisma.user.deleteMany();
 //   console.log(up);
 // }
 // main();

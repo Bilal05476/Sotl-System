@@ -1,12 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `delete` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE `delete`;
-
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -25,28 +16,28 @@ CREATE TABLE `User` (
     `campus` ENUM('Main_Campus', 'Gulshan_Campus', 'North_Campus', 'Airport_Campus', 'Bahria_Campus', 'Islamabad_Campus') NOT NULL,
     `department` ENUM('Fest', 'Aifd', 'Media_Studies', 'Business', 'Education') NOT NULL,
 
-    UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Observations` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `timeSlot` DATETIME(3) NULL,
+    `timeSlot` JSON NULL,
     `observationStatus` ENUM('Pending', 'Ongoing', 'Completed', 'Draft') NOT NULL DEFAULT 'Pending',
     `observationProgress` INTEGER NOT NULL DEFAULT 0,
-    `course` INTEGER NULL,
     `semester` VARCHAR(191) NOT NULL,
     `observationScore` INTEGER NOT NULL DEFAULT 0,
     `facultyId` INTEGER NOT NULL,
     `hodId` INTEGER NOT NULL,
     `observerId` INTEGER NOT NULL,
+    `courseId` INTEGER NULL,
 
+    UNIQUE INDEX `Observations_courseId_key`(`courseId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `ObsRequests` (
+CREATE TABLE `ObsScheduling` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `teachingPlanByFaculty` VARCHAR(191) NULL,
     `teachingPlanByObserver` VARCHAR(191) NULL,
@@ -55,10 +46,12 @@ CREATE TABLE `ObsRequests` (
     `artifcats` VARCHAR(191) NULL,
     `timeSlotsByFaculty` JSON NULL,
     `timeSlotsByObserver` JSON NULL,
-    `obsReqStatus` ENUM('Pending', 'Ongoing', 'Completed', 'Draft') NOT NULL DEFAULT 'Pending',
-    `courseByFaculty` INTEGER NULL,
+    `status` ENUM('Pending', 'Ongoing', 'Completed', 'Draft') NOT NULL DEFAULT 'Pending',
     `observationsId` INTEGER NOT NULL,
+    `courseId` INTEGER NULL,
 
+    UNIQUE INDEX `ObsScheduling_observationsId_key`(`observationsId`),
+    UNIQUE INDEX `ObsScheduling_courseId_key`(`courseId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -67,16 +60,17 @@ CREATE TABLE `Meetings` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `observationsId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `Meetings_observationsId_key`(`observationsId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Informed` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `finalScore` INTEGER NOT NULL,
-    `draftScore` INTEGER NOT NULL,
+    `finalScore` INTEGER NULL DEFAULT 0,
+    `draftScore` INTEGER NULL DEFAULT 0,
     `status` ENUM('Pending', 'Ongoing', 'Completed', 'Draft') NOT NULL DEFAULT 'Ongoing',
-    `meetingId` INTEGER NULL,
+    `meetingId` INTEGER NOT NULL,
 
     UNIQUE INDEX `Informed_meetingId_key`(`meetingId`),
     PRIMARY KEY (`id`)
@@ -104,7 +98,7 @@ CREATE TABLE `Rubric` (
 CREATE TABLE `Post` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `status` ENUM('Pending', 'Ongoing', 'Completed', 'Draft') NOT NULL DEFAULT 'Ongoing',
-    `meetingId` INTEGER NULL,
+    `meetingId` INTEGER NOT NULL,
 
     UNIQUE INDEX `Post_meetingId_key`(`meetingId`),
     PRIMARY KEY (`id`)
@@ -114,7 +108,7 @@ CREATE TABLE `Post` (
 CREATE TABLE `Uninformed` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `status` ENUM('Pending', 'Ongoing', 'Completed', 'Draft') NOT NULL DEFAULT 'Ongoing',
-    `meetingId` INTEGER NULL,
+    `meetingId` INTEGER NOT NULL,
 
     UNIQUE INDEX `Uninformed_meetingId_key`(`meetingId`),
     PRIMARY KEY (`id`)
@@ -124,7 +118,7 @@ CREATE TABLE `Uninformed` (
 CREATE TABLE `PDP` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `pdpDoc` VARCHAR(191) NOT NULL,
-    `meetingId` INTEGER NULL,
+    `meetingId` INTEGER NOT NULL,
 
     UNIQUE INDEX `PDP_meetingId_key`(`meetingId`),
     PRIMARY KEY (`id`)
@@ -136,8 +130,9 @@ CREATE TABLE `Courses` (
     `courseName` VARCHAR(191) NOT NULL,
     `department` ENUM('Fest', 'Aifd', 'Media_Studies', 'Business', 'Education') NOT NULL,
     `campus` ENUM('Main_Campus', 'Gulshan_Campus', 'North_Campus', 'Airport_Campus', 'Bahria_Campus', 'Islamabad_Campus') NOT NULL,
-    `observerId` INTEGER NULL,
-    `facultyId` INTEGER NULL,
+    `timeSlot` VARCHAR(191) NULL,
+    `room` VARCHAR(191) NULL,
+    `day` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -162,6 +157,24 @@ CREATE TABLE `Messages` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `_Observer` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_Observer_AB_unique`(`A`, `B`),
+    INDEX `_Observer_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_Faculty` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_Faculty_AB_unique`(`A`, `B`),
+    INDEX `_Faculty_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `Observations` ADD CONSTRAINT `Observations_facultyId_fkey` FOREIGN KEY (`facultyId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -172,31 +185,31 @@ ALTER TABLE `Observations` ADD CONSTRAINT `Observations_hodId_fkey` FOREIGN KEY 
 ALTER TABLE `Observations` ADD CONSTRAINT `Observations_observerId_fkey` FOREIGN KEY (`observerId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ObsRequests` ADD CONSTRAINT `ObsRequests_observationsId_fkey` FOREIGN KEY (`observationsId`) REFERENCES `Observations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Observations` ADD CONSTRAINT `Observations_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `Courses`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ObsScheduling` ADD CONSTRAINT `ObsScheduling_observationsId_fkey` FOREIGN KEY (`observationsId`) REFERENCES `Observations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ObsScheduling` ADD CONSTRAINT `ObsScheduling_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `Courses`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Meetings` ADD CONSTRAINT `Meetings_observationsId_fkey` FOREIGN KEY (`observationsId`) REFERENCES `Observations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Informed` ADD CONSTRAINT `Informed_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Informed` ADD CONSTRAINT `Informed_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Rubric` ADD CONSTRAINT `Rubric_rubricsId_fkey` FOREIGN KEY (`rubricsId`) REFERENCES `Rubrics`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Post` ADD CONSTRAINT `Post_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Post` ADD CONSTRAINT `Post_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Uninformed` ADD CONSTRAINT `Uninformed_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Uninformed` ADD CONSTRAINT `Uninformed_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `PDP` ADD CONSTRAINT `PDP_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Courses` ADD CONSTRAINT `Courses_observerId_fkey` FOREIGN KEY (`observerId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Courses` ADD CONSTRAINT `Courses_facultyId_fkey` FOREIGN KEY (`facultyId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `PDP` ADD CONSTRAINT `PDP_meetingId_fkey` FOREIGN KEY (`meetingId`) REFERENCES `Meetings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `FeedBacks` ADD CONSTRAINT `FeedBacks_authorId_fkey` FOREIGN KEY (`authorId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
@@ -209,3 +222,15 @@ ALTER TABLE `Messages` ADD CONSTRAINT `Messages_senderId_fkey` FOREIGN KEY (`sen
 
 -- AddForeignKey
 ALTER TABLE `Messages` ADD CONSTRAINT `Messages_receiverId_fkey` FOREIGN KEY (`receiverId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_Observer` ADD CONSTRAINT `_Observer_A_fkey` FOREIGN KEY (`A`) REFERENCES `Courses`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_Observer` ADD CONSTRAINT `_Observer_B_fkey` FOREIGN KEY (`B`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_Faculty` ADD CONSTRAINT `_Faculty_A_fkey` FOREIGN KEY (`A`) REFERENCES `Courses`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_Faculty` ADD CONSTRAINT `_Faculty_B_fkey` FOREIGN KEY (`B`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
