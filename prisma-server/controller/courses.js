@@ -19,7 +19,7 @@ export const getCourse = asyncHandler(async (req, res) => {
 });
 
 // @desc   Get courses
-// @route  POST api/courses
+// @route  GET api/courses
 // @access Public
 export const getCourses = asyncHandler(async (req, res) => {
   const getAllCourses = await prisma.courses.findMany();

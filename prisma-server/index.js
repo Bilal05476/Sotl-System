@@ -23,16 +23,20 @@ app.use(
   })
 );
 
-// login, create role, and user
+// login, create role
 import authRoutes from "./routes/auth.js";
 app.use("/api", authRoutes);
+
+// users
+import userRoutes from "./routes/user.js";
+app.use("/api", userRoutes);
 
 // observation and meetings
 import obsRoutes from "./routes/observation.js";
 app.use("/api", obsRoutes);
 
 // courses
-import courseRoutes from "./routes/courses.js";
+import courseRoutes from "./routes/course.js";
 app.use("/api", courseRoutes);
 
 app.use("/", (req, res) => {

@@ -1,17 +1,8 @@
 import express from "express";
 const authRoutes = express.Router();
-import {
-  // getUser,
-  loginUser,
-  createUser,
-  updateUser,
-  getUsers,
-  userById,
-} from "../controller/auth.js";
-import { protectCreateRole } from "../middleware/createRole.js";
+import { loginUser, createUser, updateUser } from "../controller/auth.js";
+import { protectCreateRole } from "../middleware/protectRoutes.js";
 
-authRoutes.route("/users").get(getUsers);
-authRoutes.route("/user/:id").get(userById);
 authRoutes.route("/login").post(loginUser);
 authRoutes.route("/create").post(protectCreateRole, createUser);
 authRoutes.route("/update/:id").put(updateUser);
