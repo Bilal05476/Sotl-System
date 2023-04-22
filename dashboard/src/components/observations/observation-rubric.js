@@ -249,21 +249,22 @@ const RubricPoints = ({
   score,
   setScore,
 }) => {
-  const addSelected = (id, sc) => {
-    setSelected([...selected, id]);
-    let newScore = score + sc;
-    console.log(newScore);
-
-    setScore(newScore);
+  const toggleSelected = (id, sc) => {
+    if (selected.includes(id)) {
+      const dRubric = selected.filter((item) => item !== id);
+      setSelected(dRubric);
+      let newScore = score - sc;
+      setScore(newScore);
+    } else {
+      setSelected([...selected, id]);
+      let newScore = score + sc;
+      setScore(newScore);
+    }
   };
 
-  const deleteSelected = (id, sc) => {
-    const dRubric = selected.filter((item) => item !== id);
-    setSelected(dRubric);
-    let newScore = score - sc;
-    console.log(newScore);
-    setScore(newScore);
-  };
+  // const deleteSelected = (id, sc) => {
+
+  // };
 
   return (
     <div className=" my-2 d-flex flex-column flex-wrap align-items-start">
@@ -272,19 +273,22 @@ const RubricPoints = ({
         {rubricDesc.map((item) => (
           <div
             key={item.id}
-            className="rubric-points d-flex align-items-start my-2"
+            className="rubric-points d-flex align-items-start my-2 "
             style={{
               backgroundColor: selected.includes(item.id) && "#6fa2d875",
+              boxShadow:
+                selected.includes(item.id) &&
+                "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
             }}
+            onClick={() => toggleSelected(item.id, item.score)}
           >
             <input
               type="radio"
               className="mt-1"
               checked={selected.includes(item.id) && true}
               style={{ marginRight: "0.5rem" }}
-              // onChange={() => setSelected([...selected, item.id])}
-              onChange={() => addSelected(item.id, item.score)}
             />
+
             <span
               className="digits"
               style={{
@@ -293,14 +297,14 @@ const RubricPoints = ({
             >
               {item.text}
             </span>
-            {selected.includes(item.id) && (
+            {/* {selected.includes(item.id) && (
               <span
                 onClick={() => deleteSelected(item.id, item.score)}
                 className="rubric-point-delete"
               >
                 <Trash2 size={18} color="white" />
               </span>
-            )}
+            )} */}
           </div>
         ))}
       </div>
@@ -312,17 +316,17 @@ const innovative = [
   {
     id: 1,
     text: "Frequently engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 2,
     text: "Teaching demonstrates extensive knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 3,
     text: "Complete alignment (90%-100%) with adopted standards, program goals, and CLOs.",
-    score: 3.33,
+    score: 3,
   },
 ];
 
@@ -330,17 +334,17 @@ const applying = [
   {
     id: 4,
     text: "Sometimes engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 5,
     text: "Teaching demonstrates reasonable knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 6,
     text: "Content teaching shows partial alignment (50%-90%) with adopted standards, program goals, and CLOs.",
-    score: 3.33,
+    score: 3,
   },
 ];
 
@@ -348,33 +352,33 @@ const developing = [
   {
     id: 7,
     text: "Rarely engages students in learning experiences focused on disciplinary knowledge and content specific skills",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 8,
     text: "Teaching demonstrates partial knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 9,
     text: "Content teaching shows limited alignment (<50%) with adopted standards, program goals, and CLOs.",
-    score: 3.33,
+    score: 3,
   },
 ];
 const notDemostrating = [
   {
     id: 10,
     text: "Does not engage students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 11,
     text: "Teaching demonstrates limited knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3.33,
+    score: 3,
   },
   {
     id: 12,
     text: "Content teaching shows no alignment with adopted standards, program goals, and CLOs.",
-    score: 3.33,
+    score: 3,
   },
 ];
