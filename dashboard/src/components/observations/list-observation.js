@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 // import data from "../../assets/data/listUser";
@@ -13,28 +13,39 @@ import {
   Row,
 } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
-import { Eye } from "react-feather";
+import { Eye, Loader } from "react-feather";
 
 const List_observation = () => {
-  const [{ user, userData }] = useStateValue();
-  const viewObs = async (id) => {
-    try {
-      const res = await fetch(`http://localhost:8080/api/observation/${id}`, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const data = await res.json();
+  const [{ user, userData }, dispatch] = useStateValue();
 
-      // dispatch({
-      //   type: "SET_USER_DATA",
-      //   payload: specificData,
-      // });
-      console.log(data);
+  async function fetchData() {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const data = await res.json();
+      const specificData = {
+        observations: data.observations,
+        courses: data.courses,
+      };
+      dispatch({
+        type: "SET_USER_DATA",
+        payload: specificData,
+      });
+      console.log(specificData);
     } catch (error) {
       console.log(error.message);
     }
-  };
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Fragment>
       <Breadcrumb title="Observation List" parent="Observations" />
@@ -53,65 +64,78 @@ const List_observation = () => {
                   </Link>
                 )}
               </CardHeader>
-
-              <CardBody>
-                <div className="user-status table-responsive latest-order-table">
-                  <Table borderless>
-                    <thead>
-                      <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Course</th>
-                        <th scope="col">Semester</th>
-                        <th scope="col">Faculty</th>
-                        <th scope="col">Observer</th>
-                        <th scope="col">Head of department</th>
-                        <th scope="col">Date&amp;Time</th>
-                        <th scope="col">Progress</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {userData?.observations.map((item) => (
-                        <tr key={item.id}>
-                          <td>{item.id}</td>
-                          <td className="digits">
-                            {item.course ? item.course : "--"}
-                          </td>
-                          <td className="digits">{item.semester}</td>
-                          <td className="digits">{item.faculty.name}</td>
-                          {/* // font-danger */}
-                          <td className="digits">{item.observer.name}</td>
-                          <td className="digits">{item.hod.name}</td>
-                          <td className="digits">{item.timeSlot[0]}</td>
-                          <td className="digits">
-                            {item.observationProgress}%
-                          </td>
-                          <td
-                            className={`digits ${
-                              item.observationStatus === "Ongoing"
-                                ? "text-primary"
-                                : item.observationStatus === "Completed"
-                                ? "text-success"
-                                : "text-danger"
-                            }`}
-                          >
-                            {item.observationStatus}
-                          </td>
-                          <td className="digits font-primary">
-                            <NavLink
-                              className="d-flex align-items-center"
-                              to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
-                            >
-                              <Eye size={20} />
-                            </NavLink>
-                          </td>
+              {userData && (
+                <CardBody>
+                  <div className="user-status table-responsive latest-order-table">
+                    <Table borderless>
+                      <thead>
+                        <tr>
+                          <th scope="col">Id</th>
+                          <th scope="col">Course</th>
+                          <th scope="col">Semester</th>
+                          <th scope="col">Faculty</th>
+                          <th scope="col">Observer</th>
+                          <th scope="col">Head of department</th>
+                          <th scope="col">Date&amp;Time</th>
+                          <th scope="col">Progress</th>
+                          <th scope="col">Status</th>
+                          <th scope="col"></th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-              </CardBody>
+                      </thead>
+                      <tbody>
+                        {userData.observations.map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td className="digits">
+                              {item.course ? item.course : "--"}
+                            </td>
+                            <td className="digits">{item.semester}</td>
+                            <td className="digits">{item.faculty.name}</td>
+                            {/* // font-danger */}
+                            <td className="digits">{item.observer.name}</td>
+                            <td className="digits">{item.hod.name}</td>
+                            <td className="digits">
+                              {item.timeSlot ? item.timeSlot[0] : "--"}
+                            </td>
+                            <td className="digits">
+                              {item.observationProgress}%
+                            </td>
+                            <td
+                              className={`digits ${
+                                item.observationStatus === "Ongoing"
+                                  ? "text-primary"
+                                  : item.observationStatus === "Completed"
+                                  ? "text-success"
+                                  : "text-danger"
+                              }`}
+                            >
+                              {item.observationStatus}
+                            </td>
+                            <td className="digits font-primary">
+                              <NavLink
+                                className="d-flex align-items-center"
+                                to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
+                              >
+                                <Eye size={20} />
+                              </NavLink>
+                            </td>
+                          </tr>
+                        ))}
+                        {userData.observations.length === 0 && (
+                          <tr>
+                            <td className="text-center" colSpan={10}>
+                              No Observations!
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </Table>
+                  </div>
+                </CardBody>
+              )}
+              {!userData && (
+                <Loader style={{ display: "block", margin: "0.5rem auto" }} />
+              )}
             </Card>
           </Col>
         </Row>

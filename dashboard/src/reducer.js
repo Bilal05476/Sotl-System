@@ -6,6 +6,7 @@ export const initialState = {
   allObs: [],
   courses: [],
   userData: null,
+  logoutState: false,
 };
 
 const reducer = (state, action) => {
@@ -46,6 +47,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         darkTheme: !state.darkTheme,
+      };
+
+    case "LOGOUT":
+      return {
+        ...state,
+        logoutState: !state.logoutState,
       };
     default:
       return state;

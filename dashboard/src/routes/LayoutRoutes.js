@@ -35,34 +35,9 @@ import Listobservation from "../components/observations/list-observation";
 import Createobservation from "../components/observations/create-observation";
 import Detailobservation from "../components/observations/detail-observation";
 import Observationrubric from "../components/observations/observation-rubric";
+import { useStateValue } from "../StateProvider";
 
 const LayoutRoutes = () => {
-  // async function fetchData() {
-  //   try {
-  //     const res = await fetch(`http://localhost:8080/api/user/${user.id}`, {
-  //       headers: {
-  //         "Content-type": "application/json; charset=UTF-8",
-  //       },
-  //     });
-  //     const data = await res.json();
-  //     const specificData = {
-  //       observations: data.observations,
-  //       courses: data.courses,
-  //     };
-  //     dispatch({
-  //       type: "SET_USER_DATA",
-  //       payload: specificData,
-  //     });
-  //     console.log(specificData);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
-  // useEffect(() => {
-  //   if (user) {
-  //     fetchData();
-  //   }
-  // }, []);
   return (
     <Fragment>
       <Routes>

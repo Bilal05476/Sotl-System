@@ -6,18 +6,22 @@ import { Loader } from "react-feather";
 
 const Detail_observation = () => {
   const { id } = useParams();
-  const [isOpen, setIsOpen] = useState("scheduling");
+  const [isOpen, setIsOpen] = useState("");
   const [obsDetail, setObsDetail] = useState("");
   const viewObs = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/observation/${id}`, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/observation/${id}`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
       const data = await res.json();
       if (!data.error) {
         setObsDetail(data);
+        console.log(data);
       } else {
         console.log(data.error);
       }
@@ -28,7 +32,16 @@ const Detail_observation = () => {
   useEffect(() => {
     viewObs();
   }, []);
-  // return null;
+
+  const handleAccordion = (selector) => {
+    if (selector === isOpen) {
+      setIsOpen("");
+    } else {
+      setIsOpen(selector);
+    }
+  };
+
+  // return;
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
@@ -58,7 +71,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => setIsOpen("scheduling")}
+                onClick={() => handleAccordion("scheduling")}
                 style={{
                   backgroundColor: "#040b5b",
                   outline: "none",
@@ -73,7 +86,7 @@ const Detail_observation = () => {
               >
                 Observation Scheduling
               </button>
-              {obsDetail?.obsRequest ? (
+              {obsDetail.obsRequest ? (
                 <>
                   {isOpen === "scheduling" && (
                     <div className="accordion-body px-2 user-status table-responsive latest-order-table">
@@ -135,7 +148,7 @@ const Detail_observation = () => {
                                   : "text-danger"
                               }`}
                             >
-                              {obsDetail?.obsRequest.status}
+                              {obsDetail.obsRequest.status}
                             </td>
                           </tr>
                         </tbody>
@@ -159,7 +172,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => setIsOpen("informed")}
+                onClick={() => handleAccordion("informed")}
                 style={{
                   backgroundColor: "#040b5b",
                   outline: "none",
@@ -174,7 +187,7 @@ const Detail_observation = () => {
               >
                 Informed Observation
               </button>
-              {obsDetail?.meetings.informedObservation ? (
+              {obsDetail.meetings?.informedObservation ? (
                 <>
                   {isOpen === "informed" && (
                     <div className="accordion-body px-2 user-status table-responsive latest-order-table">
@@ -257,7 +270,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => setIsOpen("post")}
+                onClick={() => handleAccordion("post")}
                 style={{
                   backgroundColor: "#040b5b",
                   outline: "none",
@@ -272,7 +285,7 @@ const Detail_observation = () => {
               >
                 Post Informed Meeting
               </button>
-              {obsDetail?.meetings.postObservation ? (
+              {obsDetail.meetings?.postObservation ? (
                 <>
                   {isOpen === "post" && (
                     <div className="accordion-body">
@@ -295,7 +308,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => setIsOpen("uninformed")}
+                onClick={() => handleAccordion("uninformed")}
                 style={{
                   backgroundColor: "#040b5b",
                   outline: "none",
@@ -310,7 +323,7 @@ const Detail_observation = () => {
               >
                 Uninformed Observation
               </button>
-              {obsDetail?.meetings.uninformedObservation ? (
+              {obsDetail.meetings?.uninformedObservation ? (
                 <>
                   {isOpen === "uninformed" && (
                     <div className="accordion-body">

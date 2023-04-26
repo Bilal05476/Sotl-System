@@ -10,6 +10,9 @@ const UserMenu = () => {
 
   const onLogout = () => {
     navigate("/");
+    dispatch({
+      type: "LOGOUT",
+    });
     setTimeout(() => {
       localStorage.clear();
       dispatch({

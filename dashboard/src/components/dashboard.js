@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   Calendar,
   Eye,
+  Loader,
 } from "react-feather";
 import CountUp from "react-countup";
 import { Chart } from "react-google-charts";
@@ -223,22 +224,24 @@ const Dashboard = () => {
 
   async function fetchData() {
     try {
-      const res = await fetch(`http://localhost:8080/api/user/${user.id}`, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
       const data = await res.json();
-
-      if (!data.error) {
-        dispatch({
-          type: "SET_USER_DATA",
-          payload: data,
-        });
-        console.log(data);
-      } else {
-        console.log(data.error);
-      }
+      const specificData = {
+        observations: data.observations,
+        courses: data.courses,
+      };
+      dispatch({
+        type: "SET_USER_DATA",
+        payload: specificData,
+      });
+      console.log(specificData);
     } catch (error) {
       console.log(error.message);
     }
@@ -367,13 +370,16 @@ const Dashboard = () => {
                       </div>
                       <Media body className="col-8">
                         <span className="m-0">Observations</span>
+                        {/* {userData && ( */}
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
                             end={userData?.observations.length}
                           />
-                          <small> Currently</small>
+                          <small> All Time</small>
                         </h3>
+                        {/* // )} */}
+                        {/* {!userData && <Loader />} */}
                       </Media>
                     </Media>
                   </CardBody>
@@ -390,6 +396,7 @@ const Dashboard = () => {
                       </div>
                       <Media body className="col-8">
                         <span className="m-0">Courses</span>
+                        {/* {userData && ( */}
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
@@ -397,6 +404,8 @@ const Dashboard = () => {
                           />
                           <small> Assinged</small>
                         </h3>
+                        {/* )} */}
+                        {/* {!userData && <Loader />} */}
                       </Media>
                     </Media>
                   </CardBody>
@@ -414,20 +423,26 @@ const Dashboard = () => {
                       <Media body className="col-8">
                         <span className="m-0">Current Meeting</span>
                         <h3 className="mb-0">
-                          <span className="counter">
-                            {userData?.observations[0].meetings
-                              ?.informedObservation?.status === "Ongoing" &&
-                              "Informed"}
-                            {userData?.observations[0].meetings?.postObservation
-                              ?.status === "Ongoing" && "Post Informed"}
-                            {userData?.observations[0].meetings
-                              ?.uninformedObservation?.status === "Ongoing" &&
-                              "Uniformed"}
-                            {userData?.observations[0].meetings
-                              ?.professionalDPlan?.status === "Ongoing" &&
-                              "Professional Development"}
-                          </span>
-                          {/* <small> Currently</small> */}
+                          {userData && (
+                            <span className="counter">
+                              {userData.observations[0]?.meetings
+                                ?.informedObservation?.status === "Ongoing" &&
+                                "Informed"}
+                              {userData.observations[0]?.meetings
+                                ?.postObservation?.status === "Ongoing" &&
+                                "Post Informed"}
+                              {userData.observations[0]?.meetings
+                                ?.uninformedObservation?.status === "Ongoing" &&
+                                "Uniformed"}
+                              {userData.observations[0]?.meetings
+                                ?.professionalDPlan?.status === "Ongoing" &&
+                                "Professional Development"}
+                              {userData.observations.length === 0 && "--"}
+                              {!userData.observations?.meetings && "--"}
+                              {/* {!userData.observations && "--"} */}
+                            </span>
+                          )}
+                          {!userData && <Loader size={22} />}
                         </h3>
                       </Media>
                     </Media>
@@ -464,72 +479,86 @@ const Dashboard = () => {
               <CardHeader>
                 <h5>Observations</h5>
               </CardHeader>
-              <CardBody>
-                <div className="user-status table-responsive latest-order-table">
-                  <Table borderless>
-                    <thead>
-                      <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Course</th>
-                        <th scope="col">Semester</th>
-                        <th scope="col">Faculty</th>
-                        <th scope="col">Observer</th>
-                        <th scope="col">Head of department</th>
-                        <th scope="col">Date&amp;Time</th>
-                        <th scope="col">Progress</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {userData?.observations.map((item) => (
-                        <tr key={item.id}>
-                          <td>{item.id}</td>
-                          <td className="digits">
-                            {item.course ? item.course : "--"}
-                          </td>
-                          <td className="digits">{item.semester}</td>
-                          <td className="digits">{item.faculty.name}</td>
-                          {/* // font-danger */}
-                          <td className="digits">{item.observer.name}</td>
-                          <td className="digits">{item.hod.name}</td>
-                          <td className="digits">{item.timeSlot[0]}</td>
-                          <td className="digits">
-                            {item.observationProgress}%
-                          </td>
-                          <td
-                            className={`digits ${
-                              item.observationStatus === "Ongoing"
-                                ? "text-primary"
-                                : item.observationStatus === "Completed"
-                                ? "text-success"
-                                : "text-danger"
-                            }`}
-                          >
-                            {item.observationStatus}
-                          </td>
-                          <td className="digits font-primary">
-                            <NavLink
-                              className="d-flex align-items-center"
-                              to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
-                            >
-                              <Eye size={20} />
-                            </NavLink>
-                          </td>
+              {userData && (
+                <CardBody>
+                  <div className="user-status table-responsive latest-order-table">
+                    <Table borderless>
+                      <thead>
+                        <tr>
+                          <th scope="col">Id</th>
+                          <th scope="col">Course</th>
+                          <th scope="col">Semester</th>
+                          <th scope="col">Faculty</th>
+                          <th scope="col">Observer</th>
+                          <th scope="col">Head of department</th>
+                          <th scope="col">Date&amp;Time</th>
+                          <th scope="col">Progress</th>
+                          <th scope="col">Status</th>
+                          <th scope="col"></th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                  {userData?.observations.length > 0 && (
-                    <NavLink
-                      to="/observations/list-observation"
-                      className="btn btn-primary"
-                    >
-                      View All Observerions
-                    </NavLink>
-                  )}
-                </div>
-              </CardBody>
+                      </thead>
+                      <tbody>
+                        {userData?.observations.map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td className="digits">
+                              {item.course ? item.course : "--"}
+                            </td>
+                            <td className="digits">{item.semester}</td>
+                            <td className="digits">{item.faculty.name}</td>
+                            <td className="digits">{item.observer.name}</td>
+                            <td className="digits">{item.hod.name}</td>
+                            <td className="digits">
+                              {item.timeSlot ? item.timeSlot[0] : "--"}
+                            </td>
+                            <td className="digits">
+                              {item.observationProgress}%
+                            </td>
+                            <td
+                              className={`digits ${
+                                item.observationStatus === "Ongoing"
+                                  ? "text-primary"
+                                  : item.observationStatus === "Completed"
+                                  ? "text-success"
+                                  : "text-danger"
+                              }`}
+                            >
+                              {item.observationStatus}
+                            </td>
+                            <td className="digits font-primary">
+                              <NavLink
+                                className="d-flex align-items-center"
+                                to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
+                              >
+                                <Eye size={20} />
+                              </NavLink>
+                            </td>
+                          </tr>
+                        ))}
+                        {userData.observations.length === 0 && (
+                          <tr>
+                            <td className="text-center" colSpan={10}>
+                              No Observations!
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </Table>
+                    {userData.observations.length > 0 && (
+                      <NavLink
+                        to="/observations/list-observation"
+                        className="btn btn-primary"
+                      >
+                        View All Observerions
+                      </NavLink>
+                    )}
+                  </div>
+                </CardBody>
+              )}
+
+              {!userData && (
+                <Loader style={{ display: "block", margin: "0.5rem auto" }} />
+              )}
             </Card>
           </Col>
           {user.role === "Faculty" || user.role === "Observer" ? (
@@ -538,42 +567,53 @@ const Dashboard = () => {
                 <CardHeader>
                   <h5>Courses</h5>
                 </CardHeader>
-                <CardBody>
-                  <div className="user-status table-responsive latest-order-table">
-                    <Table borderless>
-                      <thead>
-                        <tr>
-                          <th scope="col">Id</th>
-                          <th scope="col">Course</th>
-                          <th scope="col">TimeSlot</th>
-                          <th scope="col">Room</th>
-                          <th scope="col">Campus</th>
-                          <th scope="col">Department</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {userData?.courses.map((item) => (
-                          <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td className="digits">{item.courseName}</td>
-                            <td className="digits">
-                              {item.day} {item.timeSlot}
-                            </td>
-                            <td className="digits">{item.room}</td>
-                            <td className="digits">{item.campus}</td>
-                            {/* // font-danger */}
-                            <td className="digits">{item.department}</td>
+                {userData && (
+                  <CardBody>
+                    <div className="user-status table-responsive latest-order-table">
+                      <Table borderless>
+                        <thead>
+                          <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">TimeSlot</th>
+                            <th scope="col">Room</th>
+                            <th scope="col">Campus</th>
+                            <th scope="col">Department</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                    {userData?.courses.length > 0 && (
-                      <a href="#javaScript" className="btn btn-primary">
-                        View All Courses
-                      </a>
-                    )}
-                  </div>
-                </CardBody>
+                        </thead>
+                        <tbody>
+                          {userData.courses.map((item) => (
+                            <tr key={item.id}>
+                              <td>{item.id}</td>
+                              <td className="digits">{item.courseName}</td>
+                              <td className="digits">
+                                {item.day} {item.timeSlot}
+                              </td>
+                              <td className="digits">{item.room}</td>
+                              <td className="digits">{item.campus}</td>
+                              <td className="digits">{item.department}</td>
+                            </tr>
+                          ))}
+                          {userData.courses.length === 0 && (
+                            <tr>
+                              <td className="text-center" colSpan={6}>
+                                No Courses!
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </Table>
+                      {userData.courses.length > 0 && (
+                        <a href="#javaScript" className="btn btn-primary">
+                          View All Courses
+                        </a>
+                      )}
+                    </div>
+                  </CardBody>
+                )}
+                {!userData && (
+                  <Loader style={{ display: "block", margin: "0.5rem auto" }} />
+                )}
               </Card>
             </Col>
           ) : (
