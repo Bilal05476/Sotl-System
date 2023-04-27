@@ -134,22 +134,82 @@ const Detail_observation = () => {
                               )}
                             </td>
                             <td className="digits">
-                              {obsDetail?.obsRequest.artifcats}
+                              {obsDetail?.obsRequest.artifacts ? (
+                                <a
+                                  href={obsDetail?.obsRequest.artifacts}
+                                  target="blank"
+                                  className="btn btn-primary"
+                                >
+                                  view
+                                </a>
+                              ) : (
+                                "--"
+                              )}
                             </td>
 
                             <td className="digits">
-                              {obsDetail?.obsRequest.teachingPlanByFaculty}
+                              {obsDetail?.obsRequest.teachingPlanByFaculty ? (
+                                <a
+                                  href={
+                                    obsDetail?.obsRequest.teachingPlanByFaculty
+                                  }
+                                  target="blank"
+                                  className="btn btn-primary"
+                                >
+                                  view
+                                </a>
+                              ) : (
+                                "--"
+                              )}
                             </td>
                             <td className="digits">
-                              {obsDetail?.obsRequest.teachingPlanByObserver}
+                              {obsDetail?.obsRequest.teachingPlanByObserver ? (
+                                <a
+                                  href={
+                                    obsDetail?.obsRequest.teachingPlanByObserver
+                                  }
+                                  target="blank"
+                                  className="btn btn-primary"
+                                >
+                                  view
+                                </a>
+                              ) : (
+                                "--"
+                              )}
                             </td>
                             <td className="digits">
-                              {obsDetail?.obsRequest.refelectionPlanByFaculty
-                                ? obsDetail?.obsRequest.refelectionPlanByFaculty
-                                : "--"}
+                              {obsDetail?.obsRequest
+                                .refelectionPlanByFaculty ? (
+                                <a
+                                  href={
+                                    obsDetail?.obsRequest
+                                      .refelectionPlanByFaculty
+                                  }
+                                  target="blank"
+                                  className="btn btn-primary"
+                                >
+                                  view
+                                </a>
+                              ) : (
+                                "--"
+                              )}
                             </td>
                             <td className="digits">
-                              {obsDetail?.obsRequest.refelectionPlanByObserver}
+                              {obsDetail?.obsRequest
+                                .refelectionPlanByObserver ? (
+                                <a
+                                  href={
+                                    obsDetail?.obsRequest
+                                      .refelectionPlanByObserver
+                                  }
+                                  target="blank"
+                                  className="btn btn-primary"
+                                >
+                                  view
+                                </a>
+                              ) : (
+                                "--"
+                              )}
                             </td>
                             <td
                               className={`digits ${
@@ -163,6 +223,19 @@ const Detail_observation = () => {
                           </tr>
                         </tbody>
                       </Table>
+                      <div
+                        style={{
+                          textAlign: "right",
+                          paddingRight: "1rem",
+                        }}
+                      >
+                        <NavLink
+                          to={`/observations/observation-scheduling/${obsDetail?.id}`}
+                          className="btn btn-primary"
+                        >
+                          Edit Scheduling
+                        </NavLink>
+                      </div>
                     </div>
                   )}
                 </>
@@ -173,13 +246,9 @@ const Detail_observation = () => {
                       <strong>No data!</strong>
                       <br />
                       {user.role === "Observer" && (
-                        <button
-                          className="mt-2 btn btn-primary"
-                          data-toggle="modal"
-                          data-target="#exampleModal"
-                        >
+                        <NavLink to="/" className="mt-2 btn btn-primary">
                           Start Scheduling
-                        </button>
+                        </NavLink>
                       )}
                     </div>
                   )}

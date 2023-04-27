@@ -125,11 +125,21 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
   };
 
   // await prisma.obsScheduling.deleteMany();
-
-  const createdReq = await prisma.obsScheduling.create({
-    data: reqData,
+  const findSheduling = await prisma.obsScheduling.findFirst({
+    where: {
+      observationsId,
+    },
   });
-  res.status(200).json(createdReq);
+  if (findSheduling) {
+    res.status(500).json({
+      error: "Scheduling already created for this observation by observer!",
+    });
+  } else {
+    const createdReq = await prisma.obsScheduling.create({
+      data: reqData,
+    });
+    res.status(200).json(createdReq);
+  }
 });
 
 export const preObsByFaculty = asyncHandler(async (req, res) => {

@@ -142,7 +142,7 @@ const LayoutRoutes = () => {
             element={<Detailobservation />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/:id/observation-rubric`}
+            path={`${process.env.PUBLIC_URL}/observations/observation-rubric/:id`}
             element={<Observationrubric />}
           />
           <Route
@@ -150,7 +150,7 @@ const LayoutRoutes = () => {
             element={<Createobservation />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/:id/observation-scheduling`}
+            path={`${process.env.PUBLIC_URL}/observations/observation-scheduling/:id`}
             element={<ScheulingPage />}
           />
 
