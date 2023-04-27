@@ -20,20 +20,17 @@ const Header = () => {
   const [navMenus, setNavMenus] = useState(false);
 
   const toggle = () => {
-    // setNavMenus((prevState) => ({
-    // 	navMenus: !prevState.navMenus,
-    // }));
     setNavMenus(!navMenus);
   };
 
   const showRightSidebar = () => {
-    if (rightSidebar) {
-      setRightSidebar(false);
-      document.querySelector(".right-sidebar").classList.add("show");
-    } else {
-      setRightSidebar(true);
-      document.querySelector(".right-sidebar").classList.remove("show");
-    }
+    // if (rightSidebar) {
+    //   setRightSidebar(false);
+    //   document.querySelector(".right-sidebar").classList.add("show");
+    // } else {
+    //   setRightSidebar(true);
+    //   document.querySelector(".right-sidebar").classList.remove("show");
+    // }
   };
   const goFull = () => {
     if (
@@ -81,7 +78,7 @@ const Header = () => {
           <div className="main-header-left d-lg-none col-auto">
             <div className="logo-wrapper">
               <a href="index.html">
-                <img className="blur-up lazyloaded" src={logo} alt="" />
+                {/* <img className="blur-up lazyloaded" src={logo} alt="" /> */}
               </a>
             </div>
           </div>
@@ -113,12 +110,12 @@ const Header = () => {
                 <span className="dot"></span>
                 <Notification />
               </li>
-              {/* <li>
+              <li>
                 <a href="#javaScript" onClick={showRightSidebar}>
                   <MessageSquare />
                   <span className="dot"></span>
                 </a>
-              </li> */}
+              </li>
               <UserMenu />
             </ul>
             <div

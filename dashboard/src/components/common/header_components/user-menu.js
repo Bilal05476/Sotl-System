@@ -18,6 +18,9 @@ const UserMenu = () => {
       dispatch({
         type: "CLEAR_USER",
       });
+      dispatch({
+        type: "LOGOUT",
+      });
     }, 1000);
   };
   return (

@@ -4,7 +4,7 @@ import { Col, Container, Row } from "reactstrap";
 const Footer = () => {
   return (
     <div>
-      <footer className="footer">
+      <footer className="footer ">
         <Container fluid={true}>
           <Row>
             <Col md="6" className="footer-copyright">

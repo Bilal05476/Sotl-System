@@ -226,7 +226,7 @@ const Sidebar = () => {
 
   return (
     <Fragment>
-      <div className="page-sidebar">
+      <div className="page-sidebar ">
         <div className="main-header-left d-none d-lg-block">
           <div className="logo-wrapper">
             <Link to={`${process.env.PUBLIC_URL}/dashboard`}>
