@@ -69,7 +69,7 @@ model ObsScheduling {
     teachingPlanByObserver    String?
     refelectionPlanByFaculty  String? // optional for faculty
     refelectionPlanByObserver String?
-    artifcats                 String?
+    artifacts                 String?
     timeSlotsByFaculty        Json?
     timeSlotsByObserver       Json?
     status                    Status       @default(Pending)

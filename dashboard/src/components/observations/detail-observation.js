@@ -3,11 +3,14 @@ import { Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { Loader } from "react-feather";
+import { useStateValue } from "../../StateProvider";
 
 const Detail_observation = () => {
   const { id } = useParams();
   const [isOpen, setIsOpen] = useState("");
   const [obsDetail, setObsDetail] = useState("");
+
+  const [{ user }] = useStateValue();
   const viewObs = async () => {
     try {
       const res = await fetch(
@@ -41,10 +44,13 @@ const Detail_observation = () => {
     }
   };
 
+  console.log(obsDetail);
+
   // return;
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
+      {/* <SchedulingModel id="exampleModal" /> */}
       {obsDetail && (
         <Container fluid={true}>
           <Row className="mb-3">
@@ -65,6 +71,10 @@ const Detail_observation = () => {
             <Col className="xl-25 text-right">
               <span style={{ fontWeight: "500" }}>Progress:</span>{" "}
               {obsDetail?.observationProgress}%
+              <span style={{ marginLeft: "1rem", fontWeight: "500" }}>
+                Status:
+              </span>{" "}
+              {obsDetail?.observationStatus}
             </Col>
           </Row>
           <div className="accordion">
@@ -114,12 +124,12 @@ const Detail_observation = () => {
                                 : "--"}
                             </td>
                             <td className="digits">
-                              {obsDetail?.obsRequest.timeSlotsByFaculty.map(
+                              {obsDetail?.obsRequest?.timeSlotsByFaculty?.map(
                                 (item) => `${item} `
                               )}
                             </td>
                             <td className="digits">
-                              {obsDetail?.obsRequest.timeSlotsByObserver.map(
+                              {obsDetail?.obsRequest?.timeSlotsByObserver?.map(
                                 (item) => `${item} `
                               )}
                             </td>
@@ -161,6 +171,16 @@ const Detail_observation = () => {
                   {isOpen === "scheduling" && (
                     <div className="accordion-body text-center">
                       <strong>No data!</strong>
+                      <br />
+                      {user.role === "Observer" && (
+                        <button
+                          className="mt-2 btn btn-primary"
+                          data-toggle="modal"
+                          data-target="#exampleModal"
+                        >
+                          Start Scheduling
+                        </button>
+                      )}
                     </div>
                   )}
                 </>
@@ -344,7 +364,9 @@ const Detail_observation = () => {
           </div>
         </Container>
       )}
-      {!obsDetail && <Loader />}
+      {!obsDetail && (
+        <Loader size={28} style={{ display: "block", margin: "1.5rem auto" }} />
+      )}
     </Fragment>
   );
 };

@@ -35,6 +35,7 @@ import Listobservation from "../components/observations/list-observation";
 import Createobservation from "../components/observations/create-observation";
 import Detailobservation from "../components/observations/detail-observation";
 import Observationrubric from "../components/observations/observation-rubric";
+import ScheulingPage from "../components/observations/scheuling-page";
 import { useStateValue } from "../StateProvider";
 
 const LayoutRoutes = () => {
@@ -147,6 +148,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/observations/create-observation`}
             element={<Createobservation />}
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/observations/:id/observation-scheduling`}
+            element={<ScheulingPage />}
           />
 
           {/* <Route

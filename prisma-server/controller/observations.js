@@ -112,7 +112,7 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
   const {
     teachingPlanByObserver,
     refelectionPlanByObserver,
-    artifcats,
+    artifacts,
     observationsId,
   } = req.body;
 
@@ -120,9 +120,11 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
     teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
     refelectionPlanByObserver:
       refelectionPlanByObserver && refelectionPlanByObserver,
-    artifcats: artifcats && artifcats,
+    artifacts: artifacts && artifacts,
     observationsId,
   };
+
+  // await prisma.obsScheduling.deleteMany();
 
   const createdReq = await prisma.obsScheduling.create({
     data: reqData,
