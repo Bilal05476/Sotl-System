@@ -17,7 +17,7 @@ const Scheuling_Page = () => {
                 <h5> Observation Scheduling</h5>
               </CardHeader>
               <CardBody>
-                <TabsetScheduling />
+                <TabsetScheduling role={user.role} />
               </CardBody>
             </Card>
           </Col>

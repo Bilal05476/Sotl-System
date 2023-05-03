@@ -77,11 +77,20 @@ const Dashboard = () => {
     labels: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug"],
     datasets: [
       {
+        data: [3, 1, 2, 2, 2, 2, 1, 1],
+        borderColor: "goldenrod",
+        backgroundColor: "gold",
+        borderWidth: 1,
+        barPercentage: 0.5,
+        categoryPercentage: 0.4,
+        label: "Pending",
+      },
+      {
         data: [2, 3, 0, 1, 3, 1, 1, 3],
         borderColor: "#040b5b",
         backgroundColor: "lightblue",
-        borderWidth: 2,
-        barPercentage: 0.7,
+        borderWidth: 1,
+        barPercentage: 0.5,
         categoryPercentage: 0.4,
         label: "Ongoing",
       },
@@ -89,8 +98,8 @@ const Dashboard = () => {
         data: [3, 5, 3, 1, 3, 7, 2, 2],
         borderColor: "lightblue",
         backgroundColor: "#040b5b",
-        borderWidth: 2,
-        barPercentage: 0.7,
+        borderWidth: 1,
+        barPercentage: 0.5,
         categoryPercentage: 0.4,
         label: "Completed",
       },
@@ -220,7 +229,7 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, userData }, dispatch] = useStateValue();
+  const [{ user, userData, courses }, dispatch] = useStateValue();
 
   async function fetchData() {
     try {
@@ -246,9 +255,42 @@ const Dashboard = () => {
       console.log(error.message);
     }
   }
+  async function fetchCoursesAndUsers() {
+    try {
+      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const coursesres = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/courses/`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const cdata = await coursesres.json();
+      const udata = await usersres.json();
+
+      dispatch({
+        type: "SET_COURSES",
+        payload: cdata,
+      });
+      dispatch({
+        type: "SET_USERS",
+        payload: udata,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
   useEffect(() => {
     fetchData();
+    if (user.role === "Head_of_Department") fetchCoursesAndUsers();
   }, []);
+
+  console.log(courses);
 
   // return;
   return (

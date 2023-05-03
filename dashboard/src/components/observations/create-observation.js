@@ -6,14 +6,11 @@ import TabsetObservation from "./tabset-observation";
 const Create_observation = () => {
   return (
     <Fragment>
-      <Breadcrumb title="Create Observation" parent="Observations" />
+      <Breadcrumb title="Initiate Observation" parent="Observations" />
       <Container fluid={true}>
         <Row>
           <Col sm="12">
             <Card>
-              <CardHeader>
-                <h5> Initiate Observation</h5>
-              </CardHeader>
               <CardBody>
                 <TabsetObservation />
               </CardBody>

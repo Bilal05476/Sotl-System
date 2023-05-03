@@ -1,16 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
-import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
 import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 const TabsetUser = () => {
-  const [{ courses }] = useStateValue();
+  const [{ courses, user }] = useStateValue();
   const [createUser, setCreateUser] = useState({
     fullname: "",
     email: "",
     role: "Select",
-    campus: "Select",
-    department: "Select",
+    campus: user?.campus?.replaceAll("_", " "),
+    department: user?.department,
     coursesIds: [],
     password: "",
     cPassword: "",
@@ -42,12 +42,12 @@ const TabsetUser = () => {
       email,
       password,
       role,
-      campus,
-      department,
+      campus: user?.campus,
+      department: user?.department,
       courses: coursesIds,
     };
     async function postUser() {
-      const res = await fetch("http://localhost:8080/api/create", {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/create`, {
         method: "POST",
         body: JSON.stringify(userDetail),
         headers: {
@@ -84,10 +84,10 @@ const TabsetUser = () => {
         }, 2000);
       }
     }
-    if (role === "Select" || department === "Select" || campus === "Select") {
+    if (role === "Select") {
       setCreateUser({
         ...createUser,
-        error: "Missing some details",
+        error: "Missing user role",
         success: "",
       });
     } else if (password.length < 8) {
@@ -105,7 +105,7 @@ const TabsetUser = () => {
     } else if (!email.includes("iqra.edu.pk")) {
       setCreateUser({
         ...createUser,
-        error: "Only @iqra.edu.pk domain allowed",
+        error: "Only @iqra.edu.pk email domain allowed",
         success: "",
       });
     } else if (!validateEmail(email)) {
@@ -123,11 +123,11 @@ const TabsetUser = () => {
         });
       } else {
         console.log(userDetail);
-        // postUser();
+        postUser();
       }
     } else {
       console.log(userDetail);
-      // postUser();
+      postUser();
     }
   };
 
@@ -143,11 +143,11 @@ const TabsetUser = () => {
     <Fragment>
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
-          <Tab className="nav-link">Create User</Tab>
+          <Tab className="nav-link">User Details</Tab>
         </TabList>
         <TabPanel>
           <Form className="needs-validation user-add" noValidate="">
-            <h4>User Details</h4>
+            {/* <h4></h4> */}
             {error && (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">
@@ -241,24 +241,28 @@ const TabsetUser = () => {
                 <Input
                   className="form-control"
                   id="validationCustom3"
-                  type="select"
-                  required={true}
+                  type="text"
+                  // required={true}
+                  readOnly={true}
                   value={campus}
-                  onChange={(e) =>
-                    setCreateUser({
-                      ...createUser,
-                      campus: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Select">Select</option>
+                  // onChange={(e) =>
+                  //   setCreateUser({
+                  //     ...createUser,
+                  //     campus: e.target.value,
+                  //   })
+                  // }
+                />
+
+                {/* 
+                <option value="Select">Select</option>
                   <option value="Main_Campus">Main Campus</option>
                   <option value="Gulshan_Campus">Gulshan Campus</option>
                   <option value="North_Campus">North Campus</option>
                   <option value="Airport_Campus">Airport Campus</option>
                   <option value="Bahria_Campus">Bahria Campus</option>
-                  <option value="Islamabad_Campus">Islamabad Campus</option>
-                </Input>
+                  <option value="Islamabad_Campus">Islamabad Campus</option> 
+                  </Input>
+                  */}
               </div>
             </FormGroup>
             <FormGroup className="row">
@@ -269,22 +273,22 @@ const TabsetUser = () => {
                 <Input
                   className="form-control"
                   id="validationCustom4"
-                  type="select"
-                  required={true}
+                  type="text"
+                  readOnly={true}
                   value={department}
-                  onChange={(e) =>
-                    setCreateUser({
-                      ...createUser,
-                      department: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Select">Select</option>
+                  // onChange={(e) =>
+                  //   setCreateUser({
+                  //     ...createUser,
+                  //     department: e.target.value,
+                  //   })
+                  // }
+                />
+                {/* <option value="Select">Select</option>
                   <option value="Fest">FEST</option>
                   <option value="Aifd">AIFD</option>
                   <option value="Media">Media</option>
                   <option value="Business">Business</option>
-                </Input>
+                </Input> */}
               </div>
             </FormGroup>
             <FormGroup className="row">
@@ -306,10 +310,31 @@ const TabsetUser = () => {
                   }
                 >
                   <option value="Select">Select</option>
-                  <option value="Campus_Director">Campus Director</option>
-                  <option value="Head_of_Department">Head of Department</option>
-                  <option value="Observer">Observer</option>
-                  <option value="Faculty">Faculty</option>
+                  {user.role === "Admin" && (
+                    <>
+                      <option value="Campus_Director">Campus Director</option>
+                      <option value="Head_of_Department">
+                        Head of Department
+                      </option>
+                      <option value="Observer">Observer</option>
+                      <option value="Faculty">Faculty</option>
+                    </>
+                  )}
+                  {user.role === "Campus_Director" && (
+                    <>
+                      <option value="Head_of_Department">
+                        Head of Department
+                      </option>
+                      <option value="Observer">Observer</option>
+                      <option value="Faculty">Faculty</option>
+                    </>
+                  )}
+                  {user.role === "Head_of_Department" && (
+                    <>
+                      <option value="Observer">Observer</option>
+                      <option value="Faculty">Faculty</option>
+                    </>
+                  )}
                 </Input>
               </div>
             </FormGroup>
@@ -354,43 +379,48 @@ const TabsetUser = () => {
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4"></Label>
                 <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                  {courses.map((item) => (
-                    <>
-                      {coursesIds.includes(item.id) && (
-                        <span
-                          style={{
-                            backgroundColor: "#040b5b",
-                            color: "#fff",
-                            padding: "0.2rem 0.5rem",
-                            borderRadius: "5px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            width: "auto",
-                            marginRight: "0.2rem",
-                            marginBottom: "0.2rem",
-                          }}
-                        >
-                          <span
-                            style={{
-                              color: "#fff",
-                              marginRight: "0.5rem",
-                            }}
-                          >
-                            {item.courseName} {"->"} {item.day} {"->"}{" "}
-                            {item.timeSlot} {"->"} {item.room}
-                          </span>
-                          <XCircle
-                            style={{
-                              cursor: "pointer",
-                            }}
-                            onClick={() => handleCourseRemove(item.id)}
-                            size={20}
-                          />
-                        </span>
+                  <Table borderless>
+                    <thead>
+                      <tr>
+                        <th scope="col">Course</th>
+                        <th scope="col">Day</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Room</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {courses.map((item) => (
+                        <>
+                          {coursesIds.includes(item.id) && (
+                            <tr key={item.id}>
+                              <td className="digits">{item.courseName}</td>
+                              <td className="digits">{item.day}</td>
+                              <td className="digits">{item.timeSlot}</td>
+                              <td className="digits">{item.room}</td>
+                              <td>
+                                <XCircle
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => handleCourseRemove(item.id)}
+                                  size={20}
+                                  color="crimson"
+                                />
+                              </td>
+                            </tr>
+                          )}
+                        </>
+                      ))}
+                      {coursesIds.length === 0 && (
+                        <tr>
+                          <td colSpan="5" className=" text-center digits">
+                            No Courses assigned!
+                          </td>
+                        </tr>
                       )}
-                    </>
-                  ))}
+                    </tbody>
+                  </Table>
                 </div>
               </FormGroup>
             ) : (

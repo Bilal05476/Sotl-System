@@ -83,11 +83,11 @@ const TabsetObservation = () => {
     <Fragment>
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
-          <Tab className="nav-link">Create Observation</Tab>
+          <Tab className="nav-link">Provide Observation Details</Tab>
         </TabList>
         <TabPanel>
           <Form className="needs-validation user-add" noValidate="">
-            <h4>Observation Details</h4>
+            {/* <h4>Observation Details</h4> */}
             {error && (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">
@@ -199,8 +199,7 @@ const TabsetObservation = () => {
                 <Input
                   className="form-control"
                   id="validationCustom4"
-                  placeholder="Fall 2023"
-                  type="text"
+                  type="select"
                   required={true}
                   value={semester}
                   onChange={(e) =>
@@ -209,7 +208,12 @@ const TabsetObservation = () => {
                       semester: e.target.value,
                     })
                   }
-                />
+                >
+                  <option value="Select">Select</option>
+                  <option value="Spring">Spring</option>
+                  <option value="Summer">Summer</option>
+                  <option value="Fall">Fall</option>
+                </Input>
               </div>
             </FormGroup>
           </Form>

@@ -4,35 +4,30 @@ import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 // import { useStateValue } from "../../StateProvider";
 
-const TabsetScheduling = () => {
+const TabsetScheduling = ({ role }) => {
   //   const [{ user, users }] = useStateValue();
 
   const [obsSchedule, setObsSchedule] = useState({
-    observerTeaching: "",
-    observerReflection: "",
-    observerArtifacts: "",
+    teaching: "",
+    reflection: "",
+    artifacts: "",
     error: "",
     success: "",
     loader: false,
   });
-  const {
-    observerTeaching,
-    observerReflection,
-    error,
-    success,
-    observerArtifacts,
-    loader,
-  } = obsSchedule;
+  const { teaching, reflection, error, success, artifacts, loader } =
+    obsSchedule;
 
   const { id } = useParams();
 
   const onObservationScheduling = () => {
     const obsDetail = {
-      teachingPlanByObserver: observerTeaching,
-      refelectionPlanByObserver: observerReflection,
-      artifacts: observerArtifacts,
+      teachingPlanByObserver: teaching,
+      refelectionPlanByObserver: reflection,
+      artifacts,
       observationsId: Number(id),
     };
+    // const editObsDetail = {}
     async function postObs() {
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/observation/scheduling`,
@@ -58,9 +53,6 @@ const TabsetScheduling = () => {
           ...obsSchedule,
           success: "Observation scheduled successfully",
           loader: false,
-          // observerTeaching: "",
-          // observerReflection: "",
-          // observerArtifacts: "",
         });
         setTimeout(() => {
           setObsSchedule({
@@ -71,6 +63,7 @@ const TabsetScheduling = () => {
         }, 2000);
       }
     }
+    async function editObs() {}
     setObsSchedule({
       ...obsSchedule,
       error: "",
@@ -78,15 +71,28 @@ const TabsetScheduling = () => {
       loader: true,
     });
     setTimeout(() => {
-      if (!observerArtifacts || !observerReflection || !observerTeaching) {
-        setObsSchedule({
-          ...obsSchedule,
-          error: "Provide all the documents",
-          success: "",
-          loader: false,
-        });
+      if (role === "Observer") {
+        if (!artifacts || !reflection || !teaching) {
+          setObsSchedule({
+            ...obsSchedule,
+            error: "Provide all the documents",
+            success: "",
+            loader: false,
+          });
+        } else {
+          postObs();
+        }
       } else {
-        postObs();
+        if (!teaching) {
+          setObsSchedule({
+            ...obsSchedule,
+            error: "Provide all teaching plan",
+            success: "",
+            loader: false,
+          });
+        } else {
+          editObs();
+        }
       }
     }, 1000);
   };
@@ -95,11 +101,11 @@ const TabsetScheduling = () => {
     <Fragment>
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
-          <Tab className="nav-link">Observation Scheduling</Tab>
+          <Tab className="nav-link">Required for Scheduling</Tab>
         </TabList>
         <TabPanel>
           <Form className="needs-validation user-add" noValidate="">
-            <h4>Scheduling Details</h4>
+            {/* <h4></h4> */}
             {error && (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">
@@ -153,11 +159,11 @@ const TabsetScheduling = () => {
                   id="validationCustom3"
                   type="file"
                   required={true}
-                  value={observerTeaching}
+                  value={teaching}
                   onChange={(e) =>
                     setObsSchedule({
                       ...obsSchedule,
-                      observerTeaching: e.target.value,
+                      teaching: e.target.value,
                     })
                   }
                 />
@@ -165,7 +171,7 @@ const TabsetScheduling = () => {
             </FormGroup>
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
-                <span>*</span> Reflection Plan
+                {role === "Observer" && <span>*</span>} Reflection Plan
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input
@@ -173,36 +179,60 @@ const TabsetScheduling = () => {
                   id="validationCustom3"
                   type="file"
                   required={true}
-                  value={observerReflection}
+                  value={reflection}
                   onChange={(e) =>
                     setObsSchedule({
                       ...obsSchedule,
-                      observerReflection: e.target.value,
+                      reflection: e.target.value,
                     })
                   }
                 />
               </div>
             </FormGroup>
-            <FormGroup className="row">
-              <Label className="col-xl-3 col-md-4">
-                <span>*</span> Artifacts
-              </Label>
-              <div className="col-xl-8 col-md-7">
-                <Input
-                  className="form-control"
-                  id="validationCustom3"
-                  type="file"
-                  required={true}
-                  value={observerArtifacts}
-                  onChange={(e) =>
-                    setObsSchedule({
-                      ...obsSchedule,
-                      observerArtifacts: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </FormGroup>
+            {role === "Observer" && (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  <span>*</span> Artifacts
+                </Label>
+                <div className="col-xl-8 col-md-7">
+                  <Input
+                    className="form-control"
+                    id="validationCustom3"
+                    type="file"
+                    required={true}
+                    value={artifacts}
+                    onChange={(e) =>
+                      setObsSchedule({
+                        ...obsSchedule,
+                        artifacts: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </FormGroup>
+            )}
+            {role === "Faculty" && (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  <span>*</span> Select Course
+                </Label>
+                <div className="col-xl-8 col-md-7">
+                  <Input
+                    className="form-control"
+                    id="validationCustom3"
+                    type="select"
+                    required={true}
+                    value={artifacts}
+                    onChange={(e) =>
+                      setObsSchedule({
+                        ...obsSchedule,
+                        artifacts: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </FormGroup>
+            )}
           </Form>
         </TabPanel>
       </Tabs>

@@ -117,12 +117,12 @@ export const HODMENU = [
       { path: "/users/list-user", title: "All Users", type: "link" },
       {
         path: "/users/observers",
-        title: "Faculty Observers",
+        title: "Observers",
         type: "link",
       },
       {
         path: "/users/faculty",
-        title: "Faculty Members",
+        title: "Faculty",
         type: "link",
       },
       { path: "/users/create-user", title: "Create User", type: "link" },
@@ -142,7 +142,7 @@ export const HODMENU = [
       },
       {
         path: "/observations/create-observation",
-        title: "Create Observation",
+        title: "Initiate Observation",
         type: "link",
       },
     ],
