@@ -152,21 +152,6 @@ export const userById = asyncHandler(async (req, res) => {
     });
     /// send user data to client side
     const userData = {
-      // id: validate.id,
-      // name: validate.name,
-      // email: validate.email,
-      // campus: validate.campus?.replaceAll("_", " "),
-      // department: validate.department,
-      // role: validate.role?.replaceAll("_", " "),
-      // avatar: validate.avatar,
-      // phone: validate.phone,
-      // designation: validate.designation,
-      // degree: validate.degree,
-      // starting: validate.starting,
-      // ending: validate.ending,
-      // dateOfBirth: validate.dateOfBirth,
-      // institute: validate.institute,
-      // token,
       observations: user.facultyObs
         ? user.facultyObs
         : user.observerObs

@@ -147,9 +147,10 @@ export const updateUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
+    const token = generateJWT(user.id);
     const updateUser = await prisma.user.update({
       where: {
-        id: Number(req.params.id),
+        id: user.id,
       },
       data: {
         dateOfBirth,
@@ -162,7 +163,15 @@ export const updateUser = asyncHandler(async (req, res) => {
         designation,
       },
     });
-    res.status(200).json(updateUser);
+    updateUser.token = token;
+    const exclude = ["password"];
+    const filtered = Object.keys(updateUser).reduce((acc, key) => {
+      if (!exclude.includes(key)) {
+        acc[key] = updateUser[key];
+      }
+      return acc;
+    }, {});
+    res.status(200).json(filtered);
   } else {
     res.status(404).json({ error: "No User Exist" });
   }

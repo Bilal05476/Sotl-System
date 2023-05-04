@@ -74,19 +74,20 @@ const TabsetProfile = () => {
       } else {
         toast.dismiss(toastId.current);
         successes("Profile updated successfully");
-        setTimeout(() => {
-          setUpdateUser({
-            ...updateUser,
-            avatar: "",
-            dateOfBirth: "",
-            designation: "",
-            institute: "",
-            degree: "",
-            starting: "",
-            ending: "",
-            phone: "",
-          });
-        }, 2000);
+        console.log(data);
+        // setTimeout(() => {
+        //   setUpdateUser({
+        //     ...updateUser,
+        //     avatar: "",
+        //     dateOfBirth: "",
+        //     designation: "",
+        //     institute: "",
+        //     degree: "",
+        //     starting: "",
+        //     ending: "",
+        //     phone: "",
+        //   });
+        // }, 2000);
       }
     }
     putUser();
