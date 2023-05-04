@@ -1,10 +1,14 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useRef } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
 import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const TabsetUser = () => {
   const [{ courses, user }] = useStateValue();
+  // console.log(user);
   const [createUser, setCreateUser] = useState({
     fullname: "",
     email: "",
@@ -14,8 +18,6 @@ const TabsetUser = () => {
     coursesIds: [],
     password: "",
     cPassword: "",
-    error: "",
-    success: "",
   });
   const {
     fullname,
@@ -26,8 +28,6 @@ const TabsetUser = () => {
     department,
     cPassword,
     coursesIds,
-    error,
-    success,
   } = createUser;
 
   function validateEmail(email) {
@@ -35,6 +35,13 @@ const TabsetUser = () => {
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
+
+  const warning = (warning) => toast.warn(warning);
+  const errors = (error) => toast.error(error);
+  const successes = (success) => toast.success(success);
+  const info = (info) => toast.info(info);
+
+  const toastId = useRef(null);
 
   const onCreateUser = () => {
     const userDetail = {
@@ -47,86 +54,54 @@ const TabsetUser = () => {
       courses: coursesIds,
     };
     async function postUser() {
+      info("User Creating!");
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/create`, {
         method: "POST",
         body: JSON.stringify(userDetail),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${user.token}`,
         },
       });
       const data = await res.json();
       if (data.error) {
-        setCreateUser({
-          ...createUser,
-          error: data.error,
-          success: "",
-        });
+        toast.dismiss(toastId.current);
+        errors(data.error);
       } else {
-        setCreateUser({
-          ...createUser,
-          success: "User created successfully",
-        });
-
+        toast.dismiss(toastId.current);
+        successes("User created successfully");
         setTimeout(() => {
           setCreateUser({
             ...createUser,
-            error: "",
             fullname: "",
             email: "",
             password: "",
             cPassword: "",
-            courses: [],
+            coursesIds: [],
             role: "Select",
-            campus: "Select",
-            department: "Select",
-            success: "",
+            campus: user.campus ? user.campus : "Select",
+            department: user.department ? user.department : "Select",
           });
         }, 2000);
       }
     }
-    if (role === "Select") {
-      setCreateUser({
-        ...createUser,
-        error: "Missing user role",
-        success: "",
-      });
+    if (role === "Select" || department === "Select" || campus === "Select") {
+      info("Missing some user fields!");
     } else if (password.length < 8) {
-      setCreateUser({
-        ...createUser,
-        error: "Password should be minimum 8 character long",
-        success: "",
-      });
+      info("Password should be minimum 8 characters long!");
     } else if (password !== cPassword) {
-      setCreateUser({
-        ...createUser,
-        error: "Passwords should be same",
-        success: "",
-      });
+      warning("Passwords should be same!");
     } else if (!email.includes("iqra.edu.pk")) {
-      setCreateUser({
-        ...createUser,
-        error: "Only @iqra.edu.pk email domain allowed",
-        success: "",
-      });
+      info("Only @iqra.edu.pk email domain allowed!");
     } else if (!validateEmail(email)) {
-      setCreateUser({
-        ...createUser,
-        error: "Please enter valid email address",
-        success: "",
-      });
+      warning("Please enter valid email address!");
     } else if (role === "Faculty" || role === "Observer") {
       if (coursesIds.length < 1) {
-        setCreateUser({
-          ...createUser,
-          error: `Assign Courses to ${role}`,
-          success: "",
-        });
+        info(`Assign Courses to ${role}`);
       } else {
-        console.log(userDetail);
         postUser();
       }
     } else {
-      console.log(userDetail);
       postUser();
     }
   };
@@ -141,6 +116,7 @@ const TabsetUser = () => {
 
   return (
     <Fragment>
+      <ToastContainer position="top-center" />
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
           <Tab className="nav-link">User Details</Tab>
@@ -148,7 +124,7 @@ const TabsetUser = () => {
         <TabPanel>
           <Form className="needs-validation user-add" noValidate="">
             {/* <h4></h4> */}
-            {error && (
+            {/* {error && (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">
                   <span></span>
@@ -168,8 +144,8 @@ const TabsetUser = () => {
                   </span>
                 </div>
               </FormGroup>
-            )}
-            {success && (
+            )} */}
+            {/* {success && (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">
                   <span></span>
@@ -189,7 +165,7 @@ const TabsetUser = () => {
                   </span>
                 </div>
               </FormGroup>
-            )}
+            )} */}
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Full Name

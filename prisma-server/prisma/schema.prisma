@@ -137,21 +137,23 @@ model PDP {
 
 // -> User => Courses
 model Courses {
-    id          Int            @id @default(autoincrement()) // auto-inc
-    courseName  String
-    department  Department
-    campus      Campus
+    id            Int            @id @default(autoincrement()) // auto-inc
+    courseName    String
+    department    Department
+    campus        Campus
     // observer    User?          @relation("Observer", fields: [observerId], references: [id])
     // observerId  Int?
     // faculty     User?          @relation("Faculty", fields: [facultyId], references: [id])
     // facultyId   Int?
-    observer    User[]         @relation("Observer")
-    faculty     User[]         @relation("Faculty")
-    scheduling  ObsScheduling?
-    observation Observations?
-    timeSlot    String?
-    room        String?
-    day         String?
+    observer      User[]         @relation("Observer")
+    faculty       User[]         @relation("Faculty")
+    scheduling    ObsScheduling?
+    observation   Observations?
+    timeSlot      String?
+    room          String?
+    day           String?
+    elective      Boolean?       @default(false)
+    depthElective Boolean?       @default(false)
 }
 
 // -> User => Feedbacks
