@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 
 const TabsetProfile = () => {
-  const [{ user }] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
   // console.log(user);
   const [updateUser, setUpdateUser] = useState({
     fullname: user?.name,
@@ -75,6 +75,10 @@ const TabsetProfile = () => {
         toast.dismiss(toastId.current);
         successes("Profile updated successfully");
         console.log(data);
+        dispatch({
+          type: "SET_USER",
+          payload: data,
+        });
         // setTimeout(() => {
         //   setUpdateUser({
         //     ...updateUser,
