@@ -5,6 +5,7 @@ import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { successes, errors, info, warning } from "../../constants/Toasters";
 
 const TabsetUser = () => {
   const [{ courses, user }] = useStateValue();
@@ -36,11 +37,6 @@ const TabsetUser = () => {
     return re.test(email);
   }
 
-  const warning = (warning) => toast.warn(warning);
-  const errors = (error) => toast.error(error);
-  const successes = (success) => toast.success(success);
-  const info = (info) => toast.info(info);
-
   const toastId = useRef(null);
 
   const onCreateUser = () => {
@@ -54,7 +50,7 @@ const TabsetUser = () => {
       courses: coursesIds,
     };
     async function postUser() {
-      info("User Creating!");
+      info("User Creating...");
       const res = await fetch(`${process.env.REACT_APP_BASE_URL}/create`, {
         method: "POST",
         body: JSON.stringify(userDetail),

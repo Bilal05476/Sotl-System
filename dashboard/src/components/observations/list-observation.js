@@ -53,8 +53,7 @@ const List_observation = () => {
         <Row>
           <Col xl="6 xl-100">
             <Card>
-              <CardHeader className="d-flex align-items-center justify-content-between">
-                <h5>All Observations</h5>
+              <CardHeader className="d-flex justify-content-end">
                 {user.role === "Head_of_Department" && (
                   <Link
                     to="/observations/create-observation"

@@ -37,8 +37,68 @@ import Detailobservation from "../components/observations/detail-observation";
 import Observationrubric from "../components/observations/observation-rubric";
 import ScheulingPage from "../components/observations/scheuling-page";
 import { useStateValue } from "../StateProvider";
+import Edituser from "../components/users/edit-user";
 
 const LayoutRoutes = () => {
+  const [{ user }, dispatch] = useStateValue();
+  async function fetchData() {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const data = await res.json();
+      const specificData = {
+        observations: data.observations,
+        courses: data.courses,
+      };
+      dispatch({
+        type: "SET_USER_DATA",
+        payload: specificData,
+      });
+      console.log(specificData);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  async function fetchCoursesAndUsers() {
+    try {
+      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const coursesres = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/courses/`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const cdata = await coursesres.json();
+      const udata = await usersres.json();
+
+      dispatch({
+        type: "SET_COURSES",
+        payload: cdata,
+      });
+      dispatch({
+        type: "SET_USERS",
+        payload: udata,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  useEffect(() => {
+    fetchData();
+    if (user.role === "Head_of_Department") fetchCoursesAndUsers();
+  }, []);
   return (
     <Fragment>
       <Routes>
@@ -132,6 +192,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/users/create-user`}
             element={<Createuser />}
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/edit-profile`}
+            element={<Edituser />}
           />
           <Route
             path={`${process.env.PUBLIC_URL}/observations/list-observation`}

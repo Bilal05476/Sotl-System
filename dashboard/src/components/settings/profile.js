@@ -5,6 +5,7 @@ import TabsetProfile from "./tabset-profile";
 import Breadcrumb from "../common/breadcrumb";
 import { Card, CardBody, Col, Container, Media, Row, Button } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [{ user }] = useStateValue();
@@ -28,6 +29,9 @@ const Profile = () => {
                   <span className="f-w-600 f-11">
                     {user.role.replaceAll("_", " ")}
                   </span>
+                  <Link to="/edit-profile" className="mt-3 btn btn-primary">
+                    Edit Profile
+                  </Link>
                   {/* <div className="social">
                     <div className="form-group btn-showcase">
                       <Button color="btn social-btn btn-fb d-inline-block">

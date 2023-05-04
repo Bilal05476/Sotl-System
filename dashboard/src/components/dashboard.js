@@ -229,70 +229,21 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, userData, courses }, dispatch] = useStateValue();
+  const [{ user, userData, users }] = useStateValue();
 
-  async function fetchData() {
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const data = await res.json();
-      const specificData = {
-        observations: data.observations,
-        courses: data.courses,
-      };
-      dispatch({
-        type: "SET_USER_DATA",
-        payload: specificData,
-      });
-      console.log(specificData);
-    } catch (error) {
-      console.log(error.message);
-    }
+  let faculty = 0;
+  let observer = 0;
+  let hod = 0;
+  let campusD = 0;
+  {
+    users.map((item) => {
+      if (item.role === "Faculty") faculty += 1;
+      if (item.role === "Observer") observer += 1;
+      if (item.role === "Head_of_Department") hod += 1;
+      if (item.role === "Campus_Director") campusD += 1;
+      return null;
+    });
   }
-  async function fetchCoursesAndUsers() {
-    try {
-      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const coursesres = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/courses/`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const cdata = await coursesres.json();
-      const udata = await usersres.json();
-
-      dispatch({
-        type: "SET_COURSES",
-        payload: cdata,
-      });
-      dispatch({
-        type: "SET_USERS",
-        payload: udata,
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  useEffect(() => {
-    fetchData();
-    if (user.role === "Head_of_Department") fetchCoursesAndUsers();
-  }, []);
-
-  console.log(courses);
-
-  // return;
   return (
     <Fragment>
       <Breadcrumb title="Dashboard" parent="Dashboard" />
@@ -399,6 +350,74 @@ const Dashboard = () => {
             </Card>
           </Col> */}
 
+          {user.role === "Head_of_Department" && (
+            <>
+              <Col xl="3 xl-25" md="6">
+                <Card className="o-hidden widget-cards">
+                  <CardBody className="bg-primary">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Users className="font-primary" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Observer(s)</span>
+                        <h3 className="mb-0">
+                          <CountUp className="counter" end={observer} />
+                          <small> Currenlty</small>
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xl="3 xl-25" md="6">
+                <Card className="o-hidden widget-cards">
+                  <CardBody className="bg-primary">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Users className="font-primary" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Faculty(s)</span>
+                        <h3 className="mb-0">
+                          <CountUp className="counter" end={faculty} />
+                          <small> Currenlty</small>
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xl="3 xl-50" md="6">
+                <Card className="o-hidden widget-cards">
+                  <CardBody className="bg-primary">
+                    <Media className="static-top-widget row">
+                      <div className="icons-widgets col-4">
+                        <div className="align-self-center text-center">
+                          <Calendar className="font-primary" />
+                        </div>
+                      </div>
+                      <Media body className="col-8">
+                        <span className="m-0">Observation(s)</span>
+                        <h3 className="mb-0">
+                          <CountUp
+                            className="counter"
+                            end={userData?.observations.length}
+                          />
+                          <small> All Time</small>
+                        </h3>
+                      </Media>
+                    </Media>
+                  </CardBody>
+                </Card>
+              </Col>
+            </>
+          )}
+
           {user.role === "Faculty" && (
             <>
               <Col xl="3 xl-25" md="6">
@@ -420,8 +439,6 @@ const Dashboard = () => {
                           />
                           <small> All Time</small>
                         </h3>
-                        {/* // )} */}
-                        {/* {!userData && <Loader />} */}
                       </Media>
                     </Media>
                   </CardBody>

@@ -2,18 +2,22 @@ import React, { Fragment, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { successes, errors, info, warning } from "../../constants/Toasters";
+import { useRef } from "react";
 
 const TabsetObservation = () => {
   const [{ user, users }] = useStateValue();
   const [createObs, setCreateObs] = useState({
     facultyId: "Select",
     observerId: "Select",
-    semester: "",
-    error: "",
-    success: "",
+    semester: "Select",
     loader: false,
   });
-  const { facultyId, observerId, error, success, semester, loader } = createObs;
+  const { facultyId, observerId, semester, loader } = createObs;
+
+  const toastId = useRef(null);
 
   const onCreateObservation = () => {
     const obsDetail = {
@@ -23,114 +27,69 @@ const TabsetObservation = () => {
       semester,
     };
     async function postObs() {
-      const res = await fetch("http://localhost:8080/api/initiate-obs", {
-        method: "POST",
-        body: JSON.stringify(obsDetail),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
+      info("Observation initiating...");
+      setCreateObs({
+        ...createObs,
+        loader: true,
       });
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/observation/initiate`,
+        {
+          method: "POST",
+          body: JSON.stringify(obsDetail),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       const data = await res.json();
       if (data.error) {
+        toast.dismiss(toastId.current);
         setCreateObs({
           ...createObs,
-          error: data.error,
-          success: "",
           loader: false,
         });
+        errors(data.error);
       } else {
+        toast.dismiss(toastId.current);
         setCreateObs({
           ...createObs,
-          success: "Observation initiated successfully",
           loader: false,
         });
+        successes("Observation initiated successfully!");
 
         setTimeout(() => {
           setCreateObs({
             ...createObs,
-            error: "",
             facultyId: "Select",
             observerId: "Select",
-            success: "",
-            semester: "",
+            semester: "Select",
           });
         }, 2000);
       }
     }
 
-    setCreateObs({
-      ...createObs,
-      error: "",
-      success: "",
-      loader: true,
-    });
-
-    setTimeout(() => {
-      if (facultyId === "Select" || observerId === "Select" || !semester) {
-        setCreateObs({
-          ...createObs,
-          error: "Provide fill all the fields",
-          success: "",
-          loader: false,
-        });
-      } else {
-        postObs();
-      }
-    }, 1500);
+    if (
+      facultyId === "Select" ||
+      observerId === "Select" ||
+      semester === "Select"
+    ) {
+      info("Provide fill all the fields!");
+    } else {
+      postObs();
+    }
   };
 
   return (
     <Fragment>
+      <ToastContainer position="top-center" />
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
           <Tab className="nav-link">Provide Observation Details</Tab>
         </TabList>
         <TabPanel>
           <Form className="needs-validation user-add" noValidate="">
-            {/* <h4>Observation Details</h4> */}
-            {error && (
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4">
-                  <span></span>
-                </Label>
-                <div className="col-xl-8 col-md-7">
-                  <span
-                    style={{
-                      background: "pink",
-                      color: "crimson",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "5px",
-                      width: "100%",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {error}
-                  </span>
-                </div>
-              </FormGroup>
-            )}
-            {success && (
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4">
-                  <span></span>
-                </Label>
-                <div className="col-xl-8 col-md-7">
-                  <span
-                    style={{
-                      background: "greenyellow",
-                      color: "green",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "5px",
-                      width: "100%",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {success}
-                  </span>
-                </div>
-              </FormGroup>
-            )}
-
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Observer

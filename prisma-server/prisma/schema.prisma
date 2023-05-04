@@ -19,11 +19,11 @@ model User {
     password         String
     avatar           String?
     designation      String?
-    dateOfBirth      DateTime?
+    dateOfBirth      String?
     institute        String?
     degree           String?
-    starting         DateTime?
-    ending           DateTime?
+    starting         String?
+    ending           String?
     role             Role
     campus           Campus
     department       Department
