@@ -3,11 +3,10 @@ import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
 import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 
-const TabsetProfile = () => {
+const TabsetEditProfile = () => {
   const [{ user }, dispatch] = useStateValue();
   // console.log(user);
   const [updateUser, setUpdateUser] = useState({
@@ -16,14 +15,14 @@ const TabsetProfile = () => {
     role: user?.role.replaceAll("_", " "),
     campus: user?.campus?.replaceAll("_", " "),
     department: user?.department?.replaceAll("_", " "),
-    avatar: "",
-    dateOfBirth: "",
-    designation: "",
-    institute: "",
-    degree: "",
-    starting: "",
-    ending: "",
-    phone: "",
+    avatar: user?.avatar ? user?.avatar : "",
+    dateOfBirth: user?.dateOfBirth ? user?.dateOfBirth : "",
+    designation: user?.designation ? user?.designation : "",
+    institute: user?.institute ? user?.institute : "",
+    degree: user?.degree ? user?.degree : "",
+    starting: user?.starting ? user?.starting : "",
+    ending: user?.ending ? user?.ending : "",
+    phone: user?.phone ? user?.phone : "",
   });
   const {
     fullname,
@@ -94,15 +93,15 @@ const TabsetProfile = () => {
         // }, 2000);
       }
     }
-    putUser();
+    // putUser();
+    console.log(userDetail);
   };
 
   return (
     <Fragment>
-      <ToastContainer position="top-center" />
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
-          <Tab className="nav-link">Edit Details</Tab>
+          <Tab className="nav-link">Personal Details</Tab>
         </TabList>
         <TabPanel>
           <Form className="needs-validation user-add" noValidate="">
@@ -122,17 +121,19 @@ const TabsetProfile = () => {
                 })
               }
             />
-            <FormPool
-              value={avatar}
-              type="file"
-              label="Avatar"
-              onChange={(e) =>
-                setUpdateUser({
-                  ...updateUser,
-                  avatar: e.target.value,
-                })
-              }
-            />
+            {!user?.avatar && (
+              <FormPool
+                value={avatar}
+                type="file"
+                label="Avatar"
+                onChange={(e) =>
+                  setUpdateUser({
+                    ...updateUser,
+                    avatar: e.target.value,
+                  })
+                }
+              />
+            )}
             <FormPool
               value={dateOfBirth}
               type="date"
@@ -155,6 +156,15 @@ const TabsetProfile = () => {
                 })
               }
             />
+          </Form>
+        </TabPanel>
+      </Tabs>
+      <Tabs>
+        <TabList className="nav nav-tabs tab-coupon">
+          <Tab className="nav-link">Education Details</Tab>
+        </TabList>
+        <TabPanel>
+          <Form className="needs-validation user-add" noValidate="">
             <FormPool
               value={institute}
               type="text"
@@ -245,4 +255,4 @@ const FormPool = ({ label, value, onChange, type }) => {
   );
 };
 
-export default TabsetProfile;
+export default TabsetEditProfile;

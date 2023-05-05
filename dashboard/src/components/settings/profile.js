@@ -29,7 +29,11 @@ const Profile = () => {
                   <span className="f-w-600 f-11">
                     {user.role.replaceAll("_", " ")}
                   </span>
-                  <Link to="/edit-profile" className="mt-3 btn btn-primary">
+                  <br />
+                  <Link
+                    to="/settings/edit-profile"
+                    className="mt-3 btn btn-primary"
+                  >
                     Edit Profile
                   </Link>
                   {/* <div className="social">

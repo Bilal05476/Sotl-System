@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 //images import
 import avatar from "../../../assets/images/dashboard/avatar.png";
 import { useStateValue } from "../../../StateProvider";
+import { info } from "../../../constants/Toasters";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -10,18 +11,13 @@ const UserMenu = () => {
 
   const onLogout = () => {
     navigate("/");
-    dispatch({
-      type: "LOGOUT",
-    });
+    info("Logging out...");
     setTimeout(() => {
       localStorage.clear();
       dispatch({
         type: "CLEAR_USER",
       });
-      dispatch({
-        type: "LOGOUT",
-      });
-    }, 1000);
+    }, 2000);
   };
   return (
     <Fragment>

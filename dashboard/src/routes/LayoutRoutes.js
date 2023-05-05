@@ -37,7 +37,7 @@ import Detailobservation from "../components/observations/detail-observation";
 import Observationrubric from "../components/observations/observation-rubric";
 import ScheulingPage from "../components/observations/scheuling-page";
 import { useStateValue } from "../StateProvider";
-import Edituser from "../components/users/edit-user";
+import EditProfile from "../components/settings/edit-profile";
 
 const LayoutRoutes = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -193,10 +193,7 @@ const LayoutRoutes = () => {
             path={`${process.env.PUBLIC_URL}/users/create-user`}
             element={<Createuser />}
           />
-          <Route
-            path={`${process.env.PUBLIC_URL}/edit-profile`}
-            element={<Edituser />}
-          />
+
           <Route
             path={`${process.env.PUBLIC_URL}/observations/list-observation`}
             element={<Listobservation />}
@@ -248,6 +245,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/settings/profile`}
             element={<Profile />}
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/settings/edit-profile`}
+            element={<EditProfile />}
           />
 
           {/* <Route

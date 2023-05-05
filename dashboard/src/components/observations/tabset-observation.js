@@ -2,8 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 
@@ -14,8 +13,9 @@ const TabsetObservation = () => {
     observerId: "Select",
     semester: "Select",
     loader: false,
+    courseId: "",
   });
-  const { facultyId, observerId, semester, loader } = createObs;
+  const { facultyId, observerId, semester, loader, courseId } = createObs;
 
   const toastId = useRef(null);
 
@@ -23,6 +23,7 @@ const TabsetObservation = () => {
     const obsDetail = {
       facultyId: Number(facultyId),
       observerId: Number(observerId),
+      courseId: Number(courseId),
       hodId: user.id,
       semester,
     };
@@ -65,25 +66,54 @@ const TabsetObservation = () => {
             facultyId: "Select",
             observerId: "Select",
             semester: "Select",
+            courseId: "",
           });
         }, 2000);
       }
     }
-
-    if (
-      facultyId === "Select" ||
-      observerId === "Select" ||
-      semester === "Select"
-    ) {
-      info("Provide fill all the fields!");
+    if (observerId === "Select" || facultyId === "Select") {
+      info("Provide select observer and faculty both!");
+    } else if (semester === "Select") {
+      info("Provide select semester!");
+    } else if (!courseId) {
+      info("Provide select course for faculty!");
     } else {
-      postObs();
+      // postObs();
+      console.log(obsDetail);
+    }
+  };
+
+  const [fCourses, setFCourses] = useState([]);
+  const onSelectFaculty = async (e) => {
+    let fid = e.target.value;
+    setCreateObs({
+      ...createObs,
+      facultyId: fid,
+    });
+    if (fid !== "Select") {
+      let id = Number(fid);
+      const findCourse = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/user/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const data = await findCourse.json();
+      if (data.error) {
+        errors(data.error);
+      } else {
+        setFCourses(data.courses);
+      }
+    } else {
+      setFCourses([]);
     }
   };
 
   return (
     <Fragment>
-      <ToastContainer position="top-center" />
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
           <Tab className="nav-link">Provide Observation Details</Tab>
@@ -131,12 +161,7 @@ const TabsetObservation = () => {
                   type="select"
                   required={true}
                   value={facultyId}
-                  onChange={(e) =>
-                    setCreateObs({
-                      ...createObs,
-                      facultyId: e.target.value,
-                    })
-                  }
+                  onChange={(e) => onSelectFaculty(e)}
                 >
                   <option value="Select">Select</option>
                   {users.map(
@@ -147,6 +172,33 @@ const TabsetObservation = () => {
                         </option>
                       )
                   )}
+                </Input>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Faculty Course
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom4"
+                  type="select"
+                  required={true}
+                  value={courseId}
+                  onChange={(e) =>
+                    setCreateObs({
+                      ...createObs,
+                      courseId: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Select">Select</option>
+                  {fCourses.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.courseName}
+                    </option>
+                  ))}
                 </Input>
               </div>
             </FormGroup>

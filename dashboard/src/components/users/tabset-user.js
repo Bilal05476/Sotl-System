@@ -3,7 +3,7 @@ import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
 import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 
@@ -112,7 +112,6 @@ const TabsetUser = () => {
 
   return (
     <Fragment>
-      <ToastContainer position="top-center" />
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
           <Tab className="nav-link">User Details</Tab>

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { Loader } from "react-feather";
+import { Loader, DownloadCloud } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 
 const Detail_observation = () => {
@@ -77,6 +77,15 @@ const Detail_observation = () => {
               {obsDetail?.observationStatus}
             </Col>
           </Row>
+          <Row className="mb-3">
+            <Col className="xl-25 text-right">
+              <span style={{ fontWeight: "500" }}>(F):</span> Faculty
+              <span style={{ marginLeft: "1rem", fontWeight: "500" }}>
+                (O):
+              </span>{" "}
+              Observer
+            </Col>
+          </Row>
           <div className="accordion">
             <div className="accordion-item overflow-hidden mb-5">
               <button
@@ -105,13 +114,13 @@ const Detail_observation = () => {
                           <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Course</th>
-                            <th scope="col">TimeSlot (O)</th>
-                            <th scope="col">TimeSlots (F)</th>
+                            <th scope="col">Time (O)</th>
+                            <th scope="col">Time (F)</th>
                             <th scope="col">Artifact</th>
-                            <th scope="col">Teaching Plan (F)</th>
-                            <th scope="col">Teaching Plan (O)</th>
-                            <th scope="col">Reflection Plan (F)</th>
-                            <th scope="col">Reflection Plan (O)</th>
+                            <th scope="col">Teaching (F)</th>
+                            <th scope="col">Teaching (O)</th>
+                            <th scope="col">Reflection (F)</th>
+                            <th scope="col">Reflection (O)</th>
                             <th scope="col">Status</th>
                           </tr>
                         </thead>
@@ -138,9 +147,8 @@ const Detail_observation = () => {
                                 <a
                                   href={obsDetail?.obsRequest.artifacts}
                                   target="blank"
-                                  className="btn btn-primary"
                                 >
-                                  view
+                                  <DownloadCloud size={20} />
                                 </a>
                               ) : (
                                 "--"
@@ -154,9 +162,8 @@ const Detail_observation = () => {
                                     obsDetail?.obsRequest.teachingPlanByFaculty
                                   }
                                   target="blank"
-                                  className="btn btn-primary"
                                 >
-                                  view
+                                  <DownloadCloud size={20} />
                                 </a>
                               ) : (
                                 "--"
@@ -169,9 +176,8 @@ const Detail_observation = () => {
                                     obsDetail?.obsRequest.teachingPlanByObserver
                                   }
                                   target="blank"
-                                  className="btn btn-primary"
                                 >
-                                  view
+                                  <DownloadCloud size={20} />
                                 </a>
                               ) : (
                                 "--"
@@ -186,9 +192,8 @@ const Detail_observation = () => {
                                       .refelectionPlanByFaculty
                                   }
                                   target="blank"
-                                  className="btn btn-primary"
                                 >
-                                  view
+                                  <DownloadCloud size={20} />
                                 </a>
                               ) : (
                                 "--"
@@ -203,9 +208,8 @@ const Detail_observation = () => {
                                       .refelectionPlanByObserver
                                   }
                                   target="blank"
-                                  className="btn btn-primary"
                                 >
-                                  view
+                                  <DownloadCloud size={20} />
                                 </a>
                               ) : (
                                 "--"
@@ -223,19 +227,30 @@ const Detail_observation = () => {
                           </tr>
                         </tbody>
                       </Table>
-                      <div
-                        style={{
-                          textAlign: "right",
-                          paddingRight: "1rem",
-                        }}
-                      >
-                        <NavLink
-                          to={`/observations/observation-scheduling/${obsDetail?.id}`}
-                          className="btn btn-primary"
+                      {user.role === "Faculty" || user.role === "Observer" ? (
+                        <div
+                          style={{
+                            textAlign: "right",
+                          }}
                         >
-                          Edit Scheduling
-                        </NavLink>
-                      </div>
+                          <NavLink
+                            to={`/observations/observation-scheduling/${obsDetail?.id}`}
+                            className="btn btn-primary mx-2"
+                          >
+                            Edit Scheduling
+                          </NavLink>
+                          {obsDetail?.obsRequest?.timeSlotsByObserver && (
+                            <NavLink
+                              to={`/observations/observation-scheduling/${obsDetail?.id}`}
+                              className="btn btn-primary mx-2"
+                            >
+                              Done
+                            </NavLink>
+                          )}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   )}
                 </>

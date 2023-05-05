@@ -59,7 +59,7 @@ const List_observation = () => {
                     to="/observations/create-observation"
                     className="btn btn-primary"
                   >
-                    Create Observation
+                    Initiate Observation
                   </Link>
                 )}
               </CardHeader>
