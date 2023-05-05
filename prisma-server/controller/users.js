@@ -107,11 +107,7 @@ export const userById = asyncHandler(async (req, res) => {
                       email: true,
                     },
                   },
-                  obsRequest: {
-                    include: {
-                      course: true,
-                    },
-                  },
+                  obsRequest: true,
                   meetings: {
                     include: {
                       informedObservation: true,
@@ -146,11 +142,7 @@ export const userById = asyncHandler(async (req, res) => {
                       email: true,
                     },
                   },
-                  obsRequest: {
-                    include: {
-                      course: true,
-                    },
-                  },
+                  obsRequest: true,
                   meetings: {
                     include: {
                       informedObservation: true,
