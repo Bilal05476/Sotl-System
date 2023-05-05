@@ -52,15 +52,10 @@ const LayoutRoutes = () => {
         }
       );
       const data = await res.json();
-      const specificData = {
-        observations: data.observations,
-        courses: data.courses,
-      };
       dispatch({
         type: "SET_USER_DATA",
-        payload: specificData,
+        payload: data,
       });
-      console.log(specificData);
     } catch (error) {
       console.log(error.message);
     }

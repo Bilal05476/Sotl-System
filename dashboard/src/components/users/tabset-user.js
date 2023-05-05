@@ -9,16 +9,17 @@ import { successes, errors, info, warning } from "../../constants/Toasters";
 
 const TabsetUser = () => {
   const [{ courses, user }] = useStateValue();
-  // console.log(user);
+  const [slots, setSlots] = useState([]);
   const [createUser, setCreateUser] = useState({
     fullname: "",
     email: "",
     role: "Select",
     campus: user?.campus?.replaceAll("_", " "),
     department: user?.department,
-    coursesIds: [],
+    courseId: "",
     password: "",
     cPassword: "",
+    slotsId: [],
   });
   const {
     fullname,
@@ -28,7 +29,8 @@ const TabsetUser = () => {
     campus,
     department,
     cPassword,
-    coursesIds,
+    courseId,
+    slotsId,
   } = createUser;
 
   function validateEmail(email) {
@@ -47,7 +49,7 @@ const TabsetUser = () => {
       role,
       campus: user?.campus,
       department: user?.department,
-      courses: coursesIds,
+      courses: slotsId,
     };
     async function postUser() {
       info("User Creating...");
@@ -73,7 +75,7 @@ const TabsetUser = () => {
             email: "",
             password: "",
             cPassword: "",
-            coursesIds: [],
+            courseId: "",
             role: "Select",
             campus: user.campus ? user.campus : "Select",
             department: user.department ? user.department : "Select",
@@ -91,23 +93,61 @@ const TabsetUser = () => {
       info("Only @iqra.edu.pk email domain allowed!");
     } else if (!validateEmail(email)) {
       warning("Please enter valid email address!");
-    } else if (role === "Faculty" || role === "Observer") {
-      if (coursesIds.length < 1) {
-        info(`Assign Courses to ${role}`);
+    } else if (role === "Faculty") {
+      if (!courseId) {
+        info(`Assign Course to ${role}`);
+      } else if (slotsId.length === 0) {
+        info(`Assign Course Slot to ${role}`);
       } else {
-        postUser();
+        // postUser();
+        console.log(userDetail);
       }
     } else {
-      postUser();
+      // postUser();
+      console.log(userDetail);
     }
   };
 
   const handleCourseRemove = (id) => {
-    const deleteCourse = coursesIds.filter((item) => item !== id);
-    setCreateUser({
-      ...createUser,
-      coursesIds: deleteCourse,
-    });
+    // const deleteCourse = coursesIds.filter((item) => item !== id);
+    // setCreateUser({
+    //   ...createUser,
+    //   coursesIds: deleteCourse,
+    // });
+  };
+
+  const onCourseSelect = (e) => {
+    const cid = e.target.value;
+    setSlots([]);
+    if (cid !== "Select") {
+      setCreateUser({
+        ...createUser,
+        courseId: cid,
+      });
+      const [temp] = courses.filter((item) => item.id === Number(cid));
+      const filteredSlots = temp.slots.filter((item) => item.faculty === null);
+      if (filteredSlots.length === 0) {
+        info("No available slots for that course!");
+        setSlots([]);
+      } else {
+        setSlots(filteredSlots);
+      }
+    }
+  };
+
+  const onSelectSlot = (id) => {
+    if (slotsId.includes(id)) {
+      const temp = slotsId.filter((item) => item !== id);
+      setCreateUser({
+        ...createUser,
+        slotsId: temp,
+      });
+    } else {
+      setCreateUser({
+        ...createUser,
+        slotsId: [...slotsId, id],
+      });
+    }
   };
 
   return (
@@ -309,44 +349,61 @@ const TabsetUser = () => {
                 </Input>
               </div>
             </FormGroup>
-            {role === "Faculty" || role === "Observer" ? (
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4">
-                  <span>*</span> Courses
-                </Label>
-                <div className="col-xl-8 col-md-7">
-                  <Input
-                    className="form-control"
-                    id="validationCustom5"
-                    type="select"
-                    required={true}
-                    value={coursesIds}
-                    onChange={(e) =>
-                      setCreateUser({
-                        ...createUser,
-                        coursesIds: [...coursesIds, Number(e.target.value)],
-                      })
-                    }
-                  >
-                    <option value="Select">Select</option>
-                    {courses.map((item) => (
-                      <>
-                        {!coursesIds.includes(item.id) && (
-                          <option key={item.id} value={item.id}>
-                            {item.courseName} {"->"} {item.day} {"->"}{" "}
-                            {item.timeSlot} {"->"} {item.room}
-                          </option>
-                        )}
-                      </>
+            {role === "Faculty" ? (
+              <>
+                <FormGroup className="row">
+                  <Label className="col-xl-3 col-md-4">
+                    <span>*</span> Courses
+                  </Label>
+                  <div className="col-xl-8 col-md-7">
+                    <Input
+                      className="form-control"
+                      id="validationCustom5"
+                      type="select"
+                      required={true}
+                      value={courseId}
+                      onChange={(e) => onCourseSelect(e)}
+                    >
+                      <option value="Select">Select</option>
+                      {courses.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </Input>
+                  </div>
+                </FormGroup>
+                <FormGroup className="row">
+                  <Label className="col-xl-3 col-md-4">
+                    <span>*</span> Course Slots
+                  </Label>
+                  <div className="col-xl-8 col-md-7">
+                    {slots.map((item) => (
+                      <span
+                        className="mb-2"
+                        style={{
+                          border: "1px solid #040b5b",
+                          marginRight: "0.5rem",
+                          padding: "0.2rem 0.8rem",
+                          borderRadius: "15px",
+                          cursor: "pointer",
+                          backgroundColor:
+                            slotsId.includes(item.id) && "#040b5b",
+                          color: slotsId.includes(item.id) && "#fff",
+                        }}
+                        onClick={() => onSelectSlot(item.id)}
+                      >
+                        {item.day} | {item.time} | {item.location}
+                      </span>
                     ))}
-                  </Input>
-                </div>
-              </FormGroup>
+                  </div>
+                </FormGroup>
+              </>
             ) : (
               ""
             )}
 
-            {role === "Faculty" || role === "Observer" ? (
+            {role === "Faculty" ? (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4"></Label>
                 <div className="col-xl-8 col-md-7 d-flex flex-wrap">
@@ -356,19 +413,16 @@ const TabsetUser = () => {
                         <th scope="col">Course</th>
                         <th scope="col">Day</th>
                         <th scope="col">Time</th>
-                        <th scope="col">Room</th>
+                        <th scope="col">Location</th>
                         <th scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {courses.map((item) => (
+                      {/* {courses.map((item) => (
                         <>
                           {coursesIds.includes(item.id) && (
                             <tr key={item.id}>
-                              <td className="digits">{item.courseName}</td>
-                              <td className="digits">{item.day}</td>
-                              <td className="digits">{item.timeSlot}</td>
-                              <td className="digits">{item.room}</td>
+                              <td className="digits">{item.name}</td>
                               <td>
                                 <XCircle
                                   style={{
@@ -382,14 +436,14 @@ const TabsetUser = () => {
                             </tr>
                           )}
                         </>
-                      ))}
-                      {coursesIds.length === 0 && (
+                      ))} */}
+                      {/* {coursesIds.length === 0 && (
                         <tr>
                           <td colSpan="5" className=" text-center digits">
                             No Courses assigned!
                           </td>
                         </tr>
-                      )}
+                      )} */}
                     </tbody>
                   </Table>
                 </div>
