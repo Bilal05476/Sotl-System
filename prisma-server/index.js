@@ -51,10 +51,7 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
-
 // async function main() {
-//   //update courses for user
-//   const up = await prisma.user.deleteMany();
-//   console.log(up);
+//   await prisma.user.deleteMany();
 // }
 // main();

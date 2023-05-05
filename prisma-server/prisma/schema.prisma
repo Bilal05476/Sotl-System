@@ -32,14 +32,14 @@ model User {
     hodObs           Observations[] @relation("Hod")
     observerObs      Observations[] @relation("Observer")
     //courses
-    observerCourses  Courses[]      @relation("Observer")
-    facultyCourses   Courses[]      @relation("Faculty")
+    // observerCourses  Courses[]      @relation("Observer")
     //feedbacks
     feedbackAuthor   FeedBacks[]    @relation("Author")
     feedbackReceiver FeedBacks[]    @relation("Receiver")
     //messages
     messageSender    Messages[]     @relation("Sender")
     messageReceiver  Messages[]     @relation("Receiver")
+    courseSlots      CourseSlots[]
 }
 
 // -> User => Observations
@@ -58,8 +58,9 @@ model Observations {
     observerId          Int
     obsRequest          ObsScheduling?
     meetings            Meetings?
-    course              Courses?       @relation(fields: [courseId], references: [id])
-    courseId            Int?           @unique
+    course              Courses        @relation(fields: [courseId], references: [id])
+    courseId            Int            @unique
+    feedbacks           FeedBacks[]
 }
 
 // -> Observations => ObsScheduling
@@ -75,8 +76,8 @@ model ObsScheduling {
     status                    Status       @default(Pending)
     observation               Observations @relation(fields: [observationsId], references: [id])
     observationsId            Int          @unique
-    course                    Courses?     @relation(fields: [courseId], references: [id])
-    courseId                  Int?         @unique
+    // course                    Courses      @relation(fields: [courseId], references: [id])
+    // courseId                  Int          @unique
 }
 
 // -> Observations => Meetings
@@ -137,33 +138,38 @@ model PDP {
 
 // -> User => Courses
 model Courses {
-    id            Int            @id @default(autoincrement()) // auto-inc
+    id            Int           @id @default(autoincrement()) // auto-inc
     courseName    String
     department    Department
     campus        Campus
-    // observer    User?          @relation("Observer", fields: [observerId], references: [id])
-    // observerId  Int?
-    // faculty     User?          @relation("Faculty", fields: [facultyId], references: [id])
-    // facultyId   Int?
-    observer      User[]         @relation("Observer")
-    faculty       User[]         @relation("Faculty")
-    scheduling    ObsScheduling?
+    // scheduling    ObsScheduling?
     observation   Observations?
-    timeSlot      String?
-    room          String?
-    day           String?
-    elective      Boolean?       @default(false)
-    depthElective Boolean?       @default(false)
+    elective      Boolean       @default(false)
+    depthElective Boolean       @default(false)
+    slots         CourseSlots[]
+}
+
+model CourseSlots {
+    id        Int     @id @default(autoincrement()) // auto-inc
+    time      String
+    location  String
+    day       String
+    Courses   Courses @relation(fields: [coursesId], references: [id])
+    coursesId Int
+    faculty   User?   @relation(fields: [facultyId], references: [id])
+    facultyId Int?
 }
 
 // -> User => Feedbacks
 model FeedBacks {
-    id         Int    @id @default(autoincrement()) // auto-inc
-    comment    String
-    author     User?  @relation("Author", fields: [authorId], references: [id])
-    authorId   Int?
-    receiver   User?  @relation("Receiver", fields: [receiverId], references: [id])
-    receiverId Int?
+    id            Int          @id @default(autoincrement()) // auto-inc
+    comment       String
+    author        User?        @relation("Author", fields: [authorId], references: [id])
+    authorId      Int?
+    receiver      User?        @relation("Receiver", fields: [receiverId], references: [id])
+    receiverId    Int?
+    observation   Observations @relation(fields: [observationId], references: [id])
+    observationId Int
 }
 
 // -> User => Messages

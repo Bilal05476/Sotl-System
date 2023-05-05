@@ -11,8 +11,11 @@ export const getCourse = asyncHandler(async (req, res) => {
       id: Number(req.params.id),
     },
     include: {
-      faculty: true,
-      observer: true,
+      slots: {
+        include: {
+          faculty: true,
+        },
+      },
     },
   });
   res.status(200).json(getCourseById);
@@ -22,7 +25,15 @@ export const getCourse = asyncHandler(async (req, res) => {
 // @route  GET api/courses
 // @access Public
 export const getCourses = asyncHandler(async (req, res) => {
-  const getAllCourses = await prisma.courses.findMany({});
+  const getAllCourses = await prisma.courses.findMany({
+    include: {
+      slots: {
+        include: {
+          faculty: true,
+        },
+      },
+    },
+  });
   res.status(200).json(getAllCourses);
 });
 
@@ -30,27 +41,31 @@ export const getCourses = asyncHandler(async (req, res) => {
 // @route  POST api/courses
 // @access Public
 export const createCourse = asyncHandler(async (req, res) => {
-  const {
-    courseName,
-    department,
-    campus,
-    observerId,
-    facultyId,
-    day,
-    timeSlot,
-    room,
-  } = req.body;
+  await prisma.courseSlots.deleteMany();
+  await prisma.courses.deleteMany();
+
+  const { courseName, department, campus, slots, elective, depthElective } =
+    req.body;
   const newCourse = await prisma.courses.create({
     data: {
       department,
       courseName,
       campus,
-      observerId: observerId && observerId,
-      facultyId: facultyId && facultyId,
-      day,
-      timeSlot,
-      room,
+      depthElective,
+      elective,
     },
   });
+  if (newCourse) {
+    for (let s = 0; s < slots.length; s++) {
+      await prisma.courseSlots.create({
+        data: {
+          day: slots[s].day,
+          location: slots[s].location,
+          time: slots[s].time,
+          coursesId: newCourse.id,
+        },
+      });
+    }
+  }
   res.status(200).json(newCourse);
 });
