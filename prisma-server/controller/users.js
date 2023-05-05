@@ -7,7 +7,27 @@ import asyncHandler from "express-async-handler";
 // @access Private
 export const getUsers = asyncHandler(async (req, res) => {
   const allUsers = await prisma.user.findMany({});
-  res.status(200).json(allUsers);
+  let filtered = [];
+  allUsers.map((item) => {
+    filtered.push({
+      id: item.id,
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      avatar: item.avatar,
+      designation: item.designation,
+      dateOfBirth: item.dateOfBirth,
+      institute: item.institute,
+      degree: item.degree,
+      starting: item.starting,
+      ending: item.ending,
+      role: item.role,
+      campus: item.campus,
+      department: item.department,
+    });
+  });
+
+  res.status(200).json(filtered);
 });
 
 // @desc   Get User by id
@@ -52,11 +72,7 @@ export const userById = asyncHandler(async (req, res) => {
                       email: true,
                     },
                   },
-                  obsRequest: {
-                    include: {
-                      course: true,
-                    },
-                  },
+                  obsRequest: true,
                   meetings: {
                     include: {
                       informedObservation: true,
@@ -146,8 +162,14 @@ export const userById = asyncHandler(async (req, res) => {
                 },
               }
             : false,
-        facultyCourses: validate.role === "Faculty" ? true : false,
-        observerCourses: validate.role === "Observer" ? true : false,
+        courseSlots:
+          validate.role === "Faculty"
+            ? {
+                include: {
+                  course: true,
+                },
+              }
+            : false,
       },
     });
     /// send user data to client side
@@ -159,11 +181,7 @@ export const userById = asyncHandler(async (req, res) => {
         : user.hodObs
         ? user.hodObs
         : [],
-      courses: user.facultyCourses
-        ? user.facultyCourses
-        : user.observerCourses
-        ? user.observerCourses
-        : [],
+      courses: user.courseSlots,
     };
     res.status(200).json(userData);
   } else {

@@ -47,24 +47,25 @@ export const createUser = asyncHandler(async (req, res) => {
     // res.status(200).json(ids);
 
     if (newUser) {
-      if (newUser.role === "Observer") {
+      // if (newUser.role === "Observer") {
+      //   await prisma.user.update({
+      //     where: {
+      //       id: newUser.id,
+      //     },
+      //     data: {
+      //       observerCourses: {
+      //         set: ids,
+      //       },
+      //     },
+      //   });
+      // } else
+      if (newUser.role === "Faculty") {
         await prisma.user.update({
           where: {
             id: newUser.id,
           },
           data: {
-            observerCourses: {
-              set: ids,
-            },
-          },
-        });
-      } else if (newUser.role === "Faculty") {
-        await prisma.user.update({
-          where: {
-            id: newUser.id,
-          },
-          data: {
-            facultyCourses: {
+            courseSlots: {
               set: ids,
             },
           },
@@ -96,25 +97,17 @@ export const loginUser = asyncHandler(async (req, res) => {
     if (checkPassword) {
       // create user session token
       const token = generateJWT(validate.id);
+      validate.token = token;
+
+      const exclude = ["password"];
+      const loginUser = Object.keys(validate).reduce((acc, key) => {
+        if (!exclude.includes(key)) {
+          acc[key] = validate[key];
+        }
+        return acc;
+      }, {});
 
       /// send user data to client side
-      const loginUser = {
-        id: validate.id,
-        name: validate.name,
-        email: validate.email,
-        campus: validate.campus,
-        department: validate.department,
-        role: validate.role,
-        avatar: validate.avatar,
-        phone: validate.phone,
-        designation: validate.designation,
-        degree: validate.degree,
-        starting: validate.starting,
-        ending: validate.ending,
-        dateOfBirth: validate.dateOfBirth,
-        institute: validate.institute,
-        token,
-      };
       res.status(200).json(loginUser);
     } else {
       res.status(400).json({ error: "Invalid Credentials" });

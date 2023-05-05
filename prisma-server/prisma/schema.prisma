@@ -32,6 +32,7 @@ model User {
     hodObs           Observations[] @relation("Hod")
     observerObs      Observations[] @relation("Observer")
     //courses
+    courseSlots      CourseSlots[]
     // observerCourses  Courses[]      @relation("Observer")
     //feedbacks
     feedbackAuthor   FeedBacks[]    @relation("Author")
@@ -39,13 +40,12 @@ model User {
     //messages
     messageSender    Messages[]     @relation("Sender")
     messageReceiver  Messages[]     @relation("Receiver")
-    courseSlots      CourseSlots[]
 }
 
 // -> User => Observations
 model Observations {
     id                  Int            @id @default(autoincrement()) // auto-inc
-    timeSlot            Json?
+    timeSlot            String?
     observationStatus   Status         @default(Pending)
     observationProgress Int            @default(0)
     semester            String
@@ -139,7 +139,7 @@ model PDP {
 // -> User => Courses
 model Courses {
     id            Int           @id @default(autoincrement()) // auto-inc
-    courseName    String
+    name          String
     department    Department
     campus        Campus
     // scheduling    ObsScheduling?
@@ -154,8 +154,8 @@ model CourseSlots {
     time      String
     location  String
     day       String
-    Courses   Courses @relation(fields: [coursesId], references: [id])
-    coursesId Int
+    course    Courses @relation(fields: [courseId], references: [id])
+    courseId  Int
     faculty   User?   @relation(fields: [facultyId], references: [id])
     facultyId Int?
 }
