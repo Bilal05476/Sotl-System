@@ -7,7 +7,7 @@ import { protectCreateRole } from "../middleware/protectRoutes.js";
 // import { isAuthenticated } from "../middleware/protectApi.js";
 
 authRoutes.route("/login").post(loginUser);
-authRoutes.route("/create").post(createUser);
+authRoutes.route("/create").post(protectCreateRole, createUser);
 authRoutes.route("/update/:id").put(updateUser);
 
 // authRoutes.route("/protected").post(protectinitiateObs, () => {
