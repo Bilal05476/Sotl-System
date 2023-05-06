@@ -10,6 +10,7 @@ import { successes, errors, info, warning } from "../../constants/Toasters";
 const TabsetUser = () => {
   const [{ courses, user }] = useStateValue();
   const [slots, setSlots] = useState([]);
+  const [selectedSlot, setSelectedSlot] = useState([]);
   const [createUser, setCreateUser] = useState({
     fullname: "",
     email: "",
@@ -80,40 +81,37 @@ const TabsetUser = () => {
             campus: user.campus ? user.campus : "Select",
             department: user.department ? user.department : "Select",
           });
+          setSlots([]);
+          setSelectedSlot([]);
         }, 2000);
       }
     }
-    if (role === "Select" || department === "Select" || campus === "Select") {
-      info("Missing some user fields!");
+    if (
+      role === "Select" ||
+      department === "Select" ||
+      campus === "Select" ||
+      !fullname
+    ) {
+      info("Please provide required data!");
+    } else if (!validateEmail(email)) {
+      warning("Please enter valid email address!");
+    } else if (!email.includes("iqra.edu.pk")) {
+      info("Only @iqra.edu.pk email domain allowed!");
     } else if (password.length < 8) {
       info("Password should be minimum 8 characters long!");
     } else if (password !== cPassword) {
       warning("Passwords should be same!");
-    } else if (!email.includes("iqra.edu.pk")) {
-      info("Only @iqra.edu.pk email domain allowed!");
-    } else if (!validateEmail(email)) {
-      warning("Please enter valid email address!");
     } else if (role === "Faculty") {
       if (!courseId) {
         info(`Assign Course to ${role}`);
       } else if (slotsId.length === 0) {
         info(`Assign Course Slot to ${role}`);
       } else {
-        // postUser();
-        console.log(userDetail);
+        postUser();
       }
     } else {
-      // postUser();
-      console.log(userDetail);
+      postUser();
     }
-  };
-
-  const handleCourseRemove = (id) => {
-    // const deleteCourse = coursesIds.filter((item) => item !== id);
-    // setCreateUser({
-    //   ...createUser,
-    //   coursesIds: deleteCourse,
-    // });
   };
 
   const onCourseSelect = (e) => {
@@ -137,16 +135,24 @@ const TabsetUser = () => {
 
   const onSelectSlot = (id) => {
     if (slotsId.includes(id)) {
-      const temp = slotsId.filter((item) => item !== id);
+      const removeSlotId = slotsId.filter((item) => item !== id);
+      const removeSlot = selectedSlot.filter((item) => item.id !== id);
       setCreateUser({
         ...createUser,
-        slotsId: temp,
+        slotsId: removeSlotId,
       });
+      setSelectedSlot(removeSlot);
     } else {
       setCreateUser({
         ...createUser,
         slotsId: [...slotsId, id],
       });
+      const [findSlot] = slots.filter((item) => item.id === id);
+      const [findCourse] = courses.filter(
+        (item) => item.id === findSlot.courseId
+      );
+      findSlot.name = findCourse.name;
+      setSelectedSlot([...selectedSlot, findSlot]);
     }
   };
 
@@ -158,49 +164,6 @@ const TabsetUser = () => {
         </TabList>
         <TabPanel>
           <Form className="needs-validation user-add" noValidate="">
-            {/* <h4></h4> */}
-            {/* {error && (
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4">
-                  <span></span>
-                </Label>
-                <div className="col-xl-8 col-md-7">
-                  <span
-                    style={{
-                      background: "pink",
-                      color: "crimson",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "5px",
-                      width: "100%",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {error}
-                  </span>
-                </div>
-              </FormGroup>
-            )} */}
-            {/* {success && (
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4">
-                  <span></span>
-                </Label>
-                <div className="col-xl-8 col-md-7">
-                  <span
-                    style={{
-                      background: "greenyellow",
-                      color: "green",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "5px",
-                      width: "100%",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {success}
-                  </span>
-                </div>
-              </FormGroup>
-            )} */}
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Full Name
@@ -210,7 +173,7 @@ const TabsetUser = () => {
                   className="form-control"
                   id="validationCustom0"
                   type="text"
-                  placeholder="John Smith"
+                  placeholder="Asif Hussain"
                   required={true}
                   value={fullname}
                   onChange={(e) =>
@@ -232,7 +195,7 @@ const TabsetUser = () => {
                   className="form-control"
                   id="validationCustom2"
                   type="text"
-                  placeholder="john@iqra.edu.pk"
+                  placeholder="asif@iqra.edu.pk"
                   required={true}
                   value={email}
                   onChange={(e) =>
@@ -398,59 +361,36 @@ const TabsetUser = () => {
                     ))}
                   </div>
                 </FormGroup>
+                <FormGroup className="row">
+                  <Label className="col-xl-3 col-md-4"></Label>
+                  <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                    <Table borderless>
+                      <thead>
+                        <tr>
+                          <th scope="col">Course</th>
+                          <th scope="col">Day</th>
+                          <th scope="col">Time</th>
+                          <th scope="col">Location</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedSlot.map((item) => (
+                          <tr key={item.id}>
+                            <td className="digits">{item.name}</td>
+                            <td className="digits">{item.day}</td>
+                            <td className="digits">{item.time}</td>
+                            <td className="digits">{item.location}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                </FormGroup>
               </>
             ) : (
               ""
             )}
 
-            {role === "Faculty" ? (
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4"></Label>
-                <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                  <Table borderless>
-                    <thead>
-                      <tr>
-                        <th scope="col">Course</th>
-                        <th scope="col">Day</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">Location</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {/* {courses.map((item) => (
-                        <>
-                          {coursesIds.includes(item.id) && (
-                            <tr key={item.id}>
-                              <td className="digits">{item.name}</td>
-                              <td>
-                                <XCircle
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                  onClick={() => handleCourseRemove(item.id)}
-                                  size={20}
-                                  color="crimson"
-                                />
-                              </td>
-                            </tr>
-                          )}
-                        </>
-                      ))} */}
-                      {/* {coursesIds.length === 0 && (
-                        <tr>
-                          <td colSpan="5" className=" text-center digits">
-                            No Courses assigned!
-                          </td>
-                        </tr>
-                      )} */}
-                    </tbody>
-                  </Table>
-                </div>
-              </FormGroup>
-            ) : (
-              ""
-            )}
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Password

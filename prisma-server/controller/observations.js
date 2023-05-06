@@ -7,14 +7,30 @@ import asyncHandler from "express-async-handler";
 // @route  POST api/observation/initiate
 // @access Private (only hod will initiate)
 export const initiate = asyncHandler(async (req, res) => {
-  const { facultyId, semester, observerId, hodId } = req.body;
-  // const obsUsers = [facultyId, observerId, hodId];
-  const newObservation = await prisma.observations.create({
-    data: { semester, facultyId, observerId, hodId },
+  // await prisma.observations.deleteMany();
+  const { facultyId, semester, observerId, hodId, courseId } = req.body;
+  const findObservation = await prisma.observations.findFirst({
+    where: {
+      courseId,
+      facultyId,
+      observationStatus: "Pending" || "Ongoing",
+    },
   });
-  if (newObservation) {
+  if (findObservation) {
+    res.status(400).json({
+      error:
+        "Already have an ongoing observation for that course of this faculty!",
+    });
+  } else {
+    const newObservation = await prisma.observations.create({
+      data: { semester, facultyId, observerId, hodId, courseId },
+    });
     res.status(200).json(newObservation);
   }
+
+  // if (newObservation) {
+  //   res.status(200).json(newObservation);
+  // }
 
   // let obsUsers = [facultyId, observerId, hodId];
   // if (newObservation) {
@@ -48,9 +64,21 @@ export const getAllObs = asyncHandler(async (req, res) => {
   allObs.map((item) => {
     returnObss.push({
       id: item.id,
-      faculty: { name: item.faculty.name, email: item.faculty.email },
-      observer: { name: item.observer.name, email: item.observer.email },
-      hod: { name: item.hod.name, email: item.hod.email },
+      faculty: {
+        id: item.faculty.id,
+        name: item.faculty.name,
+        email: item.faculty.email,
+      },
+      observer: {
+        id: item.observer.id,
+        name: item.observer.name,
+        email: item.observer.email,
+      },
+      hod: {
+        id: item.hod.id,
+        name: item.hod.name,
+        email: item.hod.email,
+      },
       timeSlot: item.timeSlot,
       semester: item.semester,
       observationProgress: item.observationProgress,
@@ -71,11 +99,7 @@ export const getObs = asyncHandler(async (req, res) => {
       faculty: true,
       observer: true,
       hod: true,
-      obsRequest: {
-        include: {
-          course: true,
-        },
-      },
+      obsRequest: true,
       course: true,
       meetings: {
         include: {
@@ -90,9 +114,21 @@ export const getObs = asyncHandler(async (req, res) => {
   if (Obs) {
     const returnObs = {
       id: Obs.id,
-      faculty: { name: Obs.faculty.name, email: Obs.faculty.email },
-      observer: { name: Obs.observer.name, email: Obs.observer.email },
-      hod: { name: Obs.hod.name, email: Obs.hod.email },
+      faculty: {
+        id: Obs.faculty.id,
+        name: Obs.faculty.name,
+        email: Obs.faculty.email,
+      },
+      observer: {
+        id: Obs.observer.id,
+        name: Obs.observer.name,
+        email: Obs.observer.email,
+      },
+      hod: {
+        id: Obs.hod.id,
+        name: Obs.hod.name,
+        email: Obs.hod.email,
+      },
       meetings: Obs.meetings,
       obsRequest: Obs.obsRequest,
       timeSlot: Obs.timeSlot,

@@ -85,13 +85,16 @@ const TabsetObservation = () => {
 
   const [fCourses, setFCourses] = useState([]);
   const onSelectFaculty = async (e) => {
+    setFCourses([]);
     let fid = e.target.value;
-    setCreateObs({
-      ...createObs,
-      facultyId: fid,
-    });
+
     if (fid !== "Select") {
       let id = Number(fid);
+      setCreateObs({
+        ...createObs,
+        facultyId: id,
+        courseId: "",
+      });
       const findCourse = await fetch(
         `${process.env.REACT_APP_BASE_URL}/user/${id}`,
         {
@@ -108,7 +111,11 @@ const TabsetObservation = () => {
         setFCourses(data.courses);
       }
     } else {
-      setFCourses([]);
+      setCreateObs({
+        ...createObs,
+        facultyId: fid,
+        courseId: "",
+      });
     }
   };
 
@@ -195,8 +202,8 @@ const TabsetObservation = () => {
                 >
                   <option value="Select">Select</option>
                   {fCourses.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.courseName}
+                    <option key={item.id} value={item.course.id}>
+                      {item.course.name}
                     </option>
                   ))}
                 </Input>

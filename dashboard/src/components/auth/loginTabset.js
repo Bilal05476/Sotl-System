@@ -3,16 +3,17 @@ import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { User, Loader } from "react-feather";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
+import { info, errors, successes } from "../../constants/Toasters";
+import { ToastContainer } from "react-toastify";
 
 const LoginTabset = () => {
   const [loginState, setLoginState] = useState({
     email: "",
     password: "",
-    alert: "",
     loader: false,
   });
   const [{}, dispatch] = useStateValue();
-  const { email, password, alert, loader } = loginState;
+  const { email, password, loader } = loginState;
 
   function validateEmail(email) {
     const re =
@@ -31,38 +32,33 @@ const LoginTabset = () => {
         });
         const data = await res.json();
         if (data.error) {
-          setLoginState({ ...loginState, alert: data.error, loader: false });
+          setLoginState({ ...loginState, loader: false });
+          errors(data.error);
         } else {
           dispatch({
             type: "SET_USER",
             payload: data,
           });
-
           setLoginState({
             ...loginState,
-            alert: "",
             email: "",
             password: "",
             loader: false,
           });
-          // console.log(data);
           localStorage.setItem("user", JSON.stringify(data));
         }
       } catch (error) {
-        // console.log(error.message);
         setLoginState({
           ...loginState,
-          alert: "Server not responding at that time!",
           loader: false,
         });
+        errors("Server not responding at that time!");
       }
     }
     if (!validateEmail(email)) {
-      // console.log("Invalid");
-      setLoginState({ ...loginState, alert: "Enter Valid Email Address" });
+      info("Enter Valid Email Address!");
     } else {
-      // console.log("Success");
-      setLoginState({ ...loginState, alert: "", loader: true });
+      setLoginState({ ...loginState, loader: true });
       fetchData();
     }
   };
@@ -75,6 +71,7 @@ const LoginTabset = () => {
   return (
     <div>
       <Fragment>
+        <ToastContainer position="top-center" />
         <Tabs>
           <TabList className="nav nav-tabs tab-coupon">
             <Tab className="nav-link show">
@@ -89,20 +86,6 @@ const LoginTabset = () => {
 
           <TabPanel>
             <Form className="form-horizontal auth-form">
-              {alert && (
-                <FormGroup>
-                  <span
-                    style={{
-                      background: "pink",
-                      color: "crimson",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "20px",
-                    }}
-                  >
-                    {alert}
-                  </span>
-                </FormGroup>
-              )}
               <FormGroup>
                 <Input
                   required={true}
