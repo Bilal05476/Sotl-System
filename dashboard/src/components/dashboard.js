@@ -460,7 +460,7 @@ const Dashboard = () => {
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
-                            end={userData?.courses.length}
+                            end={userData?.courses?.length}
                           />
                           <small> Assinged</small>
                         </h3>
@@ -645,13 +645,17 @@ const Dashboard = () => {
                           {userData.courses.map((item) => (
                             <tr key={item.id}>
                               <td>{item.id}</td>
-                              <td className="digits">{item.courseName}</td>
+                              <td className="digits">{item.course.name}</td>
                               <td className="digits">
-                                {item.day} {item.timeSlot}
+                                {item.day} {item.time}
                               </td>
-                              <td className="digits">{item.room}</td>
-                              <td className="digits">{item.campus}</td>
-                              <td className="digits">{item.department}</td>
+                              <td className="digits">{item.location}</td>
+                              <td className="digits">
+                                {item.course.campus?.replaceAll("_", " ")}
+                              </td>
+                              <td className="digits">
+                                {item.course.department}
+                              </td>
                             </tr>
                           ))}
                           {userData.courses.length === 0 && (

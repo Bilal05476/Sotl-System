@@ -91,9 +91,11 @@ const LayoutRoutes = () => {
     }
   }
   useEffect(() => {
-    fetchData();
     if (user.role === "Head_of_Department") fetchCoursesAndUsers();
+    else fetchData();
   }, []);
+
+  // return <h2>Hello World</h2>;
   return (
     <Fragment>
       <Routes>

@@ -107,7 +107,7 @@ const Sidebar = () => {
       )}
       {menuItem.type === "sub" ? (
         <a
-          className="sidebar-header"
+          className={`sidebar-header ${menuItem.active ? "active" : ""}`}
           href="#javaScript"
           onClick={(event) => {
             event.preventDefault();
