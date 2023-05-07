@@ -51,8 +51,8 @@ export const getCourses = asyncHandler(async (req, res) => {
 // @route  POST api/courses
 // @access Public
 export const createCourse = asyncHandler(async (req, res) => {
-  await prisma.courseSlots.deleteMany();
-  await prisma.courses.deleteMany();
+  // await prisma.courseSlots.deleteMany();
+  // await prisma.courses.deleteMany();
   const {
     id,
     name,
@@ -87,10 +87,10 @@ export const createCourse = asyncHandler(async (req, res) => {
 // @route  PUT api/courses/user/:id
 // @access Only Hod assign courses
 export const assignCourses = asyncHandler(async (req, res) => {
-  const { courses } = req.body;
-  if (courses) {
+  const { slots } = req.body;
+  if (slots) {
     let ids = [];
-    courses.map((item) => ids.push({ id: item }));
+    slots.map((item) => ids.push({ id: item }));
     await prisma.user.update({
       where: {
         id: Number(req.params.id),
