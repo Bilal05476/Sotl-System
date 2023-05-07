@@ -147,6 +147,7 @@ model Courses {
     isElective      Boolean       @default(false)
     isDepthElective Boolean       @default(false)
     slots           CourseSlots[]
+    credits         Int
 }
 
 model CourseSlots {

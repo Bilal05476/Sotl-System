@@ -53,14 +53,25 @@ export const getCourses = asyncHandler(async (req, res) => {
 export const createCourse = asyncHandler(async (req, res) => {
   await prisma.courseSlots.deleteMany();
   await prisma.courses.deleteMany();
-  const { name, department, campus, slots, elective, depthElective } = req.body;
+  const {
+    id,
+    name,
+    department,
+    campus,
+    slots,
+    isElective,
+    isDepthElective,
+    credits,
+  } = req.body;
   const newCourse = await prisma.courses.create({
     data: {
+      id,
       department,
       name,
       campus,
-      depthElective,
-      elective,
+      isDepthElective,
+      isElective,
+      credits,
       slots: {
         createMany: {
           data: slots,
@@ -68,18 +79,6 @@ export const createCourse = asyncHandler(async (req, res) => {
       },
     },
   });
-  // if (newCourse) {
-  //   for (let s = 0; s < slots.length; s++) {
-  //     await prisma.courseSlots.create({
-  //       data: {
-  //         day: slots[s].day,
-  //         location: slots[s].location,
-  //         time: slots[s].time,
-  //         courseId: newCourse.id,
-  //       },
-  //     });
-  //   }
-  // }
 
   res.status(200).json(newCourse);
 });
