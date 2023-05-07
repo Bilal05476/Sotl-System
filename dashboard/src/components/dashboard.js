@@ -558,7 +558,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {userData?.observations.map((item) => (
+                        {/* {userData?.observations.map((item) => (
                           <tr key={item.id}>
                             <td>{item.id}</td>
                             <td className="digits">
@@ -601,7 +601,7 @@ const Dashboard = () => {
                               No Observations!
                             </td>
                           </tr>
-                        )}
+                        )} */}
                       </tbody>
                     </Table>
                     {userData.observations.length > 0 && (

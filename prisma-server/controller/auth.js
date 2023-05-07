@@ -44,8 +44,6 @@ export const createUser = asyncHandler(async (req, res) => {
       courses.map((item) => ids.push({ id: item }));
     }
 
-    // res.status(200).json(ids);
-
     if (newUser) {
       // if (newUser.role === "Observer") {
       //   await prisma.user.update({

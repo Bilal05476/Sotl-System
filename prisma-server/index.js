@@ -52,7 +52,7 @@ app.listen(port, () => {
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 // async function main() {
-//   const c = await prisma.courseSlots.findMany();
+//   const c = await prisma.courses.deleteMany();
 //   console.log(c);
 // }
 // main();
