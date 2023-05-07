@@ -150,7 +150,7 @@ model Courses {
 }
 
 model CourseSlots {
-    id        BigInt  @id @unique
+    id        String  @id @unique
     time      String
     location  String
     day       String
