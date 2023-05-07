@@ -60,12 +60,41 @@ const LayoutRoutes = () => {
       console.log(error.message);
     }
   }
+  async function fetchHodData() {
+    try {
+      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const courseres = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/courses/`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const udata = await usersres.json();
+      const cdata = await courseres.json();
+      dispatch({
+        type: "SET_USERS",
+        payload: udata,
+      });
+      dispatch({
+        type: "SET_COURSES",
+        payload: cdata,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   useEffect(() => {
+    if (user.role === "Head_of_Department") fetchHodData();
     fetchData();
   }, []);
 
-  // return <h2>Hello World</h2>;
   return (
     <Fragment>
       <Routes>

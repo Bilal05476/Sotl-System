@@ -5,7 +5,7 @@ import TabsetObservation from "./tabset-observation";
 import { useStateValue } from "../../StateProvider";
 
 const Create_observation = () => {
-  const [{ user }, dispatch] = useStateValue();
+  const [{}, dispatch] = useStateValue();
   async function fetchUsers() {
     try {
       const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
@@ -23,7 +23,7 @@ const Create_observation = () => {
     }
   }
   useEffect(() => {
-    if (user.role === "Head_of_Department") fetchUsers();
+    fetchUsers();
   }, []);
   return (
     <Fragment>

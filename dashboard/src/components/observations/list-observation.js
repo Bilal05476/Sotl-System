@@ -82,19 +82,19 @@ const List_observation = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {userData.observations.map((item) => (
+                        {userData?.observations.map((item) => (
                           <tr key={item.id}>
                             <td>{item.id}</td>
-                            <td className="digits">
-                              {item.course ? item.course : "--"}
-                            </td>
+                            <td className="digits">{item.course.name}</td>
                             <td className="digits">{item.semester}</td>
                             <td className="digits">{item.faculty.name}</td>
-                            {/* // font-danger */}
                             <td className="digits">{item.observer.name}</td>
                             <td className="digits">{item.hod.name}</td>
                             <td className="digits">
-                              {item.timeSlot ? item.timeSlot[0] : "--"}
+                              {item.timeSlot ? item.timeSlot : "--"}
+                            </td>
+                            <td className="digits">
+                              {item.timeSlot ? item.timeSlot : "--"}
                             </td>
                             <td className="digits">
                               {item.observationProgress}%

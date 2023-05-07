@@ -23,7 +23,7 @@ const TabsetObservation = () => {
     const obsDetail = {
       facultyId: Number(facultyId),
       observerId: Number(observerId),
-      courseId: Number(courseId),
+      courseId: courseId,
       hodId: user.id,
       semester,
     };

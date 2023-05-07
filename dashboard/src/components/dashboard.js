@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Breadcrumb from "./common/breadcrumb";
 import {
   Navigation,
@@ -73,34 +73,78 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  const [streamFilter, setStreamFilter] = useState("Monthly");
   const lineData = {
-    labels: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug"],
+    labels:
+      streamFilter === "Yearly"
+        ? ["2023"]
+        : streamFilter === "Half Yearly"
+        ? ["Jan - June", "July - Dec"]
+        : streamFilter === "Quaterly"
+        ? ["Jan - Mar", "Apr - June", "July - Sep", "Oct - Dec"]
+        : [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "June",
+            "July",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
     datasets: [
       {
-        data: [3, 1, 2, 2, 2, 2, 1, 1],
-        borderColor: "goldenrod",
+        data:
+          streamFilter === "Yearly"
+            ? [21]
+            : streamFilter === "Half Yearly"
+            ? [12, 9]
+            : streamFilter === "Quaterly"
+            ? [6, 6, 4, 5]
+            : [3, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 1],
+        borderColor: "gold",
         backgroundColor: "gold",
         borderWidth: 1,
         barPercentage: 0.5,
-        categoryPercentage: 0.4,
+        // categoryPercentage: 0.4,
         label: "Pending",
       },
       {
-        data: [2, 3, 0, 1, 3, 1, 1, 3],
-        borderColor: "#040b5b",
+        data:
+          streamFilter === "Yearly"
+            ? [19]
+            : streamFilter === "Half Yearly"
+            ? [10, 9]
+            : streamFilter === "Quaterly"
+            ? [5, 5, 4, 5]
+            : [2, 3, 0, 1, 3, 1, 1, 3, 0, 1, 3, 1],
+
+        borderColor: "lightblue",
         backgroundColor: "lightblue",
         borderWidth: 1,
         barPercentage: 0.5,
-        categoryPercentage: 0.4,
+        // categoryPercentage: 0.4,
         label: "Ongoing",
       },
       {
-        data: [3, 5, 3, 1, 3, 7, 2, 2],
-        borderColor: "lightblue",
+        data:
+          streamFilter === "Yearly"
+            ? [39]
+            : streamFilter === "Half Yearly"
+            ? [22, 17]
+            : streamFilter === "Quaterly"
+            ? [11, 11, 5, 12]
+            : [3, 5, 3, 1, 3, 7, 2, 2, 1, 3, 7, 2],
+
+        borderColor: "#040b5b",
         backgroundColor: "#040b5b",
         borderWidth: 1,
         barPercentage: 0.5,
-        categoryPercentage: 0.4,
+        // categoryPercentage: 0.4,
         label: "Completed",
       },
     ],
@@ -229,7 +273,7 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, userData, users }] = useStateValue();
+  const [{ user, userData, users }, dispatch] = useStateValue();
 
   let faculty = 0;
   let observer = 0;
@@ -244,6 +288,61 @@ const Dashboard = () => {
       return null;
     });
   }
+
+  async function fetchData() {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const data = await res.json();
+      dispatch({
+        type: "SET_USER_DATA",
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  async function fetchHodData() {
+    try {
+      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const courseres = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/courses/`,
+        {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      const udata = await usersres.json();
+      const cdata = await courseres.json();
+      dispatch({
+        type: "SET_USERS",
+        payload: udata,
+      });
+      dispatch({
+        type: "SET_COURSES",
+        payload: cdata,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  useEffect(() => {
+    if (user.role === "Head_of_Department") fetchHodData();
+    fetchData();
+  }, []);
+
   return (
     <Fragment>
       <Breadcrumb title="Dashboard" parent="Dashboard" />
@@ -515,8 +614,30 @@ const Dashboard = () => {
           {user.role !== "Faculty" ? (
             <Col xl="6 xl-100">
               <Card>
-                <CardHeader>
+                <CardHeader className="d-flex align-items-center justify-content-between">
                   <h5>Observations Stream</h5>
+                  <div>
+                    <ObservationStreamFilter
+                      streamFilter={streamFilter}
+                      setStreamFilter={setStreamFilter}
+                      text="Monthly"
+                    />
+                    <ObservationStreamFilter
+                      streamFilter={streamFilter}
+                      setStreamFilter={setStreamFilter}
+                      text="Quaterly"
+                    />
+                    <ObservationStreamFilter
+                      streamFilter={streamFilter}
+                      setStreamFilter={setStreamFilter}
+                      text="Half Yearly"
+                    />
+                    <ObservationStreamFilter
+                      streamFilter={streamFilter}
+                      setStreamFilter={setStreamFilter}
+                      text="Yearly"
+                    />
+                  </div>
                 </CardHeader>
                 <CardBody>
                   <div className="market-chart">
@@ -551,25 +672,27 @@ const Dashboard = () => {
                           <th scope="col">Faculty</th>
                           <th scope="col">Observer</th>
                           <th scope="col">Head of department</th>
-                          <th scope="col">Date&amp;Time</th>
+                          <th scope="col">Starting Date</th>
+                          <th scope="col">Ending Date</th>
                           <th scope="col">Progress</th>
                           <th scope="col">Status</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
                       <tbody>
-                        {/* {userData?.observations.map((item) => (
+                        {userData?.observations.map((item) => (
                           <tr key={item.id}>
                             <td>{item.id}</td>
-                            <td className="digits">
-                              {item.course ? item.course : "--"}
-                            </td>
+                            <td className="digits">{item.course.name}</td>
                             <td className="digits">{item.semester}</td>
                             <td className="digits">{item.faculty.name}</td>
                             <td className="digits">{item.observer.name}</td>
                             <td className="digits">{item.hod.name}</td>
                             <td className="digits">
-                              {item.timeSlot ? item.timeSlot[0] : "--"}
+                              {item.timeSlot ? item.timeSlot : "--"}
+                            </td>
+                            <td className="digits">
+                              {item.timeSlot ? item.timeSlot : "--"}
                             </td>
                             <td className="digits">
                               {item.observationProgress}%
@@ -601,7 +724,7 @@ const Dashboard = () => {
                               No Observations!
                             </td>
                           </tr>
-                        )} */}
+                        )}
                       </tbody>
                     </Table>
                     {userData.observations.length > 0 && (
@@ -1429,6 +1552,25 @@ const Dashboard = () => {
         </Row>
       </Container>
     </Fragment>
+  );
+};
+
+const ObservationStreamFilter = ({ streamFilter, setStreamFilter, text }) => {
+  return (
+    <span
+      style={{
+        border: "1px solid #040b5b",
+        borderRadius: "15px",
+        color: streamFilter === text ? "#fff" : "#040b5b",
+        padding: "0.2rem 0.6rem",
+        marginLeft: "0.5rem",
+        cursor: "pointer",
+        backgroundColor: streamFilter === text && "#040b5b",
+      }}
+      onClick={() => setStreamFilter(text)}
+    >
+      {text}
+    </span>
   );
 };
 
