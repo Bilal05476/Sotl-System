@@ -36,14 +36,14 @@ const UserMenu = () => {
         <ul className="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
           <li>
             <Link to={`${process.env.PUBLIC_URL}/settings/profile`}>
-              <i data-feather="user"></i>Edit Profile
+              <i data-feather="user"></i>Profile
             </Link>
           </li>
-          <li>
+          {/* <li>
             <a href="#javaScript">
               <i data-feather="mail"></i>Inbox
             </a>
-          </li>
+          </li> */}
 
           <li>
             <a onClick={() => onLogout()}>

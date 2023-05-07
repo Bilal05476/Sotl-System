@@ -15,7 +15,7 @@ import {
 import { useStateValue } from "../../StateProvider";
 import { Eye, Loader } from "react-feather";
 
-const List_observation = () => {
+const List_courses = () => {
   const [{ user, userData }, dispatch] = useStateValue();
 
   async function fetchData() {
@@ -144,4 +144,4 @@ const List_observation = () => {
   );
 };
 
-export default List_observation;
+export default List_courses;

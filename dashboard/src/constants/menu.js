@@ -20,22 +20,7 @@
 //     ]
 // },
 
-import {
-  Home,
-  Box,
-  DollarSign,
-  Tag,
-  Clipboard,
-  Camera,
-  AlignLeft,
-  UserPlus,
-  Users,
-  Chrome,
-  BarChart,
-  Settings,
-  Archive,
-  LogIn,
-} from "react-feather";
+import { Home, Clipboard, UserPlus, User, Book } from "react-feather";
 
 export const MENUITEMS = [
   {
@@ -88,13 +73,12 @@ export const MENUITEMS = [
   },
 
   {
-    title: "Settings",
-    icon: Settings,
-    type: "sub",
-    children: [
-      { path: "/settings/profile", title: "Your Profile", type: "link" },
-      { path: "/settings/logout", title: "Logout", type: "link" },
-    ],
+    title: "Profile",
+    icon: User,
+    path: "/settings/profile",
+    type: "link",
+    badgeType: "primary",
+    active: false,
   },
 ];
 
@@ -115,16 +99,16 @@ export const HODMENU = [
     active: false,
     children: [
       { path: "/users/list-user", title: "All Users", type: "link" },
-      {
-        path: "/users/observers",
-        title: "Observers",
-        type: "link",
-      },
-      {
-        path: "/users/faculty",
-        title: "Faculty",
-        type: "link",
-      },
+      // {
+      //   path: "/users/observers",
+      //   title: "Observers",
+      //   type: "link",
+      // },
+      // {
+      //   path: "/users/faculty",
+      //   title: "Faculty",
+      //   type: "link",
+      // },
       { path: "/users/create-user", title: "Create User", type: "link" },
     ],
   },
@@ -149,13 +133,31 @@ export const HODMENU = [
   },
 
   {
-    title: "Settings",
-    icon: Settings,
+    title: "Courses",
+    icon: Book,
     type: "sub",
+    active: false,
     children: [
-      { path: "/settings/profile", title: "Your Profile", type: "link" },
-      { path: "/settings/logout", title: "Logout", type: "link" },
+      {
+        path: "/courses/list-courses",
+        title: "All Courses",
+        type: "link",
+      },
+      {
+        path: "/courses/create-courses",
+        title: "Create Courses",
+        type: "link",
+      },
     ],
+  },
+
+  {
+    title: "Profile",
+    icon: User,
+    path: "/settings/profile",
+    type: "link",
+    badgeType: "primary",
+    active: false,
   },
 ];
 
@@ -186,13 +188,12 @@ export const FACULTYMENU = [
   },
 
   {
-    title: "Settings",
-    icon: Settings,
-    type: "sub",
-    children: [
-      { path: "/settings/profile", title: "Your Profile", type: "link" },
-      { path: "/settings/logout", title: "Logout", type: "link" },
-    ],
+    title: "Profile",
+    icon: User,
+    path: "/settings/profile",
+    type: "link",
+    badgeType: "primary",
+    active: false,
   },
 ];
 
@@ -222,12 +223,11 @@ export const OBSERVERMENU = [
   },
 
   {
-    title: "Settings",
-    icon: Settings,
-    type: "sub",
-    children: [
-      { path: "/settings/profile", title: "Your Profile", type: "link" },
-      { path: "/settings/logout", title: "Logout", type: "link" },
-    ],
+    title: "Profile",
+    icon: User,
+    path: "/settings/profile",
+    type: "link",
+    badgeType: "primary",
+    active: false,
   },
 ];

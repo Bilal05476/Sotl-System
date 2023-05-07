@@ -38,6 +38,10 @@ import Observationrubric from "../components/observations/observation-rubric";
 import ScheulingPage from "../components/observations/scheuling-page";
 import { useStateValue } from "../StateProvider";
 import EditProfile from "../components/settings/edit-profile";
+import Createcourses from "../components/courses/create-courses";
+import Listcourses from "../components/courses/list-courses";
+
+const URL = process.env.PUBLIC_URL;
 
 const LayoutRoutes = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -99,161 +103,158 @@ const LayoutRoutes = () => {
     <Fragment>
       <Routes>
         <Route element={<App />}>
-          <Route path={`${process.env.PUBLIC_URL}/`} element={<Dashboard />} />
-          <Route
-            path={`${process.env.PUBLIC_URL}/dashboard`}
-            element={<Dashboard />}
-          />
+          <Route path={`${URL}/`} element={<Dashboard />} />
+          <Route path={`${URL}/dashboard`} element={<Dashboard />} />
 
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/products/physical/category`}
+            path={`${URL}/products/physical/category`}
             element={<Category />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/products/physical/sub-category`}
+            path={`${URL}/products/physical/sub-category`}
             element={<Subcategory />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/products/physical/product-list`}
+            path={`${URL}/products/physical/product-list`}
             element={<Productlist />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/products/physical/product-detail`}
+            path={`${URL}/products/physical/product-detail`}
             element={<Productdetail />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/products/physical/add-product`}
+            path={`${URL}/products/physical/add-product`}
             element={<Addproduct />}
           /> */}
 
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/products/digital/digital-category`}
+            path={`${URL}/products/digital/digital-category`}
             element={<Digitalcategory />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/products/digital/digital-sub-category`}
+            path={`${URL}/products/digital/digital-sub-category`}
             element={<Digitalsubcategory />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/products/digital/digital-product-list`}
+            path={`${URL}/products/digital/digital-product-list`}
             element={<Digitalprolist />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/products/digital/digital-add-product`}
+            path={`${URL}/products/digital/digital-add-product`}
             element={<Digitaladdpro />}
           /> */}
 
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/sales/orders`}
+            path={`${URL}/sales/orders`}
             element={<Orders />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/sales/transactions`}
+            path={`${URL}/sales/transactions`}
             element={<Transactionsales />}
           />
 
           <Route
-            path={`${process.env.PUBLIC_URL}/coupons/list-coupons`}
+            path={`${URL}/coupons/list-coupons`}
             element={<ListCoupons />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/coupons/create-coupons`}
+            path={`${URL}/coupons/create-coupons`}
             element={<Createcoupons />}
           /> */}
 
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/pages/list-page`}
+            path={`${URL}/pages/list-page`}
             element={<ListPages />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/pages/create-page`}
+            path={`${URL}/pages/create-page`}
             element={<Createpage />}
           />
 
-          <Route path={`${process.env.PUBLIC_URL}/media`} element={<Media />} />
+          <Route path={`${URL}/media`} element={<Media />} />
 
           <Route
-            path={`${process.env.PUBLIC_URL}/menus/list-menu`}
+            path={`${URL}/menus/list-menu`}
             element={<Listmenu />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/menus/create-menu`}
+            path={`${URL}/menus/create-menu`}
             element={<Createmenu />}
           /> */}
 
+          <Route path={`${URL}/users/list-user`} element={<Listuser />} />
+          <Route path={`${URL}/users/create-user`} element={<Createuser />} />
+
           <Route
-            path={`${process.env.PUBLIC_URL}/users/list-user`}
-            element={<Listuser />}
+            path={`${URL}/courses/list-courses`}
+            element={<Listcourses />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/users/create-user`}
-            element={<Createuser />}
+            path={`${URL}/courses/create-courses`}
+            element={<Createcourses />}
           />
 
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/list-observation`}
+            path={`${URL}/observations/list-observation`}
             element={<Listobservation />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/detail-observation/:id`}
+            path={`${URL}/observations/detail-observation/:id`}
             element={<Detailobservation />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/observation-rubric/:id`}
+            path={`${URL}/observations/observation-rubric/:id`}
             element={<Observationrubric />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/create-observation`}
+            path={`${URL}/observations/create-observation`}
             element={<Createobservation />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/observations/observation-scheduling/:id`}
+            path={`${URL}/observations/observation-scheduling/:id`}
             element={<ScheulingPage />}
           />
 
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/vendors/list_vendors`}
+            path={`${URL}/vendors/list_vendors`}
             element={<Listvendors />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/vendors/create-vendors`}
+            path={`${URL}/vendors/create-vendors`}
             element={<Createvendors />}
           />
 
           <Route
-            path={`${process.env.PUBLIC_URL}/localization/transactions`}
+            path={`${URL}/localization/transactions`}
             element={<Translations />}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/localization/currency-rates`}
+            path={`${URL}/localization/currency-rates`}
             element={<Rates />}
           /> */}
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/localization/taxes`}
+            path={`${URL}/localization/taxes`}
             element={<Taxes />}
           />
 
           <Route
-            path={`${process.env.PUBLIC_URL}/reports/report`}
+            path={`${URL}/reports/report`}
             element={<Reports />}
           /> */}
 
+          <Route path={`${URL}/settings/profile`} element={<Profile />} />
           <Route
-            path={`${process.env.PUBLIC_URL}/settings/profile`}
-            element={<Profile />}
-          />
-          <Route
-            path={`${process.env.PUBLIC_URL}/settings/edit-profile`}
+            path={`${URL}/settings/edit-profile`}
             element={<EditProfile />}
           />
 
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/invoice`}
+            path={`${URL}/invoice`}
             element={<Invoice />}
           /> */}
 
           {/* <Route
-            path={`${process.env.PUBLIC_URL}/data-table`}
+            path={`${URL}/data-table`}
             element={<Datatable />}
           /> */}
         </Route>
