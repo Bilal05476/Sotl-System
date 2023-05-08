@@ -198,14 +198,13 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
   } = req.body;
 
   const reqData = {
-    observationsId,
     teachingPlanByObserver,
     refelectionPlanByObserver,
     artifacts,
     teachingPlanByFaculty,
     refelectionPlanByFaculty,
-    timeSlotsByFaculty,
-    timeSlotByObserver,
+    timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
+    timeSlotByObserver: timeSlotByObserver && timeSlotByObserver,
     scheduledOn,
     status,
   };
