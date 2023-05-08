@@ -188,7 +188,8 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     teachingPlanByFaculty,
     refelectionPlanByFaculty,
     timeSlotsByFaculty,
-    timeSlotsByObserver,
+    timeSlotByObserver,
+    scheduledOn,
     status,
   } = req.body;
 
@@ -200,7 +201,8 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     teachingPlanByFaculty,
     refelectionPlanByFaculty,
     timeSlotsByFaculty,
-    timeSlotsByObserver,
+    timeSlotByObserver,
+    scheduledOn,
     status,
   };
 
@@ -223,7 +225,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
         },
         data: {
           observationStatus: "Ongoing",
-          timeSlot: timeSlotsByObserver[0],
+          starting: scheduledOn,
           meetings: {
             create: {
               informedObservation: {

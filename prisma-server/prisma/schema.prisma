@@ -73,7 +73,8 @@ model ObsScheduling {
     refelectionPlanByObserver String?
     artifacts                 String?
     timeSlotsByFaculty        Json?
-    timeSlotsByObserver       Json?
+    timeSlotByObserver        Json?
+    scheduledOn               String?
     status                    Status       @default(Pending)
     observation               Observations @relation(fields: [observationsId], references: [id])
     observationsId            Int          @unique
