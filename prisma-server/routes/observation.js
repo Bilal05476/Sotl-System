@@ -8,9 +8,10 @@ import {
 import { protectInitiateObs } from "../middleware/protectRoutes.js";
 
 obsRoutes.route("/observation/initiate").post(protectInitiateObs, initiate);
-obsRoutes.route("/observation/scheduling").post(obsScheduleCreate);
-
-obsRoutes.route("/observation/scheduling/:id").put(obsScheduleCycle);
+obsRoutes
+  .route("/observation/scheduling")
+  .post(obsScheduleCreate)
+  .put(obsScheduleCycle);
 
 obsRoutes.route("/observations").get(getAllObs);
 obsRoutes.route("/observation/:id").get(getObs);

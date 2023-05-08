@@ -75,7 +75,7 @@ model ObsScheduling {
     timeSlotsByFaculty        CourseSlots[] @relation("Faculty")
     timeSlotByObserver        CourseSlots[] @relation("Observer")
     scheduledOn               String?
-    status                    Status        @default(Pending)
+    status                    Status        @default(Ongoing)
     observation               Observations  @relation(fields: [observationsId], references: [id])
     observationsId            Int           @unique
     // course                    Courses      @relation(fields: [courseId], references: [id])

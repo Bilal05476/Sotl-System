@@ -147,6 +147,7 @@ export const getObs = asyncHandler(async (req, res) => {
 });
 
 export const obsScheduleCreate = asyncHandler(async (req, res) => {
+  // await prisma.obsScheduling.deleteMany();
   const {
     teachingPlanByObserver,
     refelectionPlanByObserver,
@@ -179,6 +180,9 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc   update observation schedyling
+// @route  PUT api/observations/scheduling
+// @access Private for Observer and Faculty
 export const obsScheduleCycle = asyncHandler(async (req, res) => {
   const {
     observationsId,
@@ -208,13 +212,13 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 
   const existedReq = await prisma.obsScheduling.findFirst({
     where: {
-      id: Number(req.params.id),
+      observationsId,
     },
   });
   if (existedReq) {
     const updatedReq = await prisma.obsScheduling.update({
       where: {
-        id: Number(req.params.id),
+        observationsId,
       },
       data: reqData,
     });
