@@ -203,8 +203,9 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     artifacts,
     teachingPlanByFaculty,
     refelectionPlanByFaculty,
-    timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
-    timeSlotByObserver: timeSlotByObserver && timeSlotByObserver,
+    timeSlotsByFaculty: timeSlotsByFaculty,
+    timeSlotByObserver:
+      timeSlotByObserver.length > 0 ? timeSlotByObserver : null,
     scheduledOn,
     status,
   };
