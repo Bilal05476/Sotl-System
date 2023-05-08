@@ -45,7 +45,8 @@ model User {
 // -> User => Observations
 model Observations {
     id                  Int            @id @default(autoincrement()) // auto-inc
-    timeSlot            String?
+    starting            String?
+    ending              String?
     observationStatus   Status         @default(Pending)
     observationProgress Int            @default(0)
     semester            String

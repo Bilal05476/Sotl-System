@@ -79,7 +79,8 @@ export const getAllObs = asyncHandler(async (req, res) => {
         name: item.hod.name,
         email: item.hod.email,
       },
-      timeSlot: item.timeSlot,
+      starting: item.starting,
+      ending: item.ending,
       semester: item.semester,
       observationProgress: item.observationProgress,
       observationStatus: item.observationStatus,
@@ -131,7 +132,8 @@ export const getObs = asyncHandler(async (req, res) => {
       },
       meetings: Obs.meetings,
       obsRequest: Obs.obsRequest,
-      timeSlot: Obs.timeSlot,
+      starting: item.starting,
+      ending: item.ending,
       semester: Obs.semester,
       observationProgress: Obs.observationProgress,
       observationScore: Obs.observationScore,
@@ -153,10 +155,9 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
   } = req.body;
 
   const reqData = {
-    teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
-    refelectionPlanByObserver:
-      refelectionPlanByObserver && refelectionPlanByObserver,
-    artifacts: artifacts && artifacts,
+    teachingPlanByObserver,
+    refelectionPlanByObserver,
+    artifacts,
     observationsId,
   };
 
@@ -167,7 +168,7 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
     },
   });
   if (findSheduling) {
-    res.status(500).json({
+    res.status(400).json({
       error: "Scheduling already created for this observation by observer!",
     });
   } else {
@@ -230,22 +231,27 @@ export const preObsAcceptedByObserver = asyncHandler(async (req, res) => {
 
 export const obsScheduleCycle = asyncHandler(async (req, res) => {
   const {
+    observationsId,
+    teachingPlanByObserver,
+    refelectionPlanByObserver,
+    artifacts,
     teachingPlanByFaculty,
     refelectionPlanByFaculty,
     timeSlotsByFaculty,
     timeSlotsByObserver,
     status,
-    course,
   } = req.body;
 
   const reqData = {
-    teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
-    refelectionPlanByFaculty:
-      refelectionPlanByFaculty && refelectionPlanByFaculty,
-    timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
-    timeSlotsByObserver: timeSlotsByObserver && timeSlotsByObserver,
-    status: status && status,
-    courseId: course && course,
+    observationsId,
+    teachingPlanByObserver,
+    refelectionPlanByObserver,
+    artifacts,
+    teachingPlanByFaculty,
+    refelectionPlanByFaculty,
+    timeSlotsByFaculty,
+    timeSlotsByObserver,
+    status,
   };
 
   const existedReq = await prisma.obsScheduling.findFirst({
@@ -260,52 +266,43 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
       },
       data: reqData,
     });
-    if (updatedReq.status === "Completed") {
-      await prisma.observations.update({
+    if (status === "Completed") {
+      const scheduledObs = await prisma.observations.update({
         where: {
-          id: updatedReq.observationsId,
+          id: observationsId,
         },
         data: {
           observationStatus: "Ongoing",
-          timeSlot: updatedReq.timeSlotsByObserver,
-          courseId: updatedReq.courseId,
-        },
-      });
-      const newMeeting = await prisma.meetings.create({
-        data: {
-          observationsId: updatedReq.observationsId,
-        },
-      });
-      if (newMeeting) {
-        await prisma.informed.create({
-          data: {
-            meetingId: newMeeting.id,
-          },
-        });
-        const Obs = await prisma.observations.findFirst({
-          where: { id: updatedReq.observationsId },
-          include: {
-            faculty: true,
-            observer: true,
-            hod: true,
-            obsRequest: true,
-            meetings: {
-              include: {
-                informedObservation: true,
-                postObservation: true,
-                uninformedObservation: true,
-                professionalDPlan: true,
+          timeSlot: timeSlotsByObserver[0],
+          meetings: {
+            create: {
+              informedObservation: {
+                create: {},
               },
             },
           },
-        });
-        res.status(200).json(Obs);
-      }
+        },
+        include: {
+          faculty: true,
+          observer: true,
+          hod: true,
+          obsRequest: true,
+          course: true,
+          meetings: {
+            include: {
+              informedObservation: true,
+              postObservation: true,
+              uninformedObservation: true,
+              professionalDPlan: true,
+            },
+          },
+        },
+      });
+      res.status(200).json(scheduledObs);
     } else {
       res.status(200).json(updatedReq);
     }
   } else {
     res.status(404).json({ error: "Request not exist!" });
   }
-  // res.status(200).json(existedReq);
 });
