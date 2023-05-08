@@ -197,16 +197,30 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     status,
   } = req.body;
 
+  let fids = [];
+  if (timeSlotsByFaculty.length > 0) {
+    timeSlotsByFaculty.map((item) => fids.push({ id: item }));
+  }
+  let oids = [];
+  if (timeSlotByObserver.length > 0) {
+    timeSlotByObserver.map((item) => oids.push({ id: item }));
+  }
+
   const reqData = {
     teachingPlanByObserver,
     refelectionPlanByObserver,
     artifacts,
     teachingPlanByFaculty,
     refelectionPlanByFaculty,
-    timeSlotsByFaculty,
-    timeSlotByObserver,
+    timeSlotsByFaculty: {
+      set: fids,
+    },
+    timeSlotByObserver: {
+      set: oids,
+    },
     scheduledOn,
     status,
+    teachingPlanByFaculty,
   };
 
   const existedReq = await prisma.obsScheduling.findFirst({
