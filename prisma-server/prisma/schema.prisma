@@ -153,18 +153,20 @@ model Courses {
 }
 
 model CourseSlots {
-    id                String         @id @unique
+    id                String          @id @unique
     time              String
     location          String
     day               String
-    course            Courses        @relation(fields: [courseId], references: [id])
+    course            Courses         @relation(fields: [courseId], references: [id])
     courseId          String
-    faculty           User?          @relation(fields: [facultyId], references: [id])
+    faculty           User?           @relation(fields: [facultyId], references: [id])
     facultyId         Int?
-    obsSlotByFaculty  ObsScheduling? @relation("Faculty", fields: [slotFacultyId], references: [id])
-    slotFacultyId     Int?
-    obsSlotByObserver ObsScheduling? @relation("Observer", fields: [slotObserverId], references: [id])
-    slotObserverId    Int?
+    // obsSlotByFaculty  ObsScheduling? @relation("Faculty", fields: [slotFacultyId], references: [id])
+    // slotFacultyId     Int?
+    // obsSlotByObserver ObsScheduling? @relation("Observer", fields: [slotObserverId], references: [id])
+    // slotObserverId    Int?
+    obsSlotByFaculty  ObsScheduling[] @relation("Faculty")
+    obsSlotByObserver ObsScheduling[] @relation("Observer")
 }
 
 // -> User => Feedbacks
