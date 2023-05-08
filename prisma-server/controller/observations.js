@@ -97,10 +97,30 @@ export const getObs = asyncHandler(async (req, res) => {
   const Obs = await prisma.observations.findFirst({
     where: { id: Number(req.params.id) },
     include: {
-      faculty: true,
-      observer: true,
-      hod: true,
-      obsRequest: true,
+      faculty: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+      observer: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+      hod: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+      obsRequest: {
+        include: {
+          timeSlotByObserver: true,
+          timeSlotsByFaculty: true,
+        },
+      },
       course: true,
       meetings: {
         include: {
@@ -113,34 +133,7 @@ export const getObs = asyncHandler(async (req, res) => {
     },
   });
   if (Obs) {
-    const returnObs = {
-      id: Obs.id,
-      faculty: {
-        id: Obs.faculty.id,
-        name: Obs.faculty.name,
-        email: Obs.faculty.email,
-      },
-      observer: {
-        id: Obs.observer.id,
-        name: Obs.observer.name,
-        email: Obs.observer.email,
-      },
-      hod: {
-        id: Obs.hod.id,
-        name: Obs.hod.name,
-        email: Obs.hod.email,
-      },
-      meetings: Obs.meetings,
-      obsRequest: Obs.obsRequest,
-      starting: item.starting,
-      ending: item.ending,
-      semester: Obs.semester,
-      observationProgress: Obs.observationProgress,
-      observationScore: Obs.observationScore,
-      observationStatus: Obs.observationStatus,
-      course: Obs.course,
-    };
-    res.status(200).json(returnObs);
+    res.status(200).json(Obs);
   } else {
     res.status(404).json({ error: "No observation found!" });
   }
