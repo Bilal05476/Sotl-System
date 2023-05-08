@@ -66,18 +66,18 @@ model Observations {
 
 // -> Observations => ObsScheduling
 model ObsScheduling {
-    id                        Int          @id @default(autoincrement()) // auto-inc
+    id                        Int           @id @default(autoincrement()) // auto-inc
     teachingPlanByFaculty     String?
     teachingPlanByObserver    String?
     refelectionPlanByFaculty  String? // optional for faculty
     refelectionPlanByObserver String?
     artifacts                 String?
-    timeSlotsByFaculty        Json?
-    timeSlotByObserver        Json?
+    timeSlotsByFaculty        CourseSlots[] @relation("Faculty")
+    timeSlotByObserver        CourseSlots[] @relation("Observer")
     scheduledOn               String?
-    status                    Status       @default(Pending)
-    observation               Observations @relation(fields: [observationsId], references: [id])
-    observationsId            Int          @unique
+    status                    Status        @default(Pending)
+    observation               Observations  @relation(fields: [observationsId], references: [id])
+    observationsId            Int           @unique
     // course                    Courses      @relation(fields: [courseId], references: [id])
     // courseId                  Int          @unique
 }
@@ -153,14 +153,18 @@ model Courses {
 }
 
 model CourseSlots {
-    id        String  @id @unique
-    time      String
-    location  String
-    day       String
-    course    Courses @relation(fields: [courseId], references: [id])
-    courseId  String
-    faculty   User?   @relation(fields: [facultyId], references: [id])
-    facultyId Int?
+    id                String         @id @unique
+    time              String
+    location          String
+    day               String
+    course            Courses        @relation(fields: [courseId], references: [id])
+    courseId          String
+    faculty           User?          @relation(fields: [facultyId], references: [id])
+    facultyId         Int?
+    obsSlotByFaculty  ObsScheduling? @relation("Faculty", fields: [slotFacultyId], references: [id])
+    slotFacultyId     Int?
+    obsSlotByObserver ObsScheduling? @relation("Observer", fields: [slotObserverId], references: [id])
+    slotObserverId    Int?
 }
 
 // -> User => Feedbacks
