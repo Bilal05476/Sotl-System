@@ -56,6 +56,7 @@ import {
 } from "reactstrap";
 import { useStateValue } from "../StateProvider";
 import { NavLink } from "react-router-dom";
+import { fetchCoursesAndUsers, fetchUserData } from "./Endpoints";
 
 ChartJS.register(
   CategoryScale,
@@ -108,9 +109,10 @@ const Dashboard = () => {
             : [3, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 1],
         borderColor: "gold",
         backgroundColor: "gold",
-        borderWidth: 1,
+        borderWidth: 0,
         barPercentage: 0.5,
-        // categoryPercentage: 0.4,
+        borderRadius: 5,
+        categoryPercentage: 0.4,
         label: "Pending",
       },
       {
@@ -125,9 +127,10 @@ const Dashboard = () => {
 
         borderColor: "lightblue",
         backgroundColor: "lightblue",
-        borderWidth: 1,
+        borderWidth: 0,
         barPercentage: 0.5,
-        // categoryPercentage: 0.4,
+        borderRadius: 5,
+        categoryPercentage: 0.4,
         label: "Ongoing",
       },
       {
@@ -142,9 +145,10 @@ const Dashboard = () => {
 
         borderColor: "#040b5b",
         backgroundColor: "#040b5b",
-        borderWidth: 1,
+        borderWidth: 0,
         barPercentage: 0.5,
-        // categoryPercentage: 0.4,
+        borderRadius: 5,
+        categoryPercentage: 0.4,
         label: "Completed",
       },
     ],
@@ -273,14 +277,18 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, userData, users }, dispatch] = useStateValue();
+  const [{ user, userData, usersandcourses }, dispatch] = useStateValue();
+  useEffect(() => {
+    if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
+    fetchUserData(user.id, dispatch);
+  }, []);
 
   let faculty = 0;
   let observer = 0;
   let hod = 0;
   let campusD = 0;
   {
-    users.map((item) => {
+    usersandcourses?.users.map((item) => {
       if (item.role === "Faculty") faculty += 1;
       if (item.role === "Observer") observer += 1;
       if (item.role === "Head_of_Department") hod += 1;
@@ -288,60 +296,6 @@ const Dashboard = () => {
       return null;
     });
   }
-
-  async function fetchData() {
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const data = await res.json();
-      dispatch({
-        type: "SET_USER_DATA",
-        payload: data,
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  async function fetchHodData() {
-    try {
-      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const courseres = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/courses/`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const udata = await usersres.json();
-      const cdata = await courseres.json();
-      dispatch({
-        type: "SET_USERS",
-        payload: udata,
-      });
-      dispatch({
-        type: "SET_COURSES",
-        payload: cdata,
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  useEffect(() => {
-    if (user.role === "Head_of_Department") fetchHodData();
-    fetchData();
-  }, []);
 
   return (
     <Fragment>
@@ -520,7 +474,7 @@ const Dashboard = () => {
 
           {user.role === "Faculty" && (
             <>
-              <Col xl="3 xl-25" md="6">
+              <Col xl="6 xl-50" md="6" sm="3">
                 <Card className="o-hidden widget-cards">
                   <CardBody className="bg-primary">
                     <Media className="static-top-widget row">
@@ -531,11 +485,11 @@ const Dashboard = () => {
                       </div>
                       <Media body className="col-8">
                         <span className="m-0">Observations</span>
-                        {/* {userData && ( */}
+
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
-                            end={userData?.observations.length}
+                            end={userData?.observations?.length}
                           />
                           <small> All Time</small>
                         </h3>
@@ -544,7 +498,7 @@ const Dashboard = () => {
                   </CardBody>
                 </Card>
               </Col>
-              <Col xl="3 xl-25" md="6">
+              <Col xl="6 xl-50" md="6" sm="3">
                 <Card className="o-hidden widget-cards">
                   <CardBody className="bg-primary">
                     <Media className="static-top-widget row">
@@ -559,7 +513,7 @@ const Dashboard = () => {
                         <h3 className="mb-0">
                           <CountUp
                             className="counter"
-                            end={userData?.courses?.length}
+                            end={userData?.slots?.length}
                           />
                           <small> Assinged</small>
                         </h3>
@@ -570,7 +524,7 @@ const Dashboard = () => {
                   </CardBody>
                 </Card>
               </Col>
-              <Col xl="3 xl-50" md="6">
+              {/* <Col xl="3 xl-50" md="6">
                 <Card className="o-hidden widget-cards">
                   <CardBody className="bg-primary">
                     <Media className="static-top-widget row">
@@ -597,8 +551,7 @@ const Dashboard = () => {
                                 ?.professionalDPlan?.status === "Ongoing" &&
                                 "Professional Development"}
                               {userData.observations.length === 0 && "--"}
-                              {!userData.observations?.meetings && "--"}
-                              {/* {!userData.observations && "--"} */}
+                              {!userData.observations[0].meetings && "--"}
                             </span>
                           )}
                           {!userData && <Loader size={22} />}
@@ -607,7 +560,7 @@ const Dashboard = () => {
                     </Media>
                   </CardBody>
                 </Card>
-              </Col>
+              </Col> */}
             </>
           )}
 
@@ -658,7 +611,7 @@ const Dashboard = () => {
           <Col xl="6 xl-100">
             <Card>
               <CardHeader>
-                <h5>Observations</h5>
+                <h5>Your Observations</h5>
               </CardHeader>
               {userData && (
                 <CardBody>
@@ -689,10 +642,10 @@ const Dashboard = () => {
                             <td className="digits">{item.observer.name}</td>
                             <td className="digits">{item.hod.name}</td>
                             <td className="digits">
-                              {item.timeSlot ? item.timeSlot : "--"}
+                              {item.starting ? item.starting : "--"}
                             </td>
                             <td className="digits">
-                              {item.timeSlot ? item.timeSlot : "--"}
+                              {item.ending ? item.ending : "--"}
                             </td>
                             <td className="digits">
                               {item.observationProgress}%
@@ -718,7 +671,7 @@ const Dashboard = () => {
                             </td>
                           </tr>
                         ))}
-                        {userData.observations.length === 0 && (
+                        {userData?.observations.length === 0 && (
                           <tr>
                             <td className="text-center" colSpan={10}>
                               No Observations!
@@ -727,7 +680,7 @@ const Dashboard = () => {
                         )}
                       </tbody>
                     </Table>
-                    {userData.observations.length > 0 && (
+                    {userData?.observations.length > 0 && (
                       <NavLink
                         to="/observations/list-observation"
                         className="btn btn-primary"
@@ -744,11 +697,11 @@ const Dashboard = () => {
               )}
             </Card>
           </Col>
-          {user.role === "Faculty" || user.role === "Observer" ? (
+          {user.role === "Faculty" ? (
             <Col xl="6 xl-100">
               <Card>
                 <CardHeader>
-                  <h5>Courses</h5>
+                  <h5>Your Courses</h5>
                 </CardHeader>
                 {userData && (
                   <CardBody>
@@ -756,18 +709,20 @@ const Dashboard = () => {
                       <Table borderless>
                         <thead>
                           <tr>
-                            <th scope="col">Id</th>
+                            <th scope="col">Course Code</th>
+                            <th scope="col">Section Code</th>
                             <th scope="col">Course</th>
-                            <th scope="col">TimeSlot</th>
-                            <th scope="col">Room</th>
+                            <th scope="col">Time slot</th>
+                            <th scope="col">Location</th>
                             <th scope="col">Campus</th>
                             <th scope="col">Department</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {userData.courses.map((item) => (
+                          {userData?.slots.map((item) => (
                             <tr key={item.id}>
-                              <td>{item.id}</td>
+                              <td className="digits">{item.course.id}</td>
+                              <td className="digits">{item.id}</td>
                               <td className="digits">{item.course.name}</td>
                               <td className="digits">
                                 {item.day} {item.time}
@@ -781,16 +736,16 @@ const Dashboard = () => {
                               </td>
                             </tr>
                           ))}
-                          {userData.courses.length === 0 && (
+                          {userData?.slots.length === 0 && (
                             <tr>
                               <td className="text-center" colSpan={6}>
-                                No Courses!
+                                No Courses Slots!
                               </td>
                             </tr>
                           )}
                         </tbody>
                       </Table>
-                      {userData.courses.length > 0 && (
+                      {userData?.slots.length > 0 && (
                         <a href="#javaScript" className="btn btn-primary">
                           View All Courses
                         </a>

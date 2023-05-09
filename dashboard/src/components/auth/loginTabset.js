@@ -133,7 +133,8 @@ const LoginTabset = () => {
               </div> */}
               <div className="form-button">
                 <Button
-                  className="d-flex align-items-center"
+                  className="text-center 
+                  d-flex align-items-center justify-content-center w-100"
                   color="primary"
                   style={{ cursor: loader && "progress" }}
                   onClick={() => handleSignin()}

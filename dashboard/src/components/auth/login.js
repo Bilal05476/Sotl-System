@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import LoginTabset from "./loginTabset";
 import Slider from "react-slick";
-import logo from "../../assets/images/dashboard/white-version.png";
+import logo from "../../assets/images/sotllogo.png";
 import "../../assets/scss/slick.scss";
 import "../../assets/scss/slick-theme.scss";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
@@ -22,9 +22,13 @@ const Login = () => {
             <Row>
               <Col className="col-md-5 p-0 card-left">
                 <Card className="bg-primary">
-                  <div className="svg-icon">
-                    <img alt="IU Logo" src={logo} className="Img-fluid" />
-                  </div>
+                  {/* <div className="svg-icon"> */}
+                  <img
+                    alt="SOTL Logo"
+                    src={logo}
+                    className="Img-fluid site-logo"
+                  />
+                  {/* </div> */}
                   <Slider className="single-item" {...settings}>
                     <div>
                       <div>

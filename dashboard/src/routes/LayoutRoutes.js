@@ -40,63 +40,15 @@ import { useStateValue } from "../StateProvider";
 import EditProfile from "../components/settings/edit-profile";
 import Createcourses from "../components/courses/create-courses";
 import Listcourses from "../components/courses/list-courses";
+import { fetchCoursesAndUsers, fetchUserData } from "../components/Endpoints";
 
 const URL = process.env.PUBLIC_URL;
-
 const LayoutRoutes = () => {
   const [{ user }, dispatch] = useStateValue();
-  async function fetchData() {
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const data = await res.json();
-      dispatch({
-        type: "SET_USER_DATA",
-        payload: data,
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  async function fetchHodData() {
-    try {
-      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const courseres = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/courses/`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const udata = await usersres.json();
-      const cdata = await courseres.json();
-      dispatch({
-        type: "SET_USERS",
-        payload: udata,
-      });
-      dispatch({
-        type: "SET_COURSES",
-        payload: cdata,
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
 
   useEffect(() => {
-    if (user.role === "Head_of_Department") fetchHodData();
-    fetchData();
+    if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
+    fetchUserData(user.id, dispatch);
   }, []);
 
   return (

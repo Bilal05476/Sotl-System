@@ -1,19 +1,17 @@
 export const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
-  // for testting
   darkTheme: false,
-  users: [],
   allObs: [],
-  courses: [],
   userData: null,
+  usersandcourses: null,
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "SET_USERS":
+    case "SET_USERS_COURSES":
       return {
         ...state,
-        users: action.payload,
+        usersandcourses: action.payload,
       };
 
     case "SET_USER":
@@ -36,11 +34,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         allObs: action.payload,
-      };
-    case "SET_COURSES":
-      return {
-        ...state,
-        courses: action.payload,
       };
     case "TOGGLE_THEME":
       return {
