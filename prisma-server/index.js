@@ -39,6 +39,10 @@ app.use("/api", obsRoutes);
 import courseRoutes from "./routes/course.js";
 app.use("/api", courseRoutes);
 
+// utility
+import utilityRoutes from "./routes/utility.js";
+app.use("/api", utilityRoutes);
+
 app.use("/", (req, res) => {
   res.status(200).json({
     message: `Server Running!`,

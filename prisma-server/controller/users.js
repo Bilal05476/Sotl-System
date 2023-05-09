@@ -6,28 +6,25 @@ import asyncHandler from "express-async-handler";
 // @route  Get api/users
 // @access Private
 export const getUsers = asyncHandler(async (req, res) => {
-  const allUsers = await prisma.user.findMany({});
-  let filtered = [];
-  allUsers.map((item) => {
-    filtered.push({
-      id: item.id,
-      name: item.name,
-      email: item.email,
-      phone: item.phone,
-      avatar: item.avatar,
-      designation: item.designation,
-      dateOfBirth: item.dateOfBirth,
-      institute: item.institute,
-      degree: item.degree,
-      starting: item.starting,
-      ending: item.ending,
-      role: item.role,
-      campus: item.campus,
-      department: item.department,
-    });
+  const allUsers = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      avatar: true,
+      designation: true,
+      dateOfBirth: true,
+      institute: true,
+      degree: true,
+      starting: true,
+      ending: true,
+      role: true,
+      campus: true,
+      department: true,
+    },
   });
-
-  res.status(200).json(filtered);
+  res.status(200).json(allUsers);
 });
 
 // @desc   Get User by id
@@ -40,7 +37,19 @@ export const userById = asyncHandler(async (req, res) => {
     },
     select: {
       id: true,
+      name: true,
+      email: true,
+      phone: true,
+      avatar: true,
+      designation: true,
+      dateOfBirth: true,
+      institute: true,
+      degree: true,
+      starting: true,
+      ending: true,
       role: true,
+      campus: true,
+      department: true,
     },
   });
   if (validate) {
@@ -166,6 +175,20 @@ export const userById = asyncHandler(async (req, res) => {
     });
     /// send user data to client side
     const userData = {
+      id: validate.id,
+      name: validate.name,
+      email: validate.email,
+      phone: validate.phone,
+      avatar: validate.avatar,
+      designation: validate.designation,
+      dateOfBirth: validate.dateOfBirth,
+      institute: validate.institute,
+      degree: validate.degree,
+      starting: validate.starting,
+      ending: validate.ending,
+      role: validate.role,
+      campus: validate.campus,
+      department: validate.department,
       observations: user.facultyObs
         ? user.facultyObs
         : user.observerObs
@@ -173,7 +196,7 @@ export const userById = asyncHandler(async (req, res) => {
         : user.hodObs
         ? user.hodObs
         : [],
-      courses: user.courseSlots,
+      slots: user.courseSlots,
     };
     res.status(200).json(userData);
   } else {

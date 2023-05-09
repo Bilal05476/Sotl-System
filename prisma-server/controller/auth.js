@@ -87,6 +87,23 @@ export const loginUser = asyncHandler(async (req, res) => {
     where: {
       email,
     },
+    select: {
+      id: true,
+      name: true,
+      password: true,
+      email: true,
+      phone: true,
+      avatar: true,
+      designation: true,
+      dateOfBirth: true,
+      institute: true,
+      degree: true,
+      starting: true,
+      ending: true,
+      role: true,
+      campus: true,
+      department: true,
+    },
   });
 
   if (validate) {
@@ -95,15 +112,24 @@ export const loginUser = asyncHandler(async (req, res) => {
     if (checkPassword) {
       // create user session token
       const token = generateJWT(validate.id);
-      validate.token = token;
 
-      const exclude = ["password"];
-      const loginUser = Object.keys(validate).reduce((acc, key) => {
-        if (!exclude.includes(key)) {
-          acc[key] = validate[key];
-        }
-        return acc;
-      }, {});
+      const loginUser = {
+        id: validate.id,
+        name: validate.name,
+        email: validate.email,
+        phone: validate.phone,
+        avatar: validate.avatar,
+        designation: validate.designation,
+        dateOfBirth: validate.dateOfBirth,
+        institute: validate.institute,
+        degree: validate.degree,
+        starting: validate.starting,
+        ending: validate.ending,
+        role: validate.role,
+        campus: validate.campus,
+        department: validate.department,
+        token,
+      };
 
       /// send user data to client side
       res.status(200).json(loginUser);
@@ -120,14 +146,19 @@ export const loginUser = asyncHandler(async (req, res) => {
 // @access Private (only user update their own data)
 export const updateUser = asyncHandler(async (req, res) => {
   const {
+    name,
+    email,
+    phone,
     avatar,
+    designation,
     dateOfBirth,
     institute,
     degree,
     starting,
     ending,
-    phone,
-    designation,
+    role,
+    campus,
+    department,
   } = req.body;
 
   // Validate if user exist in our database
@@ -144,25 +175,38 @@ export const updateUser = asyncHandler(async (req, res) => {
         id: user.id,
       },
       data: {
+        name,
+        email,
+        phone,
+        avatar,
+        designation,
         dateOfBirth,
         institute,
         degree,
         starting,
         ending,
-        phone,
-        avatar,
-        designation,
+        role,
+        campus,
+        department,
+      },
+      select: {
+        name: true,
+        email: true,
+        phone: true,
+        avatar: true,
+        designation: true,
+        dateOfBirth: true,
+        institute: true,
+        degree: true,
+        starting: true,
+        ending: true,
+        role: true,
+        campus: true,
+        department: true,
       },
     });
     updateUser.token = token;
-    const exclude = ["password"];
-    const filtered = Object.keys(updateUser).reduce((acc, key) => {
-      if (!exclude.includes(key)) {
-        acc[key] = updateUser[key];
-      }
-      return acc;
-    }, {});
-    res.status(200).json(filtered);
+    res.status(200).json(updateUser);
   } else {
     res.status(404).json({ error: "No User Exist" });
   }
