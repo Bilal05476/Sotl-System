@@ -5,6 +5,20 @@
 //   background-color: #fff !important;
 
 // }
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("../../fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+  /* font-weight: 400; */
+  font-style: normal;
+}
+@font-face {
+  font-family: "Poppins-Semibold";
+  src: url("../../fonts/Poppins/Poppins-SemiBold.ttf");
+  font-style: normal;
+}
+* {
+  font-family: "Poppins-Semibold";
+}
 .card-left {
   z-index: 1;
 }
@@ -735,6 +749,7 @@ a {
       padding: 50px;
       // background-image: url("../../images/dashboard/login-bg.png");
       background-position: center;
+      border-radius: 10px;
       box-shadow: 1px 5px 24px 0 rgba(132, 128, 255, 0.8);
     }
     .form-group {
@@ -742,12 +757,13 @@ a {
     }
     .site-logo {
       width: 100%;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      // background-color: #6fa2d8;
     }
     p {
       color: rgba($white, 0.9);
       font-size: 15px;
-      line-height: 2;
+      line-height: 1.5;
       text-align: center;
     }
     h3 {
@@ -766,7 +782,7 @@ a {
 }
 .auth-form {
   .form-control {
-    border-radius: 25px;
+    border-radius: 10px;
     padding: 9px 25px;
     border: 1px solid #eaeaea;
     outline: none;

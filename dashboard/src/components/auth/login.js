@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import LoginTabset from "./loginTabset";
 import Slider from "react-slick";
-import logo from "../../assets/images/sotllogo.png";
+import logo from "../../assets/images/sotllogo-white.png";
 import "../../assets/scss/slick.scss";
 import "../../assets/scss/slick-theme.scss";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";

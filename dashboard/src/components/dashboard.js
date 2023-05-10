@@ -101,54 +101,55 @@ const Dashboard = () => {
       {
         data:
           streamFilter === "Yearly"
-            ? [21]
+            ? [66]
             : streamFilter === "Half Yearly"
-            ? [12, 9]
+            ? [27, 39]
             : streamFilter === "Quaterly"
-            ? [6, 6, 4, 5]
-            : [3, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 1],
-        borderColor: "gold",
-        backgroundColor: "gold",
+            ? [14, 13, 22, 17]
+            : [5, 3, 6, 5, 4, 4, 8, 9, 5, 4, 3, 10],
+        // borderColor: "gold",
+        backgroundColor: "#FCC43E",
         borderWidth: 0,
-        barPercentage: 0.5,
-        borderRadius: 5,
-        categoryPercentage: 0.4,
+        barPercentage: 0.7,
+        borderRadius: 2,
+        categoryPercentage: 0.5,
         label: "Pending",
       },
+
       {
         data:
           streamFilter === "Yearly"
-            ? [19]
+            ? [67]
             : streamFilter === "Half Yearly"
-            ? [10, 9]
+            ? [33, 34]
             : streamFilter === "Quaterly"
-            ? [5, 5, 4, 5]
-            : [2, 3, 0, 1, 3, 1, 1, 3, 0, 1, 3, 1],
+            ? [14, 19, 17, 17]
+            : [5, 6, 3, 7, 9, 3, 4, 7, 6, 5, 8, 4],
 
-        borderColor: "lightblue",
-        backgroundColor: "lightblue",
+        // borderColor: "lightblue",
+        backgroundColor: "#4AD6EF",
         borderWidth: 0,
-        barPercentage: 0.5,
-        borderRadius: 5,
-        categoryPercentage: 0.4,
+        barPercentage: 0.7,
+        borderRadius: 2,
+        categoryPercentage: 0.5,
         label: "Ongoing",
       },
       {
         data:
           streamFilter === "Yearly"
-            ? [39]
+            ? [75]
             : streamFilter === "Half Yearly"
-            ? [22, 17]
+            ? [36, 39]
             : streamFilter === "Quaterly"
-            ? [11, 11, 5, 12]
-            : [3, 5, 3, 1, 3, 7, 2, 2, 1, 3, 7, 2],
+            ? [19, 17, 22, 17]
+            : [6, 8, 5, 4, 6, 7, 8, 8, 4, 6, 7, 4],
 
-        borderColor: "#040b5b",
-        backgroundColor: "#040b5b",
+        // borderColor: "#040b5b",
+        backgroundColor: "#5673ED",
         borderWidth: 0,
-        barPercentage: 0.5,
-        borderRadius: 5,
-        categoryPercentage: 0.4,
+        barPercentage: 0.7,
+        borderRadius: 2,
+        categoryPercentage: 0.5,
         label: "Completed",
       },
     ],
@@ -719,7 +720,7 @@ const Dashboard = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {userData?.slots.map((item) => (
+                          {userData?.slots?.map((item) => (
                             <tr key={item.id}>
                               <td className="digits">{item.course.id}</td>
                               <td className="digits">{item.id}</td>

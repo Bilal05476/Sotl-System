@@ -136,7 +136,7 @@ const LoginTabset = () => {
                   className="text-center 
                   d-flex align-items-center justify-content-center w-100"
                   color="primary"
-                  style={{ cursor: loader && "progress" }}
+                  style={{ cursor: loader && "progress", borderRadius: "10px" }}
                   onClick={() => handleSignin()}
                 >
                   {loader ? <Loader /> : "Login"}

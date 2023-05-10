@@ -56,31 +56,35 @@ const Detail_observation = () => {
           <Row className="mb-3">
             <Col className="xl-25">
               {" "}
-              <span style={{ fontWeight: "500" }}>Faculty:</span>{" "}
+              <span style={{ fontWeight: "200" }}>Faculty:</span>{" "}
               {obsDetail?.faculty.name}
             </Col>
             <Col className="xl-25">
               {" "}
-              <span style={{ fontWeight: "500" }}>Observer:</span>{" "}
+              <span style={{ fontWeight: "200" }}>Observer:</span>{" "}
               {obsDetail?.observer.name}
             </Col>
             <Col className="xl-25 text-right">
-              <span style={{ fontWeight: "500" }}>Head of Department:</span>{" "}
+              <span style={{ fontWeight: "200" }}>Head of Department:</span>{" "}
               {obsDetail?.hod.name}
             </Col>
             <Col className="xl-25 text-right">
-              <span style={{ fontWeight: "500" }}>Progress:</span>{" "}
+              <span style={{ fontWeight: "200" }}>Progress:</span>{" "}
               {obsDetail?.observationProgress}%
-              <span style={{ marginLeft: "1rem", fontWeight: "500" }}>
+              <span style={{ marginLeft: "1rem", fontWeight: "200" }}>
                 Status:
               </span>{" "}
               {obsDetail?.observationStatus}
             </Col>
           </Row>
           <Row className="mb-3">
+            <Col className="xl-50 text-right">
+              <span style={{ fontWeight: "200" }}>Course:</span>{" "}
+              {obsDetail?.course.name}
+            </Col>
             <Col className="xl-25 text-right">
-              <span style={{ fontWeight: "500" }}>(F):</span> Faculty
-              <span style={{ marginLeft: "1rem", fontWeight: "500" }}>
+              <span style={{ fontWeight: "200" }}>(F):</span> Faculty
+              <span style={{ marginLeft: "1rem", fontWeight: "200" }}>
                 (O):
               </span>{" "}
               Observer
@@ -92,7 +96,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("scheduling")}
                 style={{
-                  backgroundColor: "#040b5b",
+                  backgroundColor: "#5673ED",
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",
@@ -113,7 +117,6 @@ const Detail_observation = () => {
                         <thead>
                           <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Course</th>
                             <th scope="col">Time (O)</th>
                             <th scope="col">Time (F)</th>
                             <th scope="col">Artifact</th>
@@ -127,21 +130,18 @@ const Detail_observation = () => {
                         <tbody>
                           <tr>
                             <td>{obsDetail?.obsRequest.id}</td>
+
                             <td className="digits">
-                              {obsDetail?.obsRequest.course
-                                ? obsDetail?.obsRequest.course
-                                : "--"}
+                              {obsDetail?.obsRequest?.timeSlotByObserver?.map(
+                                (item) => `${item.time} `
+                              )}
                             </td>
                             <td className="digits">
                               {obsDetail?.obsRequest?.timeSlotsByFaculty?.map(
-                                (item) => `${item} `
+                                (item) => `${item.time} `
                               )}
                             </td>
-                            <td className="digits">
-                              {obsDetail?.obsRequest?.timeSlotsByObserver?.map(
-                                (item) => `${item} `
-                              )}
-                            </td>
+
                             <td className="digits">
                               {obsDetail?.obsRequest.artifacts ? (
                                 <a
@@ -278,7 +278,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("informed")}
                 style={{
-                  backgroundColor: "#040b5b",
+                  backgroundColor: "#5673ED",
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",
@@ -336,13 +336,13 @@ const Detail_observation = () => {
                       </Table>
                       <NavLink
                         style={{
-                          backgroundColor: "#040b5b",
+                          backgroundColor: "#f8f8f9",
                           outline: "none",
                           boxShadow: "none",
                           padding: "15px",
                           width: "20%",
                           border: "0",
-                          color: "#fff",
+                          color: "#5673ED",
                           borderRadius: "5px",
                           marginRight: "1rem",
                           fontWeight: "700",
@@ -351,6 +351,7 @@ const Detail_observation = () => {
                           cursor: "pointer",
                           textDecoration: "none",
                           textAlign: "center",
+                          boxShadow: "2px 2px 3px #0000004e",
                         }}
                         to={`/observations/${id}/observation-rubric`}
                       >
@@ -376,7 +377,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("post")}
                 style={{
-                  backgroundColor: "#040b5b",
+                  backgroundColor: "#5673ED",
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",
@@ -414,7 +415,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("uninformed")}
                 style={{
-                  backgroundColor: "#040b5b",
+                  backgroundColor: "#5673ED",
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",

@@ -3,27 +3,12 @@ import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
 import TabsetObservation from "./tabset-observation";
 import { useStateValue } from "../../StateProvider";
+import { fetchCoursesAndUsers } from "../Endpoints";
 
 const Create_observation = () => {
   const [{}, dispatch] = useStateValue();
-  async function fetchUsers() {
-    try {
-      const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const udata = await usersres.json();
-      dispatch({
-        type: "SET_USERS",
-        payload: udata,
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
   useEffect(() => {
-    fetchUsers();
+    fetchCoursesAndUsers(dispatch);
   }, []);
   return (
     <Fragment>

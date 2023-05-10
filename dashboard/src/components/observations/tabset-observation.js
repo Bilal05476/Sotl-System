@@ -7,7 +7,7 @@ import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 
 const TabsetObservation = () => {
-  const [{ user, users }] = useStateValue();
+  const [{ user, usersandcourses }] = useStateValue();
   const [createObs, setCreateObs] = useState({
     facultyId: "Select",
     observerId: "Select",
@@ -79,6 +79,7 @@ const TabsetObservation = () => {
       info("Provide select course for faculty!");
     } else {
       postObs();
+      // console.log(obsDetail);
     }
   };
 
@@ -107,7 +108,7 @@ const TabsetObservation = () => {
       if (data.error) {
         errors(data.error);
       } else {
-        setFCourses(data.courses);
+        setFCourses(data.slots);
       }
     } else {
       setCreateObs({
@@ -117,6 +118,10 @@ const TabsetObservation = () => {
       });
     }
   };
+
+  // return null;
+
+  console.log(fCourses);
 
   return (
     <Fragment>
@@ -145,7 +150,7 @@ const TabsetObservation = () => {
                   }
                 >
                   <option value="Select">Select</option>
-                  {users.map(
+                  {usersandcourses?.users.map(
                     (item) =>
                       item.role === "Observer" && (
                         <option key={item.id} value={item.id}>
@@ -170,7 +175,7 @@ const TabsetObservation = () => {
                   onChange={(e) => onSelectFaculty(e)}
                 >
                   <option value="Select">Select</option>
-                  {users.map(
+                  {usersandcourses?.users.map(
                     (item) =>
                       item.role === "Faculty" && (
                         <option key={item.id} value={item.id}>
