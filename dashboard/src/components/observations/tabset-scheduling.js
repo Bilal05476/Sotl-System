@@ -1,9 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 // import { useStateValue } from "../../StateProvider";
 import { errors, successes, info } from "../../constants/Toasters";
+
+import FileBase from "react-file-base64";
+
+const BASEURL = process.env.REACT_APP_BASE_URL;
 
 const TabsetScheduling = ({ role }) => {
   //   const [{ user, users }] = useStateValue();
@@ -27,16 +31,13 @@ const TabsetScheduling = ({ role }) => {
     };
     // const editObsDetail = {}
     async function postObs() {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/observation/scheduling`,
-        {
-          method: "POST",
-          body: JSON.stringify(obsDetail),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
+      const res = await fetch(`${BASEURL}/observation/scheduling`, {
+        method: "POST",
+        body: JSON.stringify(obsDetail),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
       const data = await res.json();
 
       if (data.error) {
@@ -78,6 +79,26 @@ const TabsetScheduling = ({ role }) => {
     }
   };
 
+  const fetchObservation = async (id) => {
+    try {
+      const res = await fetch(`${BASEURL}/observation/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      const data = await res.json();
+
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchObservation(id);
+  });
+
   return (
     <Fragment>
       <Tabs>
@@ -91,7 +112,7 @@ const TabsetScheduling = ({ role }) => {
                 <span>*</span> Teaching Plan
               </Label>
               <div className="col-xl-8 col-md-7">
-                <Input
+                {/* <Input
                   className="form-control"
                   id="validationCustom3"
                   type="file"
@@ -103,6 +124,15 @@ const TabsetScheduling = ({ role }) => {
                       teaching: e.target.value,
                     })
                   }
+                /> */}
+                <FileBase
+                  className="form-control"
+                  type="file"
+                  required={true}
+                  multiple={false}
+                  onDone={({ base64 }) =>
+                    setObsSchedule({ ...obsSchedule, teaching: base64 })
+                  }
                 />
               </div>
             </FormGroup>
@@ -111,7 +141,7 @@ const TabsetScheduling = ({ role }) => {
                 {role === "Observer" && <span>*</span>} Reflection Plan
               </Label>
               <div className="col-xl-8 col-md-7">
-                <Input
+                {/* <Input
                   className="form-control"
                   id="validationCustom3"
                   type="file"
@@ -123,6 +153,15 @@ const TabsetScheduling = ({ role }) => {
                       reflection: e.target.value,
                     })
                   }
+                /> */}
+                <FileBase
+                  className="form-control"
+                  type="file"
+                  required={true}
+                  multiple={false}
+                  onDone={({ base64 }) =>
+                    setObsSchedule({ ...obsSchedule, reflection: base64 })
+                  }
                 />
               </div>
             </FormGroup>
@@ -132,7 +171,7 @@ const TabsetScheduling = ({ role }) => {
                   <span>*</span> Artifacts
                 </Label>
                 <div className="col-xl-8 col-md-7">
-                  <Input
+                  {/* <Input
                     className="form-control"
                     id="validationCustom3"
                     type="file"
@@ -144,6 +183,16 @@ const TabsetScheduling = ({ role }) => {
                         artifacts: e.target.value,
                       })
                     }
+                  /> */}
+
+                  <FileBase
+                    className="form-control"
+                    type="file"
+                    required={true}
+                    multiple={false}
+                    onDone={({ base64 }) =>
+                      setObsSchedule({ ...obsSchedule, artifacts: base64 })
+                    }
                   />
                 </div>
               </FormGroup>
@@ -151,7 +200,7 @@ const TabsetScheduling = ({ role }) => {
             {role === "Faculty" && (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">
-                  <span>*</span> Provide Slots
+                  <span>*</span> Provide Avalaible Slots
                 </Label>
                 <div className="col-xl-8 col-md-7 d-flex flex-wrap">
                   <TimeSlotSpan

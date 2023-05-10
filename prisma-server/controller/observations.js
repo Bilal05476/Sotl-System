@@ -121,7 +121,11 @@ export const getObs = asyncHandler(async (req, res) => {
           timeSlotsByFaculty: true,
         },
       },
-      course: true,
+      course: {
+        include: {
+          slots: true,
+        },
+      },
       meetings: {
         include: {
           informedObservation: true,

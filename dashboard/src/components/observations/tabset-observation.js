@@ -33,44 +33,55 @@ const TabsetObservation = () => {
         ...createObs,
         loader: true,
       });
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/observation/initiate`,
-        {
-          method: "POST",
-          body: JSON.stringify(obsDetail),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      const data = await res.json();
-      if (data.error) {
-        toast.dismiss(toastId.current);
-        setCreateObs({
-          ...createObs,
-          loader: false,
-        });
-        errors(data.error);
-      } else {
-        toast.dismiss(toastId.current);
-        setCreateObs({
-          ...createObs,
-          loader: false,
-        });
-        successes("Observation initiated successfully!");
 
-        setTimeout(() => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/observation/initiate`,
+          {
+            method: "POST",
+            body: JSON.stringify(obsDetail),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        const data = await res.json();
+        if (data.error) {
+          toast.dismiss(toastId.current);
           setCreateObs({
             ...createObs,
-            facultyId: "Select",
-            observerId: "Select",
-            semester: "Select",
-            courseId: "",
+            loader: false,
           });
-        }, 2000);
+          errors(data.error);
+        } else {
+          toast.dismiss(toastId.current);
+          setCreateObs({
+            ...createObs,
+            loader: false,
+          });
+          successes("Observation initiated successfully!");
+
+          setTimeout(() => {
+            setCreateObs({
+              ...createObs,
+              facultyId: "Select",
+              observerId: "Select",
+              semester: "Select",
+              courseId: "",
+            });
+          }, 2000);
+        }
+      } catch (error) {
+        toast.dismiss(toastId.current);
+        errors("Something went wrong, Try again in a moment!");
+        setCreateObs({
+          ...createObs,
+          loader: false,
+        });
       }
     }
+
     if (observerId === "Select" || facultyId === "Select") {
       info("Provide select observer and faculty both!");
     } else if (semester === "Select") {

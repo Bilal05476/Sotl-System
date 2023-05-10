@@ -60,7 +60,7 @@ model Observations {
     obsRequest          ObsScheduling?
     meetings            Meetings?
     course              Courses        @relation(fields: [courseId], references: [id])
-    courseId            String         @unique
+    courseId            String
     feedbacks           FeedBacks[]
 }
 
@@ -140,14 +140,14 @@ model PDP {
 
 // -> User => Courses
 model Courses {
-    id              String        @id @unique
+    id              String         @id @unique
     name            String
     department      Department
     campus          Campus
     // scheduling    ObsScheduling?
-    observation     Observations?
-    isElective      Boolean       @default(false)
-    isDepthElective Boolean       @default(false)
+    observation     Observations[]
+    isElective      Boolean        @default(false)
+    isDepthElective Boolean        @default(false)
     slots           CourseSlots[]
     credits         Int
 }

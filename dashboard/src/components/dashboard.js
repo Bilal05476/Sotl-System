@@ -737,7 +737,7 @@ const Dashboard = () => {
                               </td>
                             </tr>
                           ))}
-                          {userData?.slots.length === 0 && (
+                          {userData?.slots?.length === 0 && (
                             <tr>
                               <td className="text-center" colSpan={6}>
                                 No Courses Slots!
@@ -746,7 +746,7 @@ const Dashboard = () => {
                           )}
                         </tbody>
                       </Table>
-                      {userData?.slots.length > 0 && (
+                      {userData?.slots?.length > 0 && (
                         <a href="#javaScript" className="btn btn-primary">
                           View All Courses
                         </a>
