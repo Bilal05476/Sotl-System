@@ -18,6 +18,10 @@ import { Eye, Loader } from "react-feather";
 const List_observation = () => {
   const [{ user, userData }, dispatch] = useStateValue();
 
+  const pendingColor = "#FCC43E";
+  const ongoingColor = "#4AD6EF";
+  const completeColor = "#5673ED";
+
   async function fetchData() {
     try {
       const res = await fetch(
@@ -69,7 +73,6 @@ const List_observation = () => {
                     <Table borderless>
                       <thead>
                         <tr>
-                          <th scope="col">Id</th>
                           <th scope="col">Course</th>
                           <th scope="col">Semester</th>
                           <th scope="col">Faculty</th>
@@ -85,29 +88,46 @@ const List_observation = () => {
                       <tbody>
                         {userData?.observations.map((item) => (
                           <tr key={item.id}>
-                            <td>{item.id}</td>
                             <td className="digits">{item.course.name}</td>
                             <td className="digits">{item.semester}</td>
                             <td className="digits">{item.faculty.name}</td>
                             <td className="digits">{item.observer.name}</td>
                             <td className="digits">{item.hod.name}</td>
                             <td className="digits">
-                              {item.timeSlot ? item.timeSlot : "--"}
+                              {item.starting ? item.starting : "--"}
                             </td>
                             <td className="digits">
-                              {item.timeSlot ? item.timeSlot : "--"}
+                              {item.ending ? item.ending : "--"}
                             </td>
-                            <td className="digits">
-                              {item.observationProgress}%
+                            <td>
+                              <div className="progress-showcase">
+                                <div className="progress" style={{ height: 8 }}>
+                                  <div
+                                    className="progress-bar"
+                                    style={{
+                                      width: item.observationProgress,
+                                      backgroundColor:
+                                        item.observationStatus === "Ongoing"
+                                          ? ongoingColor
+                                          : completeColor,
+                                    }}
+                                    role="progressbar"
+                                    aria-valuenow="50"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                  ></div>
+                                </div>
+                              </div>
                             </td>
                             <td
-                              className={`digits ${
-                                item.observationStatus === "Ongoing"
-                                  ? "text-primary"
-                                  : item.observationStatus === "Completed"
-                                  ? "text-success"
-                                  : "text-danger"
-                              }`}
+                              style={{
+                                color:
+                                  item.observationStatus === "Ongoing"
+                                    ? ongoingColor
+                                    : item.observationStatus === "Completed"
+                                    ? completeColor
+                                    : pendingColor,
+                              }}
                             >
                               {item.observationStatus}
                             </td>

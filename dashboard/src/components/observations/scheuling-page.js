@@ -4,7 +4,7 @@ import Breadcrumb from "../common/breadcrumb";
 import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import TabsetScheduling from "./tabset-scheduling";
 
-const Scheuling_Page = () => {
+const Scheduling_Page = () => {
   const [{ user }] = useStateValue();
   return (
     <Fragment>
@@ -27,4 +27,4 @@ const Scheuling_Page = () => {
   );
 };
 
-export default Scheuling_Page;
+export default Scheduling_Page;

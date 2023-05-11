@@ -14,7 +14,7 @@ const Profile = () => {
       <Breadcrumb title="Profile" parent="Settings" />
       <Container fluid={true}>
         <Row>
-          <Col xl="4">
+          <Col xl="12">
             <Card>
               <CardBody>
                 <div className="profile-details text-center">
@@ -51,7 +51,7 @@ const Profile = () => {
                     </div>
                   </div> */}
                 </div>
-                <hr />
+                {/* <hr /> */}
                 {/* <div className="project-status">
                   <h5 className="f-w-600 f-16">
                     {user.role.replaceAll("_", " ")}
@@ -111,10 +111,17 @@ const Profile = () => {
               </CardBody>
             </Card>
           </Col>
-          <Col xl="8">
+          <Col xl="12">
             <Card className="profile-card">
               <CardBody>
-                <TabsetProfile user={user} />
+                <TabsetProfile user={user} personal={true} academic={false} />
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xl="12">
+            <Card className="profile-card">
+              <CardBody>
+                <TabsetProfile user={user} personal={false} academic={true} />
               </CardBody>
             </Card>
           </Col>

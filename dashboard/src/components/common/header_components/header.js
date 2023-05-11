@@ -102,20 +102,20 @@ const Header = () => {
                 </a>
               </li>
 
-              <li className="onhover-dropdown">
+              {/* <li className="onhover-dropdown">
                 <Bell />
                 <span className="badge rounded-pill badge-primary pull-right notification-badge">
                   3
                 </span>
                 <span className="dot"></span>
                 <Notification />
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <a href="#javaScript" onClick={showRightSidebar}>
                   <MessageSquare />
                   <span className="dot"></span>
                 </a>
-              </li>
+              </li> */}
               <UserMenu />
             </ul>
             <div

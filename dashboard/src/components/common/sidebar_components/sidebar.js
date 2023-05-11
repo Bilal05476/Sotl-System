@@ -9,7 +9,7 @@ import {
 } from "../../../constants/menu";
 
 // image import
-import logo from "../../../assets/images/dashboard/white-version.png";
+import logo from "../../../assets/images/sotllogo-white.png";
 import { useStateValue } from "../../../StateProvider";
 
 const Sidebar = () => {
@@ -231,9 +231,7 @@ const Sidebar = () => {
           <div className="logo-wrapper">
             <Link to={`${process.env.PUBLIC_URL}/dashboard`}>
               <img
-                width={150}
-                height={150}
-                className="blur-up lazyloaded"
+                className="blur-up lazyloaded img-fluid my-5"
                 src={logo}
                 alt="sotl system"
               />

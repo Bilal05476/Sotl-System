@@ -35,7 +35,7 @@ import Listobservation from "../components/observations/list-observation";
 import Createobservation from "../components/observations/create-observation";
 import Detailobservation from "../components/observations/detail-observation";
 import Observationrubric from "../components/observations/observation-rubric";
-import ScheulingPage from "../components/observations/scheuling-page";
+import SchedulingPage from "../components/observations/scheuling-page";
 import { useStateValue } from "../StateProvider";
 import EditProfile from "../components/settings/edit-profile";
 import Createcourses from "../components/courses/create-courses";
@@ -164,7 +164,7 @@ const LayoutRoutes = () => {
           />
           <Route
             path={`${URL}/observations/observation-scheduling/:id`}
-            element={<ScheulingPage />}
+            element={<SchedulingPage />}
           />
 
           {/* <Route

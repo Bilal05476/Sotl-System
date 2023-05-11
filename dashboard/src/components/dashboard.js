@@ -75,6 +75,9 @@ ChartJS.register(
 
 const Dashboard = () => {
   const [streamFilter, setStreamFilter] = useState("Monthly");
+  const pendingColor = "#FCC43E";
+  const ongoingColor = "#4AD6EF";
+  const completeColor = "#5673ED";
   const lineData = {
     labels:
       streamFilter === "Yearly"
@@ -108,7 +111,7 @@ const Dashboard = () => {
             ? [14, 13, 22, 17]
             : [5, 3, 6, 5, 4, 4, 8, 9, 5, 4, 3, 10],
         // borderColor: "gold",
-        backgroundColor: "#FCC43E",
+        backgroundColor: pendingColor,
         borderWidth: 0,
         barPercentage: 0.7,
         borderRadius: 2,
@@ -127,7 +130,7 @@ const Dashboard = () => {
             : [5, 6, 3, 7, 9, 3, 4, 7, 6, 5, 8, 4],
 
         // borderColor: "lightblue",
-        backgroundColor: "#4AD6EF",
+        backgroundColor: ongoingColor,
         borderWidth: 0,
         barPercentage: 0.7,
         borderRadius: 2,
@@ -145,7 +148,7 @@ const Dashboard = () => {
             : [6, 8, 5, 4, 6, 7, 8, 8, 4, 6, 7, 4],
 
         // borderColor: "#040b5b",
-        backgroundColor: "#5673ED",
+        backgroundColor: completeColor,
         borderWidth: 0,
         barPercentage: 0.7,
         borderRadius: 2,
@@ -278,7 +281,7 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, userData, usersandcourses }, dispatch] = useStateValue();
+  const [{ user, usersandcourses }, dispatch] = useStateValue();
   useEffect(() => {
     if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
     fetchUserData(user.id, dispatch);
@@ -297,6 +300,30 @@ const Dashboard = () => {
       return null;
     });
   }
+
+  const userData = {
+    observations: [
+      {
+        id: 1,
+        course: {
+          name: "Hello Course",
+        },
+        faculty: {
+          name: "Haris",
+        },
+        observer: {
+          name: "Krish",
+        },
+        hod: {
+          name: "Sheraz",
+        },
+        observationProgress: 40,
+        semester: "Fall",
+        starting: "2023-05-10",
+        observationStatus: "Ongoing",
+      },
+    ],
+  };
 
   return (
     <Fragment>
@@ -477,15 +504,22 @@ const Dashboard = () => {
             <>
               <Col xl="6 xl-50" md="6" sm="3">
                 <Card className="o-hidden widget-cards">
-                  <CardBody className="bg-primary">
+                  <CardBody style={{ backgroundColor: ongoingColor }}>
                     <Media className="static-top-widget row">
                       <div className="icons-widgets col-4">
                         <div className="align-self-center text-center">
-                          <Users className="font-primary" />
+                          <Users color={ongoingColor} />
                         </div>
                       </div>
                       <Media body className="col-8">
-                        <span className="m-0">Observations</span>
+                        <span
+                          className="m-0"
+                          style={{
+                            color: "#fff",
+                          }}
+                        >
+                          Observations
+                        </span>
 
                         <h3 className="mb-0">
                           <CountUp
@@ -620,7 +654,6 @@ const Dashboard = () => {
                     <Table borderless>
                       <thead>
                         <tr>
-                          <th scope="col">Id</th>
                           <th scope="col">Course</th>
                           <th scope="col">Semester</th>
                           <th scope="col">Faculty</th>
@@ -636,7 +669,6 @@ const Dashboard = () => {
                       <tbody>
                         {userData?.observations.map((item) => (
                           <tr key={item.id}>
-                            <td>{item.id}</td>
                             <td className="digits">{item.course.name}</td>
                             <td className="digits">{item.semester}</td>
                             <td className="digits">{item.faculty.name}</td>
@@ -648,17 +680,35 @@ const Dashboard = () => {
                             <td className="digits">
                               {item.ending ? item.ending : "--"}
                             </td>
-                            <td className="digits">
-                              {item.observationProgress}%
+                            <td>
+                              <div className="progress-showcase">
+                                <div className="progress" style={{ height: 8 }}>
+                                  <div
+                                    className="progress-bar"
+                                    style={{
+                                      width: item.observationProgress,
+                                      backgroundColor:
+                                        item.observationStatus === "Ongoing"
+                                          ? ongoingColor
+                                          : completeColor,
+                                    }}
+                                    role="progressbar"
+                                    aria-valuenow="50"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                  ></div>
+                                </div>
+                              </div>
                             </td>
                             <td
-                              className={`digits ${
-                                item.observationStatus === "Ongoing"
-                                  ? "text-primary"
-                                  : item.observationStatus === "Completed"
-                                  ? "text-success"
-                                  : "text-danger"
-                              }`}
+                              style={{
+                                color:
+                                  item.observationStatus === "Ongoing"
+                                    ? ongoingColor
+                                    : item.observationStatus === "Completed"
+                                    ? completeColor
+                                    : pendingColor,
+                              }}
                             >
                               {item.observationStatus}
                             </td>
