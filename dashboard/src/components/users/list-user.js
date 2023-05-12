@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import data from "../../assets/data/listUser";
@@ -6,9 +6,14 @@ import Datatable from "../common/datatable";
 import { Card, CardBody, CardHeader, Container, Table } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { Loader } from "react-feather";
+import { fetchCoursesAndUsers } from "../Endpoints";
 
 const List_user = () => {
-  const [{ users, user }] = useStateValue();
+  const [{ usersandcourses, user }, dispatch] = useStateValue();
+  useEffect(() => {
+    fetchCoursesAndUsers(dispatch);
+  }, []);
+
   return (
     <Fragment>
       <Breadcrumb title="User List" parent="Users" />
@@ -21,7 +26,7 @@ const List_user = () => {
               </Link>
             )}
           </CardHeader>
-          {users && (
+          {usersandcourses && (
             <CardBody>
               <div className="user-status table-responsive latest-order-table">
                 <Table borderless>
@@ -37,7 +42,7 @@ const List_user = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {users.map((item) => (
+                    {usersandcourses.users.map((item) => (
                       <tr key={item.id}>
                         <td>{item.id}</td>
                         {/* <td className="digits">{item?.avatar}</td> */}
@@ -55,7 +60,7 @@ const List_user = () => {
                         </td>
                       </tr>
                     ))}
-                    {users.length === 0 && (
+                    {usersandcourses.users.length === 0 && (
                       <tr>
                         <td className="text-center" colSpan={10}>
                           No Users!
@@ -67,7 +72,7 @@ const List_user = () => {
               </div>
             </CardBody>
           )}
-          {!users && (
+          {!usersandcourses && (
             <Loader style={{ display: "block", margin: "0.5rem auto" }} />
           )}
         </Card>

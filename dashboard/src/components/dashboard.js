@@ -84,8 +84,8 @@ const Dashboard = () => {
         ? ["2023"]
         : streamFilter === "Half Yearly"
         ? ["Jan - June", "July - Dec"]
-        : streamFilter === "Quaterly"
-        ? ["Jan - Mar", "Apr - June", "July - Sep", "Oct - Dec"]
+        : streamFilter === "Semesters"
+        ? ["Spring", "Summer", "Fall"]
         : [
             "Jan",
             "Feb",
@@ -107,8 +107,8 @@ const Dashboard = () => {
             ? [66]
             : streamFilter === "Half Yearly"
             ? [27, 39]
-            : streamFilter === "Quaterly"
-            ? [14, 13, 22, 17]
+            : streamFilter === "Semesters"
+            ? [19, 25, 22]
             : [5, 3, 6, 5, 4, 4, 8, 9, 5, 4, 3, 10],
         // borderColor: "gold",
         backgroundColor: pendingColor,
@@ -125,8 +125,8 @@ const Dashboard = () => {
             ? [67]
             : streamFilter === "Half Yearly"
             ? [33, 34]
-            : streamFilter === "Quaterly"
-            ? [14, 19, 17, 17]
+            : streamFilter === "Semesters"
+            ? [21, 23, 23]
             : [5, 6, 3, 7, 9, 3, 4, 7, 6, 5, 8, 4],
 
         // borderColor: "lightblue",
@@ -143,8 +143,8 @@ const Dashboard = () => {
             ? [75]
             : streamFilter === "Half Yearly"
             ? [36, 39]
-            : streamFilter === "Quaterly"
-            ? [19, 17, 22, 17]
+            : streamFilter === "Semesters"
+            ? [23, 29, 21]
             : [6, 8, 5, 4, 6, 7, 8, 8, 4, 6, 7, 4],
 
         // borderColor: "#040b5b",
@@ -281,7 +281,7 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, usersandcourses }, dispatch] = useStateValue();
+  const [{ user, usersandcourses, userData }, dispatch] = useStateValue();
   useEffect(() => {
     if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
     fetchUserData(user.id, dispatch);
@@ -300,30 +300,6 @@ const Dashboard = () => {
       return null;
     });
   }
-
-  const userData = {
-    observations: [
-      {
-        id: 1,
-        course: {
-          name: "Hello Course",
-        },
-        faculty: {
-          name: "Haris",
-        },
-        observer: {
-          name: "Krish",
-        },
-        hod: {
-          name: "Sheraz",
-        },
-        observationProgress: 40,
-        semester: "Fall",
-        starting: "2023-05-10",
-        observationStatus: "Ongoing",
-      },
-    ],
-  };
 
   return (
     <Fragment>
@@ -609,21 +585,25 @@ const Dashboard = () => {
                       streamFilter={streamFilter}
                       setStreamFilter={setStreamFilter}
                       text="Monthly"
+                      ongoingColor={ongoingColor}
                     />
                     <ObservationStreamFilter
                       streamFilter={streamFilter}
                       setStreamFilter={setStreamFilter}
-                      text="Quaterly"
+                      text="Semesters"
+                      ongoingColor={ongoingColor}
                     />
                     <ObservationStreamFilter
                       streamFilter={streamFilter}
                       setStreamFilter={setStreamFilter}
                       text="Half Yearly"
+                      ongoingColor={ongoingColor}
                     />
                     <ObservationStreamFilter
                       streamFilter={streamFilter}
                       setStreamFilter={setStreamFilter}
                       text="Yearly"
+                      ongoingColor={ongoingColor}
                     />
                   </div>
                 </CardHeader>
@@ -1561,17 +1541,22 @@ const Dashboard = () => {
   );
 };
 
-const ObservationStreamFilter = ({ streamFilter, setStreamFilter, text }) => {
+const ObservationStreamFilter = ({
+  streamFilter,
+  setStreamFilter,
+  text,
+  ongoingColor,
+}) => {
   return (
     <span
       style={{
-        border: "1px solid #040b5b",
+        border: `1px solid ${ongoingColor}`,
         borderRadius: "15px",
-        color: streamFilter === text ? "#fff" : "#040b5b",
+        color: streamFilter === text ? "#fff" : ongoingColor,
         padding: "0.2rem 0.6rem",
         marginLeft: "0.5rem",
         cursor: "pointer",
-        backgroundColor: streamFilter === text && "#040b5b",
+        backgroundColor: streamFilter === text && ongoingColor,
       }}
       onClick={() => setStreamFilter(text)}
     >

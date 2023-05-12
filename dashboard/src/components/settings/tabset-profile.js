@@ -68,19 +68,19 @@ const TabsetProfile = ({ user, personal, academic }) => {
                   <tbody>
                     <tr>
                       <td>Institute:</td>
-                      <td>{user.institute}</td>
+                      <td>{user?.institute ? user.institute : "---"}</td>
                     </tr>
                     <tr>
                       <td>Degree:</td>
-                      <td>{user.degree}</td>
+                      <td>{user?.degree ? user.degree : "---"}</td>
                     </tr>
                     <tr>
                       <td>Degree Starting:</td>
-                      <td>{user.starting}</td>
+                      <td>{user?.starting ? user.starting : "---"}</td>
                     </tr>
                     <tr>
                       <td>Degree Ending:</td>
-                      <td>{user.ending}</td>
+                      <td>{user?.ending ? user.ending : "---"}</td>
                     </tr>
                   </tbody>
                 </Table>

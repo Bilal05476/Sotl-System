@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
 import { XCircle } from "react-feather";
@@ -6,9 +6,10 @@ import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { successes, errors, info, warning } from "../../constants/Toasters";
+import { fetchCoursesAndUsers } from "../Endpoints";
 
 const TabsetUser = () => {
-  const [{ courses, user }] = useStateValue();
+  const [{ usersandcourses, user }, dispatch] = useStateValue();
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState([]);
   const [createUser, setCreateUser] = useState({
@@ -122,7 +123,9 @@ const TabsetUser = () => {
         ...createUser,
         courseId: cid,
       });
-      const [temp] = courses.filter((item) => item.id === Number(cid));
+      const [temp] = usersandcourses.courses.filter(
+        (item) => item.id === Number(cid)
+      );
       const filteredSlots = temp.slots.filter((item) => item.faculty === null);
       if (filteredSlots.length === 0) {
         info("No available slots for that course!");
@@ -148,13 +151,17 @@ const TabsetUser = () => {
         slotsId: [...slotsId, id],
       });
       const [findSlot] = slots.filter((item) => item.id === id);
-      const [findCourse] = courses.filter(
+      const [findCourse] = usersandcourses.courses.filter(
         (item) => item.id === findSlot.courseId
       );
       findSlot.name = findCourse.name;
       setSelectedSlot([...selectedSlot, findSlot]);
     }
   };
+
+  useEffect(() => {
+    fetchCoursesAndUsers(dispatch);
+  }, []);
 
   return (
     <Fragment>
@@ -328,7 +335,7 @@ const TabsetUser = () => {
                       onChange={(e) => onCourseSelect(e)}
                     >
                       <option value="Select">Select</option>
-                      {courses.map((item) => (
+                      {usersandcourses.courses.map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.name}
                         </option>

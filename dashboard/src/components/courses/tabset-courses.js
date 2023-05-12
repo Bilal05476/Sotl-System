@@ -262,7 +262,7 @@ const TabsetCourses = () => {
             type="button"
             color="primary"
           >
-            Initiate
+            Create
           </Button>
         )}
       </div>

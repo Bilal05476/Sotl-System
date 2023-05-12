@@ -73,24 +73,10 @@ const TabsetEditProfile = () => {
       } else {
         toast.dismiss(toastId.current);
         successes("Profile updated successfully");
-        console.log(data);
         dispatch({
           type: "SET_USER",
           payload: data,
         });
-        // setTimeout(() => {
-        //   setUpdateUser({
-        //     ...updateUser,
-        //     avatar: "",
-        //     dateOfBirth: "",
-        //     designation: "",
-        //     institute: "",
-        //     degree: "",
-        //     starting: "",
-        //     ending: "",
-        //     phone: "",
-        //   });
-        // }, 2000);
       }
     }
     // putUser();

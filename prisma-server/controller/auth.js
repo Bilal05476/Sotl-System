@@ -146,8 +146,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 // @access Private (only user update their own data)
 export const updateUser = asyncHandler(async (req, res) => {
   const {
-    name,
-    email,
     phone,
     avatar,
     designation,
@@ -156,9 +154,6 @@ export const updateUser = asyncHandler(async (req, res) => {
     degree,
     starting,
     ending,
-    role,
-    campus,
-    department,
   } = req.body;
 
   // Validate if user exist in our database
@@ -175,8 +170,6 @@ export const updateUser = asyncHandler(async (req, res) => {
         id: user.id,
       },
       data: {
-        name,
-        email,
         phone,
         avatar,
         designation,
@@ -185,9 +178,6 @@ export const updateUser = asyncHandler(async (req, res) => {
         degree,
         starting,
         ending,
-        role,
-        campus,
-        department,
       },
       select: {
         name: true,
