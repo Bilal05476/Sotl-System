@@ -14,7 +14,7 @@ const TabsetScheduling = ({ role }) => {
   const { id } = useParams();
 
   const [availableSlot, setAvailableSlots] = useState([]);
-  console.log(availableSlot);
+  // console.log(availableSlot);
 
   const [obsSchedule, setObsSchedule] = useState({
     teachingPlanByObserver: availableSlot?.obsRequest?.teachingPlanByFaculty
@@ -26,7 +26,7 @@ const TabsetScheduling = ({ role }) => {
       : "",
     artifacts: availableSlot?.obsRequest?.artifacts
       ? availableSlot?.obsRequest?.artifacts
-      : "",
+      : "artifacts",
     teachingPlanByFaculty: availableSlot?.obsRequest?.teachingPlanByFaculty
       ? availableSlot?.obsRequest?.teachingPlanByFaculty
       : "",
@@ -36,10 +36,10 @@ const TabsetScheduling = ({ role }) => {
       : "",
     timeSlotsByFaculty: availableSlot?.obsRequest?.timeSlotsByFaculty
       ? availableSlot?.obsRequest?.timeSlotsByFaculty
-      : [],
+      : ["210"],
     timeSlotByObserver: availableSlot?.obsRequest?.timeSlotByObserver
       ? availableSlot?.obsRequest?.timeSlotByObserver
-      : [],
+      : ["021"],
     scheduledOn: availableSlot?.obsRequest?.scheduledOn
       ? availableSlot?.obsRequest?.scheduledOn
       : "",
@@ -61,7 +61,7 @@ const TabsetScheduling = ({ role }) => {
 
   const onObservationEditing = () => {
     const editObsDetail = {
-      observationsId: id,
+      observationsId: Number(id),
       teachingPlanByObserver,
       refelectionPlanByObserver,
       artifacts,
@@ -70,7 +70,7 @@ const TabsetScheduling = ({ role }) => {
       timeSlotsByFaculty,
       timeSlotByObserver,
       scheduledOn,
-      status,
+      // status,
     };
     async function editObs() {
       try {
@@ -97,7 +97,8 @@ const TabsetScheduling = ({ role }) => {
       if (!teachingPlanByFaculty || timeSlotsByFaculty.length === 0) {
         info("Provide all required fields!");
       } else {
-        editObs();
+        // editObs();
+        console.log(editObsDetail);
       }
     }
     if (role === "Observer") {
@@ -111,7 +112,7 @@ const TabsetScheduling = ({ role }) => {
 
   const onObservationScheduling = () => {
     const ObsDetail = {
-      observationsId: id,
+      observationsId: Number(id),
       teachingPlanByObserver,
       refelectionPlanByObserver,
       artifacts,
@@ -142,15 +143,15 @@ const TabsetScheduling = ({ role }) => {
 
   const onSchedulingDone = () => {
     const finalObsDetails = {
-      observationsId: id,
-      teachingPlanByObserver,
-      refelectionPlanByObserver,
-      artifacts,
-      teachingPlanByFaculty,
-      refelectionPlanByFaculty,
-      timeSlotsByFaculty,
-      timeSlotByObserver,
-      scheduledOn,
+      observationsId: Number(id),
+      // teachingPlanByObserver,
+      // refelectionPlanByObserver,
+      // artifacts,
+      // teachingPlanByFaculty,
+      // refelectionPlanByFaculty,
+      // timeSlotsByFaculty,
+      // timeSlotByObserver,
+      // scheduledOn,
       status: "Completed",
     };
 
@@ -211,12 +212,12 @@ const TabsetScheduling = ({ role }) => {
 
       const data = await res.json();
       if (data.error) {
-        console.log(data.error);
+        errors(data.error);
       } else {
         setAvailableSlots(data);
       }
     } catch (err) {
-      console.log(err);
+      errors(err);
     }
   };
   useEffect(() => {
@@ -362,26 +363,26 @@ const TabsetScheduling = ({ role }) => {
       )}
 
       <div className="pull-right">
-        {!availableSlot.obsRequest && (
-          <Button
-            onClick={() => onObservationScheduling()}
-            type="button"
-            color="primary"
-          >
-            Create
-          </Button>
-        )}
-        {availableSlot.obsRequest && (
-          <Button
-            onClick={() => onObservationEditing()}
-            type="button"
-            color="primary"
-          >
-            Update
-          </Button>
-        )}
+        {/* {availableSlot.obsRequest && ( */}
+        <Button
+          onClick={() => onObservationEditing()}
+          type="button"
+          color="primary"
+        >
+          Update
+        </Button>
+        {/* )} */}
         {role === "Observer" && (
           <>
+            {!availableSlot.obsRequest && (
+              <Button
+                onClick={() => onObservationScheduling()}
+                type="button"
+                color="primary"
+              >
+                Create
+              </Button>
+            )}
             {availableSlot?.obsRequest?.scheduledOn && (
               <Button
                 onClick={() => onSchedulingDone()}

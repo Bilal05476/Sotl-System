@@ -17,26 +17,33 @@ const Profile = () => {
           <Col xl="12">
             <Card>
               <CardBody>
-                <div className="profile-details text-center">
-                  <img
-                    src={user?.avatar ? user.avatar : avatar}
-                    alt=""
-                    className="img-fluid img-90 rounded-circle blur-up lazyloaded"
-                  />
-                  <h5 className="f-w-600 f-16 mb-0">{user.name}</h5>
-                  <span>{user.email}</span>
-                  <br />
-                  <span className="f-w-600 f-11">
-                    {user.role.replaceAll("_", " ")}
-                  </span>
-                  <br />
+                <div className="profile-details d-flex align-items-center justify-content-between">
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={user?.avatar ? user.avatar : avatar}
+                      alt=""
+                      style={{
+                        width: "30%",
+                      }}
+                      className="img-fluid rounded-circle blur-up lazyloaded mx-3"
+                    />
+                    <div>
+                      <h5 className="f-w-600 f-16 mb-0">{user.name}</h5>
+                      <p className="m-0">{user.email}</p>
+                      <span className="f-w-600 f-11">
+                        {user.role.replaceAll("_", " ")}
+                      </span>
+                    </div>
+                  </div>
                   <Link
                     to="/settings/edit-profile"
-                    className="mt-3 btn btn-primary"
+                    className=" btn btn-primary"
                   >
                     Edit Profile
                   </Link>
-                  {/* <div className="social">
+                </div>
+
+                {/* <div className="social">
                     <div className="form-group btn-showcase">
                       <Button color="btn social-btn btn-fb d-inline-block">
                         {" "}
@@ -50,7 +57,6 @@ const Profile = () => {
                       </Button>
                     </div>
                   </div> */}
-                </div>
                 {/* <hr /> */}
                 {/* <div className="project-status">
                   <h5 className="f-w-600 f-16">
