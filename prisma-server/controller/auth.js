@@ -180,6 +180,7 @@ export const updateUser = asyncHandler(async (req, res) => {
         ending,
       },
       select: {
+        id: true,
         name: true,
         email: true,
         phone: true,

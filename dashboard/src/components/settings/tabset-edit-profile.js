@@ -77,10 +77,11 @@ const TabsetEditProfile = () => {
           type: "SET_USER",
           payload: data,
         });
+        localStorage.setItem("user", JSON.stringify(data));
       }
     }
-    // putUser();
-    console.log(userDetail);
+    putUser();
+    // console.log(userDetail);
   };
 
   return (
