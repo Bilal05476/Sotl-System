@@ -108,7 +108,7 @@ const TabsetEditProfile = () => {
                 })
               }
             />
-            {!user?.avatar && (
+            {/* {!user?.avatar && (
               <FormPool
                 value={avatar}
                 type="file"
@@ -120,7 +120,7 @@ const TabsetEditProfile = () => {
                   })
                 }
               />
-            )}
+            )} */}
             <FormPool
               value={dateOfBirth}
               type="date"

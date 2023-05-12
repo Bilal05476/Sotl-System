@@ -6,6 +6,7 @@ import Breadcrumb from "../common/breadcrumb";
 import { Card, CardBody, Col, Container, Media, Row, Button } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { Link } from "react-router-dom";
+import { Edit } from "react-feather";
 
 const Profile = () => {
   const [{ user }] = useStateValue();
@@ -18,14 +19,31 @@ const Profile = () => {
             <Card>
               <CardBody>
                 <div className="profile-details d-flex align-items-center justify-content-between">
-                  <div className="d-flex align-items-center">
+                  <div
+                    className="d-flex align-items-center"
+                    style={{ position: "relative" }}
+                  >
                     <img
                       src={user?.avatar ? user.avatar : avatar}
                       alt=""
                       style={{
                         width: "30%",
                       }}
-                      className="img-fluid rounded-circle blur-up lazyloaded mx-3"
+                      className="img-fluid my-0 rounded-circle blur-up lazyloaded mx-3"
+                    />
+                    <Edit
+                      style={{
+                        position: "absolute",
+                        top: 20,
+                        color: "#5673ED",
+                        left: 180,
+                        backgroundColor: "#fff",
+                        padding: "0.2rem",
+                        borderRadius: "10%",
+                        boxShadow: "1px 1px 1px #f1f1f1",
+                        cursor: "pointer",
+                      }}
+                      size={32}
                     />
                     <div>
                       <h5 className="f-w-600 f-16 mb-0">{user.name}</h5>
