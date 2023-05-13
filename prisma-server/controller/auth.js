@@ -3,9 +3,6 @@ const prisma = new PrismaClient();
 import bcrypt from "bcryptjs";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
-import multer from "multer";
-
-const upload = multer({ dest: "uploads/" });
 
 // @desc   Register or Add any Role
 // @route  POST api/create
