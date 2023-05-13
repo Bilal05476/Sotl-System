@@ -44,8 +44,6 @@ const Detail_observation = () => {
     }
   };
 
-  console.log(obsDetail);
-
   // return;
   return (
     <Fragment>
@@ -261,7 +259,10 @@ const Detail_observation = () => {
                       <strong>No data!</strong>
                       <br />
                       {user.role === "Observer" && (
-                        <NavLink to="/" className="mt-2 btn btn-primary">
+                        <NavLink
+                          to={`${process.env.PUBLIC_URL}/observations/observation-scheduling/${obsDetail?.id}`}
+                          className="mt-2 btn btn-primary"
+                        >
                           Start Scheduling
                         </NavLink>
                       )}

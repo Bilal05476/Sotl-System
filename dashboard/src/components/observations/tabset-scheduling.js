@@ -118,6 +118,7 @@ const TabsetScheduling = ({ role }) => {
       artifacts,
     };
     async function postObs() {
+      info("Observation scheduling...");
       const res = await fetch(`${BASEURL}/observation/scheduling`, {
         method: "POST",
         body: JSON.stringify(ObsDetail),
@@ -130,7 +131,7 @@ const TabsetScheduling = ({ role }) => {
       if (data.error) {
         errors(data.error);
       } else {
-        successes("Observation scheduled successfully!");
+        successes(data.message);
       }
     }
 
@@ -363,15 +364,15 @@ const TabsetScheduling = ({ role }) => {
       )}
 
       <div className="pull-right">
-        {/* {availableSlot.obsRequest && ( */}
-        <Button
-          onClick={() => onObservationEditing()}
-          type="button"
-          color="primary"
-        >
-          Update
-        </Button>
-        {/* )} */}
+        {availableSlot.obsRequest && (
+          <Button
+            onClick={() => onObservationEditing()}
+            type="button"
+            color="primary"
+          >
+            Update
+          </Button>
+        )}
         {role === "Observer" && (
           <>
             {!availableSlot.obsRequest && (
@@ -380,7 +381,7 @@ const TabsetScheduling = ({ role }) => {
                 type="button"
                 color="primary"
               >
-                Create
+                Start Scheduling
               </Button>
             )}
             {availableSlot?.obsRequest?.scheduledOn && (

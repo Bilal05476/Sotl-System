@@ -38,7 +38,6 @@ const List_observation = () => {
         type: "SET_USER_DATA",
         payload: specificData,
       });
-      console.log(specificData);
     } catch (error) {
       console.log(error.message);
     }
@@ -54,16 +53,16 @@ const List_observation = () => {
         <Row>
           <Col xl="6 xl-100">
             <Card>
-              <CardHeader className="d-flex justify-content-end">
-                {user.role === "Head_of_Department" && (
+              {user.role === "Head_of_Department" && (
+                <CardHeader className="d-flex justify-content-end">
                   <Link
                     to="/observations/create-observation"
                     className="btn btn-primary"
                   >
                     Initiate Observation
                   </Link>
-                )}
-              </CardHeader>
+                </CardHeader>
+              )}
               {userData && (
                 <CardBody>
                   <div className="user-status table-responsive latest-order-table">

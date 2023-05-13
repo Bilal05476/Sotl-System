@@ -222,12 +222,26 @@ export const updateUserImg = asyncHandler(async (req, res) => {
         avatar,
       },
       select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
         avatar: true,
+        designation: true,
+        dateOfBirth: true,
+        institute: true,
+        degree: true,
+        starting: true,
+        ending: true,
+        role: true,
+        campus: true,
+        department: true,
       },
     });
-    res.status(200).json({
-      updateImg,
-    });
+
+    const token = generateJWT(user.id);
+    updateImg.token = token;
+    res.status(200).json(updateImg);
   } else {
     res.status(404).json({ error: "No User Exist" });
   }

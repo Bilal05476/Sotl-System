@@ -479,11 +479,11 @@ const Dashboard = () => {
             <>
               <Col xl="6 xl-50" md="6" sm="3">
                 <Card className="o-hidden widget-cards">
-                  <CardBody style={{ backgroundColor: ongoingColor }}>
+                  <CardBody style={{ backgroundColor: pendingColor }}>
                     <Media className="static-top-widget row">
                       <div className="icons-widgets col-4">
                         <div className="align-self-center text-center">
-                          <Users color={ongoingColor} />
+                          <Users color={pendingColor} />
                         </div>
                       </div>
                       <Media body className="col-8">
