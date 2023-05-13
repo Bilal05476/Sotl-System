@@ -5,6 +5,7 @@ import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
+import FileBase from "react-file-base64";
 
 const TabsetEditProfile = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -15,7 +16,6 @@ const TabsetEditProfile = () => {
     role: user?.role.replaceAll("_", " "),
     campus: user?.campus?.replaceAll("_", " "),
     department: user?.department?.replaceAll("_", " "),
-    avatar: user?.avatar ? user?.avatar : "",
     dateOfBirth: user?.dateOfBirth ? user?.dateOfBirth : "",
     designation: user?.designation ? user?.designation : "",
     institute: user?.institute ? user?.institute : "",
@@ -27,7 +27,6 @@ const TabsetEditProfile = () => {
   const {
     fullname,
     email,
-    avatar,
     dateOfBirth,
     designation,
     institute,
@@ -44,7 +43,7 @@ const TabsetEditProfile = () => {
 
   const onUpdateUser = () => {
     const userDetail = {
-      avatar: avatar ? avatar : null,
+      // avatar: avatar ? avatar : null,
       dateOfBirth: dateOfBirth ? dateOfBirth : null,
       designation: designation ? designation : null,
       institute: institute ? institute : null,
@@ -81,7 +80,6 @@ const TabsetEditProfile = () => {
       }
     }
     putUser();
-    // console.log(userDetail);
   };
 
   return (
@@ -108,19 +106,7 @@ const TabsetEditProfile = () => {
                 })
               }
             />
-            {/* {!user?.avatar && (
-              <FormPool
-                value={avatar}
-                type="file"
-                label="Avatar"
-                onChange={(e) =>
-                  setUpdateUser({
-                    ...updateUser,
-                    avatar: e.target.value,
-                  })
-                }
-              />
-            )} */}
+
             <FormPool
               value={dateOfBirth}
               type="date"

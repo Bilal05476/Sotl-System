@@ -3,6 +3,9 @@ const prisma = new PrismaClient();
 import bcrypt from "bcryptjs";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+
+const upload = multer({ dest: "uploads/" });
 
 // @desc   Register or Add any Role
 // @route  POST api/create
@@ -142,12 +145,11 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 // @desc   Update User
-// @route  POST api/user-update/:id
+// @route  PUT api/update/:id
 // @access Private (only user update their own data)
 export const updateUser = asyncHandler(async (req, res) => {
   const {
     phone,
-    avatar,
     designation,
     dateOfBirth,
     institute,
@@ -171,7 +173,6 @@ export const updateUser = asyncHandler(async (req, res) => {
       },
       data: {
         phone,
-        avatar,
         designation,
         dateOfBirth,
         institute,
@@ -198,6 +199,38 @@ export const updateUser = asyncHandler(async (req, res) => {
     });
     updateUser.token = token;
     res.status(200).json(updateUser);
+  } else {
+    res.status(404).json({ error: "No User Exist" });
+  }
+});
+
+// @desc   Update User Image
+// @route  PUT api/update-image/:id
+// @access Private (only user update their own image)
+export const updateUserImg = asyncHandler(async (req, res) => {
+  const { avatar } = req.body;
+  // Validate if user exist in our database
+  const user = await prisma.user.findFirst({
+    where: {
+      id: Number(req.params.id),
+    },
+  });
+
+  if (user) {
+    const updateImg = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        avatar,
+      },
+      select: {
+        avatar: true,
+      },
+    });
+    res.status(200).json({
+      updateImg,
+    });
   } else {
     res.status(404).json({ error: "No User Exist" });
   }
