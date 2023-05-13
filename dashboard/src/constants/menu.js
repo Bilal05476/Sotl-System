@@ -148,6 +148,11 @@ export const HODMENU = [
         title: "Create Courses",
         type: "link",
       },
+      {
+        path: "/courses/assign-courses",
+        title: "Assign Courses",
+        type: "link",
+      },
     ],
   },
 

@@ -8,7 +8,7 @@ import asyncHandler from "express-async-handler";
 export const getCourse = asyncHandler(async (req, res) => {
   const getCourseById = await prisma.courses.findFirst({
     where: {
-      id: Number(req.params.id),
+      id: req.params.id,
     },
     include: {
       slots: {

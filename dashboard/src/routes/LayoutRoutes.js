@@ -41,6 +41,7 @@ import EditProfile from "../components/settings/edit-profile";
 import Createcourses from "../components/courses/create-courses";
 import Listcourses from "../components/courses/list-courses";
 import { fetchCoursesAndUsers, fetchUserData } from "../components/Endpoints";
+import Assigncourses from "../components/courses/assign-courses";
 
 const URL = process.env.PUBLIC_URL;
 const LayoutRoutes = () => {
@@ -57,7 +58,6 @@ const LayoutRoutes = () => {
         <Route element={<App />}>
           <Route path={`${URL}/`} element={<Dashboard />} />
           <Route path={`${URL}/dashboard`} element={<Dashboard />} />
-
           {/* <Route
             path={`${URL}/products/physical/category`}
             element={<Category />}
@@ -78,7 +78,6 @@ const LayoutRoutes = () => {
             path={`${URL}/products/physical/add-product`}
             element={<Addproduct />}
           /> */}
-
           {/* <Route
             path={`${URL}/products/digital/digital-category`}
             element={<Digitalcategory />}
@@ -95,7 +94,6 @@ const LayoutRoutes = () => {
             path={`${URL}/products/digital/digital-add-product`}
             element={<Digitaladdpro />}
           /> */}
-
           {/* <Route
             path={`${URL}/sales/orders`}
             element={<Orders />}
@@ -113,7 +111,6 @@ const LayoutRoutes = () => {
             path={`${URL}/coupons/create-coupons`}
             element={<Createcoupons />}
           /> */}
-
           {/* <Route
             path={`${URL}/pages/list-page`}
             element={<ListPages />}
@@ -133,7 +130,6 @@ const LayoutRoutes = () => {
             path={`${URL}/menus/create-menu`}
             element={<Createmenu />}
           /> */}
-
           <Route path={`${URL}/users/list-user`} element={<Listuser />} />
           <Route path={`${URL}/users/create-user`} element={<Createuser />} />
 
@@ -144,6 +140,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${URL}/courses/create-courses`}
             element={<Createcourses />}
+          />
+          <Route
+            path={`${URL}/courses/assign-courses`}
+            element={<Assigncourses />}
           />
 
           <Route
@@ -166,7 +166,6 @@ const LayoutRoutes = () => {
             path={`${URL}/observations/observation-scheduling/:id`}
             element={<SchedulingPage />}
           />
-
           {/* <Route
             path={`${URL}/vendors/list_vendors`}
             element={<Listvendors />}
@@ -193,18 +192,15 @@ const LayoutRoutes = () => {
             path={`${URL}/reports/report`}
             element={<Reports />}
           /> */}
-
           <Route path={`${URL}/settings/profile`} element={<Profile />} />
           <Route
             path={`${URL}/settings/edit-profile`}
             element={<EditProfile />}
           />
-
           {/* <Route
             path={`${URL}/invoice`}
             element={<Invoice />}
           /> */}
-
           {/* <Route
             path={`${URL}/data-table`}
             element={<Datatable />}
