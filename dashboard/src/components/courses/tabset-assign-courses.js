@@ -5,17 +5,17 @@ import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
+import { completeColor, ongoingColor, pendingColor } from "../colors";
 
 const TabsetAssignCourses = () => {
   const [{ usersandcourses }] = useStateValue();
-  const [selectedSlots, setSelectedSlots] = useState([]);
   const [selectedCourse, setselectedCourse] = useState("");
 
   const [assignCourses, setassignCourses] = useState({
     slots: [],
     loader: false,
-    facultyId: "",
-    courseId: "",
+    facultyId: "Select",
+    courseId: "Select",
   });
   const { slots, facultyId, courseId, loader } = assignCourses;
 
@@ -23,7 +23,7 @@ const TabsetAssignCourses = () => {
 
   const onassignCourses = () => {
     const courseDetails = {
-      slots: selectedSlots,
+      slots,
     };
     async function assignCourse() {
       info("Course assigning...");
@@ -35,7 +35,7 @@ const TabsetAssignCourses = () => {
         const res = await fetch(
           `${process.env.REACT_APP_BASE_URL}/courses/user/${facultyId}`,
           {
-            method: "POST",
+            method: "PUT",
             body: JSON.stringify(courseDetails),
             headers: {
               "Content-type": "application/json; charset=UTF-8",
@@ -57,27 +57,29 @@ const TabsetAssignCourses = () => {
             ...assignCourses,
             loader: false,
           });
-          successes("Course(s) assign successfully!");
+          successes(data.message);
+          clear();
         }
       } catch (err) {
         toast.dismiss(toastId.current);
         errors(err.message);
       }
     }
-    if (!facultyId || !courseId) {
+    if (facultyId === "Select" || courseId === "Select") {
       info("Provide details properly!");
-    } else if (selectedSlots.length === 0) {
+    } else if (slots.length === 0) {
       info("Please select the slots!");
     } else {
-      // postObs();
-      console.log(courseDetails);
+      assignCourse();
+      // console.log(courseDetails);
     }
   };
 
   const onSelectCousre = async () => {
+    warning("Slots loading...");
     try {
       const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/courses/${courseId}`,
+        `${process.env.REACT_APP_BASE_URL}/course/${courseId}`,
         {
           headers: {
             "Content-type": "application/json; charset=UTF-8",
@@ -87,16 +89,12 @@ const TabsetAssignCourses = () => {
       );
       const data = await res.json();
       if (data.error) {
-        // toast.dismiss(toastId.current);
-        setassignCourses({
-          ...assignCourses,
-          loader: false,
-        });
+        toast.dismiss(toastId.current);
         errors(data.error);
       } else {
         toast.dismiss(toastId.current);
-        setassignCourses(data);
-        // successes("Course(s) assign successfully!");
+        setselectedCourse(data);
+        successes("Slots load sucessfully!");
       }
     } catch (err) {
       toast.dismiss(toastId.current);
@@ -105,9 +103,31 @@ const TabsetAssignCourses = () => {
   };
 
   useEffect(() => {
-    warning("Wow");
-    onSelectCousre();
+    setselectedCourse([]);
+    setassignCourses({
+      ...assignCourses,
+      slots: [],
+    });
+    if (courseId !== "Select") {
+      onSelectCousre();
+    }
   }, [courseId]);
+
+  const onRmoveSlot = (id) => {
+    const removeSlotId = slots.filter((item) => item !== id);
+    setassignCourses({
+      ...assignCourses,
+      slots: removeSlotId,
+    });
+  };
+
+  const clear = () => {
+    setassignCourses({
+      slots: [],
+      facultyId: "Select",
+      courseId: "Select",
+    });
+  };
 
   return (
     <Fragment>
@@ -174,6 +194,66 @@ const TabsetAssignCourses = () => {
                 </Input>
               </div>
             </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Select Slots
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom4"
+                  type="select"
+                  required={true}
+                  value={slots}
+                  onChange={(e) =>
+                    setassignCourses({
+                      ...assignCourses,
+                      slots: [...slots, e.target.value],
+                    })
+                  }
+                >
+                  <option value="Select">Select</option>
+                  {selectedCourse?.slots?.map((item) => {
+                    if (!slots.includes(item.id) && item.facultyId === null) {
+                      return (
+                        <option key={item.id} value={item.id}>
+                          {item.day} | {item.time} | {item.location}
+                        </option>
+                      );
+                    }
+                  })}
+                </Input>
+              </div>
+            </FormGroup>
+            {slots.length > 0 && (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  <span>*</span> Selected Slots
+                </Label>
+                <div className="col-xl-8 col-md-7">
+                  {selectedCourse?.slots?.map((item) => {
+                    if (slots.includes(item.id))
+                      return (
+                        <span
+                          className="mb-2"
+                          style={{
+                            border: `1px solid ${pendingColor}`,
+                            marginRight: "0.5rem",
+                            padding: "0.2rem 0.8rem",
+                            borderRadius: "15px",
+                            cursor: "pointer",
+                            backgroundColor: pendingColor,
+                            color: "#000",
+                          }}
+                          onClick={() => onRmoveSlot(item.id)}
+                        >
+                          {item.day} | {item.time} | {item.location}
+                        </span>
+                      );
+                  })}
+                </div>
+              </FormGroup>
+            )}
           </Form>
         </TabPanel>
       </Tabs>

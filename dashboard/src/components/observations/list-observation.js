@@ -14,13 +14,10 @@ import {
 } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { Eye, Loader } from "react-feather";
+import { completeColor, ongoingColor, pendingColor } from "../colors";
 
 const List_observation = () => {
   const [{ user, userData }, dispatch] = useStateValue();
-
-  const pendingColor = "#FCC43E";
-  const ongoingColor = "#4AD6EF";
-  const completeColor = "#5673ED";
 
   async function fetchData() {
     try {

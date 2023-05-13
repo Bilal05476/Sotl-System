@@ -17,8 +17,13 @@
   font-style: normal;
 }
 * {
-  font-family: "Poppins-Semibold";
+  font-family: "Poppins-Regular";
 }
+
+.digits{
+  font-weight: 400;
+}
+
 .card-left {
   z-index: 1;
 }
@@ -465,9 +470,7 @@ a {
   }
 }
 .digital-add {
-  .col-form-label {
-    font-family: $font-nunito;
-  }
+  
   .form-control {
     font-size: 14px;
   }
@@ -563,7 +566,7 @@ a {
 .order-graph {
   h6 {
     color: $theme-body-font-color;
-    font-family: $font-nunito;
+    
     font-weight: 700;
     margin-bottom: 20px;
   }
@@ -837,7 +840,7 @@ a {
   .media-body {
     align-self: center !important;
     h3 {
-      font-family: $font-work-sans, $font-serif;
+      // font-family: $font-work-sans, $font-serif;
       color: $white;
       small {
         font-size: 11px;
@@ -867,6 +870,7 @@ a {
           vertical-align: middle;
           padding: 12px;
           border-top: 1px solid $white-4;
+          // font-weight: 3;
           .d-inline-block {
             margin-top: 11px;
           }
@@ -883,13 +887,16 @@ a {
       }
     }
     thead {
+      background-color: $theme-default;
+      box-shadow: 3px 3px 3px #a6a6a679;
+      
       tr {
         th {
           border-top: 0;
           font-size: 16px;
-          color: $dark-color;
+          color: $white;
           font-weight: 600;
-          padding: 0 12px 12px;
+          padding: 12px;
         }
       }
     }
@@ -1378,7 +1385,7 @@ a {
       }
     }
     input[type="checkbox"]:checked + label::before {
-      font-family: $font-ICO;
+      // font-family: $font-ICO;
       content: "\efab";
       text-align: center;
       line-height: 1;
@@ -1900,7 +1907,7 @@ body {
   background-color: $body-bg-color;
   font-size: $body-font-size;
   overflow-x: hidden;
-  font-family: $font-work-sans, $font-serif;
+  // font-family: $font-work-sans, $font-serif;
   color: $theme-body-font-color;
   position: relative;
 }
@@ -2077,7 +2084,7 @@ $header-size: 80px;
           margin-bottom: $page-title-margin-bottom;
           font-weight: $page-title-font-weight;
           text-transform: $page-title-text-tranform;
-          font-family: $font-nunito;
+          
           small {
             display: block;
             font-size: 12px;
@@ -2094,7 +2101,7 @@ $header-size: 80px;
         padding: 0;
         margin-bottom: 0;
         .breadcrumb-item {
-          font-family: $font-nunito;
+        
           & + .breadcrumb-item {
             &:before {
               content: $breadcrumb-content;
@@ -2280,7 +2287,7 @@ $header-size: 80px;
                 &:after {
                   position: absolute;
                   content: "\f002";
-                  font-family: $font-awesome;
+                  // font-family: $font-awesome;
                   top: 12px;
                   left: 22px;
                   color: #8e8e8e;

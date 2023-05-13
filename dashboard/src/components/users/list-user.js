@@ -32,7 +32,7 @@ const List_user = () => {
                 <Table borderless>
                   <thead>
                     <tr>
-                      <th scope="col">Id</th>
+                      {/* <th scope="col">Id</th> */}
                       {/* <th scope="col">Avatar</th> */}
                       <th scope="col">Full Name</th>
                       <th scope="col">Email</th>
@@ -44,7 +44,7 @@ const List_user = () => {
                   <tbody>
                     {usersandcourses.users.map((item) => (
                       <tr key={item.id}>
-                        <td>{item.id}</td>
+                        {/* <td>{item.id}</td> */}
                         {/* <td className="digits">{item?.avatar}</td> */}
                         <td className="digits">{item.name}</td>
                         <td className="digits">{item.email}</td>

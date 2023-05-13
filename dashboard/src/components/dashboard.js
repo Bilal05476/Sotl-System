@@ -57,6 +57,7 @@ import {
 import { useStateValue } from "../StateProvider";
 import { NavLink } from "react-router-dom";
 import { fetchCoursesAndUsers, fetchUserData } from "./Endpoints";
+import { completeColor, ongoingColor, pendingColor } from "./colors";
 
 ChartJS.register(
   CategoryScale,
@@ -75,9 +76,7 @@ ChartJS.register(
 
 const Dashboard = () => {
   const [streamFilter, setStreamFilter] = useState("Monthly");
-  const pendingColor = "#FCC43E";
-  const ongoingColor = "#4AD6EF";
-  const completeColor = "#5673ED";
+
   const lineData = {
     labels:
       streamFilter === "Yearly"
@@ -1550,13 +1549,15 @@ const ObservationStreamFilter = ({
   return (
     <span
       style={{
-        border: `1px solid ${ongoingColor}`,
+        border: `1px solid ${
+          streamFilter === text ? completeColor : ongoingColor
+        }`,
         borderRadius: "15px",
         color: streamFilter === text ? "#fff" : ongoingColor,
         padding: "0.2rem 0.6rem",
         marginLeft: "0.5rem",
         cursor: "pointer",
-        backgroundColor: streamFilter === text && ongoingColor,
+        backgroundColor: streamFilter === text && completeColor,
       }}
       onClick={() => setStreamFilter(text)}
     >
