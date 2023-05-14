@@ -12,6 +12,8 @@ import {
 } from "react-feather";
 import { NavLink, useParams } from "react-router-dom";
 
+import { completeColor, ongoingColor, pendingColor } from "../colors";
+
 const Observation_rubric = () => {
   const [isOpen, setIsOpen] = useState("");
   const [selectedRubric, setSelectedRubric] = useState([]);
@@ -30,7 +32,7 @@ const Observation_rubric = () => {
               className="digits"
               style={{
                 fontWeight: "500",
-                backgroundColor: "#040b5b",
+                backgroundColor: completeColor,
                 color: "#fff",
                 padding: "0.5rem 1rem",
                 borderRadius: "5px",
@@ -48,7 +50,7 @@ const Observation_rubric = () => {
               className="btn btn-block text-light"
               onClick={() => setIsOpen(isOpen === "Content" ? "" : "Content")}
               style={{
-                backgroundColor: "#040b5b",
+                backgroundColor: completeColor,
                 outline: "none",
                 boxShadow: "none",
                 padding: "15px",
@@ -142,7 +144,7 @@ const Observation_rubric = () => {
               className="btn btn-block text-light"
               onClick={() => setIsOpen(isOpen === "Pedagogy" ? "" : "Pedagogy")}
               style={{
-                backgroundColor: "#040b5b",
+                backgroundColor: completeColor,
                 outline: "none",
                 boxShadow: "none",
                 padding: "15px",
@@ -172,55 +174,60 @@ const Observation_rubric = () => {
             )}
           </div>
         </div>
-        <NavLink
-          to={`${process.env.PUBLIC_URL}/observations/detail-observation/${id}`}
+        <div
           style={{
-            backgroundColor: "#040b5b",
-            outline: "none",
-            boxShadow: "none",
-            padding: "15px",
-            border: "0",
-            color: "#fff",
-            borderRadius: "5px",
-            marginRight: "1rem",
-            fontWeight: "700",
-            textDecoration: "none",
+            textAlign: "right",
           }}
         >
-          BACK
-        </NavLink>
-        <button
-          style={{
-            backgroundColor: "#040b5b",
-            outline: "none",
-            boxShadow: "none",
-            padding: "15px",
-            width: "20%",
-            border: "0",
-            color: "#fff",
-            borderRadius: "5px",
-            marginRight: "1rem",
-            fontWeight: "700",
-          }}
-        >
-          DRAFT SCORE
-        </button>
-        <button
-          style={{
-            backgroundColor: "#040b5b",
-            outline: "none",
-            boxShadow: "none",
-            padding: "15px",
-            width: "20%",
-            border: "0",
-            color: "#fff",
-            borderRadius: "5px",
-            marginRight: "1rem",
-            fontWeight: "700",
-          }}
-        >
-          SUBMIT SCORE
-        </button>
+          <NavLink
+            to={`${process.env.PUBLIC_URL}/observations/detail-observation/${id}`}
+            style={{
+              backgroundColor: pendingColor,
+              outline: "none",
+              boxShadow: "none",
+              padding: "15px",
+              border: "0",
+              color: "#fff",
+              borderRadius: "5px",
+              marginRight: "1rem",
+              fontWeight: "700",
+              textDecoration: "none",
+            }}
+          >
+            BACK
+          </NavLink>
+          <button
+            style={{
+              backgroundColor: ongoingColor,
+              outline: "none",
+              boxShadow: "none",
+              padding: "15px",
+              width: "20%",
+              border: "0",
+              color: "#fff",
+              borderRadius: "5px",
+              marginRight: "1rem",
+              fontWeight: "700",
+            }}
+          >
+            DRAFT SCORE
+          </button>
+          <button
+            style={{
+              backgroundColor: completeColor,
+              outline: "none",
+              boxShadow: "none",
+              padding: "15px",
+              width: "20%",
+              border: "0",
+              color: "#fff",
+              borderRadius: "5px",
+              fontWeight: "700",
+            }}
+          >
+            SUBMIT SCORE
+          </button>
+        </div>
       </Container>
     </Fragment>
   );
@@ -267,37 +274,35 @@ const RubricPoints = ({
   // };
 
   return (
-    <div className=" my-2 d-flex flex-column flex-wrap align-items-start">
-      {/* <RadioInput value={title} rubric={rubric} setRubric={setRubric} /> */}
-      <div className="">
-        {rubricDesc.map((item) => (
-          <div
-            key={item.id}
-            className="rubric-points d-flex align-items-start my-2 "
-            style={{
-              backgroundColor: selected.includes(item.id) && "#6fa2d875",
-              boxShadow:
-                selected.includes(item.id) &&
-                "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
-            }}
-            onClick={() => toggleSelected(item.id, item.score)}
-          >
-            <input
-              type="radio"
-              className="mt-1"
-              checked={selected.includes(item.id) && true}
-              style={{ marginRight: "0.5rem" }}
-            />
+    <div className="my-2 d-flex flex-column flex-wrap align-items-start">
+      {rubricDesc.map((item) => (
+        <div
+          key={item.id}
+          className="rubric-points d-flex align-items-start my-2 "
+          style={{
+            backgroundColor: selected.includes(item.id) && ongoingColor,
+            boxShadow:
+              selected.includes(item.id) &&
+              "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
+          }}
+          onClick={() => toggleSelected(item.id, item.score)}
+        >
+          <input
+            type="radio"
+            className="mt-1"
+            checked={selected.includes(item.id) && true}
+            style={{ marginRight: "0.5rem" }}
+          />
 
-            <span
-              className="digits"
-              style={{
-                textAlign: "left",
-              }}
-            >
-              {item.text}
-            </span>
-            {/* {selected.includes(item.id) && (
+          <span
+            // className="digits"
+            style={{
+              textAlign: "left",
+            }}
+          >
+            {item.text}
+          </span>
+          {/* {selected.includes(item.id) && (
               <span
                 onClick={() => deleteSelected(item.id, item.score)}
                 className="rubric-point-delete"
@@ -305,9 +310,8 @@ const RubricPoints = ({
                 <Trash2 size={18} color="white" />
               </span>
             )} */}
-          </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

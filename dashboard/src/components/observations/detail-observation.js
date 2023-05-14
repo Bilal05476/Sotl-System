@@ -114,7 +114,6 @@ const Detail_observation = () => {
                       <Table borderless>
                         <thead>
                           <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Time (O)</th>
                             <th scope="col">Time (F)</th>
                             <th scope="col">Artifact</th>
@@ -127,16 +126,14 @@ const Detail_observation = () => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>{obsDetail?.obsRequest.id}</td>
-
                             <td className="digits">
                               {obsDetail?.obsRequest?.timeSlotByObserver?.map(
-                                (item) => `${item.time} `
+                                (item) => `${item.day} ${item.time} `
                               )}
                             </td>
                             <td className="digits">
                               {obsDetail?.obsRequest?.timeSlotsByFaculty?.map(
-                                (item) => `${item.time} `
+                                (item) => `${item.day} ${item.time} `
                               )}
                             </td>
 
@@ -220,34 +217,31 @@ const Detail_observation = () => {
                                   : "text-danger"
                               }`}
                             >
-                              {obsDetail.obsRequest.status}
+                              {obsDetail.obsRequest?.status}
                             </td>
                           </tr>
                         </tbody>
                       </Table>
-                      {user.role === "Faculty" || user.role === "Observer" ? (
-                        <div
-                          style={{
-                            textAlign: "right",
-                          }}
-                        >
-                          <NavLink
-                            to={`/observations/observation-scheduling/${obsDetail?.id}`}
-                            className="btn btn-primary mx-2"
-                          >
-                            Edit Scheduling
-                          </NavLink>
-                          {obsDetail?.obsRequest?.timeSlotsByObserver && (
-                            <NavLink
-                              to={`/observations/observation-scheduling/${obsDetail?.id}`}
-                              className="btn btn-primary mx-2"
+                      {obsDetail.obsRequest?.status === "Completed" && (
+                        <>
+                          {user.role === "Faculty" ||
+                          user.role === "Observer" ? (
+                            <div
+                              style={{
+                                textAlign: "right",
+                              }}
                             >
-                              Done
-                            </NavLink>
+                              <NavLink
+                                to={`/observations/observation-scheduling/${obsDetail?.id}`}
+                                className="btn btn-primary mx-2"
+                              >
+                                Edit Scheduling
+                              </NavLink>
+                            </div>
+                          ) : (
+                            <></>
                           )}
-                        </div>
-                      ) : (
-                        <></>
+                        </>
                       )}
                     </div>
                   )}
@@ -299,29 +293,31 @@ const Detail_observation = () => {
                       <Table borderless>
                         <thead>
                           <tr>
-                            <th scope="col">Id</th>
+                            {/* <th scope="col">Id</th> */}
                             <th scope="col">
                               Rubric Score{" "}
                               <span
-                                style={{ color: "gray", fontSize: "0.8rem" }}
+                                style={{ color: "#f1f1f1", fontSize: "0.8rem" }}
                               >
                                 (will be finalize after post informed meeting)
                               </span>
                             </th>
+                            <th scope="col">Schedule on</th>
                             <th scope="col">Status</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td className={"digits"}>
+                            {/* <td className={"digits"}>
                               {obsDetail?.meetings.informedObservation.id}
-                            </td>
-                            <td className={"digits"}>
+                            </td> */}
+                            <td className={"digits "}>
                               {
                                 obsDetail?.meetings.informedObservation
                                   .finalScore
                               }
                             </td>
+                            <td className="digits"></td>
                             <td
                               className={`digits ${
                                 obsDetail?.meetings.informedObservation
@@ -335,29 +331,15 @@ const Detail_observation = () => {
                           </tr>
                         </tbody>
                       </Table>
-                      <NavLink
-                        style={{
-                          backgroundColor: "#f8f8f9",
-                          outline: "none",
-                          boxShadow: "none",
-                          padding: "15px",
-                          width: "20%",
-                          border: "0",
-                          color: "#5673ED",
-                          borderRadius: "5px",
-                          marginRight: "1rem",
-                          fontWeight: "700",
-                          display: "block",
-                          marginLeft: "auto",
-                          cursor: "pointer",
-                          textDecoration: "none",
-                          textAlign: "center",
-                          boxShadow: "2px 2px 3px #0000004e",
-                        }}
-                        to={`/observations/${id}/observation-rubric`}
-                      >
-                        RUBRICS
-                      </NavLink>
+
+                      <div style={{ textAlign: "right" }}>
+                        <NavLink
+                          to={`/observations/observation-rubric/${id}`}
+                          className="btn btn-primary mx-2"
+                        >
+                          Rubrics
+                        </NavLink>
+                      </div>
                     </div>
                   )}
                 </>
