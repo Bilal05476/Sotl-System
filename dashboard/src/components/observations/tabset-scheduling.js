@@ -4,7 +4,7 @@ import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { errors, successes, info, warning } from "../../constants/Toasters";
-
+import { completeColor } from "../colors";
 import FileBase from "react-file-base64";
 
 const BASEURL = process.env.REACT_APP_BASE_URL;
@@ -346,7 +346,7 @@ const TabsetScheduling = ({ role }) => {
                   <span>*</span> Provide Avalaible Slots
                 </Label>
                 <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                  {/* {availableSlot?.course?.slots.map((item) => (
+                  {availableSlot?.course?.slots.map((item) => (
                     <TimeSlotSpan
                       key={item.id}
                       id={item.id}
@@ -356,7 +356,7 @@ const TabsetScheduling = ({ role }) => {
                       onClick={() => onSelectSlotFaculty(item.id)}
                       slots={timeSlotsByFaculty}
                     />
-                  ))} */}
+                  ))}
                 </div>
               </FormGroup>
             </Form>
@@ -407,12 +407,12 @@ const TimeSlotSpan = ({ key, onClick, location, time, day, slots, id }) => {
       className="mb-2"
       key={key}
       style={{
-        border: "1px solid #5673ED",
+        border: `1px solid ${completeColor}`,
         marginRight: "0.5rem",
         padding: "0.2rem 0.8rem",
-        borderRadius: "15px",
+        borderRadius: "5px",
         cursor: "pointer",
-        backgroundColor: slots.includes(id) && "#5673ED",
+        backgroundColor: slots.includes(id) && completeColor,
         color: slots.includes(id) && "#fff",
       }}
       onClick={onClick}
