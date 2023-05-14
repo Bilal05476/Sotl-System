@@ -40,6 +40,9 @@ model User {
     //messages
     messageSender    Messages[]     @relation("Sender")
     messageReceiver  Messages[]     @relation("Receiver")
+    //reasons
+    reasonSender     ObsReasons[]   @relation("Sender")
+    reasonReceiver   ObsReasons[]   @relation("Receiver")
 }
 
 // -> User => Observations
@@ -78,8 +81,23 @@ model ObsScheduling {
     status                    Status        @default(Ongoing)
     observation               Observations  @relation(fields: [observationsId], references: [id])
     observationsId            Int           @unique
+    facultyAccepted           Boolean       @default(false)
+    observerAccepted          Boolean       @default(false)
     // course                    Courses      @relation(fields: [courseId], references: [id])
     // courseId                  Int          @unique
+    reasons                   ObsReasons[]
+}
+
+//-> Observation -> ObsScheduling -> ObsReasons
+model ObsReasons {
+    id           Int            @id @default(autoincrement())
+    reason       String
+    sender       User?          @relation("Sender", fields: [senderId], references: [id])
+    senderId     Int?
+    receiver     User?          @relation("Receiver", fields: [receiverId], references: [id])
+    receiverId   Int?
+    scheduling   ObsScheduling? @relation(fields: [schedulingId], references: [id])
+    schedulingId Int?
 }
 
 // -> Observations => Meetings

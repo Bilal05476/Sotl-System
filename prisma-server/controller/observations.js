@@ -117,15 +117,28 @@ export const getObs = asyncHandler(async (req, res) => {
       },
       obsRequest: {
         include: {
-          timeSlotByObserver: true,
-          timeSlotsByFaculty: true,
+          timeSlotByObserver: {
+            select: {
+              id: true,
+              time: true,
+              location: true,
+              day: true,
+              courseId: true,
+            },
+          },
+          timeSlotsByFaculty: {
+            select: {
+              id: true,
+              time: true,
+              location: true,
+              day: true,
+              courseId: true,
+            },
+          },
+          reasons: true,
         },
       },
-      course: {
-        include: {
-          slots: true,
-        },
-      },
+      course: true,
       meetings: {
         include: {
           informedObservation: true,
@@ -192,47 +205,96 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     timeSlotByObserver,
     scheduledOn,
     status,
+    reasons,
+    observerAccepted,
+    facultyAccepted,
   } = req.body;
 
   let fids = [];
-  if (timeSlotsByFaculty.length > 0) {
+  if (timeSlotsByFaculty) {
     timeSlotsByFaculty.map((item) => fids.push({ id: item }));
   }
   let oids = [];
-  if (timeSlotByObserver.length > 0) {
+  if (timeSlotByObserver) {
     timeSlotByObserver.map((item) => oids.push({ id: item }));
   }
 
   const reqData = {
-    teachingPlanByObserver,
-    refelectionPlanByObserver,
-    artifacts,
-    teachingPlanByFaculty,
-    refelectionPlanByFaculty,
-    timeSlotsByFaculty: {
+    teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
+    teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
+
+    refelectionPlanByObserver:
+      refelectionPlanByObserver && refelectionPlanByObserver,
+
+    refelectionPlanByFaculty:
+      refelectionPlanByFaculty && refelectionPlanByFaculty,
+
+    artifacts: artifacts && artifacts,
+
+    timeSlotsByFaculty: timeSlotsByFaculty && {
       set: fids,
     },
-    timeSlotByObserver: {
+    timeSlotByObserver: timeSlotByObserver && {
       set: oids,
     },
-    scheduledOn,
-    status,
-    teachingPlanByFaculty,
+
+    scheduledOn: scheduledOn && scheduledOn,
+
+    status: status && status,
+    observerAccepted: observerAccepted && observerAccepted,
+    facultyAccepted: facultyAccepted && facultyAccepted,
+
+    reasons: reasons && {
+      create: {
+        reason: reasons.reason,
+        senderId: reasons.senderId,
+        receiverId: reasons.receiverId,
+      },
+    },
   };
+
+  // res.status(200).json(reqData);
 
   const existedReq = await prisma.obsScheduling.findFirst({
     where: {
       observationsId,
     },
+    select: {
+      id: true,
+      status: true,
+    },
   });
-  if (existedReq) {
+  // res.status(200).json(reqData);
+
+  if (existedReq && existedReq.status !== "Completed") {
     const updatedReq = await prisma.obsScheduling.update({
       where: {
         observationsId,
       },
       data: reqData,
+      include: {
+        timeSlotByObserver: {
+          select: {
+            id: true,
+            time: true,
+            location: true,
+            day: true,
+            courseId: true,
+          },
+        },
+        timeSlotsByFaculty: {
+          select: {
+            id: true,
+            time: true,
+            location: true,
+            day: true,
+            courseId: true,
+          },
+        },
+        reasons: true,
+      },
     });
-    if (status === "Completed") {
+    if (status && status === "Completed") {
       const scheduledObs = await prisma.observations.update({
         where: {
           id: observationsId,
@@ -249,10 +311,47 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
           },
         },
         include: {
-          faculty: true,
-          observer: true,
-          hod: true,
-          obsRequest: true,
+          faculty: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          observer: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          hod: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          obsRequest: {
+            include: {
+              timeSlotByObserver: {
+                select: {
+                  id: true,
+                  time: true,
+                  location: true,
+                  day: true,
+                  courseId: true,
+                },
+              },
+              timeSlotsByFaculty: {
+                select: {
+                  id: true,
+                  time: true,
+                  location: true,
+                  day: true,
+                  courseId: true,
+                },
+              },
+              reasons: true,
+            },
+          },
           course: true,
           meetings: {
             include: {
@@ -269,6 +368,6 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
       res.status(200).json(updatedReq);
     }
   } else {
-    res.status(404).json({ error: "Request not exist!" });
+    res.status(404).json({ error: "Scheduling does not exist or completed!" });
   }
 });
