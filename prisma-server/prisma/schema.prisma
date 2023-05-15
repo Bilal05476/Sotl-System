@@ -65,6 +65,7 @@ model Observations {
     course              Courses        @relation(fields: [courseId], references: [id])
     courseId            String
     feedbacks           FeedBacks[]
+    createdAt           DateTime       @default(now())
 }
 
 // -> Observations => ObsScheduling
@@ -158,7 +159,7 @@ model PDP {
 
 // -> User => Courses
 model Courses {
-    id              String         @id @unique
+    id              String         @id
     name            String
     department      Department
     campus          Campus
@@ -171,7 +172,7 @@ model Courses {
 }
 
 model CourseSlots {
-    id            String         @id @unique
+    id            String         @id
     time          String
     location      String
     day           String
