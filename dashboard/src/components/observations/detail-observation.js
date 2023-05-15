@@ -7,7 +7,7 @@ import { useStateValue } from "../../StateProvider";
 
 const Detail_observation = () => {
   const { id } = useParams();
-  const [isOpen, setIsOpen] = useState("");
+  const [isOpen, setIsOpen] = useState("scheduling");
   const [obsDetail, setObsDetail] = useState("");
 
   const [{ user }] = useStateValue();
@@ -222,7 +222,7 @@ const Detail_observation = () => {
                           </tr>
                         </tbody>
                       </Table>
-                      {obsDetail.obsRequest?.status === "Completed" && (
+                      {obsDetail.obsRequest?.status !== "Completed" && (
                         <>
                           {user.role === "Faculty" ||
                           user.role === "Observer" ? (
@@ -317,7 +317,7 @@ const Detail_observation = () => {
                                   .finalScore
                               }
                             </td>
-                            <td className="digits"></td>
+                            <td className="digits">{obsDetail?.starting}</td>
                             <td
                               className={`digits ${
                                 obsDetail?.meetings.informedObservation
