@@ -110,3 +110,12 @@ export const assignCourses = asyncHandler(async (req, res) => {
     });
   }
 });
+
+export async function cou(req, res) {
+  const d = await prisma.courses.findMany({
+    include: {
+      observation: true,
+    },
+  });
+  res.status(200).json(d);
+}

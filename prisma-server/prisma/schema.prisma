@@ -62,8 +62,8 @@ model Observations {
     observerId          Int
     obsRequest          ObsScheduling?
     meetings            Meetings?
-    course              Courses        @relation(fields: [courseId], references: [id])
-    courseId            String
+    course              Courses?       @relation(fields: [courseId], references: [id])
+    courseId            String?
     feedbacks           FeedBacks[]
     createdAt           DateTime       @default(now())
 }

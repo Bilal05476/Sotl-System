@@ -294,7 +294,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
         reasons: true,
       },
     });
-    if (status && status === "Completed") {
+    if (status) {
       const scheduledObs = await prisma.observations.update({
         where: {
           id: observationsId,
@@ -368,6 +368,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     } else {
       res.status(200).json(updatedReq);
     }
+    res.status(200).json(updatedReq);
   } else {
     res.status(404).json({ error: "Scheduling does not exist or completed!" });
   }

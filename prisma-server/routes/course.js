@@ -3,6 +3,7 @@ const courseRoutes = express.Router();
 
 import {
   assignCourses,
+  cou,
   createCourse,
   getCourse,
   getCourses,
@@ -11,5 +12,6 @@ import {
 courseRoutes.route("/courses").get(getCourses).post(createCourse);
 courseRoutes.route("/course/:id").get(getCourse);
 courseRoutes.route("/courses/user/:id").put(assignCourses);
+courseRoutes.route("/cou").get(cou);
 
 export default courseRoutes;
