@@ -53,11 +53,11 @@ app.listen(port, () => {
   console.log(`Server Running at port: ${port}`);
 });
 
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
-// async function main() {
-//   const d = await prisma.observations.deleteMany({});
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+async function main() {
+  const d = await prisma.courses.deleteMany({});
 
-//   console.log(d);
-// }
-// main();
+  console.log(d);
+}
+main();

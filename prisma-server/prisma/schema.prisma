@@ -159,7 +159,7 @@ model PDP {
 
 // -> User => Courses
 model Courses {
-    id              String         @id @unique
+    id              String         @id
     name            String
     department      Department
     campus          Campus
@@ -172,7 +172,7 @@ model Courses {
 }
 
 model CourseSlots {
-    id            String         @id @unique
+    id            String         @id
     time          String
     location      String
     day           String
