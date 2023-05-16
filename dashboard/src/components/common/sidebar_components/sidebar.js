@@ -12,6 +12,8 @@ import {
 import logo from "../../../assets/images/sotllogo-white.png";
 import { useStateValue } from "../../../StateProvider";
 
+const URL = process.env.PUBLIC_URL;
+
 const Sidebar = () => {
   const [{ user }] = useStateValue();
   const [mainmenu, setMainMenu] = useState(
@@ -123,7 +125,7 @@ const Sidebar = () => {
       )}
       {menuItem.type === "link" ? (
         <Link
-          to={`${process.env.PUBLIC_URL}${menuItem.path}`}
+          to={`${URL}${menuItem.path}`}
           className={`sidebar-header ${menuItem.active ? "active" : ""}`}
           onClick={() => setNavActive(menuItem)}
         >
@@ -176,7 +178,7 @@ const Sidebar = () => {
 
               {childrenItem.type === "link" ? (
                 <Link
-                  to={`${process.env.PUBLIC_URL}${childrenItem.path}`}
+                  to={`${URL}${childrenItem.path}`}
                   className={childrenItem.active ? "active" : ""}
                   onClick={() => setNavActive(childrenItem)}
                 >
@@ -199,7 +201,7 @@ const Sidebar = () => {
                     >
                       {childrenSubItem.type === "link" ? (
                         <Link
-                          to={`${process.env.PUBLIC_URL}${childrenSubItem.path}`}
+                          to={`${URL}${childrenSubItem.path}`}
                           className={childrenSubItem.active ? "active" : ""}
                           onClick={() => setNavActive(childrenSubItem)}
                         >
@@ -229,7 +231,7 @@ const Sidebar = () => {
       <div className="page-sidebar ">
         <div className="main-header-left d-none d-lg-block">
           <div className="logo-wrapper">
-            <Link to={`${process.env.PUBLIC_URL}/dashboard`}>
+            <Link to={`${URL}/dashboard`}>
               <img
                 className="blur-up lazyloaded img-fluid my-5"
                 src={logo}

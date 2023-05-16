@@ -11,9 +11,9 @@ export const initiate = asyncHandler(async (req, res) => {
   const { facultyId, semester, observerId, hodId, courseId } = req.body;
   const findObservation = await prisma.observations.findFirst({
     where: {
+      OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
       courseId,
       facultyId,
-      observationStatus: "Pending" || "Ongoing",
     },
   });
   if (findObservation) {

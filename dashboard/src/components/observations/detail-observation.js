@@ -5,6 +5,8 @@ import Breadcrumb from "../common/breadcrumb";
 import { Loader, DownloadCloud } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 
+const URL = process.env.PUBLIC_URL;
+
 const Detail_observation = () => {
   const { id } = useParams();
   const [isOpen, setIsOpen] = useState("scheduling");
@@ -254,7 +256,7 @@ const Detail_observation = () => {
                       <br />
                       {user.role === "Observer" && (
                         <NavLink
-                          to={`${process.env.PUBLIC_URL}/observations/observation-scheduling/${obsDetail?.id}`}
+                          to={`${URL}/observations/observation-scheduling/${obsDetail?.id}`}
                           className="mt-2 btn btn-primary"
                         >
                           Start Scheduling

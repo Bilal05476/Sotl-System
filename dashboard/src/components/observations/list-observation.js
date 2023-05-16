@@ -16,6 +16,8 @@ import { useStateValue } from "../../StateProvider";
 import { Eye, Loader } from "react-feather";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 
+const URL = process.env.PUBLIC_URL;
+
 const List_observation = () => {
   const [{ user, userData }, dispatch] = useStateValue();
 
@@ -130,7 +132,7 @@ const List_observation = () => {
                             <td className="digits font-primary">
                               <NavLink
                                 className="d-flex align-items-center"
-                                to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
+                                to={`${URL}/observations/detail-observation/${item.id}`}
                               >
                                 <Eye size={20} />
                               </NavLink>

@@ -5,6 +5,8 @@ import avatar from "../../../assets/images/dashboard/avatar.png";
 import { useStateValue } from "../../../StateProvider";
 import { info } from "../../../constants/Toasters";
 
+const URL = process.env.PUBLIC_URL;
+
 const UserMenu = () => {
   const navigate = useNavigate();
   const [{ user }, dispatch] = useStateValue();
@@ -35,7 +37,7 @@ const UserMenu = () => {
         </div>
         <ul className="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
           <li>
-            <Link to={`${process.env.PUBLIC_URL}/settings/profile`}>
+            <Link to={`${URL}/settings/profile`}>
               <i data-feather="user"></i>Profile
             </Link>
           </li>

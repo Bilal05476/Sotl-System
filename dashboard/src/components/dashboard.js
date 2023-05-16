@@ -74,6 +74,8 @@ ChartJS.register(
   RadialLinearScale
 );
 
+const URL = process.env.PUBLIC_URL;
+
 const Dashboard = () => {
   const [streamFilter, setStreamFilter] = useState("Monthly");
 
@@ -718,7 +720,7 @@ const Dashboard = () => {
                             <td className="digits font-primary">
                               <NavLink
                                 className="d-flex align-items-center"
-                                to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
+                                to={`${URL}/observations/detail-observation/${item.id}`}
                               >
                                 <Eye size={20} />
                               </NavLink>
@@ -739,7 +741,7 @@ const Dashboard = () => {
                         to="/observations/list-observation"
                         className="btn btn-primary"
                       >
-                        View All Observerions
+                        View All Observations
                       </NavLink>
                     )}
                   </div>

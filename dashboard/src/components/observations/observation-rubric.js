@@ -14,6 +14,8 @@ import { NavLink, useParams } from "react-router-dom";
 
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 
+const URL = process.env.PUBLIC_URL;
+
 const Observation_rubric = () => {
   const [isOpen, setIsOpen] = useState("");
   const [selectedRubric, setSelectedRubric] = useState([]);
@@ -180,7 +182,7 @@ const Observation_rubric = () => {
           }}
         >
           <NavLink
-            to={`${process.env.PUBLIC_URL}/observations/detail-observation/${id}`}
+            to={`${URL}/observations/detail-observation/${id}`}
             style={{
               backgroundColor: pendingColor,
               outline: "none",
