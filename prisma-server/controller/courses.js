@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
 // @desc   Get course by id
-// @route  POST api/course/:id
+// @route  GET api/course/:id
 // @access Public
 export const getCourse = asyncHandler(async (req, res) => {
   const getCourseById = await prisma.courses.findFirst({
@@ -21,9 +21,13 @@ export const getCourse = asyncHandler(async (req, res) => {
           },
         },
       },
+      observations: true,
     },
   });
-  res.status(200).json(getCourseById);
+
+  if (!getCourseById)
+    res.status(400).json({ error: `No course for that id = ${req.params.id}` });
+  else res.status(200).json(getCourseById);
 });
 
 // @desc   Get courses
@@ -44,7 +48,9 @@ export const getCourses = asyncHandler(async (req, res) => {
       },
     },
   });
-  res.status(200).json(getAllCourses);
+  if (getAllCourses.length === 0)
+    res.status(200).json({ message: "No courses" });
+  else res.status(200).json(getAllCourses);
 });
 
 // @desc   Create course
