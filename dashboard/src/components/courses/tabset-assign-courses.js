@@ -63,6 +63,10 @@ const TabsetAssignCourses = () => {
       } catch (err) {
         toast.dismiss(toastId.current);
         errors(err.message);
+        setassignCourses({
+          ...assignCourses,
+          loader: false,
+        });
       }
     }
     if (facultyId === "Select" || courseId === "Select") {
@@ -70,8 +74,8 @@ const TabsetAssignCourses = () => {
     } else if (slots.length === 0) {
       info("Please select the slots!");
     } else {
-      assignCourse();
-      // console.log(courseDetails);
+      // assignCourse();
+      console.log(courseDetails);
     }
   };
 

@@ -27,7 +27,7 @@ const TabsetCourses = () => {
     location: "",
   });
 
-  const { id, name, department, campus, credits, slots, loader } = createCourse;
+  const { id, name, department, campus, credits, loader } = createCourse;
   const { sid, day, time, location } = createSlot;
 
   const toastId = useRef(null);
@@ -38,8 +38,8 @@ const TabsetCourses = () => {
     const courseDetails = {
       id,
       name,
-      department,
-      campus,
+      department: user.department,
+      campus: user.campus,
       credits: Number(credits),
       slots: createSlots,
     };
@@ -49,68 +49,76 @@ const TabsetCourses = () => {
         ...createCourse,
         loader: true,
       });
-      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/courses`, {
-        method: "POST",
-        body: JSON.stringify(courseDetails),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const data = await res.json();
-      if (data.error) {
-        toast.dismiss(toastId.current);
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/courses`, {
+          method: "POST",
+          body: JSON.stringify(courseDetails),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            // Authorization: `Bearer ${user.token}`,
+          },
+        });
+        const data = await res.json();
+        if (data.error) {
+          toast.dismiss(toastId.current);
+          setCreateCourse({
+            ...createCourse,
+            loader: false,
+          });
+          errors(data.error);
+        } else {
+          toast.dismiss(toastId.current);
+          setCreateCourse({
+            ...createCourse,
+            loader: false,
+            id: "",
+            name: "",
+            credits: "",
+          });
+          successes("Course created successfully!");
+          setTimeout(() => {
+            setCreateSlots([]);
+          }, 1500);
+        }
+      } catch (err) {
+        errors(err.message);
         setCreateCourse({
           ...createCourse,
           loader: false,
         });
-        errors(data.error);
-      } else {
-        toast.dismiss(toastId.current);
-        setCreateCourse({
-          ...createCourse,
-          loader: false,
-        });
-        successes("Observation initiated successfully!");
-
-        // setTimeout(() => {
-        //   setCreateCourse({
-        //     ...createCourse,
-        //     facultyId: "Select",
-        //     observerId: "Select",
-        //     semester: "Select",
-        //     courseId: "",
-        //   });
-        // }, 2000);
       }
     }
     if (!id || !name || !credits) {
       info("Provide course details properly!");
     } else if (createSlots.length === 0) {
-      info("Please provide and save your slot details!");
+      info("Please provide and save minimum slot details!");
     } else {
-      // postObs();
-      console.log(courseDetails);
+      addCourse();
+      // console.log(courseDetails);
     }
   };
 
   const onSaveAddSlot = async () => {
-    setSlotsLength([...slotsLength, slotsLength.length + 1]);
-    setCreateSlots([
-      ...createSlots,
-      {
-        id: sid,
-        day,
-        time,
-        location,
-      },
-    ]);
-    setCreateSlot({
-      sid: "",
-      day: "",
-      time: "",
-      location: "",
-    });
+    if (sid && day && time && location) {
+      setSlotsLength([...slotsLength, slotsLength.length + 1]);
+      setCreateSlots([
+        ...createSlots,
+        {
+          id: sid,
+          day,
+          time,
+          location,
+        },
+      ]);
+      setCreateSlot({
+        sid: "",
+        day: "",
+        time: "",
+        location: "",
+      });
+    } else {
+      info("Please provide complete slot details if you want to add!");
+    }
   };
 
   return (
@@ -215,12 +223,14 @@ const TabsetCourses = () => {
         </TabPanel>
       </Tabs>
 
-      <div
-        onClick={onSaveAddSlot}
-        className="d-flex align-items-center justify-content-center mx-4 mb-4"
-        style={{ cursor: "pointer" }}
-      >
-        <PlusCircle size={20} className="mx-2" /> Save &amp; Add Slot
+      <div className="d-flex align-items-center justify-content-center">
+        <span
+          onClick={onSaveAddSlot}
+          className="d-flex align-items-center justify-content-center px-2 mb-4"
+          style={{ cursor: "pointer" }}
+        >
+          <PlusCircle size={20} className="mx-2" /> Save &amp; Add Slot
+        </span>
       </div>
       {createSlots.length > 0 && (
         <Tabs>
@@ -242,7 +252,7 @@ const TabsetCourses = () => {
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.day}</td>
-                    <td>{item.day}</td>
+                    <td>{item.time}</td>
                     <td>{item.location}</td>
                   </tr>
                 ))}
