@@ -89,8 +89,8 @@ const TabsetObservation = () => {
     } else if (!courseId) {
       info("Provide select course for faculty!");
     } else {
-      postObs();
-      // console.log(obsDetail);
+      // postObs();
+      console.log(obsDetail);
     }
   };
 

@@ -3,8 +3,8 @@ const courseRoutes = express.Router();
 
 import {
   assignCourses,
-  cou,
   createCourse,
+  createCourseSlots,
   getCourse,
   getCourses,
 } from "../controller/courses.js";
@@ -12,6 +12,6 @@ import {
 courseRoutes.route("/courses").get(getCourses).post(createCourse);
 courseRoutes.route("/course/:id").get(getCourse);
 courseRoutes.route("/courses/user/:id").put(assignCourses);
-courseRoutes.route("/cou").get(cou);
+courseRoutes.route("/courses/slots").post(createCourseSlots);
 
 export default courseRoutes;

@@ -85,6 +85,7 @@ export const getAllObs = asyncHandler(async (req, res) => {
       observationProgress: item.observationProgress,
       observationStatus: item.observationStatus,
       course: item.course,
+      createdAt: item.createdAt,
     });
   });
   res.status(200).json(returnObss);

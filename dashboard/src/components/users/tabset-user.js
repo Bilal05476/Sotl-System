@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { fetchCoursesAndUsers } from "../Endpoints";
+import { ongoingColor } from "../colors";
 
 const TabsetUser = () => {
   const [{ usersandcourses, user }, dispatch] = useStateValue();
@@ -123,9 +124,8 @@ const TabsetUser = () => {
         ...createUser,
         courseId: cid,
       });
-      const [temp] = usersandcourses.courses.filter(
-        (item) => item.id === Number(cid)
-      );
+      const [temp] = usersandcourses.courses.filter((item) => item.id === cid);
+      // console.log(temp);
       const filteredSlots = temp.slots.filter((item) => item.faculty === null);
       if (filteredSlots.length === 0) {
         info("No available slots for that course!");
@@ -352,13 +352,13 @@ const TabsetUser = () => {
                       <span
                         className="mb-2"
                         style={{
-                          border: "1px solid #040b5b",
+                          border: `1px solid ${ongoingColor}`,
                           marginRight: "0.5rem",
                           padding: "0.2rem 0.8rem",
                           borderRadius: "15px",
                           cursor: "pointer",
                           backgroundColor:
-                            slotsId.includes(item.id) && "#040b5b",
+                            slotsId.includes(item.id) && ongoingColor,
                           color: slotsId.includes(item.id) && "#fff",
                         }}
                         onClick={() => onSelectSlot(item.id)}

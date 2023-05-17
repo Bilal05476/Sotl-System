@@ -62,8 +62,8 @@ model Observations {
     observerId          Int
     obsRequest          ObsScheduling?
     meetings            Meetings?
-    course              Courses?       @relation(fields: [courseId], references: [id])
-    courseId            String?
+    course              Courses        @relation(fields: [courseId], references: [id])
+    courseId            String
     feedbacks           FeedBacks[]
     createdAt           DateTime       @default(now())
 }
@@ -164,7 +164,7 @@ model Courses {
     department      Department
     campus          Campus
     // scheduling    ObsScheduling?
-    observation     Observations[]
+    observations    Observations[]
     isElective      Boolean        @default(false)
     isDepthElective Boolean        @default(false)
     slots           CourseSlots[]

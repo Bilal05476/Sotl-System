@@ -74,8 +74,8 @@ const TabsetAssignCourses = () => {
     } else if (slots.length === 0) {
       info("Please select the slots!");
     } else {
-      // assignCourse();
-      console.log(courseDetails);
+      assignCourse();
+      // console.log(courseDetails);
     }
   };
 

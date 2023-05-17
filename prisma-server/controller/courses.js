@@ -111,11 +111,29 @@ export const assignCourses = asyncHandler(async (req, res) => {
   }
 });
 
-export async function cou(req, res) {
-  const d = await prisma.courses.findMany({
-    include: {
-      observation: true,
+// @desc   Add Courses Slots
+// @route  POST api/courses/slots
+// @access Only Hod add course slots
+export const createCourseSlots = asyncHandler(async (req, res) => {
+  const { id, location, day, time, courseId } = req.body;
+
+  const findSlot = await prisma.courseSlots.findFirst({
+    where: {
+      id,
+      // OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
+      location,
+      day,
+      time,
     },
   });
-  res.status(200).json(d);
-}
+  if (findSlot) {
+    res.status(400).json({
+      error: "Slot already created",
+    });
+  } else {
+    const createSlot = await prisma.courseSlots.create({
+      data: { id, location, day, time, courseId },
+    });
+    res.status(200).json(createSlot);
+  }
+});
