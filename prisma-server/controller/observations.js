@@ -267,6 +267,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     select: {
       id: true,
       status: true,
+      scheduledOn: true,
     },
   });
   // res.status(200).json(reqData);
@@ -306,7 +307,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
         },
         data: {
           observationStatus: "Ongoing",
-          starting: scheduledOn,
+          starting: existedReq.scheduledOn,
           observationProgress: 20,
           meetings: {
             create: {

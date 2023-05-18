@@ -55,16 +55,18 @@ const TabsetScheduling = ({ role }) => {
   } = obsSchedule;
 
   const editDetail = {
-    teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
-    teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
+    teachingPlanByObserver:
+      teachingPlanByObserver && teachingPlanByObserver.slice(0, 10),
+    teachingPlanByFaculty:
+      teachingPlanByFaculty && teachingPlanByFaculty.slice(0, 10),
 
     refelectionPlanByObserver:
-      refelectionPlanByObserver && refelectionPlanByObserver,
+      refelectionPlanByObserver && refelectionPlanByObserver.slice(0, 10),
 
     refelectionPlanByFaculty:
-      refelectionPlanByFaculty && refelectionPlanByFaculty,
+      refelectionPlanByFaculty && refelectionPlanByFaculty.slice(0, 10),
 
-    artifacts: artifacts && artifacts,
+    artifacts: artifacts && artifacts.slice(0, 10),
 
     timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
     timeSlotByObserver: timeSlotByObserver && timeSlotByObserver,
@@ -83,6 +85,7 @@ const TabsetScheduling = ({ role }) => {
 
   async function editObs() {
     editedObsDetail.observationsId = Number(id);
+    info("Scheduling uppdating...");
     try {
       const res = await fetch(`${BASEURL}/observation/scheduling`, {
         method: "PUT",
@@ -104,44 +107,61 @@ const TabsetScheduling = ({ role }) => {
   }
 
   const onObservationEditing = () => {
-    editedObsDetail.observationsId = Number(id);
-    console.log(editedObsDetail);
-
-    // if (role === "Faculty") {
-    //   if (!teachingPlanByFaculty || timeSlotsByFaculty.length === 0) {
-    //     info("Provide all required fields!");
-    //   } else {
-    //     // editObs();
-    //     console.log(editObsDetail);
-    //   }
-    // }
-    // if (role === "Observer") {
-    //   if (!scheduledOn || timeSlotByObserver.length === 0) {
-    //     info("Provide all required fields!");
-    //   } else {
-    //     editObs();
-    //   }
-    // }
+    if (role === "Faculty") {
+      if (!teachingPlanByFaculty || timeSlotsByFaculty.length === 0) {
+        info("Provide all required fields!");
+      } else {
+        editObs();
+      }
+    }
+    if (role === "Observer") {
+      if (!scheduledOn || timeSlotByObserver.length === 0) {
+        info("Provide all required fields!");
+      } else {
+        editObs();
+      }
+    }
   };
 
   const onSchedulingAccept = () => {
     const accepted = {
       observationsId: Number(id),
     };
+
+    async function acceptScheduling() {
+      info("Observation accepting...");
+      const res = await fetch(`${BASEURL}/observation/scheduling`, {
+        method: "PUT",
+        body: JSON.stringify(accepted),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        errors(data.error);
+      } else {
+        successes("Observation Accepted");
+      }
+    }
+
     if (role === "Faculty") {
       accepted.facultyAccepted = true;
+      acceptScheduling();
     }
     if (role === "Observer") {
       accepted.observerAccepted = true;
+      acceptScheduling();
     }
   };
 
   const onObservationScheduling = () => {
     const ObsDetail = {
       observationsId: Number(id),
-      teachingPlanByObserver: "teaching",
-      refelectionPlanByObserver: "reflection",
-      artifacts: "artifacts",
+      teachingPlanByObserver,
+      refelectionPlanByObserver,
+      artifacts,
     };
     async function postObs() {
       info("Observation scheduling...");
@@ -169,11 +189,27 @@ const TabsetScheduling = ({ role }) => {
     }
   };
 
-  const onSchedulingDone = () => {
+  const onSchedulingDone = async () => {
     const finalObsDetails = {
       observationsId: Number(id),
       status: "Completed",
     };
+
+    info("Done Scheduling...");
+    const res = await fetch(`${BASEURL}/observation/scheduling`, {
+      method: "PUT",
+      body: JSON.stringify(finalObsDetails),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      errors(data.error);
+    } else {
+      successes("Observation Scheduling Done!");
+    }
   };
 
   const onSelectSlotFaculty = (id) => {
@@ -321,6 +357,7 @@ const TabsetScheduling = ({ role }) => {
           <TabList className="nav nav-tabs tab-coupon">
             <Tab className="nav-link">Required for Scheduling</Tab>
           </TabList>
+
           <TabPanel>
             <Form className="needs-validation user-add" noValidate="">
               <DocumentsForm
@@ -349,18 +386,38 @@ const TabsetScheduling = ({ role }) => {
                   <span>*</span> Provide Avalaible Slots
                 </Label>
                 <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                  {/* {availableSlot?.course?.slots.map((item) => (
-                    <TimeSlotSpan
-                      key={item.id}
-                      id={item.id}
-                      location={item.location}
-                      time={item.time}
-                      day={item.day}
-                      onClick={() => onSelectSlotFaculty(item.id)}
-                      slots={timeSlotsByFaculty}
-                    />
-                  ))} */}
+                  {availableSlot?.course?.slots.map((item) => {
+                    if (item.facultyId === user.id)
+                      return (
+                        <TimeSlotSpan
+                          key={item.id}
+                          id={item.id}
+                          location={item.location}
+                          time={item.time}
+                          day={item.day}
+                          onClick={() => onSelectSlotFaculty(item.id)}
+                          slots={timeSlotsByFaculty}
+                        />
+                      );
+                  })}
                 </div>
+              </FormGroup>
+            </Form>
+          </TabPanel>
+          <TabList className="nav nav-tabs tab-coupon">
+            <Tab className="nav-link">Response from Observer</Tab>
+          </TabList>
+          <TabPanel>
+            <Form className="needs-validation user-add">
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  Observer Select Slots
+                </Label>
+                <Input
+                  value={availableSlot?.obsRequest?.scheduledOn}
+                  readOnly={true}
+                  type="text"
+                />
               </FormGroup>
             </Form>
           </TabPanel>
@@ -369,13 +426,24 @@ const TabsetScheduling = ({ role }) => {
 
       <div className="pull-right">
         {availableSlot.obsRequest && (
-          <Button
-            onClick={() => onObservationEditing()}
-            type="button"
-            color="primary"
-          >
-            Update
-          </Button>
+          <>
+            <Button
+              onClick={() => onObservationEditing()}
+              type="button"
+              color="primary"
+              // className=""
+            >
+              Update
+            </Button>
+            <Button
+              onClick={() => onSchedulingAccept()}
+              type="button"
+              color="primary"
+              className="mx-3"
+            >
+              Accept
+            </Button>
+          </>
         )}
         {role === "Observer" && (
           <>
@@ -388,7 +456,8 @@ const TabsetScheduling = ({ role }) => {
                 Start Scheduling
               </Button>
             )}
-            {availableSlot?.obsRequest?.scheduledOn && (
+            {availableSlot?.obsRequest?.facultyAccepted &&
+            availableSlot?.obsRequest?.observerAccepted ? (
               <Button
                 onClick={() => onSchedulingDone()}
                 type="button"
@@ -396,6 +465,8 @@ const TabsetScheduling = ({ role }) => {
               >
                 Done
               </Button>
+            ) : (
+              <></>
             )}
           </>
         )}
