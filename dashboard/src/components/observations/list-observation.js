@@ -76,9 +76,10 @@ const List_observation = () => {
                           <th scope="col">Faculty</th>
                           <th scope="col">Observer</th>
                           <th scope="col">Head of department</th>
+                          <th scope="col">Progress</th>
+                          <th scope="col">Current Meeting</th>
                           <th scope="col">Starting Date</th>
                           <th scope="col">Ending Date</th>
-                          <th scope="col">Progress</th>
                           <th scope="col">Status</th>
                           <th scope="col"></th>
                         </tr>
@@ -91,12 +92,7 @@ const List_observation = () => {
                             <td className="digits">{item.faculty.name}</td>
                             <td className="digits">{item.observer.name}</td>
                             <td className="digits">{item.hod.name}</td>
-                            <td className="digits">
-                              {item.starting ? item.starting : "--"}
-                            </td>
-                            <td className="digits">
-                              {item.ending ? item.ending : "--"}
-                            </td>
+
                             <td>
                               <div className="progress-showcase">
                                 <div className="progress" style={{ height: 8 }}>
@@ -116,6 +112,34 @@ const List_observation = () => {
                                   ></div>
                                 </div>
                               </div>
+                            </td>
+                            <td
+                              className="digits"
+                              style={{
+                                color: completeColor,
+                              }}
+                            >
+                              {item.meetings?.obsRequest?.status === "Ongoing"
+                                ? "Scheduling"
+                                : item.meetings?.informedObservation?.status ===
+                                  "Ongoing"
+                                ? "Informed"
+                                : item.meetings?.postObservation?.status ===
+                                  "Ongoing"
+                                ? "Post Informed"
+                                : item.meetings?.uninformedObservation
+                                    ?.status === "Ongoing"
+                                ? "Uninformed"
+                                : item.meetings?.professionalDPlan?.status ===
+                                  "Ongoing"
+                                ? "Prof development"
+                                : "---"}
+                            </td>
+                            <td className="digits">
+                              {item.starting ? item.starting : "--"}
+                            </td>
+                            <td className="digits">
+                              {item.ending ? item.ending : "--"}
                             </td>
                             <td
                               style={{

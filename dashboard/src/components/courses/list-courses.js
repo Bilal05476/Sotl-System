@@ -14,14 +14,14 @@ import {
 } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { Eye, Loader } from "react-feather";
-import { fetchUserData } from "../Endpoints";
+import { fetchCoursesAndUsers, fetchUserData } from "../Endpoints";
 
 const List_courses = () => {
-  const [{ user, userData, usersandcourses }, dispatch] = useStateValue();
+  const [{ user, usersandcourses }, dispatch] = useStateValue();
   useEffect(() => {
-    fetchUserData(dispatch);
+    if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
+    fetchUserData(user.id, dispatch);
   }, []);
-
   return (
     <Fragment>
       <Breadcrumb title="Courses List" parent="Courses" />

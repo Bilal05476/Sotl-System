@@ -15,6 +15,8 @@ const TabsetScheduling = ({ role }) => {
 
   const [availableSlot, setAvailableSlots] = useState("");
 
+  console.log(availableSlot);
+
   const [obsSchedule, setObsSchedule] = useState({
     teachingPlanByObserver: "",
     refelectionPlanByObserver: "",
@@ -137,9 +139,9 @@ const TabsetScheduling = ({ role }) => {
   const onObservationScheduling = () => {
     const ObsDetail = {
       observationsId: Number(id),
-      teachingPlanByObserver,
-      refelectionPlanByObserver,
-      artifacts,
+      teachingPlanByObserver: "teaching",
+      refelectionPlanByObserver: "reflection",
+      artifacts: "artifacts",
     };
     async function postObs() {
       info("Observation scheduling...");
@@ -163,6 +165,7 @@ const TabsetScheduling = ({ role }) => {
       info("Provide all the documents!");
     } else {
       postObs();
+      // console.log(ObsDetail);
     }
   };
 
@@ -346,7 +349,7 @@ const TabsetScheduling = ({ role }) => {
                   <span>*</span> Provide Avalaible Slots
                 </Label>
                 <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                  {availableSlot?.course?.slots.map((item) => (
+                  {/* {availableSlot?.course?.slots.map((item) => (
                     <TimeSlotSpan
                       key={item.id}
                       id={item.id}
@@ -356,7 +359,7 @@ const TabsetScheduling = ({ role }) => {
                       onClick={() => onSelectSlotFaculty(item.id)}
                       slots={timeSlotsByFaculty}
                     />
-                  ))}
+                  ))} */}
                 </div>
               </FormGroup>
             </Form>

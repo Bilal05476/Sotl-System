@@ -481,11 +481,11 @@ const Dashboard = () => {
             <>
               <Col xl="6 xl-50" md="6" sm="3">
                 <Card className="o-hidden widget-cards">
-                  <CardBody style={{ backgroundColor: pendingColor }}>
+                  <CardBody style={{ backgroundColor: ongoingColor }}>
                     <Media className="static-top-widget row">
                       <div className="icons-widgets col-4">
                         <div className="align-self-center text-center">
-                          <Users color={pendingColor} />
+                          <Users color={ongoingColor} />
                         </div>
                       </div>
                       <Media body className="col-8">
@@ -697,7 +697,7 @@ const Dashboard = () => {
                                 : item.meetings?.professionalDPlan?.status ===
                                   "Ongoing"
                                 ? "Prof development"
-                                : "All completed"}
+                                : "---"}
                             </td>
                             <td className="digits">
                               {item.starting ? item.starting : "--"}
