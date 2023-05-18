@@ -46,6 +46,7 @@ export const getCourses = asyncHandler(async (req, res) => {
           },
         },
       },
+      observations: true,
     },
   });
   if (getAllCourses.length === 0)
@@ -126,10 +127,6 @@ export const createCourseSlots = asyncHandler(async (req, res) => {
   const findSlot = await prisma.courseSlots.findFirst({
     where: {
       id,
-      // OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
-      location,
-      day,
-      time,
     },
   });
   if (findSlot) {

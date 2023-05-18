@@ -84,8 +84,6 @@ model ObsScheduling {
     observationsId            Int           @unique
     facultyAccepted           Boolean       @default(false)
     observerAccepted          Boolean       @default(false)
-    // course                    Courses      @relation(fields: [courseId], references: [id])
-    // courseId                  Int          @unique
     reasons                   ObsReasons[]
 }
 
