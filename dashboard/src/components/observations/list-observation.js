@@ -53,7 +53,7 @@ const List_observation = () => {
       <Breadcrumb title="Observation List" parent="Observations" />
       <Container fluid={true}>
         <Row>
-          <Col xl="6 xl-100">
+          <Col xl="12 xl-100">
             <Card>
               {user.role === "Head_of_Department" && (
                 <CardHeader className="d-flex justify-content-end">

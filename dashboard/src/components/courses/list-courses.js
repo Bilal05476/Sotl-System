@@ -27,7 +27,7 @@ const List_courses = () => {
       <Breadcrumb title="Courses List" parent="Courses" />
       <Container fluid={true}>
         <Row>
-          <Col xl="6 xl-100">
+          <Col xl="12 xl-100">
             <Card>
               {user.role === "Head_of_Department" && (
                 <>

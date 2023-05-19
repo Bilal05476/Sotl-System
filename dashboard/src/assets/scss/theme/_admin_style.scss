@@ -671,6 +671,7 @@ a {
     align-items: center;
   }
   .tab2-card {
+
     .nav-tabs {
       .nav-link {
         font-size: 18px;
@@ -761,7 +762,16 @@ a {
       margin-bottom: 1.5rem;
     }
     .site-logo {
-      width: 100%;
+      width: 70%;
+      display: block;
+      margin: 0px auto;
+      margin-bottom: 15px;
+      // background-color: #6fa2d8;
+    }
+    .site-logo-main {
+      width: 30%;
+      display: block;
+      margin: 0px auto;
       margin-bottom: 15px;
       // background-color: #6fa2d8;
     }

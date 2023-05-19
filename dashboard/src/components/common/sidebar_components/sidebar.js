@@ -10,6 +10,7 @@ import {
 
 // image import
 import logo from "../../../assets/images/sotllogo-white.png";
+import logo2 from "../../../assets/images/white-version.png";
 import { useStateValue } from "../../../StateProvider";
 
 const URL = process.env.PUBLIC_URL;
@@ -233,9 +234,24 @@ const Sidebar = () => {
           <div className="logo-wrapper">
             <Link to={`${URL}/dashboard`}>
               <img
-                className="blur-up lazyloaded img-fluid my-5"
+                className="blur-up lazyloaded img-fluid mt-2"
+                src={logo2}
+                alt="sotl system"
+                style={{
+                  width: "30%",
+                  display: "block",
+                  margin: "1px auto",
+                }}
+              />
+              <img
+                className="blur-up lazyloaded img-fluid my-2"
                 src={logo}
                 alt="sotl system"
+                style={{
+                  width: "70%",
+                  display: "block",
+                  margin: "1px auto",
+                }}
               />
             </Link>
           </div>

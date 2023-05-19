@@ -577,7 +577,7 @@ const Dashboard = () => {
           )}
 
           {user.role !== "Faculty" ? (
-            <Col xl="6 xl-100">
+            <Col xl="12 xl-100">
               <Card>
                 <CardHeader className="d-flex align-items-center justify-content-between">
                   <h5>Observations Stream</h5>
@@ -624,10 +624,10 @@ const Dashboard = () => {
             <></>
           )}
 
-          <Col xl="6 xl-100">
+          <Col xl="12 xl-100">
             <Card>
               <CardHeader>
-                <h5>Your Observations</h5>
+                <h5>Recent Observations</h5>
               </CardHeader>
               {userData && (
                 <CardBody>
