@@ -42,6 +42,9 @@ import Createcourses from "../components/courses/create-courses";
 import Listcourses from "../components/courses/list-courses";
 import { fetchCoursesAndUsers, fetchUserData } from "../components/Endpoints";
 import Assigncourses from "../components/courses/assign-courses";
+import Teaching from "../components/Templates/Teaching";
+import Reflection from "../components/Templates/Reflection";
+import Artifacts from "../components/Templates/Artifacts";
 
 const URL = process.env.PUBLIC_URL;
 const LayoutRoutes = () => {
@@ -145,6 +148,16 @@ const LayoutRoutes = () => {
             path={`${URL}/courses/assign-courses`}
             element={<Assigncourses />}
           />
+
+          <Route
+            path={`${URL}/templates/teaching-plan`}
+            element={<Teaching />}
+          />
+          <Route
+            path={`${URL}/templates/reflection-plan`}
+            element={<Reflection />}
+          />
+          <Route path={`${URL}/templates/artifacts`} element={<Artifacts />} />
 
           <Route
             path={`${URL}/observations/list-observation`}

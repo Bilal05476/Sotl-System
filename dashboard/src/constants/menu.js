@@ -20,7 +20,15 @@
 //     ]
 // },
 
-import { Home, Clipboard, UserPlus, User, Book } from "react-feather";
+import {
+  Home,
+  Clipboard,
+  UserPlus,
+  User,
+  Book,
+  BookOpen,
+  FileText,
+} from "react-feather";
 
 export const MENUITEMS = [
   {
@@ -221,10 +229,34 @@ export const OBSERVERMENU = [
   {
     path: "/",
     title: "Courses",
-    icon: Home,
+    icon: BookOpen,
     type: "link",
     badgeType: "primary",
     active: false,
+  },
+
+  {
+    title: "Templates",
+    icon: FileText,
+    type: "sub",
+    active: false,
+    children: [
+      {
+        path: "/templates/teaching-plan",
+        title: "Teaching Plan",
+        type: "link",
+      },
+      {
+        path: "/templates/reflection-plan",
+        title: "Reflection Plan",
+        type: "link",
+      },
+      {
+        path: "/templates/artifacts",
+        title: "Artifacts",
+        type: "link",
+      },
+    ],
   },
 
   {
