@@ -12,37 +12,40 @@ datasource db {
 
 // -> User => Observations || => Courses || => Feedbacks || => Messages
 model User {
-    id               Int            @id @default(autoincrement()) // auto-inc
-    name             String
-    email            String
-    phone            String?
-    password         String
-    avatar           String?
-    designation      String?
-    dateOfBirth      String?
-    institute        String?
-    degree           String?
-    starting         String?
-    ending           String?
-    role             Role
-    campus           Campus
-    department       Department
+    id                  Int            @id @default(autoincrement()) // auto-inc
+    name                String
+    email               String
+    phone               String?
+    password            String
+    avatar              String?
+    designation         String?
+    dateOfBirth         String?
+    institute           String?
+    degree              String?
+    starting            String?
+    ending              String?
+    role                Role
+    campus              Campus
+    department          Department
     //observations
-    facultyObs       Observations[] @relation("Faculty")
-    hodObs           Observations[] @relation("Hod")
-    observerObs      Observations[] @relation("Observer")
+    facultyObs          Observations[] @relation("Faculty")
+    hodObs              Observations[] @relation("Hod")
+    observerObs         Observations[] @relation("Observer")
     //courses
-    courseSlots      CourseSlots[]
+    courseSlots         CourseSlots[]
     // observerCourses  Courses[]      @relation("Observer")
     //feedbacks
-    feedbackAuthor   FeedBacks[]    @relation("Author")
-    feedbackReceiver FeedBacks[]    @relation("Receiver")
+    feedbackAuthor      FeedBacks[]    @relation("Author")
+    feedbackReceiver    FeedBacks[]    @relation("Receiver")
     //messages
-    messageSender    Messages[]     @relation("Sender")
-    messageReceiver  Messages[]     @relation("Receiver")
+    messageSender       Messages[]     @relation("Sender")
+    messageReceiver     Messages[]     @relation("Receiver")
     //reasons
-    reasonSender     ObsReasons[]   @relation("Sender")
-    reasonReceiver   ObsReasons[]   @relation("Receiver")
+    reasonSender        ObsReasons[]   @relation("Sender")
+    reasonReceiver      ObsReasons[]   @relation("Receiver")
+    //templates
+    TemplatePlansFilled TemplatePlan[] @relation("Filled")
+    TemplatePlansEdit   TemplatePlan[] @relation("Edited")
 }
 
 // -> User => Observations
@@ -206,9 +209,20 @@ model Messages {
     receiverId Int?
 }
 
+model TemplatePlan {
+    id         Int          @id @default(autoincrement())
+    field      String
+    type       TemplateType @default(Teaching)
+    filledBy   User?        @relation("Filled", fields: [filledById], references: [id])
+    filledById Int?
+    editedByBy User?        @relation("Edited", fields: [editedById], references: [id])
+    editedById Int?
+}
+
 // enums
 enum Role {
-    Admin
+    Super_Admin
+    Dean
     Campus_Director
     Head_of_Department
     Faculty
@@ -216,11 +230,12 @@ enum Role {
 }
 
 enum Department {
+    Computer_Science
+    Software_Engineering
+}
+
+enum FacultyOf {
     Fest
-    Aifd
-    Media_Studies
-    Business
-    Education
 }
 
 enum Campus {
@@ -243,4 +258,10 @@ enum Semester {
     Fall
     Spring
     Summer
+}
+
+enum TemplateType {
+    Teaching
+    Reflection
+    Artifacts
 }
