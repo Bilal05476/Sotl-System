@@ -9,24 +9,24 @@ import asyncHandler from "express-async-handler";
 export const initiate = asyncHandler(async (req, res) => {
   // await prisma.observations.deleteMany();
   const { facultyId, semester, observerId, hodId, courseId } = req.body;
-  const findObservation = await prisma.observations.findFirst({
-    where: {
-      OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
-      courseId,
-      facultyId,
-    },
+  // const findObservation = await prisma.observations.findFirst({
+  //   where: {
+  //     OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
+  //     courseId,
+  //     facultyId,
+  //   },
+  // });
+  // if (findObservation) {
+  //   res.status(400).json({
+  //     error:
+  //       "Already have an ongoing observation for that course of this faculty!",
+  //   });
+  // } else {
+  const newObservation = await prisma.observations.create({
+    data: { semester, facultyId, observerId, hodId, courseId },
   });
-  if (findObservation) {
-    res.status(400).json({
-      error:
-        "Already have an ongoing observation for that course of this faculty!",
-    });
-  } else {
-    const newObservation = await prisma.observations.create({
-      data: { semester, facultyId, observerId, hodId, courseId },
-    });
-    res.status(200).json(newObservation);
-  }
+  res.status(200).json(newObservation);
+  // }
 
   // if (newObservation) {
   //   res.status(200).json(newObservation);

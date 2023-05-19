@@ -73,21 +73,18 @@ model Observations {
 
 // -> Observations => ObsScheduling
 model ObsScheduling {
-    id                        Int           @id @default(autoincrement()) // auto-inc
-    teachingPlanByFaculty     String?
-    teachingPlanByObserver    String?
-    refelectionPlanByFaculty  String? // optional for faculty
-    refelectionPlanByObserver String?
-    artifacts                 String?
-    timeSlotsByFaculty        CourseSlots[] @relation("Faculty")
-    timeSlotByObserver        CourseSlots[] @relation("Observer")
-    scheduledOn               String?
-    status                    Status        @default(Ongoing)
-    observation               Observations  @relation(fields: [observationsId], references: [id])
-    observationsId            Int           @unique
-    facultyAccepted           Boolean       @default(false)
-    observerAccepted          Boolean       @default(false)
-    reasons                   ObsReasons[]
+    id                 Int            @id @default(autoincrement()) // auto-inc
+    timeSlotsByFaculty CourseSlots[]  @relation("Faculty")
+    timeSlotByObserver CourseSlots[]  @relation("Observer")
+    scheduledOn        String?
+    status             Status         @default(Ongoing)
+    observation        Observations   @relation(fields: [observationsId], references: [id])
+    observationsId     Int            @unique
+    facultyAccepted    Boolean        @default(false)
+    observerAccepted   Boolean        @default(false)
+    reasons            ObsReasons[]
+    teachingPlan       TemplatePlan[] @relation("Teaching Plan")
+    reflectionPlan     TemplatePlan[] @relation("Reflection Plan")
 }
 
 //-> Observation -> ObsScheduling -> ObsReasons
@@ -209,14 +206,19 @@ model Messages {
     receiverId Int?
 }
 
+// -> User => Scheduling => Template
 model TemplatePlan {
-    id         Int          @id @default(autoincrement())
-    field      String
-    type       TemplateType @default(Teaching)
-    filledBy   User?        @relation("Filled", fields: [filledById], references: [id])
-    filledById Int?
-    editedByBy User?        @relation("Edited", fields: [editedById], references: [id])
-    editedById Int?
+    id            Int            @id @default(autoincrement())
+    field         String
+    type          TemplateType   @default(Teaching)
+    filledBy      User?          @relation("Filled", fields: [filledById], references: [id])
+    filledById    Int?
+    editedByBy    User?          @relation("Edited", fields: [editedById], references: [id])
+    editedById    Int?
+    schedulingT   ObsScheduling? @relation("Teaching Plan", fields: [schedulingTId], references: [id])
+    schedulingTId Int?
+    schedulingR   ObsScheduling? @relation("Reflection Plan", fields: [schedulingRId], references: [id])
+    schedulingRId Int?
 }
 
 // enums
@@ -234,7 +236,7 @@ enum Department {
     Software_Engineering
 }
 
-enum FacultyOf {
+enum Specialization {
     Fest
 }
 
