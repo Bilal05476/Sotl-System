@@ -14,8 +14,9 @@ const UserPanel = () => {
             alt="#"
           />
         </div>
-        <h6 className="mt-3 f-14">{user.name}</h6>
+        <h5 className="mt-3 f-14">{user.name}</h5>
         <p>{user.role.replaceAll("_", " ")}</p>
+        <p>Fest</p>
       </div>
     </div>
   );

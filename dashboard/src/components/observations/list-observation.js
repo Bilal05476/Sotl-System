@@ -75,11 +75,13 @@ const List_observation = () => {
                           <th scope="col">Semester</th>
                           <th scope="col">Faculty</th>
                           <th scope="col">Observer</th>
-                          <th scope="col">Head of department</th>
-                          <th scope="col">Progress</th>
+                          {user.role !== "Head_of_Department" && (
+                            <th scope="col">Head of department</th>
+                          )}
                           <th scope="col">Current Meeting</th>
                           <th scope="col">Starting Date</th>
                           <th scope="col">Ending Date</th>
+                          <th scope="col">Progress</th>
                           <th scope="col">Status</th>
                           <th scope="col"></th>
                         </tr>
@@ -91,28 +93,10 @@ const List_observation = () => {
                             <td className="digits">{item.semester}</td>
                             <td className="digits">{item.faculty.name}</td>
                             <td className="digits">{item.observer.name}</td>
-                            <td className="digits">{item.hod.name}</td>
+                            {user.role !== "Head_of_Department" && (
+                              <td className="digits">{item.hod.name}</td>
+                            )}
 
-                            <td>
-                              <div className="progress-showcase">
-                                <div className="progress" style={{ height: 8 }}>
-                                  <div
-                                    className="progress-bar"
-                                    style={{
-                                      width: item.observationProgress,
-                                      backgroundColor:
-                                        item.observationStatus === "Ongoing"
-                                          ? ongoingColor
-                                          : completeColor,
-                                    }}
-                                    role="progressbar"
-                                    aria-valuenow="50"
-                                    aria-valuemin="0"
-                                    aria-valuemax="100"
-                                  ></div>
-                                </div>
-                              </div>
-                            </td>
                             <td
                               className="digits"
                               style={{
@@ -140,6 +124,26 @@ const List_observation = () => {
                             </td>
                             <td className="digits">
                               {item.ending ? item.ending : "--"}
+                            </td>
+                            <td>
+                              <div className="progress-showcase">
+                                <div className="progress" style={{ height: 8 }}>
+                                  <div
+                                    className="progress-bar"
+                                    style={{
+                                      width: item.observationProgress,
+                                      backgroundColor:
+                                        item.observationStatus === "Ongoing"
+                                          ? ongoingColor
+                                          : completeColor,
+                                    }}
+                                    role="progressbar"
+                                    aria-valuenow="50"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                  ></div>
+                                </div>
+                              </div>
                             </td>
                             <td
                               style={{

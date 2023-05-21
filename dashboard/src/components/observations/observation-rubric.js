@@ -12,7 +12,15 @@ import {
 } from "react-feather";
 import { NavLink, useParams } from "react-router-dom";
 
-import { completeColor, ongoingColor, pendingColor } from "../colors";
+import {
+  blue1,
+  blue2,
+  blue3,
+  blue4,
+  completeColor,
+  ongoingColor,
+  pendingColor,
+} from "../colors";
 
 const URL = process.env.PUBLIC_URL;
 
@@ -83,32 +91,23 @@ const Observation_rubric = () => {
                 <Table borderless>
                   <thead>
                     <th className="col">
-                      <RadioInput value={"Innovating"} />
+                      <RadioInput value={"1. Not Demonstrating"} />
                     </th>
                     <th className="col">
-                      <RadioInput value={"Applying"} />
+                      <RadioInput value={"2. Developing"} />
                     </th>
                     <th className="col">
-                      <RadioInput value={"Developing"} />
+                      <RadioInput value={"3. Applying"} />
                     </th>
                     <th className="col">
-                      <RadioInput value={"Not Demonstrating"} />
+                      <RadioInput value={"4. Innovating"} />
                     </th>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
                         <RubricPoints
-                          rubricDesc={innovative}
-                          setSelected={setSelectedRubric}
-                          selected={selectedRubric}
-                          score={rubricScore}
-                          setScore={setRubricScore}
-                        />
-                      </td>
-                      <td>
-                        <RubricPoints
-                          rubricDesc={applying}
+                          rubricDesc={notDemostrating}
                           setSelected={setSelectedRubric}
                           selected={selectedRubric}
                           score={rubricScore}
@@ -124,9 +123,20 @@ const Observation_rubric = () => {
                           setScore={setRubricScore}
                         />
                       </td>
+
                       <td>
                         <RubricPoints
-                          rubricDesc={notDemostrating}
+                          rubricDesc={applying}
+                          setSelected={setSelectedRubric}
+                          selected={selectedRubric}
+                          score={rubricScore}
+                          setScore={setRubricScore}
+                        />
+                      </td>
+
+                      <td>
+                        <RubricPoints
+                          rubricDesc={innovative}
                           setSelected={setSelectedRubric}
                           selected={selectedRubric}
                           score={rubricScore}
@@ -282,7 +292,16 @@ const RubricPoints = ({
           key={item.id}
           className="rubric-points d-flex align-items-start my-2 "
           style={{
-            backgroundColor: selected.includes(item.id) && ongoingColor,
+            backgroundColor:
+              selected.includes(item.id) && item.score === 1
+                ? blue3
+                : selected.includes(item.id) && item.score === 2
+                ? blue2
+                : selected.includes(item.id) && item.score === 3
+                ? blue1
+                : selected.includes(item.id) && item.score === 4
+                ? blue4
+                : "",
             boxShadow:
               selected.includes(item.id) &&
               "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
@@ -322,17 +341,17 @@ const innovative = [
   {
     id: 1,
     text: "Frequently engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 3,
+    score: 4,
   },
   {
     id: 2,
     text: "Teaching demonstrates extensive knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3,
+    score: 4,
   },
   {
     id: 3,
     text: "Complete alignment (90%-100%) with adopted standards, program goals, and CLOs.",
-    score: 3,
+    score: 4,
   },
 ];
 
@@ -358,33 +377,33 @@ const developing = [
   {
     id: 7,
     text: "Rarely engages students in learning experiences focused on disciplinary knowledge and content specific skills",
-    score: 3,
+    score: 2,
   },
   {
     id: 8,
     text: "Teaching demonstrates partial knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3,
+    score: 2,
   },
   {
     id: 9,
     text: "Content teaching shows limited alignment (<50%) with adopted standards, program goals, and CLOs.",
-    score: 3,
+    score: 2,
   },
 ];
 const notDemostrating = [
   {
     id: 10,
     text: "Does not engage students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 3,
+    score: 1,
   },
   {
     id: 11,
     text: "Teaching demonstrates limited knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3,
+    score: 1,
   },
   {
     id: 12,
     text: "Content teaching shows no alignment with adopted standards, program goals, and CLOs.",
-    score: 3,
+    score: 1,
   },
 ];

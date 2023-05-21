@@ -83,8 +83,8 @@ const Dashboard = () => {
     labels:
       streamFilter === "Yearly"
         ? ["2023"]
-        : streamFilter === "Half Yearly"
-        ? ["Jan - June", "July - Dec"]
+        : streamFilter === "Quarter"
+        ? ["Jan - Mar", "Apr - June", "Jul - Sep", "Oct - Dec"]
         : streamFilter === "Semesters"
         ? ["Spring", "Summer", "Fall"]
         : [
@@ -106,15 +106,15 @@ const Dashboard = () => {
         data:
           streamFilter === "Yearly"
             ? [66]
-            : streamFilter === "Half Yearly"
-            ? [27, 39]
+            : streamFilter === "Quarter"
+            ? [27, 39, 12, 32]
             : streamFilter === "Semesters"
             ? [19, 25, 22]
             : [5, 3, 6, 5, 4, 4, 8, 9, 5, 4, 3, 10],
         // borderColor: "gold",
         backgroundColor: pendingColor,
         borderWidth: 0,
-        barPercentage: 0.7,
+        barPercentage: 0.6,
         borderRadius: 2,
         categoryPercentage: 0.5,
         label: "Pending",
@@ -124,8 +124,8 @@ const Dashboard = () => {
         data:
           streamFilter === "Yearly"
             ? [67]
-            : streamFilter === "Half Yearly"
-            ? [33, 34]
+            : streamFilter === "Quarter"
+            ? [33, 34, 36, 58]
             : streamFilter === "Semesters"
             ? [21, 23, 23]
             : [5, 6, 3, 7, 9, 3, 4, 7, 6, 5, 8, 4],
@@ -133,7 +133,7 @@ const Dashboard = () => {
         // borderColor: "lightblue",
         backgroundColor: ongoingColor,
         borderWidth: 0,
-        barPercentage: 0.7,
+        barPercentage: 0.6,
         borderRadius: 2,
         categoryPercentage: 0.5,
         label: "Ongoing",
@@ -142,8 +142,8 @@ const Dashboard = () => {
         data:
           streamFilter === "Yearly"
             ? [75]
-            : streamFilter === "Half Yearly"
-            ? [36, 39]
+            : streamFilter === "Quarter"
+            ? [36, 39, 45, 25]
             : streamFilter === "Semesters"
             ? [23, 29, 21]
             : [6, 8, 5, 4, 6, 7, 8, 8, 4, 6, 7, 4],
@@ -151,7 +151,7 @@ const Dashboard = () => {
         // borderColor: "#040b5b",
         backgroundColor: completeColor,
         borderWidth: 0,
-        barPercentage: 0.7,
+        barPercentage: 0.6,
         borderRadius: 2,
         categoryPercentage: 0.5,
         label: "Completed",
@@ -597,7 +597,7 @@ const Dashboard = () => {
                     <ObservationStreamFilter
                       streamFilter={streamFilter}
                       setStreamFilter={setStreamFilter}
-                      text="Half Yearly"
+                      text="Quarter"
                       ongoingColor={ongoingColor}
                     />
                     <ObservationStreamFilter
@@ -639,11 +639,13 @@ const Dashboard = () => {
                           <th scope="col">Semester</th>
                           <th scope="col">Faculty</th>
                           <th scope="col">Observer</th>
-                          <th scope="col">Head of department</th>
-                          <th scope="col">Progress</th>
+                          {user.role !== "Head_of_Department" && (
+                            <th scope="col">Head of department</th>
+                          )}
                           <th scope="col">Current Meeting</th>
                           <th scope="col">Starting Date</th>
                           <th scope="col">Ending Date</th>
+                          <th scope="col">Progress</th>
                           <th scope="col">Status</th>
                           <th scope="col"></th>
                         </tr>
@@ -655,28 +657,12 @@ const Dashboard = () => {
                             <td className="digits">{item.semester}</td>
                             <td className="digits">{item.faculty.name}</td>
                             <td className="digits">{item.observer.name}</td>
-                            <td className="digits">{item.hod.name}</td>
+                            {user.role !== "Head_of_Department" && (
+                              <td className="digits">{item.hod.name}</td>
+                            )}
 
-                            <td>
-                              <div className="progress-showcase">
-                                <div className="progress" style={{ height: 8 }}>
-                                  <div
-                                    className="progress-bar"
-                                    style={{
-                                      width: item.observationProgress,
-                                      backgroundColor:
-                                        item.observationStatus === "Ongoing"
-                                          ? ongoingColor
-                                          : completeColor,
-                                    }}
-                                    role="progressbar"
-                                    aria-valuenow="50"
-                                    aria-valuemin="0"
-                                    aria-valuemax="100"
-                                  ></div>
-                                </div>
-                              </div>
-                            </td>
+                            {/* {item.observationStatus} */}
+
                             <td
                               className="digits"
                               style={{
@@ -704,6 +690,26 @@ const Dashboard = () => {
                             </td>
                             <td className="digits">
                               {item.ending ? item.ending : "--"}
+                            </td>
+                            <td>
+                              <div className="progress-showcase">
+                                <div className="progress" style={{ height: 8 }}>
+                                  <div
+                                    className="progress-bar"
+                                    style={{
+                                      width: item.observationProgress,
+                                      backgroundColor:
+                                        item.observationStatus === "Ongoing"
+                                          ? ongoingColor
+                                          : completeColor,
+                                    }}
+                                    role="progressbar"
+                                    aria-valuenow="50"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                  ></div>
+                                </div>
+                              </div>
                             </td>
                             <td
                               style={{
