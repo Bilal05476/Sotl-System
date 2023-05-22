@@ -208,17 +208,25 @@ model Messages {
 
 // -> User => Scheduling => Template
 model TemplatePlan {
-    id            Int            @id @default(autoincrement())
-    field         String
-    type          TemplateType   @default(Teaching)
-    filledBy      User?          @relation("Filled", fields: [filledById], references: [id])
+    id            Int                @id @default(autoincrement())
+    steps         TemplatePlanStep[]
+    type          TemplateType       @default(Teaching)
+    filledBy      User?              @relation("Filled", fields: [filledById], references: [id])
     filledById    Int?
-    editedByBy    User?          @relation("Edited", fields: [editedById], references: [id])
+    editedByBy    User?              @relation("Edited", fields: [editedById], references: [id])
     editedById    Int?
-    schedulingT   ObsScheduling? @relation("Teaching Plan", fields: [schedulingTId], references: [id])
+    schedulingT   ObsScheduling?     @relation("Teaching Plan", fields: [schedulingTId], references: [id])
     schedulingTId Int?
-    schedulingR   ObsScheduling? @relation("Reflection Plan", fields: [schedulingRId], references: [id])
+    schedulingR   ObsScheduling?     @relation("Reflection Plan", fields: [schedulingRId], references: [id])
     schedulingRId Int?
+}
+
+model TemplatePlanStep {
+    id             Int           @id @default(autoincrement())
+    field          String
+    response       String?
+    TemplatePlan   TemplatePlan? @relation(fields: [templatePlanId], references: [id])
+    templatePlanId Int?
 }
 
 // enums
