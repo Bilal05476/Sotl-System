@@ -22,7 +22,7 @@ const Users = () => {
       <div className="routes-deck">
         <div id="create" className="mb-5">
           <h4>Create User</h4>
-          <EndPoint endpoint="url/api/create" method="POST" />
+          <EndPoint endpoint="/api/create" method="POST" />
           <h4>
             Available Parameters + User Token in header (Only
             Head_of_Department, Campus_Director, Admin) e.g: Bearer eyJh.....
@@ -70,14 +70,14 @@ const Users = () => {
                 name: "department",
                 type: "string",
                 def: "",
-                avail: "Fest | Aifd | Media_Studies | Business | Education",
+                avail: "Computer_Science | Software_Engineering",
                 req: true,
               },
               {
                 name: "courses",
                 type: "array",
                 def: "",
-                avail: "Required for Obsever | Faculty, array of courses id",
+                avail: "Required for Faculty, array of slots id",
                 req: false,
               },
             ]}
@@ -86,7 +86,7 @@ const Users = () => {
 
         <div id="login" className="mb-5">
           <h4>Login User</h4>
-          <EndPoint endpoint="url/api/login" method="POST" />
+          <EndPoint endpoint="/api/login" method="POST" />
           <h4>Available Parameters</h4>
           <Parameters
             params={[
@@ -109,15 +109,15 @@ const Users = () => {
         </div>
         <div id="users" className="mb-5">
           <h4>Get All Users</h4>
-          <EndPoint endpoint="url/api/users" method="GET" />
+          <EndPoint endpoint="/api/users" method="GET" />
         </div>
         <div id="user" className="mb-5">
           <h4>Get User by Id</h4>
-          <EndPoint endpoint="url/api/user/:id" method="GET" />
+          <EndPoint endpoint="/api/user/:id" method="GET" />
         </div>
         <div id="update" className="mb-5">
           <h4>User update by Id</h4>
-          <EndPoint endpoint="url/api/update/:id" method="PUT" />
+          <EndPoint endpoint="/api/update/:id" method="PUT" />
           <h4>Available Parameters</h4>
           <Parameters
             params={[
@@ -163,13 +163,13 @@ const Users = () => {
                 avail: "",
                 req: false,
               },
-              {
-                name: "avatar",
-                type: "string",
-                def: "null",
-                avail: "",
-                req: false,
-              },
+              // {
+              //   name: "avatar",
+              //   type: "string",
+              //   def: "null",
+              //   avail: "",
+              //   req: false,
+              // },
             ]}
           />
         </div>

@@ -37,7 +37,7 @@
   display: flex;
   flex-direction: column;
   padding: 6rem;
-  min-width: 300px;
+  width: 300px;
   position: fixed;
   padding-left: 2rem;
   /* padding-right: 6rem; */
@@ -48,6 +48,7 @@
   color: #fff;
   margin-bottom: 1rem;
   cursor: pointer;
+  text-decoration: none;
 }
 .routes-deck {
   display: flex;
@@ -55,6 +56,9 @@
   padding: 6rem;
   padding-left: 2rem;
   margin-left: 300px;
+  background-color: #1827c91d;
+  width: 100%;
+  min-height: 100vh;
 }
 .routes-deck h4 {
   font-size: 1rem;
@@ -70,7 +74,8 @@
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.51);
 }
 .parameters {
-  background-color: aliceblue;
+  background-color: rgba(240, 248, 255, 0.419);
+  backdrop-filter: blur(10px);
   color: var(--themeColor--);
   display: flex;
   justify-content: space-between;

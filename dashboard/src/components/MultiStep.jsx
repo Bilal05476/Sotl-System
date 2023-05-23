@@ -27,24 +27,24 @@ const initialValues = {
 };
 
 // Define form steps
-const steps = [
-  {
-    fields: ["Program Outcomes for this program (PLOs)"],
-  },
-  {
-    fields: ["Learning Outcomes for this course (CLOs)", "Learning Resources"],
-  },
-  {
-    fields: ["Teaching Summary", "Pre-Teaching / Warm-up", "Post Teaching"],
-  },
-  {
-    fields: [
-      "Learning Feedbacks (activity, quiz, no-graded/graded assessments)",
-    ],
-  },
-];
+// const steps = [
+//   {
+//     fields: ["Program Outcomes for this program (PLOs)"],
+//   },
+//   {
+//     fields: ["Learning Outcomes for this course (CLOs)", "Learning Resources"],
+//   },
+//   {
+//     fields: ["Teaching Summary", "Pre-Teaching / Warm-up", "Post Teaching"],
+//   },
+//   {
+//     fields: [
+//       "Learning Feedbacks (activity, quiz, no-graded/graded assessments)",
+//     ],
+//   },
+// ];
 
-const MultiStepForm = ({ tabtitle }) => {
+const MultiStepForm = ({ tabtitle, steps }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleNextStep = () => {
@@ -62,30 +62,35 @@ const MultiStepForm = ({ tabtitle }) => {
           <Tab className="nav-link">{tabtitle}</Tab>
         </TabList>
 
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={(values) => {
-            // Handle form submission
-            console.log(values);
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form className="needs-validation" noValidate="">
-              <FormGroup className="row">
-                <div className="col-12">
-                  {steps.map((step, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        display: index === currentStep ? "block" : "none",
-                      }}
-                    >
-                      {/* <h2>{step.label}</h2> */}
-                      {step.fields.map((field) => (
-                        <div key={field} className="row mb-2">
-                          <Label htmlFor={field} className="col-xl-3 col-md-4">
-                            {field.charAt(0).toUpperCase() + field.slice(1)}
+        {steps && (
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              // Handle form submission
+              console.log(values);
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form className="needs-validation" noValidate="">
+                <FormGroup className="row">
+                  <div className="col-12">
+                    {steps.map((step, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          display: index === currentStep ? "block" : "none",
+                        }}
+                      >
+                        {/* <h2>{step.label}</h2> */}
+                        {/* {step.map((field) => ( */}
+                        <div key={step.field} className="row mb-2">
+                          <Label
+                            htmlFor={step.field}
+                            className="col-xl-3 col-md-4"
+                          >
+                            {step.field.charAt(0).toUpperCase() +
+                              step.field.slice(1)}
                           </Label>
 
                           <textarea
@@ -93,48 +98,49 @@ const MultiStepForm = ({ tabtitle }) => {
                             rows={5}
                             required={true}
                             type="text"
-                            id={field}
-                            name={field}
+                            id={step.field}
+                            name={step.field}
                           ></textarea>
                         </div>
-                      ))}
-                    </div>
-                  ))}
-                  <div className="text-center mt-5">
-                    {currentStep > 0 && (
-                      <Button
-                        onClick={handlePreviousStep}
-                        type="button"
-                        color="primary"
-                        className="mx-2"
-                      >
-                        Previous
-                      </Button>
-                    )}
+                        {/* ))} */}
+                      </div>
+                    ))}
+                    <div className="text-center mt-5">
+                      {currentStep > 0 && (
+                        <Button
+                          onClick={handlePreviousStep}
+                          type="button"
+                          color="primary"
+                          className="mx-2"
+                        >
+                          Previous
+                        </Button>
+                      )}
 
-                    {currentStep < steps.length - 1 ? (
-                      <Button
-                        onClick={handleNextStep}
-                        type="button"
-                        color="primary"
-                      >
-                        Next
-                      </Button>
-                    ) : (
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        color="primary"
-                      >
-                        Submit
-                      </Button>
-                    )}
+                      {currentStep < steps.length - 1 ? (
+                        <Button
+                          onClick={handleNextStep}
+                          type="button"
+                          color="primary"
+                        >
+                          Next
+                        </Button>
+                      ) : (
+                        <Button
+                          type="submit"
+                          // disabled={isSubmitting}
+                          color="primary"
+                        >
+                          Submit
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </FormGroup>
-            </Form>
-          )}
-        </Formik>
+                </FormGroup>
+              </Form>
+            )}
+          </Formik>
+        )}
       </Tabs>
     </Fragment>
   );

@@ -255,12 +255,17 @@ const Detail_observation = () => {
                       <strong>No data!</strong>
                       <br />
                       {user.role === "Observer" && (
-                        <NavLink
-                          to={`${URL}/observations/observation-scheduling/${obsDetail?.id}`}
+                        <button
+                          // to={`${URL}/observations/observation-scheduling/${obsDetail?.id}`}
                           className="mt-2 btn btn-primary"
+                          onClick={() =>
+                            alert(
+                              "Yahan press krne se templates faculty ko chale jayngay!"
+                            )
+                          }
                         >
                           Start Scheduling
-                        </NavLink>
+                        </button>
                       )}
                     </div>
                   )}

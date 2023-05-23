@@ -103,11 +103,12 @@ const Sidebar = () => {
 
   const mainMenu = mainmenu.map((menuItem, i) => (
     <li className={`${menuItem.active ? "active" : ""}`} key={i}>
-      {menuItem.sidebartitle ? (
-        <div className="sidebar-title">{menuItem.sidebartitle}</div>
+      {/* {menuItem.sidebartitle ? (
+        // <div className="sidebar-title">{menuItem.sidebartitle}</div>
+        <></>
       ) : (
         ""
-      )}
+      )} */}
       {menuItem.type === "sub" ? (
         <a
           className={`sidebar-header ${menuItem.active ? "active" : ""}`}

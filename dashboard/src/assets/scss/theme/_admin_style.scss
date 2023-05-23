@@ -2731,7 +2731,7 @@ ul.notification-dropdown.onhover-show-div {
           display: none;
           transform-style: preserve-3d;
           transform: rotateX(-90deg);
-          list-style: none;
+          list-style: none !important;
           .sidebar-submenu {
             padding-top: 0 !important;
           }
@@ -2765,6 +2765,7 @@ ul.notification-dropdown.onhover-show-div {
               &:hover {
                 color: $sidebar-hover-txt-color;
                 transition: $sidebar-transition;
+                
               }
               &.active {
                 color: $sidebar-hover-txt-color;
@@ -3535,6 +3536,7 @@ $i: 1;
       tr {
         td,
         th {
+          font-weight: 200;
           &:nth-child(5) {
             width: 195px !important;
           }

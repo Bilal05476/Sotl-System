@@ -34,3 +34,17 @@ export async function fetchCoursesAndUsers(dispatch) {
     console.log(error.message);
   }
 }
+
+export async function getTemplate(setPlan, id) {
+  try {
+    const template = await fetch(`${BASEURL}/template/${id}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await template.json();
+    setPlan(data.steps);
+  } catch (err) {
+    console.log(err);
+  }
+}
