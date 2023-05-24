@@ -3,6 +3,34 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 // import nodemailer from "nodemailer";
 
+const TeachingSteps = [
+  {
+    field: "Program Outcomes for this Program (PLOs)",
+  },
+  {
+    field: "Learning Outcomes for this Course (CLOs)",
+  },
+  {
+    field: "Learning Resources",
+  },
+  {
+    field: "Teaching Summary",
+  },
+  {
+    field: "Pre Teaching / Warm-up",
+  },
+  {
+    field: "Post Teaching",
+  },
+  {
+    field: "Learning Feedbacks (activity, quiz, no-graded/graded assessments)",
+  },
+];
+const ReflectionSteps = [
+  {
+    field: "Abhi nahi pata",
+  },
+];
 // @desc   Initiate Observation by Head of department
 // @route  POST api/observation/initiate
 // @access Private (only hod will initiate)
@@ -136,6 +164,16 @@ export const getObs = asyncHandler(async (req, res) => {
               courseId: true,
             },
           },
+          teachingPlan: {
+            select: {
+              steps: true,
+            },
+          },
+          reflectionPlan: {
+            select: {
+              steps: true,
+            },
+          },
           reasons: true,
         },
       },
@@ -163,21 +201,7 @@ export const getObs = asyncHandler(async (req, res) => {
 
 export const obsScheduleCreate = asyncHandler(async (req, res) => {
   // await prisma.obsScheduling.deleteMany();
-  const {
-    teachingPlanByObserver,
-    refelectionPlanByObserver,
-    artifacts,
-    observationsId,
-  } = req.body;
-
-  const reqData = {
-    teachingPlanByObserver,
-    refelectionPlanByObserver,
-    artifacts,
-    observationsId,
-  };
-
-  // await prisma.obsScheduling.deleteMany();
+  const { observationsId } = req.body;
   const findSheduling = await prisma.obsScheduling.findFirst({
     where: {
       observationsId,
@@ -189,8 +213,31 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
     });
   } else {
     const createdReq = await prisma.obsScheduling.create({
-      data: reqData,
+      data: {
+        observationsId,
+        teachingPlan: {
+          create: {
+            type: "Teaching",
+            steps: {
+              createMany: {
+                data: TeachingSteps,
+              },
+            },
+          },
+        },
+        reflectionPlan: {
+          create: {
+            type: "Reflection",
+            steps: {
+              createMany: {
+                data: ReflectionSteps,
+              },
+            },
+          },
+        },
+      },
     });
+
     res.status(200).json(createdReq);
   }
 });
@@ -201,11 +248,6 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
 export const obsScheduleCycle = asyncHandler(async (req, res) => {
   const {
     observationsId,
-    teachingPlanByObserver,
-    refelectionPlanByObserver,
-    artifacts,
-    teachingPlanByFaculty,
-    refelectionPlanByFaculty,
     timeSlotsByFaculty,
     timeSlotByObserver,
     scheduledOn,
@@ -225,17 +267,6 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
   }
 
   const reqData = {
-    teachingPlanByObserver: teachingPlanByObserver && teachingPlanByObserver,
-    teachingPlanByFaculty: teachingPlanByFaculty && teachingPlanByFaculty,
-
-    refelectionPlanByObserver:
-      refelectionPlanByObserver && refelectionPlanByObserver,
-
-    refelectionPlanByFaculty:
-      refelectionPlanByFaculty && refelectionPlanByFaculty,
-
-    artifacts: artifacts && artifacts,
-
     timeSlotsByFaculty: timeSlotsByFaculty && {
       set: fids,
     },
@@ -257,8 +288,6 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
       },
     },
   };
-
-  // res.status(200).json(reqData);
 
   const existedReq = await prisma.obsScheduling.findFirst({
     where: {
@@ -298,6 +327,16 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
           },
         },
         reasons: true,
+        teachingPlan: {
+          select: {
+            steps: true,
+          },
+        },
+        reflectionPlan: {
+          select: {
+            steps: true,
+          },
+        },
       },
     });
     if (status) {
@@ -357,6 +396,16 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
                 },
               },
               reasons: true,
+              teachingPlan: {
+                select: {
+                  steps: true,
+                },
+              },
+              reflectionPlan: {
+                select: {
+                  steps: true,
+                },
+              },
             },
           },
           course: true,
@@ -374,7 +423,6 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     } else {
       res.status(200).json(updatedReq);
     }
-    res.status(200).json(updatedReq);
   } else {
     res.status(404).json({ error: "Scheduling does not exist or completed!" });
   }

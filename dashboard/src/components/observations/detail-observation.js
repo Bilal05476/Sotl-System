@@ -47,6 +47,7 @@ const Detail_observation = () => {
   };
 
   // return;
+  console.log(obsDetail);
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
@@ -116,13 +117,10 @@ const Detail_observation = () => {
                       <Table borderless>
                         <thead>
                           <tr>
-                            <th scope="col">Time (O)</th>
-                            <th scope="col">Time (F)</th>
-                            <th scope="col">Artifact</th>
-                            <th scope="col">Teaching (F)</th>
-                            <th scope="col">Teaching (O)</th>
-                            <th scope="col">Reflection (F)</th>
-                            <th scope="col">Reflection (O)</th>
+                            <th scope="col">Slot By Observer</th>
+                            <th scope="col">Slots By Faculty</th>
+                            <th scope="col">Teaching Plan</th>
+                            <th scope="col">Reflection Plan</th>
                             <th scope="col">Status</th>
                           </tr>
                         </thead>
@@ -140,7 +138,7 @@ const Detail_observation = () => {
                             </td>
 
                             <td className="digits">
-                              {obsDetail?.obsRequest.artifacts ? (
+                              {/* {obsDetail?.obsRequest.artifacts ? (
                                 <a
                                   href={obsDetail?.obsRequest.artifacts}
                                   target="blank"
@@ -149,69 +147,22 @@ const Detail_observation = () => {
                                 </a>
                               ) : (
                                 "--"
-                              )}
+                              )} */}
                             </td>
 
                             <td className="digits">
-                              {obsDetail?.obsRequest.teachingPlanByFaculty ? (
+                              {/* {obsDetail?.obsRequest.artifacts ? (
                                 <a
-                                  href={
-                                    obsDetail?.obsRequest.teachingPlanByFaculty
-                                  }
+                                  href={obsDetail?.obsRequest.artifacts}
                                   target="blank"
                                 >
                                   <DownloadCloud size={20} />
                                 </a>
                               ) : (
                                 "--"
-                              )}
+                              )} */}
                             </td>
-                            <td className="digits">
-                              {obsDetail?.obsRequest.teachingPlanByObserver ? (
-                                <a
-                                  href={
-                                    obsDetail?.obsRequest.teachingPlanByObserver
-                                  }
-                                  target="blank"
-                                >
-                                  <DownloadCloud size={20} />
-                                </a>
-                              ) : (
-                                "--"
-                              )}
-                            </td>
-                            <td className="digits">
-                              {obsDetail?.obsRequest
-                                .refelectionPlanByFaculty ? (
-                                <a
-                                  href={
-                                    obsDetail?.obsRequest
-                                      .refelectionPlanByFaculty
-                                  }
-                                  target="blank"
-                                >
-                                  <DownloadCloud size={20} />
-                                </a>
-                              ) : (
-                                "--"
-                              )}
-                            </td>
-                            <td className="digits">
-                              {obsDetail?.obsRequest
-                                .refelectionPlanByObserver ? (
-                                <a
-                                  href={
-                                    obsDetail?.obsRequest
-                                      .refelectionPlanByObserver
-                                  }
-                                  target="blank"
-                                >
-                                  <DownloadCloud size={20} />
-                                </a>
-                              ) : (
-                                "--"
-                              )}
-                            </td>
+
                             <td
                               className={`digits ${
                                 obsDetail?.obsRequest.status === "Completed"
