@@ -167,11 +167,15 @@ export const getObs = asyncHandler(async (req, res) => {
           teachingPlan: {
             select: {
               steps: true,
+              filledBy: true,
+              editedByBy: true,
             },
           },
           reflectionPlan: {
             select: {
               steps: true,
+              filledBy: true,
+              editedByBy: true,
             },
           },
           reasons: true,
