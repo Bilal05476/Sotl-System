@@ -235,29 +235,29 @@ export const OBSERVERMENU = [
     active: false,
   },
 
-  {
-    title: "Templates",
-    icon: FileText,
-    type: "sub",
-    active: false,
-    children: [
-      {
-        path: "/templates/teaching-plan",
-        title: "Teaching Plan",
-        type: "link",
-      },
-      {
-        path: "/templates/reflection-plan",
-        title: "Reflection Plan",
-        type: "link",
-      },
-      {
-        path: "/templates/artifacts",
-        title: "Artifacts",
-        type: "link",
-      },
-    ],
-  },
+  // {
+  //   title: "Templates",
+  //   icon: FileText,
+  //   type: "sub",
+  //   active: false,
+  //   children: [
+  //     {
+  //       path: "/templates/teaching-plan",
+  //       title: "Teaching Plan",
+  //       type: "link",
+  //     },
+  //     {
+  //       path: "/templates/reflection-plan",
+  //       title: "Reflection Plan",
+  //       type: "link",
+  //     },
+  //     {
+  //       path: "/templates/artifacts",
+  //       title: "Artifacts",
+  //       type: "link",
+  //     },
+  //   ],
+  // },
 
   {
     title: "Profile",

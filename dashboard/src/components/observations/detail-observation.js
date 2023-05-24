@@ -47,7 +47,7 @@ const Detail_observation = () => {
   };
 
   // return;
-  console.log(obsDetail);
+  // console.log(obsDetail);
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />

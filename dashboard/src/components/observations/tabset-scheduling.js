@@ -6,6 +6,9 @@ import { useStateValue } from "../../StateProvider";
 import { errors, successes, info, warning } from "../../constants/Toasters";
 import { completeColor } from "../colors";
 import FileBase from "react-file-base64";
+import { fetchObservation } from "../Endpoints";
+import { Frown } from "react-feather";
+import MultiStepForm from "../MultiStep";
 
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
@@ -242,70 +245,22 @@ const TabsetScheduling = ({ role }) => {
     }
   };
 
-  const fetchObservation = async () => {
-    try {
-      const res = await fetch(`${BASEURL}/observation/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-
-      const data = await res.json();
-      if (data.error) {
-        errors(data.error);
-      } else {
-        setAvailableSlots(data);
-      }
-    } catch (err) {
-      errors(err);
-    }
-  };
   useEffect(() => {
-    fetchObservation();
+    fetchObservation(setAvailableSlots, id, errors);
   }, []);
+
+  console.log(availableSlot?.obsRequest?.teachingPlan[0]?.steps);
 
   return (
     <Fragment>
       {role === "Observer" && (
         <>
-          {!availableSlot.obsRequest ? (
-            <Tabs>
-              <TabList className="nav nav-tabs tab-coupon">
-                <Tab className="nav-link">Start Scheduling</Tab>
-              </TabList>
-              <TabPanel>
-                <Form className="needs-validation user-add" noValidate="">
-                  <DocumentsForm
-                    label={"Teaching Plan"}
-                    required={true}
-                    onDone={({ base64 }) =>
-                      setObsSchedule({
-                        ...obsSchedule,
-                        teachingPlanByObserver: base64,
-                      })
-                    }
-                  />
-                  <DocumentsForm
-                    label={"Reflection Plan"}
-                    required={true}
-                    onDone={({ base64 }) =>
-                      setObsSchedule({
-                        ...obsSchedule,
-                        refelectionPlanByObserver: base64,
-                      })
-                    }
-                  />
-
-                  <DocumentsForm
-                    required={true}
-                    label={"Artifacts"}
-                    onDone={({ base64 }) =>
-                      setObsSchedule({ ...obsSchedule, artifacts: base64 })
-                    }
-                  />
-                </Form>
-              </TabPanel>
+          {!availableSlot?.obsRequest?.teachingPlan[0]?.filledBy ? (
+            <Tabs className="text-center">
+              <span>
+                No templates filled by faculty yet...{" "}
+                <Frown color="brown" size={18} />{" "}
+              </span>
             </Tabs>
           ) : (
             <Tabs>
@@ -353,120 +308,83 @@ const TabsetScheduling = ({ role }) => {
         </>
       )}
       {role === "Faculty" && (
-        <Tabs>
-          <TabList className="nav nav-tabs tab-coupon">
-            <Tab className="nav-link">Required for Scheduling</Tab>
-          </TabList>
-
-          <TabPanel>
-            <Form className="needs-validation user-add" noValidate="">
-              <DocumentsForm
-                label={"Teaching Plan"}
-                required={true}
-                onDone={({ base64 }) =>
-                  setObsSchedule({
-                    ...obsSchedule,
-                    teachingPlanByFaculty: base64,
-                  })
-                }
-              />
-              <DocumentsForm
-                label={"Reflection Plan"}
-                required={false}
-                onDone={({ base64 }) =>
-                  setObsSchedule({
-                    ...obsSchedule,
-                    refelectionPlanByFaculty: base64,
-                  })
-                }
-              />
-
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4">
-                  <span>*</span> Provide Avalaible Slots
-                </Label>
-                <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                  {availableSlot?.course?.slots.map((item) => {
-                    if (item.facultyId === user.id)
-                      return (
-                        <TimeSlotSpan
-                          key={item.id}
-                          id={item.id}
-                          location={item.location}
-                          time={item.time}
-                          day={item.day}
-                          onClick={() => onSelectSlotFaculty(item.id)}
-                          slots={timeSlotsByFaculty}
-                        />
-                      );
-                  })}
-                </div>
-              </FormGroup>
-            </Form>
-          </TabPanel>
-          <TabList className="nav nav-tabs tab-coupon">
-            <Tab className="nav-link">Response from Observer</Tab>
-          </TabList>
-          <TabPanel>
-            <Form className="needs-validation user-add">
-              <FormGroup className="row">
-                <Label className="col-xl-3 col-md-4">
-                  Observer Select Slots
-                </Label>
-                <Input
-                  value={availableSlot?.obsRequest?.scheduledOn}
-                  readOnly={true}
-                  type="text"
-                />
-              </FormGroup>
-            </Form>
-          </TabPanel>
-        </Tabs>
+        <>
+          <MultiStepForm
+            tabtitle={"Provide Teaching Plan Details Step By Step"}
+            steps={availableSlot?.obsRequest?.teachingPlan[0]?.steps}
+          />
+          <MultiStepForm
+            tabtitle={"Provide Reflection Plan Details Step By Step"}
+            steps={availableSlot?.obsRequest?.reflectionPlan[0]?.steps}
+          />
+          {availableSlot.obsRequest.teachingPlan[0].filledBy &&
+          availableSlot.obsRequest.reflectionPlan[0].filledBy ? (
+            <Tabs>
+              <TabPanel>
+                <Form className="needs-validation user-add" noValidate="">
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
+                      <span>*</span> Provide Avalaible Slots
+                    </Label>
+                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                      {availableSlot?.course?.slots.map((item) => {
+                        if (item.facultyId === user.id)
+                          return (
+                            <TimeSlotSpan
+                              key={item.id}
+                              id={item.id}
+                              location={item.location}
+                              time={item.time}
+                              day={item.day}
+                              onClick={() => onSelectSlotFaculty(item.id)}
+                              slots={timeSlotsByFaculty}
+                            />
+                          );
+                      })}
+                    </div>
+                  </FormGroup>
+                </Form>
+              </TabPanel>
+            </Tabs>
+          ) : (
+            <></>
+          )}
+        </>
       )}
 
       <div className="pull-right">
-        {availableSlot.obsRequest && (
+        {availableSlot?.obsRequest?.teachingPlan[0]?.filledBy && (
           <>
             <Button
               onClick={() => onObservationEditing()}
               type="button"
               color="primary"
-              // className=""
             >
               Update
             </Button>
-            <Button
-              onClick={() => onSchedulingAccept()}
-              type="button"
-              color="primary"
-              className="mx-3"
-            >
-              Accept
-            </Button>
           </>
         )}
-        {role === "Observer" && (
+
+        {availableSlot?.obsRequest?.facultyAccepted &&
+        availableSlot?.obsRequest?.observerAccepted ? (
+          <Button
+            onClick={() => onSchedulingDone()}
+            type="button"
+            color="primary"
+          >
+            Done
+          </Button>
+        ) : (
           <>
-            {!availableSlot.obsRequest && (
+            {availableSlot?.obsRequest?.scheduledOn && (
               <Button
-                onClick={() => onObservationScheduling()}
+                onClick={() => onSchedulingAccept()}
                 type="button"
                 color="primary"
+                className="mx-3"
               >
-                Start Scheduling
+                Accept
               </Button>
-            )}
-            {availableSlot?.obsRequest?.facultyAccepted &&
-            availableSlot?.obsRequest?.observerAccepted ? (
-              <Button
-                onClick={() => onSchedulingDone()}
-                type="button"
-                color="primary"
-              >
-                Done
-              </Button>
-            ) : (
-              <></>
             )}
           </>
         )}

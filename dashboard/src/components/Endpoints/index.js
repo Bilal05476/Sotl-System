@@ -48,3 +48,23 @@ export async function getTemplate(setPlan, id) {
     console.log(err);
   }
 }
+
+export async function fetchObservation(setAvailableSlots, id, errors) {
+  try {
+    const res = await fetch(`${BASEURL}/observation/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      errors(data.error);
+    } else {
+      setAvailableSlots(data);
+    }
+  } catch (err) {
+    errors(err);
+  }
+}
