@@ -317,8 +317,8 @@ const TabsetScheduling = ({ role }) => {
             tabtitle={"Provide Reflection Plan Details Step By Step"}
             steps={availableSlot?.obsRequest?.reflectionPlan[0]?.steps}
           />
-          {availableSlot.obsRequest.teachingPlan[0].filledBy &&
-          availableSlot.obsRequest.reflectionPlan[0].filledBy ? (
+          {availableSlot?.obsRequest?.teachingPlan[0]?.filledBy &&
+          availableSlot?.obsRequest?.reflectionPlan[0]?.filledBy ? (
             <Tabs>
               <TabPanel>
                 <Form className="needs-validation user-add" noValidate="">
@@ -353,16 +353,19 @@ const TabsetScheduling = ({ role }) => {
       )}
 
       <div className="pull-right">
-        {availableSlot?.obsRequest?.teachingPlan[0]?.filledBy && (
-          <>
-            <Button
-              onClick={() => onObservationEditing()}
-              type="button"
-              color="primary"
-            >
-              Update
-            </Button>
-          </>
+        {availableSlot?.obsRequest?.teachingPlan[0]?.filledBy &&
+        availableSlot?.obsRequest?.reflectionPlan[0]?.filledBy &&
+        !availableSlot?.obsRequest?.facultyAccepted &&
+        !availableSlot?.obsRequest?.observerAccepted ? (
+          <Button
+            onClick={() => onObservationEditing()}
+            type="button"
+            color="primary"
+          >
+            Update
+          </Button>
+        ) : (
+          <></>
         )}
 
         {availableSlot?.obsRequest?.facultyAccepted &&
@@ -383,7 +386,7 @@ const TabsetScheduling = ({ role }) => {
                 color="primary"
                 className="mx-3"
               >
-                Accept
+                Confirm
               </Button>
             )}
           </>

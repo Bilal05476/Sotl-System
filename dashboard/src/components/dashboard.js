@@ -637,8 +637,12 @@ const Dashboard = () => {
                         <tr>
                           <th scope="col">Course</th>
                           <th scope="col">Semester</th>
-                          <th scope="col">Faculty</th>
-                          <th scope="col">Observer</th>
+                          {user.role !== "Faculty" && (
+                            <th scope="col">Faculty</th>
+                          )}
+                          {user.role !== "Observer" && (
+                            <th scope="col">Observer</th>
+                          )}
                           {user.role !== "Head_of_Department" && (
                             <th scope="col">Head of department</th>
                           )}
@@ -655,8 +659,12 @@ const Dashboard = () => {
                           <tr key={item.id}>
                             <td className="digits">{item.course.name}</td>
                             <td className="digits">{item.semester}</td>
-                            <td className="digits">{item.faculty.name}</td>
-                            <td className="digits">{item.observer.name}</td>
+                            {user.role !== "Faculty" && (
+                              <td className="digits">{item.faculty.name}</td>
+                            )}
+                            {user.role !== "Observer" && (
+                              <td className="digits">{item.observer.name}</td>
+                            )}
                             {user.role !== "Head_of_Department" && (
                               <td className="digits">{item.hod.name}</td>
                             )}
