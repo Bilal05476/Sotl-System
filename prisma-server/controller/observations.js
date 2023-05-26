@@ -35,26 +35,31 @@ const ReflectionSteps = [
 // @route  POST api/observation/initiate
 // @access Private (only hod will initiate)
 export const initiate = asyncHandler(async (req, res) => {
-  // await prisma.observations.deleteMany();
   const { facultyId, semester, observerId, hodId, courseId } = req.body;
-  // const findObservation = await prisma.observations.findFirst({
-  //   where: {
-  //     OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
-  //     courseId,
-  //     facultyId,
-  //   },
-  // });
-  // if (findObservation) {
-  //   res.status(400).json({
-  //     error:
-  //       "Already have an ongoing observation for that course of this faculty!",
-  //   });
-  // } else {
-  const newObservation = await prisma.observations.create({
-    data: { semester, facultyId, observerId, hodId, courseId },
+  const findObservation = await prisma.observations.findFirst({
+    where: {
+      OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
+      courseId,
+      facultyId,
+    },
   });
-  res.status(200).json(newObservation);
-  // }
+  if (findObservation) {
+    res.status(400).json({
+      error:
+        "Already have an ongoing observation for that course of this faculty!",
+    });
+  } else {
+    const newObservation = await prisma.observations.create({
+      data: {
+        facultyId,
+        observerId,
+        hodId,
+        courseId,
+        semester,
+      },
+    });
+    res.status(200).json(newObservation);
+  }
 
   // if (newObservation) {
   //   res.status(200).json(newObservation);
@@ -207,6 +212,9 @@ export const getObs = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc   Create observation scheduling
+// @route  POST api/observations/scheduling
+// @access Private for Observer
 export const obsScheduleCreate = asyncHandler(async (req, res) => {
   const { observationsId, facultyId } = req.body;
   const findSheduling = await prisma.obsScheduling.findFirst({
@@ -239,7 +247,7 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc   update observation schedyling
+// @desc   update observation scheduling
 // @route  PUT api/observations/scheduling
 // @access Private for Observer and Faculty
 export const obsScheduleCycle = asyncHandler(async (req, res) => {
@@ -320,19 +328,9 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
           },
         });
       });
-      const obs = await prisma.obsScheduling.findFirst({
-        where: {
-          observationsId,
-        },
-        include: {
-          teachingPlan: {
-            include: {
-              steps: true,
-            },
-          },
-        },
+      res.status(200).json({
+        message: "Teaching Template Successfully Submitted!",
       });
-      res.status(200).json(obs);
     } else {
       const updatedReq = await prisma.obsScheduling.update({
         where: {

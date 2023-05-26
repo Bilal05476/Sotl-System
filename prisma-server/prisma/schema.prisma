@@ -66,7 +66,7 @@ model Observations {
     obsRequest          ObsScheduling?
     meetings            Meetings?
     course              Courses        @relation(fields: [courseId], references: [id])
-    courseId            String
+    courseId            Int
     feedbacks           FeedBacks[]
     createdAt           DateTime       @default(now())
 }
@@ -156,11 +156,11 @@ model PDP {
 
 // -> User => Courses
 model Courses {
-    id              String         @id
+    id              Int            @id @default(autoincrement()) // auto-inc
+    courseCode      String
     name            String
     department      Department
     campus          Campus
-    // scheduling    ObsScheduling?
     observations    Observations[]
     isElective      Boolean        @default(false)
     isDepthElective Boolean        @default(false)
@@ -169,12 +169,13 @@ model Courses {
 }
 
 model CourseSlots {
-    id            String         @id
+    id            Int            @id @default(autoincrement()) // auto-inc
+    sectionCode   String
     time          String
     location      String
     day           String
     course        Courses        @relation(fields: [courseId], references: [id])
-    courseId      String
+    courseId      Int
     faculty       User?          @relation(fields: [facultyId], references: [id])
     facultyId     Int?
     facultyObs    ObsScheduling? @relation("Faculty", fields: [facultyobsId], references: [id])
