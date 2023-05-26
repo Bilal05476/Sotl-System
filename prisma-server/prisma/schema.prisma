@@ -83,8 +83,7 @@ model ObsScheduling {
     facultyAccepted    Boolean        @default(false)
     observerAccepted   Boolean        @default(false)
     reasons            ObsReasons[]
-    teachingPlan       TemplatePlan[] @relation("Teaching Plan")
-    reflectionPlan     TemplatePlan[] @relation("Reflection Plan")
+    teachingPlan       TemplatePlan[]
 }
 
 //-> Observation -> ObsScheduling -> ObsReasons
@@ -208,17 +207,15 @@ model Messages {
 
 // -> User => Scheduling => Template
 model TemplatePlan {
-    id            Int                @id @default(autoincrement())
-    steps         TemplatePlanStep[]
-    type          TemplateType       @default(Teaching)
-    filledBy      User?              @relation("Filled", fields: [filledById], references: [id])
-    filledById    Int?
-    editedByBy    User?              @relation("Edited", fields: [editedById], references: [id])
-    editedById    Int?
-    schedulingT   ObsScheduling?     @relation("Teaching Plan", fields: [schedulingTId], references: [id])
-    schedulingTId Int?
-    schedulingR   ObsScheduling?     @relation("Reflection Plan", fields: [schedulingRId], references: [id])
-    schedulingRId Int?
+    id              Int                @id @default(autoincrement())
+    steps           TemplatePlanStep[]
+    type            TemplateType       @default(Teaching)
+    assignedTo      User?              @relation("Filled", fields: [assignedId], references: [id])
+    assignedId      Int?
+    editedBy        User?              @relation("Edited", fields: [editedById], references: [id])
+    editedById      Int?
+    schedulingT     ObsScheduling?     @relation(fields: [obsSchedulingId], references: [id])
+    obsSchedulingId Int?
 }
 
 model TemplatePlanStep {

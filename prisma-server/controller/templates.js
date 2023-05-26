@@ -1,4 +1,4 @@
-import { PrismaClient, TemplateType } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
@@ -7,7 +7,6 @@ import asyncHandler from "express-async-handler";
 // @access Private (Role Like (Observer))
 export const createTemplate = asyncHandler(async (req, res) => {
   const { steps, type } = req.body;
-  await prisma.templatePlan.deleteMany();
 
   const createTemplate = await prisma.templatePlan.create({
     data: {

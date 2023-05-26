@@ -167,17 +167,21 @@ export const getObs = asyncHandler(async (req, res) => {
           teachingPlan: {
             select: {
               steps: true,
-              filledBy: true,
-              editedByBy: true,
+              assignedTo: {
+                select: {
+                  name: true,
+                  email: true,
+                },
+              },
+              editedBy: {
+                select: {
+                  name: true,
+                  email: true,
+                },
+              },
             },
           },
-          reflectionPlan: {
-            select: {
-              steps: true,
-              filledBy: true,
-              editedByBy: true,
-            },
-          },
+
           reasons: true,
         },
       },
@@ -204,8 +208,7 @@ export const getObs = asyncHandler(async (req, res) => {
 });
 
 export const obsScheduleCreate = asyncHandler(async (req, res) => {
-  // await prisma.obsScheduling.deleteMany();
-  const { observationsId } = req.body;
+  const { observationsId, facultyId } = req.body;
   const findSheduling = await prisma.obsScheduling.findFirst({
     where: {
       observationsId,
@@ -227,21 +230,11 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
                 data: TeachingSteps,
               },
             },
-          },
-        },
-        reflectionPlan: {
-          create: {
-            type: "Reflection",
-            steps: {
-              createMany: {
-                data: ReflectionSteps,
-              },
-            },
+            assignedId: facultyId,
           },
         },
       },
     });
-
     res.status(200).json(createdReq);
   }
 });
@@ -259,6 +252,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     reasons,
     observerAccepted,
     facultyAccepted,
+    templateResponse,
   } = req.body;
 
   let fids = [];
@@ -303,129 +297,145 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
       scheduledOn: true,
     },
   });
-  // res.status(200).json(reqData);
 
   if (existedReq && existedReq.status !== "Completed") {
-    const updatedReq = await prisma.obsScheduling.update({
-      where: {
-        observationsId,
-      },
-      data: reqData,
-      include: {
-        timeSlotByObserver: {
-          select: {
-            id: true,
-            time: true,
-            location: true,
-            day: true,
-            courseId: true,
+    if (templateResponse) {
+      templateResponse.map(async (item) => {
+        await prisma.templatePlanStep.update({
+          where: {
+            id: item.id,
           },
-        },
-        timeSlotsByFaculty: {
-          select: {
-            id: true,
-            time: true,
-            location: true,
-            day: true,
-            courseId: true,
+          data: {
+            response: item.response,
           },
-        },
-        reasons: true,
-        teachingPlan: {
-          select: {
-            steps: true,
-          },
-        },
-        reflectionPlan: {
-          select: {
-            steps: true,
-          },
-        },
-      },
-    });
-    if (status) {
-      const scheduledObs = await prisma.observations.update({
+        });
+      });
+      const obs = await prisma.obsScheduling.findFirst({
         where: {
-          id: observationsId,
-        },
-        data: {
-          observationStatus: "Ongoing",
-          starting: existedReq.scheduledOn,
-          observationProgress: 20,
-          meetings: {
-            create: {
-              informedObservation: {
-                create: {},
-              },
-            },
-          },
+          observationsId,
         },
         include: {
-          faculty: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          observer: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          hod: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-          obsRequest: {
+          teachingPlan: {
             include: {
-              timeSlotByObserver: {
-                select: {
-                  id: true,
-                  time: true,
-                  location: true,
-                  day: true,
-                  courseId: true,
-                },
-              },
-              timeSlotsByFaculty: {
-                select: {
-                  id: true,
-                  time: true,
-                  location: true,
-                  day: true,
-                  courseId: true,
-                },
-              },
-              reasons: true,
-              teachingPlan: {
-                select: {
-                  steps: true,
-                },
-              },
-              reflectionPlan: {
-                select: {
-                  steps: true,
-                },
-              },
-            },
-          },
-          course: true,
-          meetings: {
-            include: {
-              informedObservation: true,
-              postObservation: true,
-              uninformedObservation: true,
-              professionalDPlan: true,
+              steps: true,
             },
           },
         },
       });
-      res.status(200).json(scheduledObs);
+      res.status(200).json(obs);
     } else {
-      res.status(200).json(updatedReq);
+      const updatedReq = await prisma.obsScheduling.update({
+        where: {
+          observationsId,
+        },
+        data: reqData,
+        include: {
+          timeSlotByObserver: {
+            select: {
+              id: true,
+              time: true,
+              location: true,
+              day: true,
+              courseId: true,
+            },
+          },
+          timeSlotsByFaculty: {
+            select: {
+              id: true,
+              time: true,
+              location: true,
+              day: true,
+              courseId: true,
+            },
+          },
+          reasons: true,
+        },
+      });
+      if (status) {
+        const scheduledObs = await prisma.observations.update({
+          where: {
+            id: observationsId,
+          },
+          data: {
+            observationStatus: "Ongoing",
+            starting: existedReq.scheduledOn,
+            observationProgress: 0,
+            meetings: {
+              create: {
+                informedObservation: {
+                  create: {},
+                },
+              },
+            },
+          },
+          include: {
+            faculty: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+            observer: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+            hod: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+            obsRequest: {
+              include: {
+                timeSlotByObserver: {
+                  select: {
+                    id: true,
+                    time: true,
+                    location: true,
+                    day: true,
+                    courseId: true,
+                  },
+                },
+                timeSlotsByFaculty: {
+                  select: {
+                    id: true,
+                    time: true,
+                    location: true,
+                    day: true,
+                    courseId: true,
+                  },
+                },
+                reasons: true,
+                teachingPlan: {
+                  select: {
+                    steps: true,
+                    filledBy: {
+                      select: {
+                        name: true,
+                        email: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            course: true,
+            meetings: {
+              include: {
+                informedObservation: true,
+                postObservation: true,
+                uninformedObservation: true,
+                professionalDPlan: true,
+              },
+            },
+          },
+        });
+        res.status(200).json(scheduledObs);
+      } else {
+        res.status(200).json(updatedReq);
+      }
     }
   } else {
     res.status(404).json({ error: "Scheduling does not exist or completed!" });
