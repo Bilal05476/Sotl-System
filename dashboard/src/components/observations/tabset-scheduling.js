@@ -15,17 +15,9 @@ const BASEURL = process.env.REACT_APP_BASE_URL;
 const TabsetScheduling = ({ role }) => {
   const [{ user }] = useStateValue();
   const { id } = useParams();
-
-  const [availableSlot, setAvailableSlots] = useState("");
-
-  console.log(availableSlot);
+  const [obs, setObs] = useState("");
 
   const [obsSchedule, setObsSchedule] = useState({
-    teachingPlanByObserver: "",
-    refelectionPlanByObserver: "",
-    artifacts: "",
-    teachingPlanByFaculty: "",
-    refelectionPlanByFaculty: "",
     timeSlotsByFaculty: [],
     timeSlotByObserver: [],
     scheduledOn: "",
@@ -36,46 +28,19 @@ const TabsetScheduling = ({ role }) => {
   const onAddReason = () => {
     const reason = {
       senderId: user.id,
-      receiverId:
-        role === "Observer"
-          ? availableSlot?.facultyId
-          : availableSlot?.observerId,
-      schedulingId: availableSlot?.obsRequest?.id,
+      receiverId: role === "Observer" ? obs?.facultyId : obs?.observerId,
+      schedulingId: obs?.obsRequest?.id,
       reason: "This is reason!",
     };
     setReasons(reason);
   };
 
-  const {
-    teachingPlanByObserver,
-    refelectionPlanByObserver,
-    artifacts,
-    teachingPlanByFaculty,
-    refelectionPlanByFaculty,
-    timeSlotsByFaculty,
-    timeSlotByObserver,
-    scheduledOn,
-  } = obsSchedule;
+  const { timeSlotsByFaculty, timeSlotByObserver, scheduledOn } = obsSchedule;
 
   const editDetail = {
-    teachingPlanByObserver:
-      teachingPlanByObserver && teachingPlanByObserver.slice(0, 10),
-    teachingPlanByFaculty:
-      teachingPlanByFaculty && teachingPlanByFaculty.slice(0, 10),
-
-    refelectionPlanByObserver:
-      refelectionPlanByObserver && refelectionPlanByObserver.slice(0, 10),
-
-    refelectionPlanByFaculty:
-      refelectionPlanByFaculty && refelectionPlanByFaculty.slice(0, 10),
-
-    artifacts: artifacts && artifacts.slice(0, 10),
-
     timeSlotsByFaculty: timeSlotsByFaculty && timeSlotsByFaculty,
     timeSlotByObserver: timeSlotByObserver && timeSlotByObserver,
-
     scheduledOn: scheduledOn && scheduledOn,
-
     reasons: reasons && reasons,
   };
 
@@ -111,7 +76,7 @@ const TabsetScheduling = ({ role }) => {
 
   const onObservationEditing = () => {
     if (role === "Faculty") {
-      if (!teachingPlanByFaculty || timeSlotsByFaculty.length === 0) {
+      if (timeSlotsByFaculty.length === 0) {
         info("Provide all required fields!");
       } else {
         editObs();
@@ -156,39 +121,6 @@ const TabsetScheduling = ({ role }) => {
     if (role === "Observer") {
       accepted.observerAccepted = true;
       acceptScheduling();
-    }
-  };
-
-  const onObservationScheduling = () => {
-    const ObsDetail = {
-      observationsId: Number(id),
-      teachingPlanByObserver,
-      refelectionPlanByObserver,
-      artifacts,
-    };
-    async function postObs() {
-      info("Observation scheduling...");
-      const res = await fetch(`${BASEURL}/observation/scheduling`, {
-        method: "POST",
-        body: JSON.stringify(ObsDetail),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      const data = await res.json();
-
-      if (data.error) {
-        errors(data.error);
-      } else {
-        successes(data.message);
-      }
-    }
-
-    if (!artifacts || !refelectionPlanByObserver || !teachingPlanByObserver) {
-      info("Provide all the documents!");
-    } else {
-      postObs();
-      // console.log(ObsDetail);
     }
   };
 
@@ -246,16 +178,16 @@ const TabsetScheduling = ({ role }) => {
   };
 
   useEffect(() => {
-    fetchObservation(setAvailableSlots, id, errors);
+    fetchObservation(setObs, id, errors);
   }, []);
 
-  console.log(availableSlot?.obsRequest?.teachingPlan[0]?.steps);
+  console.log(obs);
 
   return (
     <Fragment>
       {role === "Observer" && (
         <>
-          {!availableSlot?.obsRequest?.teachingPlan[0]?.filledBy ? (
+          {!obs?.obsRequest?.teachingPlan[0]?.filledBy ? (
             <Tabs className="text-center">
               <span>
                 No templates filled by faculty yet...{" "}
@@ -274,19 +206,17 @@ const TabsetScheduling = ({ role }) => {
                       <span>*</span> Select Faculty Slot
                     </Label>
                     <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                      {availableSlot?.obsRequest?.timeSlotsByFaculty.map(
-                        (item) => (
-                          <TimeSlotSpan
-                            key={item.id}
-                            id={item.id}
-                            location={item.location}
-                            time={item.time}
-                            day={item.day}
-                            onClick={() => onSelectSlotObserver(item.id)}
-                            slots={timeSlotByObserver}
-                          />
-                        )
-                      )}
+                      {obs?.obsRequest?.timeSlotsByFaculty.map((item) => (
+                        <TimeSlotSpan
+                          key={item.id}
+                          id={item.id}
+                          location={item.location}
+                          time={item.time}
+                          day={item.day}
+                          onClick={() => onSelectSlotObserver(item.id)}
+                          slots={timeSlotByObserver}
+                        />
+                      ))}
                     </div>
                   </FormGroup>
                   <FormPool
@@ -311,52 +241,43 @@ const TabsetScheduling = ({ role }) => {
         <>
           <MultiStepForm
             tabtitle={"Provide Teaching Plan Details Step By Step"}
-            steps={availableSlot?.obsRequest?.teachingPlan[0]?.steps}
+            steps={obs?.obsRequest?.teachingPlan[0]?.steps}
           />
-          <MultiStepForm
-            tabtitle={"Provide Reflection Plan Details Step By Step"}
-            steps={availableSlot?.obsRequest?.reflectionPlan[0]?.steps}
-          />
-          {availableSlot?.obsRequest?.teachingPlan[0]?.filledBy &&
-          availableSlot?.obsRequest?.reflectionPlan[0]?.filledBy ? (
-            <Tabs>
-              <TabPanel>
-                <Form className="needs-validation user-add" noValidate="">
-                  <FormGroup className="row">
-                    <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Provide Avalaible Slots
-                    </Label>
-                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                      {availableSlot?.course?.slots.map((item) => {
-                        if (item.facultyId === user.id)
-                          return (
-                            <TimeSlotSpan
-                              key={item.id}
-                              id={item.id}
-                              location={item.location}
-                              time={item.time}
-                              day={item.day}
-                              onClick={() => onSelectSlotFaculty(item.id)}
-                              slots={timeSlotsByFaculty}
-                            />
-                          );
-                      })}
-                    </div>
-                  </FormGroup>
-                </Form>
-              </TabPanel>
-            </Tabs>
-          ) : (
-            <></>
-          )}
+
+          <Tabs>
+            <TabPanel>
+              <Form className="needs-validation user-add" noValidate="">
+                <FormGroup className="row">
+                  <Label className="col-xl-3 col-md-4">
+                    <span>*</span> Provide Avalaible Slots
+                  </Label>
+                  <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                    {obs?.course?.slots.map((item) => {
+                      if (item.facultyId === user.id)
+                        return (
+                          <TimeSlotSpan
+                            key={item.id}
+                            id={item.id}
+                            location={item.location}
+                            time={item.time}
+                            day={item.day}
+                            onClick={() => onSelectSlotFaculty(item.id)}
+                            slots={timeSlotsByFaculty}
+                          />
+                        );
+                    })}
+                  </div>
+                </FormGroup>
+              </Form>
+            </TabPanel>
+          </Tabs>
         </>
       )}
 
       <div className="pull-right">
-        {availableSlot?.obsRequest?.teachingPlan[0]?.filledBy &&
-        availableSlot?.obsRequest?.reflectionPlan[0]?.filledBy &&
-        !availableSlot?.obsRequest?.facultyAccepted &&
-        !availableSlot?.obsRequest?.observerAccepted ? (
+        {obs?.obsRequest?.teachingPlan[0]?.assignedTo &&
+        !obs?.obsRequest?.facultyAccepted &&
+        !obs?.obsRequest?.observerAccepted ? (
           <Button
             onClick={() => onObservationEditing()}
             type="button"
@@ -368,8 +289,8 @@ const TabsetScheduling = ({ role }) => {
           <></>
         )}
 
-        {availableSlot?.obsRequest?.facultyAccepted &&
-        availableSlot?.obsRequest?.observerAccepted ? (
+        {obs?.obsRequest?.facultyAccepted &&
+        obs?.obsRequest?.observerAccepted ? (
           <Button
             onClick={() => onSchedulingDone()}
             type="button"
@@ -379,7 +300,7 @@ const TabsetScheduling = ({ role }) => {
           </Button>
         ) : (
           <>
-            {availableSlot?.obsRequest?.scheduledOn && (
+            {obs?.obsRequest?.scheduledOn && (
               <Button
                 onClick={() => onSchedulingAccept()}
                 type="button"

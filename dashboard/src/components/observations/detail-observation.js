@@ -4,8 +4,8 @@ import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { Loader, DownloadCloud } from "react-feather";
 import { useStateValue } from "../../StateProvider";
-
-const URL = process.env.PUBLIC_URL;
+import { fetchObservation, startScheduling } from "../Endpoints";
+import { errors } from "../../constants/Toasters";
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -13,29 +13,9 @@ const Detail_observation = () => {
   const [obsDetail, setObsDetail] = useState("");
 
   const [{ user }] = useStateValue();
-  const viewObs = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/observation/${id}`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const data = await res.json();
-      if (!data.error) {
-        setObsDetail(data);
-        console.log(data);
-      } else {
-        console.log(data.error);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+
   useEffect(() => {
-    viewObs();
+    fetchObservation(setObsDetail, id, errors);
   }, []);
 
   const handleAccordion = (selector) => {
@@ -120,7 +100,7 @@ const Detail_observation = () => {
                             <th scope="col">Slot By Observer</th>
                             <th scope="col">Slots By Faculty</th>
                             <th scope="col">Teaching Plan</th>
-                            <th scope="col">Reflection Plan</th>
+
                             <th scope="col">Status</th>
                           </tr>
                         </thead>
@@ -136,32 +116,7 @@ const Detail_observation = () => {
                                 (item) => `${item.day} ${item.time} `
                               )}
                             </td>
-
-                            <td className="digits">
-                              {/* {obsDetail?.obsRequest.artifacts ? (
-                                <a
-                                  href={obsDetail?.obsRequest.artifacts}
-                                  target="blank"
-                                >
-                                  <DownloadCloud size={20} />
-                                </a>
-                              ) : (
-                                "--"
-                              )} */}
-                            </td>
-
-                            <td className="digits">
-                              {/* {obsDetail?.obsRequest.artifacts ? (
-                                <a
-                                  href={obsDetail?.obsRequest.artifacts}
-                                  target="blank"
-                                >
-                                  <DownloadCloud size={20} />
-                                </a>
-                              ) : (
-                                "--"
-                              )} */}
-                            </td>
+                            <td className="digits"></td>
 
                             <td
                               className={`digits ${
@@ -207,11 +162,12 @@ const Detail_observation = () => {
                       <br />
                       {user.role === "Observer" && (
                         <button
-                          // to={`${URL}/observations/observation-scheduling/${obsDetail?.id}`}
                           className="mt-2 btn btn-primary"
                           onClick={() =>
-                            alert(
-                              "Yahan press krne se templates faculty ko chale jayngay!"
+                            startScheduling(
+                              obsDetail?.facultyId,
+                              Number(id),
+                              errors
                             )
                           }
                         >

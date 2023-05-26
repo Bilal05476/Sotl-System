@@ -49,10 +49,9 @@ export async function getTemplate(setPlan, id) {
   }
 }
 
-export async function fetchObservation(setAvailableSlots, id, errors) {
+export async function fetchObservation(setObs, id, errors) {
   try {
     const res = await fetch(`${BASEURL}/observation/${id}`, {
-      method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -62,7 +61,26 @@ export async function fetchObservation(setAvailableSlots, id, errors) {
     if (data.error) {
       errors(data.error);
     } else {
-      setAvailableSlots(data);
+      setObs(data);
+    }
+  } catch (err) {
+    errors(err);
+  }
+}
+
+export async function startScheduling(facultyId, observationsId, errors) {
+  try {
+    const res = await fetch(`${BASEURL}/observation/scheduling`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({ facultyId, observationsId }),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      errors(data.error);
     }
   } catch (err) {
     errors(err);
