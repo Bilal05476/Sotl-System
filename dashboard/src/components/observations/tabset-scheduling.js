@@ -187,53 +187,71 @@ const TabsetScheduling = ({ role }) => {
     <Fragment>
       {role === "Observer" && (
         <>
-          {!obs?.obsRequest?.teachingPlan[0]?.filledBy ? (
-            <Tabs className="text-center">
-              <span>
-                No templates filled by faculty yet...{" "}
+          {!obs?.obsRequest?.teachingPlan[0]?.editedBy ? (
+            <Tabs>
+              <span
+                style={{
+                  fontStyle: "italic",
+                }}
+                className="d-flex align-items-center justify-items-center"
+              >
+                Teaching plan cannot sumitted by faculty yet...{" "}
                 <Frown color="brown" size={18} />{" "}
               </span>
             </Tabs>
           ) : (
-            <Tabs>
-              <TabList className="nav nav-tabs tab-coupon">
-                <Tab className="nav-link">Update Scheduling</Tab>
-              </TabList>
-              <TabPanel>
-                <Form className="needs-validation user-add" noValidate="">
-                  <FormGroup className="row">
-                    <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Select Faculty Slot
-                    </Label>
-                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                      {obs?.obsRequest?.timeSlotsByFaculty.map((item) => (
-                        <TimeSlotSpan
-                          key={item.id}
-                          id={item.id}
-                          location={item.location}
-                          time={item.time}
-                          day={item.day}
-                          onClick={() => onSelectSlotObserver(item.id)}
-                          slots={timeSlotByObserver}
-                        />
-                      ))}
-                    </div>
-                  </FormGroup>
-                  <FormPool
-                    required={true}
-                    label={"Provide Date"}
-                    value={scheduledOn}
-                    onChange={(e) =>
-                      setObsSchedule({
-                        ...obsSchedule,
-                        scheduledOn: e.target.value,
-                      })
-                    }
-                    type={"date"}
-                  />
-                </Form>
-              </TabPanel>
-            </Tabs>
+            <>
+              <Tabs>
+                <TabList className="nav nav-tabs tab-coupon">
+                  <Tab className="nav-link">Update Scheduling</Tab>
+                </TabList>
+                <TabPanel>
+                  <Form className="needs-validation user-add" noValidate="">
+                    <FormGroup className="row">
+                      <Label className="col-xl-3 col-md-4">
+                        <span>*</span> Select Faculty Slot
+                      </Label>
+                      <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                        {obs?.obsRequest?.timeSlotsByFaculty.map((item) => (
+                          <TimeSlotSpan
+                            key={item.id}
+                            id={item.id}
+                            location={item.location}
+                            time={item.time}
+                            day={item.day}
+                            onClick={() => onSelectSlotObserver(item.id)}
+                            slots={timeSlotByObserver}
+                          />
+                        ))}
+                      </div>
+                    </FormGroup>
+                    <FormPool
+                      required={true}
+                      label={"Provide Date"}
+                      value={scheduledOn}
+                      onChange={(e) =>
+                        setObsSchedule({
+                          ...obsSchedule,
+                          scheduledOn: e.target.value,
+                        })
+                      }
+                      type={"date"}
+                    />
+                  </Form>
+                </TabPanel>
+              </Tabs>
+              <div className="pull-right">
+                {!obs?.obsRequest?.observerAccepted && (
+                  <Button
+                    onClick={() => onObservationEditing()}
+                    type="button"
+                    color="primary"
+                  >
+                    Update
+                  </Button>
+                )}
+              </div>
+            </>
           )}
         </>
       )}
@@ -271,24 +289,21 @@ const TabsetScheduling = ({ role }) => {
               </Form>
             </TabPanel>
           </Tabs>
+          <div className="pull-right">
+            {!obs?.obsRequest?.facultyAccepted && (
+              <Button
+                onClick={() => onObservationEditing()}
+                type="button"
+                color="primary"
+              >
+                Update
+              </Button>
+            )}
+          </div>
         </>
       )}
 
       <div className="pull-right">
-        {obs?.obsRequest?.teachingPlan[0]?.assignedTo &&
-        !obs?.obsRequest?.facultyAccepted &&
-        !obs?.obsRequest?.observerAccepted ? (
-          <Button
-            onClick={() => onObservationEditing()}
-            type="button"
-            color="primary"
-          >
-            Update
-          </Button>
-        ) : (
-          <></>
-        )}
-
         {obs?.obsRequest?.facultyAccepted &&
         obs?.obsRequest?.observerAccepted ? (
           <Button

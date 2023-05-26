@@ -253,6 +253,8 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     observerAccepted,
     facultyAccepted,
     templateResponse,
+    templateId,
+    editedById,
   } = req.body;
 
   let fids = [];
@@ -300,6 +302,14 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 
   if (existedReq && existedReq.status !== "Completed") {
     if (templateResponse) {
+      await prisma.templatePlan.update({
+        where: {
+          id: templateId,
+        },
+        data: {
+          editedById,
+        },
+      });
       templateResponse.map(async (item) => {
         await prisma.templatePlanStep.update({
           where: {
