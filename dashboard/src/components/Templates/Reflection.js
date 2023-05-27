@@ -1,15 +1,15 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
+import React, { Fragment, useState } from "react";
+import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
 import MultiStepForm from "../MultiStep";
-import { getTemplate } from "../Endpoints";
+// import { getTemplate } from "../Endpoints";
 
 const Reflection = () => {
   const [reflectionPlan, setReflectionPlan] = useState("");
 
-  useEffect(() => {
-    getTemplate(setReflectionPlan, 2);
-  }, []);
+  // useEffect(() => {
+  //   getTemplate(setReflectionPlan, 2);
+  // }, []);
 
   return (
     <Fragment>

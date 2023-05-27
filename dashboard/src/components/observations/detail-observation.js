@@ -1,11 +1,11 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { Loader, DownloadCloud } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import { fetchObservation, startScheduling } from "../Endpoints";
-import { errors } from "../../constants/Toasters";
+import { errors, info } from "../../constants/Toasters";
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -15,7 +15,7 @@ const Detail_observation = () => {
   const [{ user }] = useStateValue();
 
   useEffect(() => {
-    fetchObservation(setObsDetail, id, errors);
+    fetchObservation(setObsDetail, Number(id));
   }, []);
 
   const handleAccordion = (selector) => {
@@ -24,6 +24,14 @@ const Detail_observation = () => {
     } else {
       setIsOpen(selector);
     }
+  };
+
+  const startSchedule = () => {
+    startScheduling(obsDetail?.facultyId, Number(id));
+    info("Scheduling Creating...");
+    setTimeout(() => {
+      fetchObservation(setObsDetail, Number(id));
+    }, 1500);
   };
 
   // return;
@@ -163,13 +171,7 @@ const Detail_observation = () => {
                       {user.role === "Observer" && (
                         <button
                           className="mt-2 btn btn-primary"
-                          onClick={() =>
-                            startScheduling(
-                              obsDetail?.facultyId,
-                              Number(id),
-                              errors
-                            )
-                          }
+                          onClick={() => startSchedule()}
                         >
                           Start Scheduling
                         </button>

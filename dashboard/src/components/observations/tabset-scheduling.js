@@ -193,9 +193,9 @@ const TabsetScheduling = ({ role }) => {
                 style={{
                   fontStyle: "italic",
                 }}
-                className="d-flex align-items-center justify-items-center"
+                className="d-flex align-items-center justify-content-center"
               >
-                Teaching plan cannot sumitted by faculty yet...{" "}
+                The teaching plan cannot be submitted by the faculty yet...{" "}
                 <Frown color="brown" size={18} />{" "}
               </span>
             </Tabs>

@@ -41,3 +41,7 @@ export const getUsersAndCourses = asyncHandler(async (req, res) => {
   const data = { users: getUsers, courses: getCourses };
   res.status(200).json(data);
 });
+
+// @desc   Add Departments into Specialization
+// @route  POST api/spec/dept/
+// @access Private (Parent Role Like (Admin, Campus Director, Dean))

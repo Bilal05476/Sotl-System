@@ -1,4 +1,9 @@
+// import { toast } from "react-toastify";
+import { successes, errors } from "../../constants/Toasters";
+// import { useRef } from "react";
+
 const BASEURL = process.env.REACT_APP_BASE_URL;
+// const toastId = useRef(null);
 
 export async function fetchUserData(id, dispatch) {
   try {
@@ -8,7 +13,7 @@ export async function fetchUserData(id, dispatch) {
       },
     });
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     dispatch({
       type: "SET_USER_DATA",
       payload: data,
@@ -49,7 +54,7 @@ export async function getTemplate(setPlan, id) {
   }
 }
 
-export async function fetchObservation(setObs, id, errors) {
+export async function fetchObservation(setObs, id) {
   try {
     const res = await fetch(`${BASEURL}/observation/${id}`, {
       headers: {
@@ -68,10 +73,33 @@ export async function fetchObservation(setObs, id, errors) {
   }
 }
 
-export async function startScheduling(facultyId, observationsId, errors) {
+export async function startScheduling(facultyId, observationsId, tid) {
   try {
     const res = await fetch(`${BASEURL}/observation/scheduling`, {
       method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({ facultyId, observationsId }),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      // toast.dismiss(toastId.current);
+      errors(data.error);
+    } else {
+      // toast.dismiss(toastId.current);
+      successes("Scheduling Created Successfully!");
+    }
+  } catch (err) {
+    errors(err);
+  }
+}
+
+export async function updateScheduling(facultyId, observationsId, errors) {
+  try {
+    const res = await fetch(`${BASEURL}/observation/scheduling`, {
+      method: "PUT",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

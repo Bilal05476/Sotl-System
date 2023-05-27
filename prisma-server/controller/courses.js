@@ -8,7 +8,7 @@ import asyncHandler from "express-async-handler";
 export const getCourse = asyncHandler(async (req, res) => {
   const getCourseById = await prisma.courses.findFirst({
     where: {
-      id: req.params.id,
+      id: Number(req.params.id),
     },
     include: {
       slots: {
@@ -61,7 +61,7 @@ export const createCourse = asyncHandler(async (req, res) => {
   // await prisma.courseSlots.deleteMany();
   // await prisma.courses.deleteMany();
   const {
-    id,
+    courseCode,
     name,
     department,
     campus,
@@ -72,7 +72,7 @@ export const createCourse = asyncHandler(async (req, res) => {
   } = req.body;
   const newCourse = await prisma.courses.create({
     data: {
-      id,
+      courseCode,
       department,
       name,
       campus,
@@ -122,11 +122,11 @@ export const assignCourses = asyncHandler(async (req, res) => {
 // @route  POST api/courses/slots
 // @access Only Hod add course slots
 export const createCourseSlots = asyncHandler(async (req, res) => {
-  const { id, location, day, time, courseId } = req.body;
+  const { sectionCode, location, day, time, courseId } = req.body;
 
   const findSlot = await prisma.courseSlots.findFirst({
     where: {
-      id,
+      OR: [{ sectionCode }, { time }],
     },
   });
   if (findSlot) {
@@ -135,7 +135,7 @@ export const createCourseSlots = asyncHandler(async (req, res) => {
     });
   } else {
     const createSlot = await prisma.courseSlots.create({
-      data: { id, location, day, time, courseId },
+      data: { sectionCode, location, day, time, courseId },
     });
     res.status(200).json(createSlot);
   }
