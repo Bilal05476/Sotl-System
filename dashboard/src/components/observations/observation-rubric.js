@@ -74,7 +74,7 @@ const Observation_rubric = () => {
               type="button"
               aria-expanded="true"
             >
-              1.A Demonstrating Knowledge of Content
+              1-A Demonstrating Pedagogical Content Knowledge
               <span className="d-flex align-items-center">
                 Rubric Score: {rubricScore.toFixed(2)}
                 {/* Rubric Score: {Math.ceil(rubricScore)} */}
@@ -88,64 +88,55 @@ const Observation_rubric = () => {
 
             {isOpen === "Content" && (
               <div className="accordion-body text-center">
-                <Table borderless>
-                  <thead>
-                    <th className="col">
-                      <RadioInput value={"1. Not Demonstrating"} />
-                    </th>
-                    <th className="col">
-                      <RadioInput value={"2. Developing"} />
-                    </th>
-                    <th className="col">
-                      <RadioInput value={"3. Applying"} />
-                    </th>
-                    <th className="col">
-                      <RadioInput value={"4. Innovating"} />
-                    </th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <RubricPoints
-                          rubricDesc={notDemostrating}
-                          setSelected={setSelectedRubric}
-                          selected={selectedRubric}
-                          score={rubricScore}
-                          setScore={setRubricScore}
-                        />
-                      </td>
-                      <td>
-                        <RubricPoints
-                          rubricDesc={developing}
-                          setSelected={setSelectedRubric}
-                          selected={selectedRubric}
-                          score={rubricScore}
-                          setScore={setRubricScore}
-                        />
-                      </td>
+                <h5
+                  className="d-flex"
+                  style={{
+                    fontStyle: "italic",
+                    fontWeight: "800",
+                  }}
+                >
+                  {alignmentPLO.title}
+                </h5>
+                <RubricTable
+                  type={alignmentPLO}
+                  setSelectedRubric={setSelectedRubric}
+                  selectedRubric={selectedRubric}
+                  rubricScore={rubricScore}
+                  setRubricScore={setRubricScore}
+                />
 
-                      <td>
-                        <RubricPoints
-                          rubricDesc={applying}
-                          setSelected={setSelectedRubric}
-                          selected={selectedRubric}
-                          score={rubricScore}
-                          setScore={setRubricScore}
-                        />
-                      </td>
-
-                      <td>
-                        <RubricPoints
-                          rubricDesc={innovative}
-                          setSelected={setSelectedRubric}
-                          selected={selectedRubric}
-                          score={rubricScore}
-                          setScore={setRubricScore}
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
+                <h5
+                  className="d-flex"
+                  style={{
+                    fontStyle: "italic",
+                    fontWeight: "800",
+                  }}
+                >
+                  {demonnstratingDSK.title}
+                </h5>
+                <RubricTable
+                  type={demonnstratingDSK}
+                  setSelectedRubric={setSelectedRubric}
+                  selectedRubric={selectedRubric}
+                  rubricScore={rubricScore}
+                  setRubricScore={setRubricScore}
+                />
+                <h5
+                  className="d-flex"
+                  style={{
+                    fontStyle: "italic",
+                    fontWeight: "800",
+                  }}
+                >
+                  {studentEng.title}
+                </h5>
+                <RubricTable
+                  type={studentEng}
+                  setSelectedRubric={setSelectedRubric}
+                  selectedRubric={selectedRubric}
+                  rubricScore={rubricScore}
+                  setRubricScore={setRubricScore}
+                />
               </div>
             )}
           </div>
@@ -170,7 +161,7 @@ const Observation_rubric = () => {
               type="button"
               aria-expanded="true"
             >
-              1-B. Demonstrating Knowledge of Pedagogy
+              1-B Demonstrating Knowledge of Pedagogy
               <span className="d-flex align-items-center">
                 Rubric Score: {rubricScore.toFixed(2)}
                 {isOpen === "Pedagogy" ? (
@@ -182,7 +173,24 @@ const Observation_rubric = () => {
             </button>
 
             {isOpen === "Pedagogy" && (
-              <div className="accordion-body text-center"></div>
+              <div className="accordion-body text-center">
+                <h5
+                  className="d-flex"
+                  style={{
+                    fontStyle: "italic",
+                    fontWeight: "800",
+                  }}
+                >
+                  {insStrategies.title}
+                </h5>
+                <RubricTable
+                  type={insStrategies}
+                  setSelectedRubric={setSelectedRubric}
+                  selectedRubric={selectedRubric}
+                  rubricScore={rubricScore}
+                  setRubricScore={setRubricScore}
+                />
+              </div>
             )}
           </div>
         </div>
@@ -248,14 +256,10 @@ export default Observation_rubric;
 
 const RadioInput = ({ value }) => {
   return (
-    <label className="col d-flex align-items-center">
-      {/* <input
-        type="radio"
-        value={value}
-        checked={rubric === value && true}
-        style={{ marginRight: "0.5rem" }}
-        onChange={() => setRubric(value)}
-      /> */}
+    <label
+      className="col d-flex align-items-center"
+      style={{ fontWeight: "600" }}
+    >
       {value}
     </label>
   );
@@ -281,129 +285,209 @@ const RubricPoints = ({
     }
   };
 
-  // const deleteSelected = (id, sc) => {
-
-  // };
-
   return (
     <div className="my-2 d-flex flex-column flex-wrap align-items-start">
-      {rubricDesc.map((item) => (
-        <div
-          key={item.id}
-          className="rubric-points d-flex align-items-start my-2 "
-          style={{
-            backgroundColor:
-              selected.includes(item.id) && item.score === 1
-                ? blue3
-                : selected.includes(item.id) && item.score === 2
-                ? blue2
-                : selected.includes(item.id) && item.score === 3
-                ? blue1
-                : selected.includes(item.id) && item.score === 4
-                ? blue4
-                : "",
-            boxShadow:
-              selected.includes(item.id) &&
-              "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
-          }}
-          onClick={() => toggleSelected(item.id, item.score)}
-        >
-          <input
-            type="radio"
-            className="mt-1"
-            checked={selected.includes(item.id) && true}
-            style={{ marginRight: "0.5rem" }}
-          />
+      <div
+        key={rubricDesc.id}
+        className="rubric-points d-flex align-items-start my-2 "
+        style={{
+          backgroundColor:
+            selected.includes(rubricDesc.id) && rubricDesc.score === 1
+              ? blue3
+              : selected.includes(rubricDesc.id) && rubricDesc.score === 2
+              ? blue2
+              : selected.includes(rubricDesc.id) && rubricDesc.score === 3
+              ? blue1
+              : selected.includes(rubricDesc.id) && rubricDesc.score === 4
+              ? blue4
+              : "",
+          boxShadow:
+            selected.includes(rubricDesc.id) &&
+            "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
+        }}
+        onClick={() => toggleSelected(rubricDesc.id, rubricDesc.score)}
+      >
+        <input
+          type="radio"
+          className="mt-1"
+          checked={selected.includes(rubricDesc.id) && true}
+          style={{ marginRight: "0.5rem" }}
+        />
 
-          <span
-            // className="digits"
-            style={{
-              textAlign: "left",
-            }}
-          >
-            {item.text}
-          </span>
-          {/* {selected.includes(item.id) && (
-              <span
-                onClick={() => deleteSelected(item.id, item.score)}
-                className="rubric-point-delete"
-              >
-                <Trash2 size={18} color="white" />
-              </span>
-            )} */}
-        </div>
-      ))}
+        <span
+          style={{
+            textAlign: "left",
+          }}
+        >
+          {rubricDesc.text}
+        </span>
+      </div>
     </div>
   );
 };
 
-const innovative = [
+const alignmentPLO = {
+  code: "1-A.1",
+  title: "1-A.1 Alignment with Program and Course Learning Goals",
+};
+
+const demonnstratingDSK = {
+  code: "1-A.2",
+  title: "1-A.2 Demonstrating Discipline-Specific Knowledge",
+};
+
+const studentEng = {
+  code: "1-A.3",
+  title: "1-A.3 Student Engagement in Discipline-Specific Learning Experiences",
+};
+
+const insStrategies = {
+  code: "1-B.1",
+  title: "1-B.1 Instructional Strategies",
+};
+
+const rubrics = [
   {
     id: 1,
-    text: "Frequently engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 4,
+    text: "Instruction shows no alignment with adopted standards, PLOs and CLOs.",
+    score: 1,
+    code: "1-A.1",
   },
-  {
-    id: 2,
-    text: "Teaching demonstrates extensive knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 4,
-  },
-  {
-    id: 3,
-    text: "Complete alignment (90%-100%) with adopted standards, program goals, and CLOs.",
-    score: 4,
-  },
-];
-
-const applying = [
-  {
-    id: 4,
-    text: "Sometimes engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 3,
-  },
-  {
-    id: 5,
-    text: "Teaching demonstrates reasonable knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 3,
-  },
-  {
-    id: 6,
-    text: "Content teaching shows partial alignment (50%-90%) with adopted standards, program goals, and CLOs.",
-    score: 3,
-  },
-];
-
-const developing = [
   {
     id: 7,
-    text: "Rarely engages students in learning experiences focused on disciplinary knowledge and content specific skills",
+    text: "Instruction shows partial alignment (< 50%) with adopted standards, PLOs and CLOs.",
     score: 2,
+    code: "1-A.1",
   },
   {
-    id: 8,
-    text: "Teaching demonstrates partial knowledge of the content area, its discipline-specific terminology, and academic language demands.",
-    score: 2,
+    id: 4,
+    text: "Instruction shows reasonable alignment (50% - 90%) with adopted standards, PLOs and CLOs.",
+    score: 3,
+    code: "1-A.1",
   },
-  {
-    id: 9,
-    text: "Content teaching shows limited alignment (<50%) with adopted standards, program goals, and CLOs.",
-    score: 2,
-  },
-];
-const notDemostrating = [
   {
     id: 10,
-    text: "Does not engage students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 1,
+    text: "Instruction shows consistent alignment (90% - 100%) with adopted standards, PLOs and CLOs.",
+    score: 4,
+    code: "1-A.1",
   },
   {
     id: 11,
-    text: "Teaching demonstrates limited knowledge of the content area, its discipline-specific terminology, and academic language demands.",
+    text: "Instruction demonstrates limited knowledge of the content area, its discipline-specific terminology and academic language demands.",
     score: 1,
+    code: "1-A.2",
+  },
+  {
+    id: 8,
+    text: " Instruction demonstrates partial knowledge of the content area, its discipline-specific terminology and academic language demands.",
+    score: 2,
+    code: "1-A.2",
+  },
+  {
+    id: 5,
+    text: "Instruction demonstrates reasonable knowledge of the content area, its discipline-specific terminology and academic language demands.",
+    score: 3,
+    code: "1-A.2",
+  },
+
+  {
+    id: 2,
+    text: "Instruction demonstrates extensive knowledge of the content area, its discipline-specific terminology and academic language demands.",
+    score: 4,
+    code: "1-A.2",
   },
   {
     id: 12,
-    text: "Content teaching shows no alignment with adopted standards, program goals, and CLOs.",
+    text: "Instruction does not engage students in learning experiences focused on disciplinary knowledge and content specific skills.",
     score: 1,
+    code: "1-A.3",
+  },
+  {
+    id: 9,
+    text: "Instruction partially engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
+    score: 2,
+    code: "1-A.3",
+  },
+  {
+    id: 6,
+    text: "Instruction reasonably engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
+    score: 3,
+    code: "1-A.3",
+  },
+
+  {
+    id: 3,
+    text: "Instruction consistently engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
+    score: 4,
+    code: "1-A.3",
+  },
+  {
+    id: 13,
+    text: "Instruction does not demonstrate any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
+    score: 1,
+    code: "1-B.1",
+  },
+  {
+    id: 14,
+    text: "Instruction partially demonstrates any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
+    score: 2,
+    code: "1-B.1",
+  },
+  {
+    id: 15,
+    text: "Instruction reasonably demonstrates any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
+    score: 3,
+    code: "1-B.1",
+  },
+  {
+    id: 16,
+    text: "Instruction consistently demonstrates any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
+    score: 4,
+    code: "1-B.1",
   },
 ];
+
+const RubricTable = ({
+  type,
+  selectedRubric,
+  setSelectedRubric,
+  rubricScore,
+  setRubricScore,
+}) => {
+  return (
+    <Table borderless>
+      <thead>
+        <th className="col">
+          <RadioInput value={"Not Demonstrating (1)"} />
+        </th>
+        <th className="col">
+          <RadioInput value={"Developing (2)"} />
+        </th>
+        <th className="col">
+          <RadioInput value={"Applying (3)"} />
+        </th>
+        <th className="col">
+          <RadioInput value={"Innovating (4)"} />
+        </th>
+      </thead>
+      <tbody>
+        <tr>
+          {rubrics.map((item) => {
+            if (item.code === type.code)
+              return (
+                <td>
+                  <RubricPoints
+                    rubricDesc={item}
+                    setSelected={setSelectedRubric}
+                    selected={selectedRubric}
+                    score={rubricScore}
+                    setScore={setRubricScore}
+                  />
+                </td>
+              );
+          })}
+        </tr>
+      </tbody>
+    </Table>
+  );
+};
