@@ -264,42 +264,46 @@ const TabsetScheduling = ({ role }) => {
 
           <Tabs>
             <TabPanel>
-              <Form className="needs-validation user-add" noValidate="">
-                <FormGroup className="row">
-                  <Label className="col-xl-3 col-md-4">
-                    <span>*</span> Provide Avalaible Slots
-                  </Label>
-                  <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                    {obs?.course?.slots.map((item) => {
-                      if (item.facultyId === user.id)
-                        return (
-                          <TimeSlotSpan
-                            key={item.id}
-                            id={item.id}
-                            location={item.location}
-                            time={item.time}
-                            day={item.day}
-                            onClick={() => onSelectSlotFaculty(item.id)}
-                            slots={timeSlotsByFaculty}
-                          />
-                        );
-                    })}
-                  </div>
-                </FormGroup>
-              </Form>
+              {obs?.obsRequest?.teachingPlan[0]?.editedBy && (
+                <Form className="needs-validation user-add" noValidate="">
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
+                      <span>*</span> Provide Avalaible Slots
+                    </Label>
+                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                      {obs?.course?.slots.map((item) => {
+                        if (item.facultyId === user.id)
+                          return (
+                            <TimeSlotSpan
+                              key={item.id}
+                              id={item.id}
+                              location={item.location}
+                              time={item.time}
+                              day={item.day}
+                              onClick={() => onSelectSlotFaculty(item.id)}
+                              slots={timeSlotsByFaculty}
+                            />
+                          );
+                      })}
+                    </div>
+                  </FormGroup>
+                </Form>
+              )}
             </TabPanel>
           </Tabs>
-          <div className="pull-right">
-            {!obs?.obsRequest?.facultyAccepted && (
-              <Button
-                onClick={() => onObservationEditing()}
-                type="button"
-                color="primary"
-              >
-                Update
-              </Button>
-            )}
-          </div>
+          {obs?.obsRequest?.teachingPlan[0]?.editedBy && (
+            <div className="pull-right">
+              {!obs?.obsRequest?.facultyAccepted && (
+                <Button
+                  onClick={() => onObservationEditing()}
+                  type="button"
+                  color="primary"
+                >
+                  Update
+                </Button>
+              )}
+            </div>
+          )}
         </>
       )}
 

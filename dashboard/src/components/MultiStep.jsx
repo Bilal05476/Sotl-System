@@ -1,9 +1,8 @@
 import React, { useState, Fragment } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, FormGroup, Label } from "reactstrap";
-import { Loader } from "react-feather";
 import { info } from "../constants/Toasters";
 // Define validation schema for each step
 const validationSchema = Yup.object({
@@ -17,28 +16,53 @@ const validationSchema = Yup.object({
   ),
 });
 
-// Define initial form values
-const initialValues = {
-  programOutcomes: "",
-  learningOutcomes: "",
-  teachingSummary: "",
-  preTeaching: "",
-  postTeaching: "",
-  feedback: "",
-};
-
 const MultiStepForm = ({ tabtitle, steps }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [text, setText] = useState("");
   const [loader, setLoader] = useState(false);
+  const [templateResponse, setTemplateResponse] = useState([]);
+
+  // Define initial form values
+  const initialValues = {
+    programOutcomes: "",
+    learningOutcomes: "",
+    teachingSummary: "",
+    preTeaching: "",
+    postTeaching: "",
+    feedback: "",
+  };
 
   const handleNextStep = (id) => {
     if (text) {
-      addText(id);
       setLoader(true);
+
+      const foundObject = templateResponse.find((obj) => obj.id === id);
+
+      if (foundObject) {
+        const filteredTemp = templateResponse.filter(
+          (item) => item.id !== foundObject.id
+        );
+        setTemplateResponse(filteredTemp);
+
+        setTemplateResponse([
+          ...templateResponse,
+          {
+            id,
+            response: text,
+          },
+        ]);
+      } else {
+        setTemplateResponse([
+          ...templateResponse,
+          {
+            id,
+            response: text,
+          },
+        ]);
+      }
+
       setTimeout(() => {
         setCurrentStep(currentStep + 1);
-        setText("");
         setLoader(false);
       }, 1000);
     } else {
@@ -50,9 +74,11 @@ const MultiStepForm = ({ tabtitle, steps }) => {
     setCurrentStep(currentStep - 1);
   };
 
-  const addText = (id) => {
-    const [filtered] = steps.filter((item) => item.id === id);
-    filtered.response = text;
+  const submitTemplateReposne = (id) => {
+    handleNextStep(id);
+    setTimeout(() => {
+      console.log(templateResponse);
+    }, 1500);
   };
 
   return (
@@ -71,7 +97,7 @@ const MultiStepForm = ({ tabtitle, steps }) => {
               console.log(values);
             }}
           >
-            {({}) => (
+            {({ isSubmitting }) => (
               <Form className="needs-validation" noValidate="">
                 <FormGroup className="row">
                   <div className="col-12">
@@ -90,7 +116,6 @@ const MultiStepForm = ({ tabtitle, steps }) => {
                             {step.field.charAt(0).toUpperCase() +
                               step.field.slice(1)}
                           </Label>
-
                           <textarea
                             className="col-xl-8 col-md-7"
                             rows={5}
@@ -100,6 +125,11 @@ const MultiStepForm = ({ tabtitle, steps }) => {
                             name={step.field}
                             onChange={(e) => setText(e.target.value)}
                           ></textarea>
+                          <ErrorMessage
+                            name={step.field}
+                            component="div"
+                            className="error"
+                          />
                         </div>
                         <div className="text-center mt-5">
                           {currentStep > 0 && (
@@ -125,8 +155,11 @@ const MultiStepForm = ({ tabtitle, steps }) => {
                           ) : (
                             <Button
                               type="submit"
-                              // disabled={isSubmitting}
+                              disabled={isSubmitting}
                               color="primary"
+                              // onClick={() => {
+                              //   submitTemplateReposne(step.id);
+                              // }}
                             >
                               Submit
                             </Button>
