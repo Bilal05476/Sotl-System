@@ -114,3 +114,30 @@ export async function updateScheduling(facultyId, observationsId, errors) {
     errors(err);
   }
 }
+
+export async function submitTeachingTemplate(templateResponse, loader, text) {
+  console.log(templateResponse);
+  return;
+  try {
+    const res = await fetch(`${BASEURL}/observation/scheduling`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({ templateResponse }),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      errors(data.error);
+      loader(false);
+    } else {
+      loader(false);
+      text("");
+      successes("Your Teaching Template Successfully Submitted!");
+    }
+  } catch (err) {
+    errors(err);
+    loader(false);
+  }
+}

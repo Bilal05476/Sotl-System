@@ -222,6 +222,7 @@ model TemplatePlan {
 model TemplatePlanStep {
     id             Int           @id @default(autoincrement())
     field          String
+    name           String
     response       String?
     TemplatePlan   TemplatePlan? @relation(fields: [templatePlanId], references: [id])
     templatePlanId Int?

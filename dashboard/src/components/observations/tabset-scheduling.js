@@ -181,7 +181,7 @@ const TabsetScheduling = ({ role }) => {
     fetchObservation(setObs, id, errors);
   }, []);
 
-  console.log(obs);
+  // console.log(obs);
 
   return (
     <Fragment>

@@ -6,24 +6,31 @@ import asyncHandler from "express-async-handler";
 const TeachingSteps = [
   {
     field: "Program Outcomes for this Program (PLOs)",
+    name: "ProgramOutcomes",
   },
   {
     field: "Learning Outcomes for this Course (CLOs)",
+    name: "LearningOutcomes",
   },
   {
     field: "Learning Resources",
+    name: "LearningResources",
   },
   {
     field: "Teaching Summary",
+    name: "TeachingSummary",
   },
   {
     field: "Pre Teaching / Warm-up",
+    name: "PreTeaching",
   },
   {
     field: "Post Teaching",
+    name: "PostTeaching",
   },
   {
     field: "Learning Feedbacks (activity, quiz, no-graded/graded assessments)",
+    name: "Feedback",
   },
 ];
 const ReflectionSteps = [
