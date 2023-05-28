@@ -77,7 +77,7 @@ const TabsetScheduling = ({ role }) => {
   const onObservationEditing = () => {
     if (role === "Faculty") {
       if (timeSlotsByFaculty.length === 0) {
-        info("Provide all required fields!");
+        info("Provide your slots!");
       } else {
         editObs();
       }

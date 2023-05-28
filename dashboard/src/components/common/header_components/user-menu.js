@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../../assets/images/dashboard/avatar.png";
 import { useStateValue } from "../../../StateProvider";
 import { info } from "../../../constants/Toasters";
+import { User, UserPlus } from "react-feather";
 
 const URL = process.env.PUBLIC_URL;
 
@@ -24,17 +25,20 @@ const UserMenu = () => {
   return (
     <Fragment>
       <li className="onhover-dropdown">
-        <div className="media align-items-center">
-          <img
+        {/* <div className="media align-items-center"> */}
+        {/* <img
             className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded"
             src={user?.avatar ? user.avatar : avatar}
             alt="header-user"
-          />
-          <div className="dotted-animation">
+          /> */}
+        {/* <User className="bg-dark" /> */}
+        {/* <div className="dotted-animation">
             <span className="animate-circle"></span>
             <span className="main-circle"></span>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
+        <User />
+
         <ul className="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
           <li>
             <Link to={`${URL}/settings/profile`}>

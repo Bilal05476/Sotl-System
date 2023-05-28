@@ -432,7 +432,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
                 teachingPlan: {
                   select: {
                     steps: true,
-                    filledBy: {
+                    assignedTo: {
                       select: {
                         name: true,
                         email: true,

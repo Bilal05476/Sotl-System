@@ -12,6 +12,7 @@ import {
 import logo from "../../../assets/images/sotllogo-white.png";
 import logo2 from "../../../assets/images/white-version.png";
 import { useStateValue } from "../../../StateProvider";
+import { Settings } from "react-feather";
 
 const URL = process.env.PUBLIC_URL;
 
@@ -231,6 +232,20 @@ const Sidebar = () => {
   return (
     <Fragment>
       <div className="page-sidebar ">
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            background: "#f1f4fb",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            padding: "0.5rem",
+          }}
+        >
+          <Settings size={18} />
+        </div>
         <div className="main-header-left d-none d-lg-block">
           <div className="logo-wrapper">
             <Link to={`${URL}/dashboard`}>
@@ -257,6 +272,7 @@ const Sidebar = () => {
             </Link>
           </div>
         </div>
+
         <div className="sidebar custom-scrollbar">
           <UserPanel />
           <ul className="sidebar-menu">{mainMenu}</ul>

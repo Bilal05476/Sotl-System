@@ -20,15 +20,7 @@
 //     ]
 // },
 
-import {
-  Home,
-  Clipboard,
-  UserPlus,
-  User,
-  Book,
-  BookOpen,
-  FileText,
-} from "react-feather";
+import { Home, Clipboard, UserPlus, User, Book, BookOpen } from "react-feather";
 
 export const MENUITEMS = [
   {

@@ -2,10 +2,11 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { Loader, DownloadCloud } from "react-feather";
+import { Loader, DownloadCloud, Eye } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import { fetchObservation, startScheduling } from "../Endpoints";
 import { errors, info } from "../../constants/Toasters";
+import { completeColor } from "../colors";
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -124,7 +125,23 @@ const Detail_observation = () => {
                                 (item) => `${item.day} ${item.time} `
                               )}
                             </td>
-                            <td className="digits"></td>
+                            <td className="digits" title="Download & View">
+                              {obsDetail?.obsRequest?.teachingPlan[0]
+                                ?.editedBy && (
+                                <>
+                                  <DownloadCloud
+                                    className="mx-2"
+                                    color={completeColor}
+                                    size={20}
+                                  />{" "}
+                                  <Eye
+                                    className="mx-2"
+                                    color={completeColor}
+                                    size={20}
+                                  />
+                                </>
+                              )}
+                            </td>
 
                             <td
                               className={`digits ${
