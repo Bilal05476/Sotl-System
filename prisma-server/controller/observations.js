@@ -317,27 +317,31 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 
   if (existedReq && existedReq.status !== "Completed") {
     if (templateResponse) {
-      await prisma.templatePlan.update({
-        where: {
-          id: templateId,
-        },
-        data: {
-          editedById,
-        },
-      });
-      templateResponse.map(async (item) => {
-        await prisma.templatePlanStep.update({
+      try {
+        await prisma.templatePlan.update({
           where: {
-            id: item.id,
+            id: templateId,
           },
           data: {
-            response: item.response,
+            editedById,
           },
         });
-      });
-      res.status(200).json({
-        message: "Teaching Template Successfully Submitted!",
-      });
+        templateResponse.map(async (item) => {
+          await prisma.templatePlanStep.update({
+            where: {
+              id: item.id,
+            },
+            data: {
+              response: item.response,
+            },
+          });
+        });
+        res.status(200).json({
+          message: "Teaching Template Successfully Submitted!",
+        });
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       const updatedReq = await prisma.obsScheduling.update({
         where: {

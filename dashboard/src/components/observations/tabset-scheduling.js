@@ -181,8 +181,6 @@ const TabsetScheduling = ({ role }) => {
     fetchObservation(setObs, id, errors);
   }, []);
 
-  // console.log(obs);
-
   return (
     <Fragment>
       {role === "Observer" && (
@@ -260,6 +258,8 @@ const TabsetScheduling = ({ role }) => {
           <MultiStepForm
             tabtitle={"Provide Teaching Plan Details Step By Step"}
             steps={obs?.obsRequest?.teachingPlan[0]?.steps}
+            tempId={obs?.obsRequest?.teachingPlan[0]?.steps[0]?.templatePlanId}
+            observationsId={Number(id)}
           />
 
           <Tabs>

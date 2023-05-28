@@ -1,10 +1,11 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 // import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, FormGroup, Label, Form } from "reactstrap";
 import { info } from "../constants/Toasters";
 import { submitTeachingTemplate } from "./Endpoints";
+import { useStateValue } from "../StateProvider";
 // Define validation schema for each step
 const validationSchema = Yup.object({
   programOutcomes: Yup.string().required("Program outcomes are required!"),
@@ -17,27 +18,25 @@ const validationSchema = Yup.object({
   ),
 });
 
-const MultiStepForm = ({ tabtitle, steps }) => {
+const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
+  const [{ user }] = useStateValue();
   const [currentStep, setCurrentStep] = useState(0);
   const [text, setText] = useState({
-    ProgramOutcomes: "Program",
-    LearningOutcomes: "",
-    LearningResources: "",
-    TeachingSummary: "",
-    PreTeaching: "",
-    PostTeaching: "",
-    Feedback: "",
+    ProgramOutcomes: steps && steps[0]?.response ? steps[0]?.response : "",
+    LearningOutcomes: steps && steps[1]?.response ? steps[1]?.response : "",
+    LearningResources: steps && steps[2]?.response ? steps[2]?.response : "",
+    TeachingSummary: steps && steps[3]?.response ? steps[3]?.response : "",
+    PreTeaching: steps && steps[4]?.response ? steps[4]?.response : "",
+    PostTeaching: steps && steps[5]?.response ? steps[5]?.response : "",
+    Feedback: steps && steps[6]?.response ? steps[6]?.response : "",
   });
 
   const [loader, setLoader] = useState(false);
+
   const [templateResponse, setTemplateResponse] = useState([]);
 
   const handleNextStep = (id, name) => {
-    if (text) {
-      setLoader(true);
-      console.log(name);
-      console.log(text[name]);
-
+    if (text[name]) {
       const foundObject = templateResponse.find((obj) => obj.id === id);
 
       if (foundObject) {
@@ -62,13 +61,9 @@ const MultiStepForm = ({ tabtitle, steps }) => {
         ]);
       }
 
-      setTimeout(() => {
-        if (currentStep < steps.length - 1) {
-          setCurrentStep(currentStep + 1);
-          setLoader(false);
-          setText("");
-        }
-      }, 1000);
+      if (currentStep < steps.length - 1) {
+        setCurrentStep(currentStep + 1);
+      }
     } else {
       info("Please provide required information!");
     }
@@ -79,13 +74,18 @@ const MultiStepForm = ({ tabtitle, steps }) => {
   };
 
   const submitTemplateReposne = (id, name) => {
+    setLoader(true);
     handleNextStep(id, name);
     setTimeout(() => {
-      submitTeachingTemplate(templateResponse, setLoader, setText);
-    }, 1500);
+      submitTeachingTemplate(
+        templateResponse,
+        setLoader,
+        tempId,
+        user?.id,
+        observationsId
+      );
+    }, 2500);
   };
-
-  console.log(steps);
 
   return (
     <Fragment>
@@ -121,7 +121,6 @@ const MultiStepForm = ({ tabtitle, steps }) => {
                           value={text[step.name]}
                           onChange={(e) => {
                             const { name, value } = e.target;
-                            console.log(step.name, value);
                             setText((text) => ({
                               ...text,
                               [name]: value,
@@ -148,19 +147,17 @@ const MultiStepForm = ({ tabtitle, steps }) => {
                           type="button"
                           color="primary"
                         >
-                          {/* {loader ? <Loader size={18} /> : "Next"} */}
                           Next
                         </Button>
                       ) : (
                         <Button
-                          // type="submit"
-                          // disabled={isSubmitting}
                           color="primary"
                           onClick={() => {
                             submitTemplateReposne(step.id, step.name);
                           }}
+                          disabled={loader}
                         >
-                          Submit
+                          {loader ? "Submiting..." : "Submit"}
                         </Button>
                       )}
                     </div>

@@ -115,16 +115,33 @@ export async function updateScheduling(facultyId, observationsId, errors) {
   }
 }
 
-export async function submitTeachingTemplate(templateResponse, loader, text) {
-  console.log(templateResponse);
-  return;
+export async function submitTeachingTemplate(
+  templateResponse,
+  loader,
+  templateId,
+  editedById,
+  observationsId
+) {
+  // console.log({
+  //   templateResponse,
+  //   templateId,
+  //   editedById,
+  //   observationsId,
+  // });
+  // loader(false);
+  // return;
   try {
     const res = await fetch(`${BASEURL}/observation/scheduling`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-      body: JSON.stringify({ templateResponse }),
+      body: JSON.stringify({
+        templateResponse,
+        templateId,
+        editedById,
+        observationsId,
+      }),
     });
 
     const data = await res.json();
@@ -133,8 +150,7 @@ export async function submitTeachingTemplate(templateResponse, loader, text) {
       loader(false);
     } else {
       loader(false);
-      text("");
-      successes("Your Teaching Template Successfully Submitted!");
+      successes(data.message);
     }
   } catch (err) {
     errors(err);
