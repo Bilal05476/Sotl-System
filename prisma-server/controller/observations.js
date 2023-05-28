@@ -340,7 +340,9 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
           message: "Teaching Template Successfully Submitted!",
         });
       } catch (err) {
-        console.log(err);
+        res.status(400).json({
+          error: err,
+        });
       }
     } else {
       const updatedReq = await prisma.obsScheduling.update({
