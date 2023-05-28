@@ -20,6 +20,48 @@
   font-family: "Poppins-Regular";
 }
 
+// routes change animation styling
+.fade-enter {
+  opacity: 0.5;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in-out;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0.5;
+  transition: opacity 300ms ease-in-out;
+}
+
+// .page-enter {
+//   opacity: 0;
+//   transform: translateX(100%);
+// }
+
+// .page-enter-active {
+//   opacity: 1;
+//   transform: translateX(0%);
+//   transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+// }
+
+// .page-exit {
+//   opacity: 1;
+//   transform: translateX(0%);
+// }
+
+// .page-exit-active {
+//   opacity: 0;
+//   transform: translateX(-100%);
+//   transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+// }
+// end 
+
 .digits{
   font-weight: 400;
   max-width: 200px;
