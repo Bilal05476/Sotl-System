@@ -16,10 +16,10 @@ const Observations = () => {
           Observations
         </h4>
         <SidebarOptions optionName="Initiate Observation" href="#initiate" />
-        {/* <SidebarOptions optionName="Start Meeting Scheduling" /> */}
+        <SidebarOptions optionName="Start Meeting Scheduling" href="#start" />
         <SidebarOptions optionName="Update Meeting Scheduling" href="#update" />
-        <SidebarOptions optionName="Get Observations" />
-        <SidebarOptions optionName="One Observation" />
+        <SidebarOptions optionName="Get Observations" href="#allObs" />
+        <SidebarOptions optionName="One Observation" href="#oneObs" />
       </div>
       <div className="routes-deck">
         <div id="initiate" className="mb-5">
@@ -69,10 +69,33 @@ const Observations = () => {
             ]}
           />
         </div>
+        <div id="start" className="mb-5">
+          <h4>Create Meeting Scheduling</h4>
+          <EndPoint endpoint="/api/observation/scheduling/" method="POST" />
+          <h4>-</h4>
+          <Parameters
+            params={[
+              {
+                name: "observationsId",
+                type: "int",
+                def: "",
+                avail: "",
+                req: true,
+              },
+              {
+                name: "facultyId",
+                type: "int",
+                def: "",
+                avail: "",
+                req: true,
+              },
+            ]}
+          />
+        </div>
         <div id="update" className="mb-5">
           <h4>Update Meeting Scheduling</h4>
           <EndPoint endpoint="/api/observation/scheduling/" method="PUT" />
-          <h4></h4>
+          <h4>-</h4>
           <Parameters
             params={[
               {
@@ -98,7 +121,7 @@ const Observations = () => {
               },
               {
                 name: "scheduledOn",
-                type: "string",
+                type: "dateTime",
                 def: "",
                 avail: "",
                 req: false,
@@ -111,7 +134,7 @@ const Observations = () => {
                 req: false,
               },
               {
-                name: "ObserverAccepted",
+                name: "observerAccepted",
                 type: "boolean",
                 def: "false",
                 avail: "",
@@ -127,6 +150,14 @@ const Observations = () => {
               },
             ]}
           />
+        </div>
+        <div id="getObs" className="mb-5">
+          <h4>Get All Scheduling</h4>
+          <EndPoint endpoint="/api/observations/" method="GET" />
+        </div>
+        <div id="oneObs" className="mb-5">
+          <h4>Get Unique Scheduling</h4>
+          <EndPoint endpoint="/api/observation/:id" method="GET" />
         </div>
       </div>
     </div>

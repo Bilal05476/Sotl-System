@@ -22,8 +22,8 @@ model User {
     dateOfBirth         String?
     institute           String?
     degree              String?
-    starting            String?
-    ending              String?
+    starting            DateTime?
+    ending              DateTime?
     role                Role
     campus              Campus
     department          Department
@@ -51,8 +51,8 @@ model User {
 // -> User => Observations
 model Observations {
     id                  Int            @id @default(autoincrement()) // auto-inc
-    starting            String?
-    ending              String?
+    starting            DateTime?
+    ending              DateTime?
     observationStatus   Status         @default(Pending)
     observationProgress Int            @default(0)
     semester            String
@@ -76,7 +76,7 @@ model ObsScheduling {
     id                 Int            @id @default(autoincrement()) // auto-inc
     timeSlotsByFaculty CourseSlots[]  @relation("Faculty")
     timeSlotByObserver CourseSlots[]  @relation("Observer")
-    scheduledOn        String?
+    scheduledOn        DateTime?
     status             Status         @default(Ongoing)
     observation        Observations   @relation(fields: [observationsId], references: [id])
     observationsId     Int            @unique
@@ -96,6 +96,7 @@ model ObsReasons {
     receiverId   Int?
     scheduling   ObsScheduling? @relation(fields: [schedulingId], references: [id])
     schedulingId Int?
+    timeStamp    DateTime       @default(now())
 }
 
 // -> Observations => Meetings
@@ -161,11 +162,11 @@ model Courses {
     name            String
     department      Department
     campus          Campus
-    observations    Observations[]
     isElective      Boolean        @default(false)
     isDepthElective Boolean        @default(false)
-    slots           CourseSlots[]
     credits         Int
+    slots           CourseSlots[]
+    observations    Observations[]
 }
 
 model CourseSlots {
@@ -194,16 +195,18 @@ model FeedBacks {
     receiverId    Int?
     observation   Observations @relation(fields: [observationId], references: [id])
     observationId Int
+    timeStamp     DateTime     @default(now())
 }
 
 // -> User => Messages
 model Messages {
-    id         Int    @id @default(autoincrement()) // auto-inc
+    id         Int      @id @default(autoincrement()) // auto-inc
     message    String
-    sender     User?  @relation("Sender", fields: [senderId], references: [id])
+    sender     User?    @relation("Sender", fields: [senderId], references: [id])
     senderId   Int?
-    receiver   User?  @relation("Receiver", fields: [receiverId], references: [id])
+    receiver   User?    @relation("Receiver", fields: [receiverId], references: [id])
     receiverId Int?
+    timeStamp  DateTime @default(now())
 }
 
 // -> User => Scheduling => Template
@@ -241,10 +244,16 @@ enum Role {
 enum Department {
     Computer_Science
     Software_Engineering
+    Business_Accounting
+    Business_Adminitration
+    Animation
+    Film_and_TV
 }
 
 enum Specialization {
     Fest
+    BBA
+    Media_Studies
 }
 
 enum Campus {

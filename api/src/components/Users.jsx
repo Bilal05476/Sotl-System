@@ -70,9 +70,11 @@ const Users = () => {
                 name: "department",
                 type: "string",
                 def: "",
-                avail: "Computer_Science | Software_Engineering",
+                avail:
+                  "Computer_Science | Software_Engineering Business_Accounting | Business_Adminitration | Animation | Film_and_TV",
                 req: true,
               },
+
               {
                 name: "courses",
                 type: "array",
@@ -121,6 +123,13 @@ const Users = () => {
           <h4>Available Parameters</h4>
           <Parameters
             params={[
+              {
+                name: "designation",
+                type: "string",
+                def: "null",
+                avail: "",
+                req: false,
+              },
               {
                 name: "phone",
                 type: "string",
