@@ -179,6 +179,7 @@ const TabsetScheduling = ({ role }) => {
 
   useEffect(() => {
     fetchObservation(setObs, id, errors);
+    window.scrollTo(0, 0);
   }, []);
 
   return (

@@ -107,11 +107,15 @@ const TabsetAssignCourses = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setselectedCourse([]);
     setassignCourses({
       ...assignCourses,
       slots: [],
     });
+  }, []);
+
+  useEffect(() => {
     if (courseId !== "Select") {
       onSelectCousre();
     }
@@ -212,7 +216,7 @@ const TabsetAssignCourses = () => {
                   onChange={(e) =>
                     setassignCourses({
                       ...assignCourses,
-                      slots: [...slots, e.target.value],
+                      slots: [...slots, Number(e.target.value)],
                     })
                   }
                 >

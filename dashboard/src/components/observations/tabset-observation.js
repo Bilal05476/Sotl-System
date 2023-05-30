@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
@@ -18,6 +18,10 @@ const TabsetObservation = () => {
   const { facultyId, observerId, semester, loader, courseId } = createObs;
 
   const toastId = useRef(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const onCreateObservation = () => {
     const obsDetail = {

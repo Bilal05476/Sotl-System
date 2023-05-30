@@ -17,6 +17,7 @@ const Detail_observation = () => {
 
   useEffect(() => {
     fetchObservation(setObsDetail, Number(id));
+    window.scrollTo(0, 0);
   }, []);
 
   const handleAccordion = (selector) => {

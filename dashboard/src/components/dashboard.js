@@ -286,6 +286,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
     fetchUserData(user.id, dispatch);
+    window.scrollTo(0, 0);
   }, []);
 
   let faculty = 0;
@@ -768,7 +769,7 @@ const Dashboard = () => {
             </Card>
           </Col>
           {user.role === "Faculty" ? (
-            <Col xl="6 xl-100">
+            <Col xl="12 xl-100">
               <Card>
                 <CardHeader>
                   <h5>Your Courses</h5>
@@ -791,8 +792,10 @@ const Dashboard = () => {
                         <tbody>
                           {userData?.slots?.map((item) => (
                             <tr key={item.id}>
-                              <td className="digits">{item.course.id}</td>
-                              <td className="digits">{item.id}</td>
+                              <td className="digits">
+                                {item.course.courseCode}
+                              </td>
+                              <td className="digits">{item.sectionCode}</td>
                               <td className="digits">{item.course.name}</td>
                               <td className="digits">
                                 {item.day} {item.time}
@@ -808,7 +811,7 @@ const Dashboard = () => {
                           ))}
                           {userData?.slots?.length === 0 && (
                             <tr>
-                              <td className="text-center" colSpan={6}>
+                              <td className="text-center" colSpan={7}>
                                 No Courses Slots!
                               </td>
                             </tr>

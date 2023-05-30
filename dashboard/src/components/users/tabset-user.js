@@ -161,6 +161,7 @@ const TabsetUser = () => {
 
   useEffect(() => {
     fetchCoursesAndUsers(dispatch);
+    window.scrollTo(0, 0);
   }, []);
 
   return (

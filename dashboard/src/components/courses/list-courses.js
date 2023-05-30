@@ -21,6 +21,7 @@ const List_courses = () => {
   useEffect(() => {
     if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
     fetchUserData(user.id, dispatch);
+    window.scrollTo(0, 0);
   }, []);
   return (
     <Fragment>
@@ -33,7 +34,7 @@ const List_courses = () => {
                 <>
                   <CardHeader className="d-flex justify-content-end">
                     <Link
-                      to="/observations/create-observation"
+                      to="/courses/create-courses"
                       className="btn btn-primary"
                     >
                       Create Course
@@ -57,7 +58,7 @@ const List_courses = () => {
                         <tbody>
                           {usersandcourses?.courses.map((item) => (
                             <tr key={item.id}>
-                              <td className="digits">{item.id}</td>
+                              <td className="digits">{item.courseCode}</td>
                               <td className="digits">{item.name}</td>
                               <td className="digits">{item.credits}</td>
                               <td className="digits">

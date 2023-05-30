@@ -22,12 +22,12 @@
 
 // routes change animation styling
 .fade-enter {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .fade-enter-active {
   opacity: 1;
-  transition: opacity 300ms ease-in-out;
+  transition: opacity 500ms ease-in-out !important;
 }
 
 .fade-exit {
@@ -35,8 +35,8 @@
 }
 
 .fade-exit-active {
-  opacity: 0.5;
-  transition: opacity 300ms ease-in-out;
+  opacity: 0.6;
+  transition: opacity 500ms ease-in-out !important;
 }
 
 // .page-enter {

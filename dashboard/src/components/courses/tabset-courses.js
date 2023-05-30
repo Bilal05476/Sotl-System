@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Form, Table } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
@@ -33,6 +33,10 @@ const TabsetCourses = () => {
   const toastId = useRef(null);
 
   const [createSlots, setCreateSlots] = useState([]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const onCreateCourse = () => {
     const courseDetails = {

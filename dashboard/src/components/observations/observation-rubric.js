@@ -31,6 +31,10 @@ const Observation_rubric = () => {
   const [totalScore, setTotalScore] = useState(0);
   const { id } = useParams();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Fragment>
       <Breadcrumb title="Observation Rubrics" parent="Informed Observations" />
