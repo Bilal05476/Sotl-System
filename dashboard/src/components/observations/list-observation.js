@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 // import data from "../../assets/data/listUser";
@@ -11,15 +11,22 @@ import {
   Table,
   Col,
   Row,
+  Label,
+  Form,
+  FormGroup,
+  Input,
+  Button,
 } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
-import { Eye, Loader } from "react-feather";
+import { Eye, Filter, Loader } from "react-feather";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 
 const URL = process.env.PUBLIC_URL;
 
 const List_observation = () => {
   const [{ user, userData }, dispatch] = useStateValue();
+
+  console.log(userData);
 
   async function fetchData() {
     try {
@@ -49,6 +56,40 @@ const List_observation = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [openFilter, setOpenFilter] = useState(false);
+  const [obsFilter, setObsFilter] = useState({
+    course: 0,
+    semester: "All",
+    faculty: 0,
+    observer: 0,
+    status: "All",
+    start: "All",
+  });
+  const { course, semester, faculty, observer, status, start } = obsFilter;
+  const [observationData, setObservationData] = useState(
+    userData?.observations
+  );
+  const applyFilter = () => {
+    if (course !== 0) {
+      const filteredByCourse = userData?.observations?.filter(
+        (item) => item.courseId === course
+      );
+      setObservationData(filteredByCourse);
+    }
+    if (semester !== "All") {
+      const filteredByCourse = userData?.observations?.filter(
+        (item) => item.semester === semester
+      );
+      setObservationData(filteredByCourse);
+    } else {
+      setObservationData(userData?.observations);
+    }
+    // const filteredBy = userData?.observations?.filter(
+    //   (item) =>
+    //     (item.courseId === course !== 0 && course) ||
+    //     (item.facultyId === faculty !== 0 && faculty)
+    // );
+  };
   return (
     <Fragment>
       <Breadcrumb title="Observation List" parent="Observations" />
@@ -57,17 +98,95 @@ const List_observation = () => {
           <Col xl="12 xl-100">
             <Card>
               {user.role === "Head_of_Department" && (
-                <CardHeader className="d-flex justify-content-end">
+                <CardHeader className="d-flex align-items-center justify-content-end">
                   <Link
                     to="/observations/create-observation"
                     className="btn btn-primary"
                   >
                     Initiate Observation
                   </Link>
+                  <Filter
+                    color={completeColor}
+                    className="mx-3"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setOpenFilter(!openFilter)}
+                  />
                 </CardHeader>
               )}
               {userData && (
                 <CardBody>
+                  {openFilter && (
+                    <div className="mb-4">
+                      <Form className="needs-validation user-add" noValidate="">
+                        <FormGroup className="row">
+                          <FilterOptions
+                            filtername="Course"
+                            filterOption={[]}
+                            filterValue={course}
+                            changeValue={(value) =>
+                              setObsFilter({
+                                ...obsFilter,
+                                course: value,
+                              })
+                            }
+                          />
+                          <FilterOptions
+                            filtername="Semester"
+                            filterOption={[
+                              {
+                                id: "Spring",
+                                name: "Spring",
+                              },
+                              {
+                                id: "Summer",
+                                name: "Summer",
+                              },
+                              {
+                                id: "Fall",
+                                name: "Fall",
+                              },
+                            ]}
+                            filterValue={semester}
+                            changeValue={(value) =>
+                              setObsFilter({
+                                ...obsFilter,
+                                semester: value,
+                              })
+                            }
+                          />
+                          <FilterOptions
+                            filtername="Faculty"
+                            filterOption={[]}
+                            filterValue={faculty}
+                            setObsFilter={setObsFilter}
+                            obsFilter={obsFilter}
+                          />
+                          <FilterOptions
+                            filtername="Observer"
+                            filterOption={[]}
+                            filterValue={observer}
+                            setObsFilter={setObsFilter}
+                            obsFilter={obsFilter}
+                          />
+                          <FilterOptions
+                            filtername="Status"
+                            filterOption={[]}
+                            filterValue={status}
+                            setObsFilter={setObsFilter}
+                            obsFilter={obsFilter}
+                          />
+                        </FormGroup>
+                      </Form>
+                      <Button
+                        onClick={() => applyFilter()}
+                        className="btn btn-primary d-flex justify-self-flex-end"
+                      >
+                        Apply Filter
+                      </Button>
+                    </div>
+                  )}
                   <div className="user-status table-responsive latest-order-table">
                     <Table borderless>
                       <thead>
@@ -92,7 +211,7 @@ const List_observation = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {userData?.observations.map((item) => (
+                        {observationData?.map((item) => (
                           <tr key={item.id}>
                             <td className="digits">{item.course.name}</td>
                             <td className="digits">{item.semester}</td>
@@ -196,6 +315,38 @@ const List_observation = () => {
         </Row>
       </Container>
     </Fragment>
+  );
+};
+
+const FilterOptions = ({
+  filtername,
+  filterOption,
+  filterValue,
+  changeValue,
+}) => {
+  return (
+    <>
+      <Label className="col-xl-2 col-3 mb-2">
+        <span>*</span> {filtername}
+      </Label>
+      <div className="col-xl-2 col-3 mb-2">
+        <Input
+          className="form-control"
+          id="validationCustom3"
+          type="select"
+          required={true}
+          value={filterValue}
+          onChange={(e) => changeValue(e.target.value)}
+        >
+          <option value="Select">Select</option>
+          {filterOption?.map((item) => (
+            <option key={item?.id} value={item?.id}>
+              {item?.name}
+            </option>
+          ))}
+        </Input>
+      </div>
+    </>
   );
 };
 
