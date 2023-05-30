@@ -157,8 +157,8 @@ const Observations = () => {
               },
               {
                 name: "status",
-                type: "array",
-                def: "[]",
+                type: "string",
+                def: "",
                 avail: "Completed | Pending | Ongoing",
                 req: false,
               },
