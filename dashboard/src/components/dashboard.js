@@ -58,6 +58,7 @@ import { useStateValue } from "../StateProvider";
 import { NavLink } from "react-router-dom";
 import { fetchCoursesAndUsers, fetchUserData } from "./Endpoints";
 import { completeColor, ongoingColor, pendingColor } from "./colors";
+import welcome from "../assets/images/dashboard/welcome_img.svg";
 
 ChartJS.register(
   CategoryScale,
@@ -308,6 +309,33 @@ const Dashboard = () => {
       <Breadcrumb title="Dashboard" parent="Dashboard" />
 
       <Container fluid={true}>
+        <Row>
+          <Col xl="12 xl-100" md="12" className="">
+            <Card
+              className=" o-hidden widget-cards"
+              style={{
+                backdropFilter: "blur(10px)",
+                background: "transparent",
+                boxShadow: `0px 1px 5px ${completeColor}`,
+                border: `3px solid ${completeColor}`,
+              }}
+            >
+              <CardBody className="d-flex align-items-center justify-content-between">
+                <h4 className="m-0">
+                  Welcome to
+                  <h2
+                    style={{
+                      color: completeColor,
+                    }}
+                  >
+                    SOTL System
+                  </h2>
+                </h4>
+                <img src={welcome} width={150} />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
         <Row>
           {/* {user.role === "Admin" || user.role === "Campus_Director" ? (
             <>
