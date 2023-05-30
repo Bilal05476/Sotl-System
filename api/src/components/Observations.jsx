@@ -61,7 +61,7 @@ const Observations = () => {
               },
               {
                 name: "courseId",
-                type: "string",
+                type: "int",
                 def: "",
                 avail: "",
                 req: true,
@@ -146,6 +146,20 @@ const Observations = () => {
                 def: "[]",
                 avail:
                   "[{senderId : int, receiverId: int, reason: string, schedulingId: int}]",
+                req: false,
+              },
+              {
+                name: "templateResponse",
+                type: "array",
+                def: "[]",
+                avail: "[{id : int, response: string}]",
+                req: false,
+              },
+              {
+                name: "status",
+                type: "array",
+                def: "[]",
+                avail: "Completed | Pending | Ongoing",
                 req: false,
               },
             ]}

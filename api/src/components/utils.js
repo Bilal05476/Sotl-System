@@ -21,9 +21,9 @@ export const Parameters = ({ params }) => {
       <table>
         <thead>
           <tr>
-            <th>Paramter name</th>
-            <th>Paramter Type</th>
-            <th>Paramter Default</th>
+            <th>Parameter name</th>
+            <th>Parameter Type</th>
+            <th>Parameter Default</th>
             <th>Available Values</th>
           </tr>
         </thead>
