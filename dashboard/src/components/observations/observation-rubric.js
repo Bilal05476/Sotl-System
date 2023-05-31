@@ -64,14 +64,14 @@ const Observation_rubric = () => {
           totalScore={totalScore}
           setTotalScore={setTotalScore}
         />
-        <RubricAccordion
+        {/* <RubricAccordion
           title=" 1-B Demonstrating Knowledge of Pedagogy"
           accordname={"Pedagogy"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           totalScore={totalScore}
           setTotalScore={setTotalScore}
-        />
+        /> */}
 
         <div
           style={{
@@ -142,6 +142,13 @@ const RubricAccordion = ({
   setTotalScore,
 }) => {
   const [accordionScore, setAccordionScore] = useState(0);
+  const [rubricFinal, setRubricFinal] = useState(0);
+
+  const addAccordionScore = () => {
+    setAccordionScore(rubricFinal);
+    setTotalScore(totalScore + rubricFinal);
+  };
+
   return (
     <div className="accordion">
       <div className="accordion-item overflow-hidden mb-5">
@@ -166,7 +173,6 @@ const RubricAccordion = ({
           {title}
           <span className="d-flex align-items-center">
             Rubric Score: {accordionScore.toFixed(2)}
-            {/* Rubric Score: {Math.ceil(rubricScore)} */}
             {isOpen === accordname ? (
               <ChevronsUp style={{ marginLeft: "1.5rem" }} />
             ) : (
@@ -176,7 +182,7 @@ const RubricAccordion = ({
         </button>
 
         {isOpen === accordname && (
-          <div className="accordion-body text-center">
+          <div className="accordion-body">
             <h5
               className="d-flex"
               style={{
@@ -186,13 +192,27 @@ const RubricAccordion = ({
             >
               {alignmentPLO.title}
             </h5>
-            <RubricTable
-              type={alignmentPLO}
-              setAccordionScore={setAccordionScore}
-              accordionScore={accordionScore}
-              setTotalScore={setTotalScore}
-              totalScore={totalScore}
-            />
+            <Table borderless>
+              <thead>
+                <th className="col">
+                  <RadioInput value={"Not Demonstrating (1)"} />
+                </th>
+                <th className="col">
+                  <RadioInput value={"Developing (2)"} />
+                </th>
+                <th className="col">
+                  <RadioInput value={"Applying (3)"} />
+                </th>
+                <th className="col">
+                  <RadioInput value={"Innovating (4)"} />
+                </th>
+              </thead>
+              <RubricTable
+                type={alignmentPLO}
+                rubricFinal={rubricFinal}
+                setRubricFinal={setRubricFinal}
+              />
+            </Table>
             <h5
               className="d-flex"
               style={{
@@ -202,13 +222,13 @@ const RubricAccordion = ({
             >
               {demonnstratingDSK.title}
             </h5>
-            <RubricTable
-              type={demonnstratingDSK}
-              setAccordionScore={setAccordionScore}
-              accordionScore={accordionScore}
-              setTotalScore={setTotalScore}
-              totalScore={totalScore}
-            />
+            <Table borderless>
+              <RubricTable
+                type={demonnstratingDSK}
+                rubricFinal={rubricFinal}
+                setRubricFinal={setRubricFinal}
+              />
+            </Table>
             <h5
               className="d-flex"
               style={{
@@ -218,13 +238,33 @@ const RubricAccordion = ({
             >
               {studentEng.title}
             </h5>
-            <RubricTable
-              type={studentEng}
-              setAccordionScore={setAccordionScore}
-              accordionScore={accordionScore}
-              setTotalScore={setTotalScore}
-              totalScore={totalScore}
-            />
+            <Table borderless>
+              <RubricTable
+                type={studentEng}
+                rubricFinal={rubricFinal}
+                setRubricFinal={setRubricFinal}
+              />
+            </Table>
+            {/* {rubricFinal > 0 && ( */}
+            <button
+              style={{
+                backgroundColor: pendingColor,
+                outline: "none",
+                boxShadow: "none",
+                padding: "10px",
+                width: "15%",
+                border: "0",
+                color: "#fff",
+                borderRadius: "5px",
+                fontWeight: "700",
+                display: "block",
+                margin: "1rem auto",
+              }}
+              onClick={() => addAccordionScore()}
+            >
+              Submit Rubric Score
+            </button>
+            {/* // )} */}
           </div>
         )}
       </div>
@@ -249,10 +289,6 @@ const RubricPoints = ({
   setSelected,
   rubricScore,
   setRubricScore,
-  // setAccordionScore,
-  // accordionScore,
-  // setTotalScore,
-  // totalScore,
 }) => {
   const toggleSelected = (id, sc) => {
     if (selected.includes(id)) {
@@ -430,67 +466,56 @@ const rubrics = [
   },
 ];
 
-const RubricTable = ({ type, setAccordionScore, accordionScore }) => {
+const RubricTable = ({ type, rubricFinal, setRubricFinal }) => {
   const [rubricScore, setRubricScore] = useState(0);
   const [selectedRubric, setSelectedRubric] = useState([]);
 
+  const addRubrics = () => {
+    const avg = rubricScore / selectedRubric.length;
+    setRubricFinal(rubricFinal + avg);
+  };
+
   return (
-    <>
-      <Table borderless>
-        <thead>
-          <th className="col">
-            <RadioInput value={"Not Demonstrating (1)"} />
-          </th>
-          <th className="col">
-            <RadioInput value={"Developing (2)"} />
-          </th>
-          <th className="col">
-            <RadioInput value={"Applying (3)"} />
-          </th>
-          <th className="col">
-            <RadioInput value={"Innovating (4)"} />
-          </th>
-        </thead>
-        <tbody>
-          <tr>
-            {rubrics.map((item) => {
-              if (item.code === type.code)
-                return (
-                  <td>
-                    <RubricPoints
-                      rubricDesc={item}
-                      setSelected={setSelectedRubric}
-                      selected={selectedRubric}
-                      rubricScore={rubricScore}
-                      setRubricScore={setRubricScore}
-                    />
-                  </td>
-                );
-            })}
-          </tr>
-        </tbody>
-      </Table>
-      <button
-        style={{
-          backgroundColor: pendingColor,
-          outline: "none",
-          boxShadow: "none",
-          padding: "15px",
-          width: "20%",
-          border: "0",
-          color: "#fff",
-          borderRadius: "5px",
-          fontWeight: "700",
-          marginBottom: "1rem",
-        }}
-        onClick={() =>
-          setAccordionScore(
-            accordionScore + rubricScore / selectedRubric.length
-          )
-        }
-      >
-        ADD SCORE
-      </button>
-    </>
+    <tbody>
+      <tr>
+        {rubrics.map((item) => {
+          if (item.code === type.code)
+            return (
+              <td>
+                <RubricPoints
+                  rubricDesc={item}
+                  setSelected={setSelectedRubric}
+                  selected={selectedRubric}
+                  rubricScore={rubricScore}
+                  setRubricScore={setRubricScore}
+                />
+              </td>
+            );
+        })}
+      </tr>
+      {rubricScore > 0 && (
+        <tr>
+          <td colSpan={4}>
+            <button
+              style={{
+                backgroundColor: ongoingColor,
+                outline: "none",
+                boxShadow: "none",
+                padding: "10px",
+                width: "15%",
+                border: "0",
+                color: "#fff",
+                borderRadius: "5px",
+                fontWeight: "700",
+                marginBottom: "1rem",
+              }}
+              onClick={() => addRubrics()}
+            >
+              Add Score
+            </button>
+          </td>
+        </tr>
+      )}
+    </tbody>
   );
 };
