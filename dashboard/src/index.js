@@ -30,3 +30,13 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // reportWebVitals();
+
+// content: "";
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 100%;
+//       height: 100%;
+//       background-image: url("../../images/dashboard/login-bg2.png");
+//       background-position: center;
+//       opacity: 0.2;
