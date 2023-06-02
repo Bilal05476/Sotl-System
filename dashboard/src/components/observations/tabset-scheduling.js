@@ -234,7 +234,7 @@ const TabsetScheduling = ({ role }) => {
                           scheduledOn: e.target.value,
                         })
                       }
-                      type={"date"}
+                      type={"dateTime-local"}
                     />
                   </Form>
                 </TabPanel>
@@ -257,7 +257,7 @@ const TabsetScheduling = ({ role }) => {
       {role === "Faculty" && (
         <>
           <MultiStepForm
-            tabtitle={"Provide Teaching Plan Details Step By Step"}
+            tabtitle={"Provide Teaching Plan Details"}
             steps={obs?.obsRequest?.teachingPlan[0]?.steps}
             tempId={obs?.obsRequest?.teachingPlan[0]?.steps[0]?.templatePlanId}
             observationsId={Number(id)}

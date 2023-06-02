@@ -87,7 +87,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("scheduling")}
                 style={{
-                  backgroundColor: "#5673ED",
+                  backgroundColor: completeColor,
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",
@@ -207,7 +207,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("informed")}
                 style={{
-                  backgroundColor: "#5673ED",
+                  backgroundColor: completeColor,
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",
@@ -294,7 +294,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("post")}
                 style={{
-                  backgroundColor: "#5673ED",
+                  backgroundColor: completeColor,
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",
@@ -332,7 +332,7 @@ const Detail_observation = () => {
                 className="btn btn-block text-light"
                 onClick={() => handleAccordion("uninformed")}
                 style={{
-                  backgroundColor: "#5673ED",
+                  backgroundColor: completeColor,
                   outline: "none",
                   boxShadow: "none",
                   padding: "15px",

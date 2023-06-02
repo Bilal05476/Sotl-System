@@ -57,7 +57,12 @@ import {
 import { useStateValue } from "../StateProvider";
 import { NavLink } from "react-router-dom";
 import { fetchCoursesAndUsers, fetchUserData } from "./Endpoints";
-import { completeColor, ongoingColor, pendingColor } from "./colors";
+import {
+  completeColor,
+  completeColor2,
+  ongoingColor,
+  pendingColor,
+} from "./colors";
 import welcome from "../assets/images/dashboard/welcome_img.svg";
 
 ChartJS.register(
@@ -331,7 +336,7 @@ const Dashboard = () => {
                     SOTL System
                   </h2>
                 </h4>
-                <img src={welcome} width={150} />
+                {/* <img src={welcome} width={150} /> */}
               </CardBody>
             </Card>
           </Col>
@@ -510,11 +515,11 @@ const Dashboard = () => {
             <>
               <Col xl="6 xl-50" md="6" sm="3">
                 <Card className="o-hidden widget-cards">
-                  <CardBody style={{ backgroundColor: ongoingColor }}>
+                  <CardBody style={{ backgroundColor: completeColor2 }}>
                     <Media className="static-top-widget row">
                       <div className="icons-widgets col-4">
                         <div className="align-self-center text-center">
-                          <Users color={ongoingColor} />
+                          <Users color={completeColor2} />
                         </div>
                       </div>
                       <Media body className="col-8">

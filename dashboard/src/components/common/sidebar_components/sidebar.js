@@ -231,21 +231,7 @@ const Sidebar = () => {
 
   return (
     <Fragment>
-      <div className="page-sidebar ">
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            background: "#f1f4fb",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            justifyContent: "space-around",
-            padding: "0.5rem",
-          }}
-        >
-          <Settings size={18} />
-        </div>
+      <div className="page-sidebar">
         <div className="main-header-left d-none d-lg-block">
           <div className="logo-wrapper">
             <Link to={`${URL}/dashboard`}>

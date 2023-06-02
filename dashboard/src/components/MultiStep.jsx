@@ -6,85 +6,64 @@ import { Button, FormGroup, Label, Form } from "reactstrap";
 import { info } from "../constants/Toasters";
 import { submitTeachingTemplate } from "./Endpoints";
 import { useStateValue } from "../StateProvider";
-// Define validation schema for each step
-const validationSchema = Yup.object({
-  programOutcomes: Yup.string().required("Program outcomes are required!"),
-  learningOutcomes: Yup.string().required("Learning outcomes are required!"),
-  teachingSummary: Yup.string().required("Teaching Summary is required!"),
-  preTeaching: Yup.string().required("Pre Teaching Practices are required!"),
-  postTeaching: Yup.string().required("Post Teaching Practices are required!"),
-  feedback: Yup.string().required(
-    "Activities are required, provide minimum one!"
-  ),
-});
 
 const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
   const [{ user }] = useStateValue();
   const [currentStep, setCurrentStep] = useState(0);
   const [text, setText] = useState({
-    ProgramOutcomes: steps && steps[0]?.response ? steps[0]?.response : "",
-    LearningOutcomes: steps && steps[1]?.response ? steps[1]?.response : "",
-    LearningResources: steps && steps[2]?.response ? steps[2]?.response : "",
-    TeachingSummary: steps && steps[3]?.response ? steps[3]?.response : "",
-    PreTeaching: steps && steps[4]?.response ? steps[4]?.response : "",
-    PostTeaching: steps && steps[5]?.response ? steps[5]?.response : "",
-    Feedback: steps && steps[6]?.response ? steps[6]?.response : "",
+    ProgramOutcomes: { id: 0, response: "" },
+    LearningOutcomes: { id: 0, response: "" },
+    LearningResources: { id: 0, response: "" },
+    TeachingSummary: { id: 0, response: "" },
+    PreTeaching: { id: 0, response: "" },
+    PostTeaching: { id: 0, response: "" },
+    Feedback: { id: 0, response: "" },
   });
+
+  const {
+    ProgramOutcomes,
+    LearningOutcomes,
+    LearningResources,
+    TeachingSummary,
+    PreTeaching,
+    PostTeaching,
+    Feedback,
+  } = text;
 
   const [loader, setLoader] = useState(false);
 
   const [templateResponse, setTemplateResponse] = useState([]);
 
-  const handleNextStep = (id, name) => {
-    if (text[name]) {
-      const foundObject = templateResponse.find((obj) => obj.id === id);
+  // const handleNextStep = () => {
+  //   const tempRes = {
+  //     ProgramOutcomes,
+  //     LearningOutcomes,
+  //     LearningResources,
+  //     TeachingSummary,
+  //     PreTeaching,
+  //     PostTeaching,
+  //     Feedback,
+  //   };
+  //   return tempRes;
+  // };
 
-      if (foundObject) {
-        const filteredTemp = templateResponse.filter(
-          (item) => item.id !== foundObject.id
-        );
+  // const handlePreviousStep = () => {
+  //   setCurrentStep(currentStep - 1);
+  // };
 
-        setTemplateResponse([
-          ...filteredTemp,
-          {
-            id,
-            response: text[name],
-          },
-        ]);
-      } else {
-        setTemplateResponse([
-          ...templateResponse,
-          {
-            id,
-            response: text[name],
-          },
-        ]);
-      }
-
-      if (currentStep < steps.length - 1) {
-        setCurrentStep(currentStep + 1);
-      }
-    } else {
-      info("Please provide required information!");
-    }
-  };
-
-  const handlePreviousStep = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
-  const submitTemplateReposne = (id, name) => {
-    setLoader(true);
-    handleNextStep(id, name);
-    setTimeout(() => {
-      submitTeachingTemplate(
-        templateResponse,
-        setLoader,
-        tempId,
-        user?.id,
-        observationsId
-      );
-    }, 2500);
+  const submitTemplateReposne = () => {
+    // setLoader(true);
+    // const res = handleNextStep();
+    // console.log(res);
+    // setTimeout(() => {
+    //   submitTeachingTemplate(
+    //     templateResponse,
+    //     setLoader,
+    //     tempId,
+    //     user?.id,
+    //     observationsId
+    //   );
+    // }, 2500);
   };
 
   return (
@@ -99,12 +78,7 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
             <FormGroup className="row">
               <div className="col-12">
                 {steps.map((step, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      display: index === currentStep ? "block" : "none",
-                    }}
-                  >
+                  <div key={index}>
                     <div key={step.field} className="row mb-2">
                       <Label htmlFor={step.field} className="col-xl-3 col-md-4">
                         {step.field.charAt(0).toUpperCase() +
@@ -118,19 +92,22 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
                           type="text"
                           id={step.field}
                           name={step.name}
-                          value={text[step.name]}
+                          value={text[step.name]["response"]}
                           onChange={(e) => {
                             const { name, value } = e.target;
-                            setText((text) => ({
-                              ...text,
-                              [name]: value,
+                            setText((prev) => ({
+                              ...prev,
+                              [name.response]: value,
+                              [name.id]: step.id,
                             }));
                           }}
                         ></textarea>
                       </div>
                     </div>
-                    <div className="text-center mt-5">
-                      {currentStep > 0 && (
+                  </div>
+                ))}
+                <div className="text-center mt-5">
+                  {/* {currentStep > 0 && (
                         <Button
                           onClick={handlePreviousStep}
                           type="button"
@@ -139,9 +116,9 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
                         >
                           Previous
                         </Button>
-                      )}
+                      )} */}
 
-                      {currentStep < steps.length - 1 ? (
+                  {/* {currentStep < steps.length - 1 ? (
                         <Button
                           onClick={() => handleNextStep(step.id, step.name)}
                           type="button"
@@ -149,20 +126,18 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
                         >
                           Next
                         </Button>
-                      ) : (
-                        <Button
-                          color="primary"
-                          onClick={() => {
-                            submitTemplateReposne(step.id, step.name);
-                          }}
-                          disabled={loader}
-                        >
-                          {loader ? "Submiting..." : "Submit"}
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                      ) : ( */}
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      submitTemplateReposne();
+                    }}
+                    disabled={loader}
+                  >
+                    {loader ? "Submiting..." : "Submit"}
+                  </Button>
+                  {/* )} */}
+                </div>
               </div>
             </FormGroup>
           </Form>

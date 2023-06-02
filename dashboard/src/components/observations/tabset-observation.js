@@ -27,7 +27,7 @@ const TabsetObservation = () => {
     const obsDetail = {
       facultyId: Number(facultyId),
       observerId: Number(observerId),
-      courseId: courseId,
+      courseId: Number(courseId),
       hodId: user.id,
       semester,
     };
@@ -136,7 +136,7 @@ const TabsetObservation = () => {
 
   // return null;
 
-  console.log(fCourses);
+  // console.log(fCourses);
 
   return (
     <Fragment>
@@ -169,7 +169,7 @@ const TabsetObservation = () => {
                     (item) =>
                       item.role === "Observer" && (
                         <option key={item.id} value={item.id}>
-                          {item.name}
+                          {item.name} ({item.id})
                         </option>
                       )
                   )}
@@ -194,7 +194,7 @@ const TabsetObservation = () => {
                     (item) =>
                       item.role === "Faculty" && (
                         <option key={item.id} value={item.id}>
-                          {item.name}
+                          {item.name} ({item.id})
                         </option>
                       )
                   )}

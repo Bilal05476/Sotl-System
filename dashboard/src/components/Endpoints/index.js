@@ -122,14 +122,14 @@ export async function submitTeachingTemplate(
   editedById,
   observationsId
 ) {
-  // console.log({
-  //   templateResponse,
-  //   templateId,
-  //   editedById,
-  //   observationsId,
-  // });
-  // loader(false);
-  // return;
+  console.log({
+    templateResponse,
+    templateId,
+    editedById,
+    observationsId,
+  });
+  loader(false);
+  return;
   try {
     const res = await fetch(`${BASEURL}/observation/scheduling`, {
       method: "PUT",
