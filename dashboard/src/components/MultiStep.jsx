@@ -9,15 +9,15 @@ import { useStateValue } from "../StateProvider";
 
 const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
   const [{ user }] = useStateValue();
-  const [currentStep, setCurrentStep] = useState(0);
+  // const [currentStep, setCurrentStep] = useState(0);
   const [text, setText] = useState({
-    ProgramOutcomes: { id: 0, response: "" },
-    LearningOutcomes: { id: 0, response: "" },
-    LearningResources: { id: 0, response: "" },
-    TeachingSummary: { id: 0, response: "" },
-    PreTeaching: { id: 0, response: "" },
-    PostTeaching: { id: 0, response: "" },
-    Feedback: { id: 0, response: "" },
+    ProgramOutcomes: "",
+    LearningOutcomes: "",
+    LearningResources: "",
+    TeachingSummary: "",
+    PreTeaching: "",
+    PostTeaching: "",
+    Feedback: "",
   });
 
   const {
@@ -34,36 +34,52 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
 
   const [templateResponse, setTemplateResponse] = useState([]);
 
-  // const handleNextStep = () => {
-  //   const tempRes = {
-  //     ProgramOutcomes,
-  //     LearningOutcomes,
-  //     LearningResources,
-  //     TeachingSummary,
-  //     PreTeaching,
-  //     PostTeaching,
-  //     Feedback,
-  //   };
-  //   return tempRes;
-  // };
+  const handleNextStep = () => {
+    const tempRes = [
+      ProgramOutcomes,
+      LearningOutcomes,
+      LearningResources,
+      TeachingSummary,
+      PreTeaching,
+      PostTeaching,
+      Feedback,
+    ];
+
+    for (let t = 0; t < tempRes.length; t++) {
+      setTemplateResponse([
+        ...templateResponse,
+        {
+          id: steps[t].id,
+          response: tempRes[t],
+        },
+      ]);
+    }
+  };
 
   // const handlePreviousStep = () => {
   //   setCurrentStep(currentStep - 1);
   // };
 
   const submitTemplateReposne = () => {
-    // setLoader(true);
-    // const res = handleNextStep();
-    // console.log(res);
-    // setTimeout(() => {
-    //   submitTeachingTemplate(
-    //     templateResponse,
-    //     setLoader,
-    //     tempId,
-    //     user?.id,
-    //     observationsId
-    //   );
-    // }, 2500);
+    setLoader(true);
+    handleNextStep();
+    setTimeout(() => {
+      submitTeachingTemplate(
+        templateResponse,
+        setLoader,
+        tempId,
+        user?.id,
+        observationsId
+      );
+    }, 3500);
+  };
+
+  const changeText = (e) => {
+    const { name, value } = e.target;
+    setText((text) => ({
+      ...text,
+      [name]: value,
+    }));
   };
 
   return (
@@ -92,15 +108,8 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
                           type="text"
                           id={step.field}
                           name={step.name}
-                          value={text[step.name]["response"]}
-                          onChange={(e) => {
-                            const { name, value } = e.target;
-                            setText((prev) => ({
-                              ...prev,
-                              [name.response]: value,
-                              [name.id]: step.id,
-                            }));
-                          }}
+                          value={text[step.name]}
+                          onChange={(e) => changeText(e)}
                         ></textarea>
                       </div>
                     </div>
