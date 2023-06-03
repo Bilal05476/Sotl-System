@@ -18,6 +18,7 @@ import {
   blue3,
   blue4,
   completeColor,
+  completeColor2,
   ongoingColor,
   pendingColor,
 } from "../colors";
@@ -27,11 +28,21 @@ const URL = process.env.PUBLIC_URL;
 const Observation_rubric = () => {
   const [isOpen, setIsOpen] = useState("");
   const [totalScore, setTotalScore] = useState(0);
+  const [rubricSection, setRubricSection] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const updateTotal = () => {
+    let count = 0;
+    rubricSection.map((item) => {
+      count += item.accordionScore;
+      return null;
+    });
+    setTotalScore(count);
+  };
 
   return (
     <Fragment>
@@ -59,10 +70,12 @@ const Observation_rubric = () => {
         <RubricAccordion
           title="1-A Demonstrating Pedagogical Content Knowledge"
           accordname={"Content"}
+          accordCode={"1-A"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          totalScore={totalScore}
-          setTotalScore={setTotalScore}
+          updateTotal={updateTotal}
+          rubricSection={rubricSection}
+          setRubricSection={setRubricSection}
         />
         {/* <RubricAccordion
           title=" 1-B Demonstrating Knowledge of Pedagogy"
@@ -73,11 +86,7 @@ const Observation_rubric = () => {
           setTotalScore={setTotalScore}
         /> */}
 
-        <div
-          style={{
-            textAlign: "right",
-          }}
-        >
+        <div className="d-flex align-items-center justify-content-between py-3">
           <NavLink
             to={`${URL}/observations/detail-observation/${id}`}
             style={{
@@ -95,40 +104,32 @@ const Observation_rubric = () => {
           >
             BACK
           </NavLink>
-          <button
-            style={{
-              backgroundColor: "#f1f1f1",
-              outline: "none",
-              boxShadow: "none",
-              padding: "15px",
-              width: "20%",
-              border: "0",
-              color: "#1e1e1e",
-              borderRadius: "5px",
-              marginRight: "1rem",
-              fontWeight: "700",
-            }}
-          >
-            DRAFT SCORE
-          </button>
-          <button
-            style={{
-              backgroundColor: completeColor,
-              outline: "none",
-              boxShadow: "none",
-              padding: "15px",
-              width: "20%",
-              border: "0",
-              color: "#fff",
-              borderRadius: "5px",
-              fontWeight: "700",
-            }}
-          >
-            SUBMIT SCORE
-          </button>
+
+          <AccordButton text="DRAFT SCORE" backgroundColor={completeColor} />
+          <AccordButton text="SUBMIT SCORE" backgroundColor={completeColor2} />
         </div>
       </Container>
     </Fragment>
+  );
+};
+
+const AccordButton = ({ backgroundColor, text }) => {
+  return (
+    <button
+      style={{
+        backgroundColor: backgroundColor,
+        outline: "none",
+        boxShadow: "none",
+        padding: "15px",
+        width: "20%",
+        border: "0",
+        color: "#fff",
+        borderRadius: "5px",
+        fontWeight: "700",
+      }}
+    >
+      {text}
+    </button>
   );
 };
 export default Observation_rubric;
@@ -138,15 +139,38 @@ const RubricAccordion = ({
   setIsOpen,
   isOpen,
   accordname,
-  totalScore,
-  setTotalScore,
+  accordCode,
+  updateTotal,
+  rubricSection,
+  setRubricSection,
 }) => {
   const [accordionScore, setAccordionScore] = useState(0);
   const [rubricFinal, setRubricFinal] = useState(0);
 
   const addAccordionScore = () => {
     setAccordionScore(rubricFinal);
-    setTotalScore(totalScore + rubricFinal);
+    const existed = rubricSection.filter(
+      (item) => item.accordionCode !== accordCode
+    );
+    if (existed) {
+      setRubricSection([
+        ...existed,
+        {
+          accordionCode: accordCode,
+          accordionScore: rubricFinal,
+        },
+      ]);
+      updateTotal();
+    } else {
+      setRubricSection([
+        ...rubricSection,
+        {
+          accordionCode: accordCode,
+          accordionScore: rubricFinal,
+        },
+      ]);
+      updateTotal();
+    }
   };
 
   return (
@@ -209,8 +233,8 @@ const RubricAccordion = ({
               </thead>
               <RubricTable
                 type={alignmentPLO}
-                rubricFinal={rubricFinal}
-                setRubricFinal={setRubricFinal}
+                // rubricFinal={rubricFinal}
+                // setRubricFinal={setRubricFinal}
               />
             </Table>
             <h5
@@ -225,8 +249,8 @@ const RubricAccordion = ({
             <Table borderless>
               <RubricTable
                 type={demonnstratingDSK}
-                rubricFinal={rubricFinal}
-                setRubricFinal={setRubricFinal}
+                // rubricFinal={rubricFinal}
+                // setRubricFinal={setRubricFinal}
               />
             </Table>
             <h5
@@ -241,14 +265,14 @@ const RubricAccordion = ({
             <Table borderless>
               <RubricTable
                 type={studentEng}
-                rubricFinal={rubricFinal}
-                setRubricFinal={setRubricFinal}
+                // rubricFinal={rubricFinal}
+                // setRubricFinal={setRubricFinal}
               />
             </Table>
             {/* {rubricFinal > 0 && ( */}
             <button
               style={{
-                backgroundColor: pendingColor,
+                backgroundColor: completeColor2,
                 outline: "none",
                 boxShadow: "none",
                 padding: "10px",
@@ -466,14 +490,14 @@ const rubrics = [
   },
 ];
 
-const RubricTable = ({ type, rubricFinal, setRubricFinal }) => {
+const RubricTable = ({ type }) => {
   const [rubricScore, setRubricScore] = useState(0);
   const [selectedRubric, setSelectedRubric] = useState([]);
 
-  const addRubrics = () => {
-    const avg = rubricScore / selectedRubric.length;
-    setRubricFinal(rubricFinal + avg);
-  };
+  // const addRubrics = () => {
+  //   const avg = rubricScore / selectedRubric.length;
+  //   setRubricFinal(rubricFinal + avg);
+  // };
 
   return (
     <tbody>
@@ -493,7 +517,7 @@ const RubricTable = ({ type, rubricFinal, setRubricFinal }) => {
             );
         })}
       </tr>
-      {rubricScore > 0 && (
+      {/* {rubricScore > 0 && (
         <tr>
           <td colSpan={4}>
             <button
@@ -515,7 +539,7 @@ const RubricTable = ({ type, rubricFinal, setRubricFinal }) => {
             </button>
           </td>
         </tr>
-      )}
+      )} */}
     </tbody>
   );
 };
