@@ -10,7 +10,7 @@ import {
   Trash,
   Trash2,
 } from "react-feather";
-import { NavLink, useFetcher, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import {
   blue1,
@@ -22,7 +22,8 @@ import {
   ongoingColor,
   pendingColor,
 } from "../colors";
-
+import Applink from "../applink";
+import { info } from "../../constants/Toasters";
 const URL = process.env.PUBLIC_URL;
 
 const Observation_rubric = () => {
@@ -87,26 +88,19 @@ const Observation_rubric = () => {
         /> */}
 
         <div className="d-flex align-items-center justify-content-between py-3">
-          <NavLink
+          <Applink
             to={`${URL}/observations/detail-observation/${id}`}
-            style={{
-              backgroundColor: pendingColor,
-              outline: "none",
-              boxShadow: "none",
-              padding: "15px",
-              border: "0",
-              color: "#fff",
-              borderRadius: "5px",
-              marginRight: "1rem",
-              fontWeight: "700",
-              textDecoration: "none",
-            }}
-          >
-            BACK
-          </NavLink>
+            backgroundColor={pendingColor}
+            text="Back"
+          />
 
-          <AccordButton text="DRAFT SCORE" backgroundColor={completeColor} />
-          <AccordButton text="SUBMIT SCORE" backgroundColor={completeColor2} />
+          <div className="d-flex align-items-center justify-content-between">
+            <AccordButton text="Save Score" backgroundColor={completeColor} />
+            <AccordButton
+              text="Submit Score"
+              backgroundColor={completeColor2}
+            />
+          </div>
         </div>
       </Container>
     </Fragment>
@@ -121,7 +115,8 @@ const AccordButton = ({ backgroundColor, text }) => {
         outline: "none",
         boxShadow: "none",
         padding: "15px",
-        width: "20%",
+        // width: "20%",
+        marginLeft: "0.4rem",
         border: "0",
         color: "#fff",
         borderRadius: "5px",
@@ -319,12 +314,20 @@ const RubricPoints = ({
       const dRubric = selected.filter((item) => item !== id);
       setSelected(dRubric);
       let newScore = rubricScore - sc;
-      setRubricScore(newScore);
+      avgRubricScore(newScore);
     } else {
-      setSelected([...selected, id]);
-      let newScore = rubricScore + sc;
-      setRubricScore(newScore);
+      if (selected.length < 2) {
+        setSelected([...selected, id]);
+        let newScore = rubricScore + sc;
+        avgRubricScore(newScore);
+      } else {
+        info("You can only select any two of the rubric sub points...");
+      }
     }
+  };
+  const avgRubricScore = (newScore) => {
+    const avg = newScore / selected.length;
+    setRubricScore(avg);
   };
 
   return (
