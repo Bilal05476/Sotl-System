@@ -107,7 +107,7 @@ const Observation_rubric = () => {
   );
 };
 
-const AccordButton = ({ backgroundColor, text }) => {
+const AccordButton = ({ backgroundColor, text, onClick }) => {
   return (
     <button
       style={{
@@ -122,6 +122,7 @@ const AccordButton = ({ backgroundColor, text }) => {
         borderRadius: "5px",
         fontWeight: "700",
       }}
+      onClick={onClick}
     >
       {text}
     </button>
@@ -264,26 +265,12 @@ const RubricAccordion = ({
                 // setRubricFinal={setRubricFinal}
               />
             </Table>
-            {/* {rubricFinal > 0 && ( */}
-            <button
-              style={{
-                backgroundColor: completeColor2,
-                outline: "none",
-                boxShadow: "none",
-                padding: "10px",
-                width: "15%",
-                border: "0",
-                color: "#fff",
-                borderRadius: "5px",
-                fontWeight: "700",
-                display: "block",
-                margin: "1rem auto",
-              }}
+
+            <AccordButton
+              backgroundColor={completeColor2}
+              text="Submit Rubric Score"
               onClick={() => addAccordionScore()}
-            >
-              Submit Rubric Score
-            </button>
-            {/* // )} */}
+            />
           </div>
         )}
       </div>
@@ -302,22 +289,16 @@ const RadioInput = ({ value }) => {
   );
 };
 
-const RubricPoints = ({
-  rubricDesc,
-  selected,
-  setSelected,
-  rubricScore,
-  setRubricScore,
-}) => {
+const RubricPoints = ({ rubricDesc, rubricScore, setRubricScore }) => {
+  let rubricSelected = [];
   const toggleSelected = (id, sc) => {
-    if (selected.includes(id)) {
-      const dRubric = selected.filter((item) => item !== id);
-      setSelected(dRubric);
+    if (rubricSelected.includes(id)) {
+      rubricSelected = rubricSelected.filter((item) => item !== id);
       let newScore = rubricScore - sc;
       avgRubricScore(newScore);
     } else {
-      if (selected.length < 2) {
-        setSelected([...selected, id]);
+      if (rubricSelected.length < 2) {
+        rubricSelected.push(id);
         let newScore = rubricScore + sc;
         avgRubricScore(newScore);
       } else {
@@ -326,8 +307,9 @@ const RubricPoints = ({
     }
   };
   const avgRubricScore = (newScore) => {
-    const avg = newScore / selected.length;
-    setRubricScore(avg);
+    const avg = newScore / rubricSelected.length;
+    // setRubricScore(avg);
+    console.log(rubricSelected, avg);
   };
 
   return (
@@ -337,17 +319,17 @@ const RubricPoints = ({
         className="rubric-points d-flex align-items-start my-2 "
         style={{
           backgroundColor:
-            selected.includes(rubricDesc.id) && rubricDesc.score === 1
+            rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 1
               ? blue3
-              : selected.includes(rubricDesc.id) && rubricDesc.score === 2
+              : rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 2
               ? blue2
-              : selected.includes(rubricDesc.id) && rubricDesc.score === 3
+              : rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 3
               ? blue1
-              : selected.includes(rubricDesc.id) && rubricDesc.score === 4
+              : rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 4
               ? blue4
               : "",
           boxShadow:
-            selected.includes(rubricDesc.id) &&
+            rubricSelected.includes(rubricDesc.id) &&
             "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
         }}
         onClick={() => toggleSelected(rubricDesc.id, rubricDesc.score)}
@@ -355,7 +337,7 @@ const RubricPoints = ({
         <input
           type="radio"
           className="mt-1"
-          checked={selected.includes(rubricDesc.id) && true}
+          checked={rubricSelected.includes(rubricDesc.id) && true}
           style={{ marginRight: "0.5rem" }}
         />
 
@@ -365,7 +347,7 @@ const RubricPoints = ({
           }}
         >
           {rubricDesc.text}
-          {/* {rubricScore > 0 ? rubricScore / selected.length : 0} */}
+          {rubricScore}
         </span>
       </div>
     </div>
@@ -495,12 +477,6 @@ const rubrics = [
 
 const RubricTable = ({ type }) => {
   const [rubricScore, setRubricScore] = useState(0);
-  const [selectedRubric, setSelectedRubric] = useState([]);
-
-  // const addRubrics = () => {
-  //   const avg = rubricScore / selectedRubric.length;
-  //   setRubricFinal(rubricFinal + avg);
-  // };
 
   return (
     <tbody>
@@ -511,8 +487,6 @@ const RubricTable = ({ type }) => {
               <td>
                 <RubricPoints
                   rubricDesc={item}
-                  setSelected={setSelectedRubric}
-                  selected={selectedRubric}
                   rubricScore={rubricScore}
                   setRubricScore={setRubricScore}
                 />
@@ -520,29 +494,6 @@ const RubricTable = ({ type }) => {
             );
         })}
       </tr>
-      {/* {rubricScore > 0 && (
-        <tr>
-          <td colSpan={4}>
-            <button
-              style={{
-                backgroundColor: ongoingColor,
-                outline: "none",
-                boxShadow: "none",
-                padding: "10px",
-                width: "15%",
-                border: "0",
-                color: "#fff",
-                borderRadius: "5px",
-                fontWeight: "700",
-                marginBottom: "1rem",
-              }}
-              onClick={() => addRubrics()}
-            >
-              Add Score
-            </button>
-          </td>
-        </tr>
-      )} */}
     </tbody>
   );
 };

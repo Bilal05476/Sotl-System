@@ -35,7 +35,7 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId, setObs }) => {
   // const [templateResponse, setTemplateResponse] = useState([]);
 
   const handleNextStep = () => {
-    const templateResponse = [];
+    let templateResponse = [];
     const tempRes = [
       ProgramOutcomes,
       LearningOutcomes,
