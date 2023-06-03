@@ -7,7 +7,7 @@ import { info } from "../constants/Toasters";
 import { submitTeachingTemplate } from "./Endpoints";
 import { useStateValue } from "../StateProvider";
 
-const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
+const MultiStepForm = ({ tabtitle, steps, tempId, observationsId, setObs }) => {
   const [{ user }] = useStateValue();
   // const [currentStep, setCurrentStep] = useState(0);
   const [text, setText] = useState({
@@ -32,9 +32,10 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
 
   const [loader, setLoader] = useState(false);
 
-  const [templateResponse, setTemplateResponse] = useState([]);
+  // const [templateResponse, setTemplateResponse] = useState([]);
 
   const handleNextStep = () => {
+    const templateResponse = [];
     const tempRes = [
       ProgramOutcomes,
       LearningOutcomes,
@@ -46,14 +47,13 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
     ];
 
     for (let t = 0; t < tempRes.length; t++) {
-      setTemplateResponse([
-        ...templateResponse,
-        {
-          id: steps[t].id,
-          response: tempRes[t],
-        },
-      ]);
+      templateResponse.push({
+        id: steps[t].id,
+        response: tempRes[t],
+      });
     }
+
+    return templateResponse;
   };
 
   // const handlePreviousStep = () => {
@@ -61,17 +61,30 @@ const MultiStepForm = ({ tabtitle, steps, tempId, observationsId }) => {
   // };
 
   const submitTemplateReposne = () => {
-    setLoader(true);
-    handleNextStep();
-    setTimeout(() => {
-      submitTeachingTemplate(
-        templateResponse,
-        setLoader,
-        tempId,
-        user?.id,
-        observationsId
-      );
-    }, 3500);
+    if (
+      ProgramOutcomes &&
+      LearningOutcomes &&
+      LearningResources &&
+      TeachingSummary &&
+      PreTeaching &&
+      PostTeaching &&
+      Feedback
+    ) {
+      setLoader(true);
+      const tempResponses = handleNextStep();
+      if (tempResponses?.length > 0) {
+        submitTeachingTemplate(
+          tempResponses,
+          setLoader,
+          tempId,
+          user?.id,
+          observationsId,
+          setObs
+        );
+      }
+    } else {
+      info("Please provide all the required details...");
+    }
   };
 
   const changeText = (e) => {

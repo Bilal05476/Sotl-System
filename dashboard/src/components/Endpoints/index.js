@@ -120,16 +120,9 @@ export async function submitTeachingTemplate(
   loader,
   templateId,
   editedById,
-  observationsId
+  observationsId,
+  setObs
 ) {
-  console.log({
-    templateResponse,
-    templateId,
-    editedById,
-    observationsId,
-  });
-  loader(false);
-  return;
   try {
     const res = await fetch(`${BASEURL}/observation/scheduling`, {
       method: "PUT",
@@ -151,6 +144,7 @@ export async function submitTeachingTemplate(
     } else {
       loader(false);
       successes(data.message);
+      fetchObservation(setObs, observationsId);
     }
   } catch (err) {
     errors(err);

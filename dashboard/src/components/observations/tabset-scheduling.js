@@ -53,6 +53,12 @@ const TabsetScheduling = ({ role }) => {
 
   async function editObs() {
     editedObsDetail.observationsId = Number(id);
+    if (scheduledOn) {
+      const selectedDate = new Date(scheduledOn);
+      const formattedDate = selectedDate.toISOString();
+      editedObsDetail.scheduledOn = formattedDate;
+    }
+
     info("Scheduling uppdating...");
     try {
       const res = await fetch(`${BASEURL}/observation/scheduling`, {
@@ -178,7 +184,7 @@ const TabsetScheduling = ({ role }) => {
   };
 
   useEffect(() => {
-    fetchObservation(setObs, id, errors);
+    fetchObservation(setObs, id);
     window.scrollTo(0, 0);
   }, []);
 
@@ -256,55 +262,60 @@ const TabsetScheduling = ({ role }) => {
       )}
       {role === "Faculty" && (
         <>
-          <MultiStepForm
-            tabtitle={"Provide Teaching Plan Details"}
-            steps={obs?.obsRequest?.teachingPlan[0]?.steps}
-            tempId={obs?.obsRequest?.teachingPlan[0]?.steps[0]?.templatePlanId}
-            observationsId={Number(id)}
-          />
+          {!obs?.obsRequest?.teachingPlan[0]?.editedBy && (
+            <MultiStepForm
+              tabtitle={"Provide Teaching Plan Details"}
+              steps={obs?.obsRequest?.teachingPlan[0]?.steps}
+              tempId={
+                obs?.obsRequest?.teachingPlan[0]?.steps[0]?.templatePlanId
+              }
+              observationsId={Number(id)}
+              setObs={setObs}
+            />
+          )}
 
           <Tabs>
             <TabPanel>
               {obs?.obsRequest?.teachingPlan[0]?.editedBy && (
-                <Form className="needs-validation user-add" noValidate="">
-                  <FormGroup className="row">
-                    <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Provide Avalaible Slots
-                    </Label>
-                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                      {obs?.course?.slots.map((item) => {
-                        if (item.facultyId === user.id)
-                          return (
-                            <TimeSlotSpan
-                              key={item.id}
-                              id={item.id}
-                              location={item.location}
-                              time={item.time}
-                              day={item.day}
-                              onClick={() => onSelectSlotFaculty(item.id)}
-                              slots={timeSlotsByFaculty}
-                            />
-                          );
-                      })}
-                    </div>
-                  </FormGroup>
-                </Form>
+                <>
+                  <Form className="needs-validation user-add" noValidate="">
+                    <FormGroup className="row">
+                      <Label className="col-xl-3 col-md-4">
+                        <span>*</span> Provide Avalaible Slots
+                      </Label>
+                      <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                        {obs?.course?.slots.map((item) => {
+                          if (item.facultyId === user.id)
+                            return (
+                              <TimeSlotSpan
+                                key={item.id}
+                                id={item.id}
+                                location={item.location}
+                                time={item.time}
+                                day={item.day}
+                                onClick={() => onSelectSlotFaculty(item.id)}
+                                slots={timeSlotsByFaculty}
+                              />
+                            );
+                        })}
+                      </div>
+                    </FormGroup>
+                  </Form>
+                  <div className="pull-right">
+                    {!obs?.obsRequest?.facultyAccepted && (
+                      <Button
+                        onClick={() => onObservationEditing()}
+                        type="button"
+                        color="primary"
+                      >
+                        Update
+                      </Button>
+                    )}
+                  </div>
+                </>
               )}
             </TabPanel>
           </Tabs>
-          {obs?.obsRequest?.teachingPlan[0]?.editedBy && (
-            <div className="pull-right">
-              {!obs?.obsRequest?.facultyAccepted && (
-                <Button
-                  onClick={() => onObservationEditing()}
-                  type="button"
-                  color="primary"
-                >
-                  Update
-                </Button>
-              )}
-            </div>
-          )}
         </>
       )}
 
