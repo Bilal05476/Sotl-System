@@ -90,16 +90,13 @@ const Observation_rubric = () => {
         <div className="d-flex align-items-center justify-content-between py-3">
           <Applink
             to={`${URL}/observations/detail-observation/${id}`}
-            backgroundColor={pendingColor}
+            backgroundColor={completeColor2}
             text="Back"
           />
 
           <div className="d-flex align-items-center justify-content-between">
-            <AccordButton text="Save Score" backgroundColor={completeColor} />
-            <AccordButton
-              text="Submit Score"
-              backgroundColor={completeColor2}
-            />
+            <AccordButton text="Save Score" backgroundColor={completeColor2} />
+            <AccordButton text="Submit Score" backgroundColor={completeColor} />
           </div>
         </div>
       </Container>
@@ -115,7 +112,6 @@ const AccordButton = ({ backgroundColor, text, onClick }) => {
         outline: "none",
         boxShadow: "none",
         padding: "15px",
-        // width: "20%",
         marginLeft: "0.4rem",
         border: "0",
         color: "#fff",
@@ -204,14 +200,17 @@ const RubricAccordion = ({
         {isOpen === accordname && (
           <div className="accordion-body">
             <h5
-              className="d-flex"
+              className="d-flex  p-2"
               style={{
                 fontStyle: "italic",
                 fontWeight: "800",
+                boxShadow: "1px 1px 2px #1e1e1e56",
+                borderRadius: "2px",
               }}
             >
               {alignmentPLO.title}
             </h5>
+
             <Table borderless>
               <thead>
                 <th className="col">
@@ -234,10 +233,12 @@ const RubricAccordion = ({
               />
             </Table>
             <h5
-              className="d-flex"
+              className="d-flex p-2"
               style={{
                 fontStyle: "italic",
                 fontWeight: "800",
+                boxShadow: "1px 1px 2px #1e1e1e56",
+                borderRadius: "2px",
               }}
             >
               {demonnstratingDSK.title}
@@ -250,10 +251,12 @@ const RubricAccordion = ({
               />
             </Table>
             <h5
-              className="d-flex"
+              className="d-flex p-2"
               style={{
                 fontStyle: "italic",
                 fontWeight: "800",
+                boxShadow: "1px 1px 2px #1e1e1e56",
+                borderRadius: "2px",
               }}
             >
               {studentEng.title}
@@ -266,11 +269,19 @@ const RubricAccordion = ({
               />
             </Table>
 
-            <AccordButton
-              backgroundColor={completeColor2}
-              text="Submit Rubric Score"
-              onClick={() => addAccordionScore()}
-            />
+            <div
+              className="bg-light py-3 text-center"
+              style={{
+                boxShadow: "1px 1px 2px #1e1e1e56",
+                borderRadius: "2px",
+              }}
+            >
+              <AccordButton
+                backgroundColor={completeColor2}
+                text="Submit Rubric Score"
+                onClick={() => addAccordionScore()}
+              />
+            </div>
           </div>
         )}
       </div>
@@ -289,28 +300,36 @@ const RadioInput = ({ value }) => {
   );
 };
 
-const RubricPoints = ({ rubricDesc, rubricScore, setRubricScore }) => {
-  let rubricSelected = [];
+const RubricPoints = ({
+  rubricDesc,
+  rubricScore,
+  setRubricScore,
+  rubricSelected,
+  setRubricSelected,
+}) => {
+  let newScore = 0;
   const toggleSelected = (id, sc) => {
     if (rubricSelected.includes(id)) {
-      rubricSelected = rubricSelected.filter((item) => item !== id);
-      let newScore = rubricScore - sc;
-      avgRubricScore(newScore);
+      const filtered = rubricSelected.filter((item) => item !== id);
+      setRubricSelected(filtered);
+      newScore = rubricScore - sc;
     } else {
       if (rubricSelected.length < 2) {
-        rubricSelected.push(id);
-        let newScore = rubricScore + sc;
-        avgRubricScore(newScore);
+        setRubricSelected([...rubricSelected, id]);
+        newScore = rubricScore + sc;
       } else {
         info("You can only select any two of the rubric sub points...");
       }
     }
   };
-  const avgRubricScore = (newScore) => {
+  const avgRubricScore = () => {
     const avg = newScore / rubricSelected.length;
-    // setRubricScore(avg);
-    console.log(rubricSelected, avg);
+    setRubricScore(avg);
   };
+
+  useEffect(() => {
+    avgRubricScore();
+  }, [newScore, rubricSelected]);
 
   return (
     <div className="my-2 d-flex flex-column flex-wrap align-items-start">
@@ -347,7 +366,6 @@ const RubricPoints = ({ rubricDesc, rubricScore, setRubricScore }) => {
           }}
         >
           {rubricDesc.text}
-          {rubricScore}
         </span>
       </div>
     </div>
@@ -477,6 +495,7 @@ const rubrics = [
 
 const RubricTable = ({ type }) => {
   const [rubricScore, setRubricScore] = useState(0);
+  const [rubricSelected, setRubricSelected] = useState([]);
 
   return (
     <tbody>
@@ -489,6 +508,8 @@ const RubricTable = ({ type }) => {
                   rubricDesc={item}
                   rubricScore={rubricScore}
                   setRubricScore={setRubricScore}
+                  rubricSelected={rubricSelected}
+                  setRubricSelected={setRubricSelected}
                 />
               </td>
             );
