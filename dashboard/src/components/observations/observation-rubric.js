@@ -307,29 +307,31 @@ const RubricPoints = ({
   rubricSelected,
   setRubricSelected,
 }) => {
-  let newScore = 0;
   const toggleSelected = (id, sc) => {
     if (rubricSelected.includes(id)) {
       const filtered = rubricSelected.filter((item) => item !== id);
       setRubricSelected(filtered);
-      newScore = rubricScore - sc;
+      setRubricScore(rubricScore - sc);
     } else {
       if (rubricSelected.length < 2) {
         setRubricSelected([...rubricSelected, id]);
-        newScore = rubricScore + sc;
+        setRubricScore(rubricScore + sc);
       } else {
         info("You can only select any two of the rubric sub points...");
       }
     }
   };
   const avgRubricScore = () => {
-    const avg = newScore / rubricSelected.length;
-    setRubricScore(avg);
+    const avg = rubricScore / rubricSelected.length;
+    // setRubricScore(avg);
   };
 
   useEffect(() => {
-    avgRubricScore();
-  }, [newScore, rubricSelected]);
+    setTimeout(() => {
+      avgRubricScore();
+      // console.log(rubricScore);
+    }, 2000);
+  }, [rubricSelected]);
 
   return (
     <div className="my-2 d-flex flex-column flex-wrap align-items-start">
@@ -358,6 +360,7 @@ const RubricPoints = ({
           className="mt-1"
           checked={rubricSelected.includes(rubricDesc.id) && true}
           style={{ marginRight: "0.5rem" }}
+          readOnly={true}
         />
 
         <span
@@ -503,7 +506,7 @@ const RubricTable = ({ type }) => {
         {rubrics.map((item) => {
           if (item.code === type.code)
             return (
-              <td>
+              <td key={item.id}>
                 <RubricPoints
                   rubricDesc={item}
                   rubricScore={rubricScore}
