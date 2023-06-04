@@ -73,7 +73,8 @@ const TabsetScheduling = ({ role }) => {
       if (data.error) {
         errors(data.error);
       } else {
-        successes("Observation Updated successfully!");
+        successes(data.message);
+        fetchObservation(setObs, Number(id));
       }
     } catch (err) {
       console.log(err);
@@ -117,6 +118,7 @@ const TabsetScheduling = ({ role }) => {
         errors(data.error);
       } else {
         successes("Observation Accepted");
+        fetchObservation(setObs, Number(id));
       }
     }
 
@@ -150,6 +152,7 @@ const TabsetScheduling = ({ role }) => {
       errors(data.error);
     } else {
       successes("Observation Scheduling Done!");
+      fetchObservation(setObs, Number(id));
     }
   };
 
@@ -183,8 +186,10 @@ const TabsetScheduling = ({ role }) => {
     }
   };
 
+  // console.log(obs);
+
   useEffect(() => {
-    fetchObservation(setObs, id);
+    fetchObservation(setObs, Number(id));
     window.scrollTo(0, 0);
   }, []);
 
@@ -293,10 +298,32 @@ const TabsetScheduling = ({ role }) => {
                                 location={item.location}
                                 time={item.time}
                                 day={item.day}
+                                cursor={true}
                                 onClick={() => onSelectSlotFaculty(item.id)}
                                 slots={timeSlotsByFaculty}
                               />
                             );
+                        })}
+                      </div>
+                    </FormGroup>
+                    <FormGroup className="row">
+                      <Label className="col-xl-3 col-md-4">
+                        <span>*</span> Slot(s) Selected by Observer
+                      </Label>
+                      <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                        {obs?.obsRequest?.timeSlotByObserver?.map((item) => {
+                          return (
+                            <TimeSlotSpan
+                              key={item.id}
+                              id={item.id}
+                              location={item.location}
+                              time={item.time}
+                              day={item.day}
+                              cursor={false}
+                              // onClick={() => onSelectSlotFaculty(item.id)}
+                              slots={timeSlotsByFaculty}
+                            />
+                          );
                         })}
                       </div>
                     </FormGroup>
@@ -348,7 +375,16 @@ const TabsetScheduling = ({ role }) => {
   );
 };
 
-const TimeSlotSpan = ({ key, onClick, location, time, day, slots, id }) => {
+const TimeSlotSpan = ({
+  key,
+  onClick,
+  location,
+  time,
+  day,
+  slots,
+  id,
+  cursor,
+}) => {
   return (
     <span
       className="mb-2"
@@ -358,9 +394,10 @@ const TimeSlotSpan = ({ key, onClick, location, time, day, slots, id }) => {
         marginRight: "0.5rem",
         padding: "0.2rem 0.8rem",
         borderRadius: "5px",
-        cursor: "pointer",
-        backgroundColor: slots.includes(id) && completeColor,
-        color: slots.includes(id) && "#fff",
+        cursor: cursor && "pointer",
+        backgroundColor:
+          (slots.includes(id) && completeColor) || (!cursor && completeColor),
+        color: (slots.includes(id) && "#fff") || (!cursor && "#fff"),
       }}
       onClick={onClick}
     >
