@@ -2,14 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 // import { useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import {
-  ChevronDown,
-  ChevronsDown,
-  ChevronsUp,
-  Loader,
-  Trash,
-  Trash2,
-} from "react-feather";
+import { ChevronsDown, ChevronsUp, Loader } from "react-feather";
 import { useParams } from "react-router-dom";
 
 import {
@@ -19,8 +12,6 @@ import {
   blue4,
   completeColor,
   completeColor2,
-  ongoingColor,
-  pendingColor,
 } from "../colors";
 import Applink from "../applink";
 import { info } from "../../constants/Toasters";
@@ -199,75 +190,12 @@ const RubricAccordion = ({
 
         {isOpen === accordname && (
           <div className="accordion-body">
-            <h5
-              className="d-flex  p-2"
-              style={{
-                fontStyle: "italic",
-                fontWeight: "800",
-                boxShadow: "1px 1px 2px #1e1e1e56",
-                borderRadius: "2px",
-              }}
-            >
-              {alignmentPLO.title}
-            </h5>
-
-            <Table borderless>
-              <thead>
-                <th className="col">
-                  <RadioInput value={"Not Demonstrating (1)"} />
-                </th>
-                <th className="col">
-                  <RadioInput value={"Developing (2)"} />
-                </th>
-                <th className="col">
-                  <RadioInput value={"Applying (3)"} />
-                </th>
-                <th className="col">
-                  <RadioInput value={"Innovating (4)"} />
-                </th>
-              </thead>
-              <RubricTable
-                type={alignmentPLO}
-                // rubricFinal={rubricFinal}
-                // setRubricFinal={setRubricFinal}
-              />
-            </Table>
-            <h5
-              className="d-flex p-2"
-              style={{
-                fontStyle: "italic",
-                fontWeight: "800",
-                boxShadow: "1px 1px 2px #1e1e1e56",
-                borderRadius: "2px",
-              }}
-            >
-              {demonnstratingDSK.title}
-            </h5>
-            <Table borderless>
-              <RubricTable
-                type={demonnstratingDSK}
-                // rubricFinal={rubricFinal}
-                // setRubricFinal={setRubricFinal}
-              />
-            </Table>
-            <h5
-              className="d-flex p-2"
-              style={{
-                fontStyle: "italic",
-                fontWeight: "800",
-                boxShadow: "1px 1px 2px #1e1e1e56",
-                borderRadius: "2px",
-              }}
-            >
-              {studentEng.title}
-            </h5>
-            <Table borderless>
-              <RubricTable
-                type={studentEng}
-                // rubricFinal={rubricFinal}
-                // setRubricFinal={setRubricFinal}
-              />
-            </Table>
+            <SubAccordion title={alignmentPLO.title} type={alignmentPLO} />
+            <SubAccordion
+              title={demonnstratingDSK.title}
+              type={demonnstratingDSK}
+            />
+            <SubAccordion title={studentEng.title} type={studentEng} />
 
             <div
               className="bg-light py-3 text-center"
@@ -286,6 +214,52 @@ const RubricAccordion = ({
         )}
       </div>
     </div>
+  );
+};
+
+const SubAccordion = ({ title, type }) => {
+  return (
+    <>
+      <AccordionSubHeading title={title} />
+      <Table borderless>
+        <TableHead />
+        <RubricTable type={type} />
+      </Table>
+    </>
+  );
+};
+
+const AccordionSubHeading = ({ title }) => {
+  return (
+    <h5
+      className="d-flex  p-2"
+      style={{
+        fontStyle: "italic",
+        fontWeight: "800",
+        boxShadow: "1px 1px 2px #1e1e1e56",
+        borderRadius: "2px",
+      }}
+    >
+      {title}
+    </h5>
+  );
+};
+const TableHead = () => {
+  return (
+    <thead>
+      <th className="col">
+        <RadioInput value={"Not Demonstrating (1)"} />
+      </th>
+      <th className="col">
+        <RadioInput value={"Developing (2)"} />
+      </th>
+      <th className="col">
+        <RadioInput value={"Applying (3)"} />
+      </th>
+      <th className="col">
+        <RadioInput value={"Innovating (4)"} />
+      </th>
+    </thead>
   );
 };
 

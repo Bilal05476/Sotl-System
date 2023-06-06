@@ -10,7 +10,7 @@ import { completeColor } from "../colors";
 
 const Detail_observation = () => {
   const { id } = useParams();
-  const [isOpen, setIsOpen] = useState("scheduling");
+  const [isOpen, setIsOpen] = useState("open");
   const [obsDetail, setObsDetail] = useState("");
 
   const [{ user }] = useStateValue();
@@ -20,13 +20,13 @@ const Detail_observation = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleAccordion = (selector) => {
-    if (selector === isOpen) {
-      setIsOpen("");
-    } else {
-      setIsOpen(selector);
-    }
-  };
+  // const handleAccordion = (selector) => {
+  //   if (selector === isOpen) {
+  //     setIsOpen("");
+  //   } else {
+  //     setIsOpen(selector);
+  //   }
+  // };
 
   const startSchedule = () => {
     startScheduling(obsDetail?.facultyId, Number(id));
@@ -85,7 +85,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => handleAccordion("scheduling")}
+                // onClick={() => handleAccordion("scheduling")}
                 style={{
                   backgroundColor: completeColor,
                   outline: "none",
@@ -102,7 +102,7 @@ const Detail_observation = () => {
               </button>
               {obsDetail.obsRequest ? (
                 <>
-                  {isOpen === "scheduling" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body px-2 user-status table-responsive latest-order-table">
                       <Table borderless>
                         <thead>
@@ -126,21 +126,21 @@ const Detail_observation = () => {
                                 (item) => `${item.day} ${item.time} `
                               )}
                             </td>
-                            <td className="digits" title="Download & View">
+                            <td className="digits" title="Download">
                               {obsDetail?.obsRequest?.teachingPlan[0]
                                 ?.editedBy && (
-                                <>
+                                <span
+                                  className="d-flex alogn-items-center"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => alert("PDF Downloaded")}
+                                >
                                   <DownloadCloud
                                     className="mx-2"
                                     color={completeColor}
                                     size={20}
                                   />{" "}
-                                  <Eye
-                                    className="mx-2"
-                                    color={completeColor}
-                                    size={20}
-                                  />
-                                </>
+                                  Download
+                                </span>
                               )}
                             </td>
 
@@ -182,7 +182,7 @@ const Detail_observation = () => {
                 </>
               ) : (
                 <>
-                  {isOpen === "scheduling" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body text-center">
                       <strong>No data!</strong>
                       <br />
@@ -205,7 +205,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => handleAccordion("informed")}
+                // onClick={() => handleAccordion("informed")}
                 style={{
                   backgroundColor: completeColor,
                   outline: "none",
@@ -222,18 +222,18 @@ const Detail_observation = () => {
               </button>
               {obsDetail.meetings?.informedObservation ? (
                 <>
-                  {isOpen === "informed" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body px-2 user-status table-responsive latest-order-table">
                       <Table borderless>
                         <thead>
                           <tr>
                             {/* <th scope="col">Id</th> */}
                             <th scope="col">
-                              Rubric Score{" "}
+                              Final Score{" "}
                               <span
                                 style={{ color: "#f1f1f1", fontSize: "0.8rem" }}
                               >
-                                (will be finalize after post informed meeting)
+                                (avg. observer and faculty)
                               </span>
                             </th>
                             <th scope="col">Schedule on</th>
@@ -251,7 +251,8 @@ const Detail_observation = () => {
                                   .finalScore
                               }
                             </td>
-                            <td className="digits">{obsDetail?.starting}</td>
+                            {dateFormated(obsDetail?.starting)}
+                            {/* <td className="digits">{obsDetail?.starting}</td> */}
                             <td
                               className={`digits ${
                                 obsDetail?.meetings.informedObservation
@@ -271,7 +272,7 @@ const Detail_observation = () => {
                           to={`/observations/observation-rubric/${id}`}
                           className="btn btn-primary mx-2"
                         >
-                          Rubrics
+                          Open Rubrics
                         </NavLink>
                       </div>
                     </div>
@@ -279,7 +280,7 @@ const Detail_observation = () => {
                 </>
               ) : (
                 <>
-                  {isOpen === "informed" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body text-center">
                       <strong>No data!</strong>
                     </div>
@@ -292,7 +293,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => handleAccordion("post")}
+                // onClick={() => handleAccordion("post")}
                 style={{
                   backgroundColor: completeColor,
                   outline: "none",
@@ -309,7 +310,7 @@ const Detail_observation = () => {
               </button>
               {obsDetail.meetings?.postObservation ? (
                 <>
-                  {isOpen === "post" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body">
                       <strong>Ruko zara, sabar karo!</strong>
                     </div>
@@ -317,7 +318,7 @@ const Detail_observation = () => {
                 </>
               ) : (
                 <>
-                  {isOpen === "post" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body text-center">
                       <strong>No data!</strong>
                     </div>
@@ -330,7 +331,7 @@ const Detail_observation = () => {
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
-                onClick={() => handleAccordion("uninformed")}
+                // onClick={() => handleAccordion("uninformed")}
                 style={{
                   backgroundColor: completeColor,
                   outline: "none",
@@ -347,7 +348,7 @@ const Detail_observation = () => {
               </button>
               {obsDetail.meetings?.uninformedObservation ? (
                 <>
-                  {isOpen === "uninformed" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body">
                       <strong>Ruko zara, sabar karo!</strong>
                     </div>
@@ -355,7 +356,7 @@ const Detail_observation = () => {
                 </>
               ) : (
                 <>
-                  {isOpen === "uninformed" && (
+                  {isOpen === "open" && (
                     <div className="accordion-body text-center">
                       <strong>No data!</strong>
                     </div>
@@ -371,6 +372,16 @@ const Detail_observation = () => {
       )}
     </Fragment>
   );
+};
+
+const dateFormated = (dateToFromat) => {
+  const date = new Date(dateToFromat);
+  const formattedDate = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  return <td className="digits">{formattedDate}</td>;
 };
 
 export default Detail_observation;

@@ -327,14 +327,16 @@ const Dashboard = () => {
             >
               <CardBody className="d-flex align-items-center justify-content-between">
                 <h4 className="m-0">
-                  Welcome to
-                  <h2
+                  Welcome to <br />
+                  <span
                     style={{
                       color: completeColor,
+                      fontSize: "2rem",
+                      fontWeight: "600",
                     }}
                   >
                     SOTL System
-                  </h2>
+                  </span>
                 </h4>
                 {/* <img src={welcome} width={150} /> */}
               </CardBody>
