@@ -210,7 +210,7 @@ const RubricAccordion = ({
                       demonnstratingDSK.code,
                       studentEng.code,
                     ],
-                    [2, 3, 4]
+                    [0, 2, 4]
                   )
                 }
               />
@@ -248,6 +248,8 @@ const SubAccordion = ({ title, type }) => {
 };
 
 const AccordionSubHeading = ({ title, rubricScore, rubricSelected }) => {
+  const avgScore = rubricScore / rubricSelected.length;
+
   return (
     <h5
       className="d-flex p-2"
@@ -265,18 +267,20 @@ const AccordionSubHeading = ({ title, rubricScore, rubricSelected }) => {
 const TableHead = () => {
   return (
     <thead>
-      <th className="col">
-        <RadioInput value={"Not Demonstrating (1)"} />
-      </th>
-      <th className="col">
-        <RadioInput value={"Developing (2)"} />
-      </th>
-      <th className="col">
-        <RadioInput value={"Applying (3)"} />
-      </th>
-      <th className="col">
-        <RadioInput value={"Innovating (4)"} />
-      </th>
+      <tr>
+        <th className="col">
+          <RadioInput value={"Not Demonstrating (1)"} />
+        </th>
+        <th className="col">
+          <RadioInput value={"Developing (2)"} />
+        </th>
+        <th className="col">
+          <RadioInput value={"Applying (3)"} />
+        </th>
+        <th className="col">
+          <RadioInput value={"Innovating (4)"} />
+        </th>
+      </tr>
     </thead>
   );
 };
@@ -294,6 +298,7 @@ const RadioInput = ({ value }) => {
 
 const RubricPoints = ({
   rubricDesc,
+
   rubricScore,
   setRubricScore,
   rubricSelected,
@@ -371,7 +376,7 @@ const alignmentPLO = {
   code: "1-A.1",
   title: "1-A.1 Alignment with Program and Course Learning Goals",
 };
-
+console.log(alignmentPLO);
 const demonnstratingDSK = {
   code: "1-A.2",
   title: "1-A.2 Demonstrating Discipline-Specific Knowledge",

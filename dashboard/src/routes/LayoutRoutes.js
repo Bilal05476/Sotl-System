@@ -45,6 +45,8 @@ import Assigncourses from "../components/courses/assign-courses";
 import Teaching from "../components/Templates/Teaching";
 import Reflection from "../components/Templates/Reflection";
 import Artifacts from "../components/Templates/Artifacts";
+import ParentComponent from "../components/ParentComponent";
+import ChildComponent from "../components/ChildComponent";
 
 const URL = process.env.PUBLIC_URL;
 const LayoutRoutes = () => {
@@ -60,6 +62,15 @@ const LayoutRoutes = () => {
       <Routes>
         <Route element={<App />}>
           <Route path={`${URL}/`} element={<Dashboard />} />
+          {/* <Route
+            path={`${URL}/`}
+            element={
+              <>
+                <ParentComponent />
+                <ChildComponent />
+              </>
+            }
+          /> */}
           <Route path={`${URL}/dashboard`} element={<Dashboard />} />
           {/* <Route
             path={`${URL}/products/physical/category`}
