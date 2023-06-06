@@ -7,6 +7,7 @@ import { useStateValue } from "../../StateProvider";
 import { fetchObservation, startScheduling } from "../Endpoints";
 import { errors, info } from "../../constants/Toasters";
 import { completeColor } from "../colors";
+import { dateFormater } from "../DateFormater";
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -251,8 +252,7 @@ const Detail_observation = () => {
                                   .finalScore
                               }
                             </td>
-                            {dateFormated(obsDetail?.starting)}
-                            {/* <td className="digits">{obsDetail?.starting}</td> */}
+                            {dateFormater(obsDetail?.starting)}
                             <td
                               className={`digits ${
                                 obsDetail?.meetings.informedObservation
@@ -372,16 +372,6 @@ const Detail_observation = () => {
       )}
     </Fragment>
   );
-};
-
-const dateFormated = (dateToFromat) => {
-  const date = new Date(dateToFromat);
-  const formattedDate = date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-  return <td className="digits">{formattedDate}</td>;
 };
 
 export default Detail_observation;

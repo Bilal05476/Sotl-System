@@ -122,17 +122,19 @@ model Informed {
 }
 
 model Rubrics {
-    id          Int      @id @default(autoincrement()) // auto-inc
-    rubricTitle String
-    rubric      Rubric[]
+    id      Int      @id @default(autoincrement()) // auto-inc
+    title   String
+    code    String
+    rubrics Rubric[]
 }
 
 model Rubric {
-    id          Int      @id @default(autoincrement())
-    rubricText  String
-    rubricScore Float    @default(0)
-    Rubrics     Rubrics? @relation(fields: [rubricsId], references: [id])
-    rubricsId   Int?
+    id       Int      @id @default(autoincrement())
+    text     String
+    score    Int
+    code     String
+    Rubric   Rubrics? @relation(fields: [rubricId], references: [id])
+    rubricId Int?
 }
 
 model Post {

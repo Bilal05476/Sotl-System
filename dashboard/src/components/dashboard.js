@@ -64,6 +64,7 @@ import {
   pendingColor,
 } from "./colors";
 import welcome from "../assets/images/dashboard/welcome_img.svg";
+import { dateFormater } from "./DateFormater";
 
 ChartJS.register(
   CategoryScale,
@@ -729,12 +730,17 @@ const Dashboard = () => {
                                 ? "Prof development"
                                 : "---"}
                             </td>
-                            <td className="digits">
-                              {item.starting ? item.starting : "--"}
-                            </td>
-                            <td className="digits">
-                              {item.ending ? item.ending : "--"}
-                            </td>
+                            {item.starting ? (
+                              dateFormater(item.starting)
+                            ) : (
+                              <td>---</td>
+                            )}
+
+                            {item.ending ? (
+                              dateFormater(item.ending)
+                            ) : (
+                              <td>---</td>
+                            )}
                             <td>
                               <div className="progress-showcase">
                                 <div className="progress" style={{ height: 8 }}>

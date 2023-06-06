@@ -20,6 +20,7 @@ import {
 import { useStateValue } from "../../StateProvider";
 import { Eye, Filter, Loader } from "react-feather";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
+import { dateFormater } from "../DateFormater";
 
 const URL = process.env.PUBLIC_URL;
 
@@ -247,12 +248,19 @@ const List_observation = () => {
                                 ? "Prof development"
                                 : "---"}
                             </td>
-                            <td className="digits">
-                              {item.starting ? item.starting : "--"}
-                            </td>
-                            <td className="digits">
-                              {item.ending ? item.ending : "--"}
-                            </td>
+
+                            {item.starting ? (
+                              dateFormater(item.starting)
+                            ) : (
+                              <td>---</td>
+                            )}
+
+                            {item.ending ? (
+                              dateFormater(item.ending)
+                            ) : (
+                              <td>---</td>
+                            )}
+
                             <td>
                               <div className="progress-showcase">
                                 <div className="progress" style={{ height: 8 }}>
