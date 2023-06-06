@@ -112,12 +112,13 @@ model Meetings {
 
 // -> Meetings => Informed/Post/Uninformed/PDP
 model Informed {
-    id         Int      @id @default(autoincrement()) // auto-inc
-    finalScore Int?     @default(0)
-    draftScore Int?     @default(0)
-    status     Status   @default(Ongoing)
-    meeting    Meetings @relation(fields: [meetingId], references: [id])
-    meetingId  Int      @unique
+    id            Int      @id @default(autoincrement()) // auto-inc
+    observerScore Int?     @default(0)
+    facultyScore  Int?     @default(0)
+    savedScore    Int?     @default(0)
+    status        Status   @default(Ongoing)
+    meeting       Meetings @relation(fields: [meetingId], references: [id])
+    meetingId     Int      @unique
 }
 
 model Rubrics {
@@ -211,7 +212,7 @@ model Messages {
 
 // -> User => Scheduling => Template
 model TemplatePlan {
-    id              Int                @id @default(autoincrement())
+    id              Int                @id @default(autoincrement()) // auto-inc
     steps           TemplatePlanStep[]
     type            TemplateType       @default(Teaching)
     assignedTo      User?              @relation("Filled", fields: [assignedId], references: [id])

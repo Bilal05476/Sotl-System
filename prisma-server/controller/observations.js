@@ -197,7 +197,11 @@ export const getObs = asyncHandler(async (req, res) => {
           reasons: true,
         },
       },
-      course: true,
+      course: {
+        include: {
+          slots: true,
+        },
+      },
       meetings: {
         include: {
           informedObservation: true,
