@@ -68,15 +68,61 @@ const Observation_rubric = () => {
           updateTotal={updateTotal}
           rubricSection={rubricSection}
           setRubricSection={setRubricSection}
+          subAccordions={[
+            {
+              title: alignmentPLO.title,
+              item: alignmentPLO,
+              code: alignmentPLO.code,
+            },
+            {
+              title: demonnstratingDSK.title,
+              item: demonnstratingDSK,
+              code: demonnstratingDSK.code,
+            },
+            {
+              title: studentEng.title,
+              item: studentEng,
+              code: studentEng.code,
+            },
+          ]}
         />
-        {/* <RubricAccordion
-          title=" 1-B Demonstrating Knowledge of Pedagogy"
+        <RubricAccordion
+          title="1-B Demonstrating Knowledge of Pedagogy"
           accordname={"Pedagogy"}
+          accordCode={"1-B"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          totalScore={totalScore}
-          setTotalScore={setTotalScore}
-        /> */}
+          updateTotal={updateTotal}
+          rubricSection={rubricSection}
+          setRubricSection={setRubricSection}
+          subAccordions={[
+            {
+              title: insStrategies.title,
+              item: insStrategies,
+              code: insStrategies.code,
+            },
+          ]}
+        />
+
+        <RubricAccordion
+          title="1-C Designing and Communicating Learning Assessments"
+          accordname={"LearningAssessmnets"}
+          accordCode={"1-C"}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          updateTotal={updateTotal}
+          rubricSection={rubricSection}
+          setRubricSection={setRubricSection}
+          subAccordions={
+            [
+              // {
+              //   title: insStrategies.title,
+              //   item: insStrategies,
+              //   code: insStrategies.code,
+              // },
+            ]
+          }
+        />
 
         <div className="d-flex align-items-center justify-content-between py-3">
           <Applink
@@ -122,6 +168,7 @@ const RubricAccordion = ({
   setIsOpen,
   isOpen,
   accordname,
+  subAccordions,
   accordCode,
   updateTotal,
   rubricSection,
@@ -178,24 +225,14 @@ const RubricAccordion = ({
 
         {isOpen === accordname && (
           <div className="accordion-body">
-            <SubAccordion
-              title={alignmentPLO.title}
-              type={alignmentPLO}
-              addAccordionScore={addAccordionScore}
-              code={alignmentPLO.code}
-            />
-            <SubAccordion
-              title={demonnstratingDSK.title}
-              type={demonnstratingDSK}
-              code={demonnstratingDSK.code}
-              addAccordionScore={addAccordionScore}
-            />
-            <SubAccordion
-              title={studentEng.title}
-              type={studentEng}
-              code={studentEng.code}
-              addAccordionScore={addAccordionScore}
-            />
+            {subAccordions.map((item) => (
+              <SubAccordion
+                title={item.title}
+                type={item.item}
+                addAccordionScore={addAccordionScore}
+                code={item.code}
+              />
+            ))}
 
             <div
               className="bg-light py-3 text-center"
