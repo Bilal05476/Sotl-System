@@ -130,17 +130,9 @@ const RubricAccordion = ({
   const [accordionScore, setAccordionScore] = useState(0);
   const [subSections, setSubSections] = useState([]);
 
-  const addAccordionScore = (codes, scores) => {
-    let subScores = [];
-    for (let i = 0; i < codes.length; i++) {
-      subScores.push({
-        code: codes[i],
-        score: scores[i],
-      });
-    }
-    console.log(subScores);
-    // setSubSections(subScores);
-    // updateAccordionscore();
+  const addAccordionScore = (code, score) => {
+    const filterPrev = subSections.filter((item) => item.code !== code);
+    setSubSections([...filterPrev, { code, score }]);
   };
 
   const updateAccordionscore = () => {
@@ -186,12 +178,24 @@ const RubricAccordion = ({
 
         {isOpen === accordname && (
           <div className="accordion-body">
-            <SubAccordion title={alignmentPLO.title} type={alignmentPLO} />
+            <SubAccordion
+              title={alignmentPLO.title}
+              type={alignmentPLO}
+              addAccordionScore={addAccordionScore}
+              code={alignmentPLO.code}
+            />
             <SubAccordion
               title={demonnstratingDSK.title}
               type={demonnstratingDSK}
+              code={demonnstratingDSK.code}
+              addAccordionScore={addAccordionScore}
             />
-            <SubAccordion title={studentEng.title} type={studentEng} />
+            <SubAccordion
+              title={studentEng.title}
+              type={studentEng}
+              code={studentEng.code}
+              addAccordionScore={addAccordionScore}
+            />
 
             <div
               className="bg-light py-3 text-center"
@@ -203,16 +207,7 @@ const RubricAccordion = ({
               <AccordButton
                 backgroundColor={completeColor2}
                 text="Submit Rubric Score"
-                onClick={() =>
-                  addAccordionScore(
-                    [
-                      alignmentPLO.code,
-                      demonnstratingDSK.code,
-                      studentEng.code,
-                    ],
-                    [0, 2, 4]
-                  )
-                }
+                onClick={() => updateAccordionscore()}
               />
             </div>
           </div>
@@ -222,7 +217,7 @@ const RubricAccordion = ({
   );
 };
 
-const SubAccordion = ({ title, type }) => {
+const SubAccordion = ({ title, type, addAccordionScore, code }) => {
   const [rubricScore, setRubricScore] = useState(0);
   const [rubricSelected, setRubricSelected] = useState([]);
 
@@ -232,6 +227,8 @@ const SubAccordion = ({ title, type }) => {
         title={title}
         rubricScore={rubricScore}
         rubricSelected={rubricSelected}
+        addAccordionScore={addAccordionScore}
+        code={code}
       />
       <Table borderless>
         <TableHead />
@@ -247,9 +244,19 @@ const SubAccordion = ({ title, type }) => {
   );
 };
 
-const AccordionSubHeading = ({ title, rubricScore, rubricSelected }) => {
+const AccordionSubHeading = ({
+  title,
+  rubricScore,
+  rubricSelected,
+  addAccordionScore,
+  code,
+}) => {
   const avgScore = rubricScore / rubricSelected.length;
-
+  useEffect(() => {
+    if (avgScore > 0) {
+      addAccordionScore(code, avgScore);
+    }
+  }, [avgScore]);
   return (
     <h5
       className="d-flex p-2"
@@ -298,11 +305,12 @@ const RadioInput = ({ value }) => {
 
 const RubricPoints = ({
   rubricDesc,
-
   rubricScore,
   setRubricScore,
   rubricSelected,
   setRubricSelected,
+  // addAccordionScore,
+  // code,
 }) => {
   const toggleSelected = (id, sc) => {
     if (rubricSelected.includes(id)) {
@@ -318,17 +326,10 @@ const RubricPoints = ({
       }
     }
   };
-  const avgRubricScore = () => {
-    const avg = rubricScore / rubricSelected.length;
-    // setRubricScore(avg);
-  };
 
-  useEffect(() => {
-    setTimeout(() => {
-      avgRubricScore();
-      // console.log(rubricScore);
-    }, 2000);
-  }, [rubricSelected]);
+  // useEffect(() => {
+  //     addAccordionScore(code, rubricScore);
+  // }, [rubricSelected]);
 
   return (
     <div className="my-2 d-flex flex-column flex-wrap align-items-start">
@@ -376,7 +377,6 @@ const alignmentPLO = {
   code: "1-A.1",
   title: "1-A.1 Alignment with Program and Course Learning Goals",
 };
-console.log(alignmentPLO);
 const demonnstratingDSK = {
   code: "1-A.2",
   title: "1-A.2 Demonstrating Discipline-Specific Knowledge",
@@ -499,6 +499,8 @@ const RubricTable = ({
   setRubricScore,
   rubricSelected,
   setRubricSelected,
+  // addAccordionScore,
+  // code,
 }) => {
   // const [rubricScore, setRubricScore] = useState(0);
   // const [rubricSelected, setRubricSelected] = useState([]);
@@ -511,6 +513,8 @@ const RubricTable = ({
             return (
               <td key={item.id}>
                 <RubricPoints
+                  // addAccordionScore={addAccordionScore}
+                  // code={code}
                   rubricDesc={item}
                   rubricScore={rubricScore}
                   setRubricScore={setRubricScore}
