@@ -67,6 +67,7 @@ export async function fetchObservation(setObs, id) {
       errors(data.error);
     } else {
       setObs(data);
+      // console.log(data);
     }
   } catch (err) {
     errors(err);
@@ -149,5 +150,31 @@ export async function submitTeachingTemplate(
   } catch (err) {
     errors(err);
     loader(false);
+  }
+}
+
+export async function submitScore(informedId, score) {
+  console.log(informedId, score);
+  return;
+  try {
+    const res = await fetch(`${BASEURL}/observation/informed`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({
+        informedId,
+        score,
+      }),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      errors(data.error);
+    } else {
+      // setObs(data);
+    }
+  } catch (err) {
+    errors(err);
   }
 }

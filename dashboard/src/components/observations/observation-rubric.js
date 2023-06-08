@@ -15,6 +15,8 @@ import {
 } from "../colors";
 import Applink from "../applink";
 import { info } from "../../constants/Toasters";
+import { rubrics } from "./rubric-list";
+import { fetchObservation, submitScore } from "../Endpoints";
 const URL = process.env.PUBLIC_URL;
 
 const Observation_rubric = () => {
@@ -22,9 +24,11 @@ const Observation_rubric = () => {
   const [totalScore, setTotalScore] = useState(0);
   const [rubricSection, setRubricSection] = useState([]);
   const { id } = useParams();
+  const [obsDetails, setObsDetail] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchObservation(setObsDetail, Number(id));
   }, []);
 
   const updateTotal = () => {
@@ -43,20 +47,49 @@ const Observation_rubric = () => {
         <Row className="mb-2">
           <Col className="xl-100 d-flex align-items-center justify-content-end">
             {" "}
-            <span
-              className="digits"
-              style={{
-                fontWeight: "500",
-                backgroundColor: completeColor,
-                color: "#fff",
-                padding: "0.5rem 1rem",
-                borderRadius: "5px",
-                // fontSize: "0.9rem",
-                fontWeight: "700",
-              }}
-            >
-              TOTAL SCORE: {totalScore.toFixed(2)}
-            </span>
+            {[
+              {
+                color: completeColor2,
+                text: "SCORE BY FACULTY",
+                score: obsDetails?.meetings?.informedObservation?.facultyScore,
+              },
+              {
+                color: completeColor2,
+                text: "SCORE BY OBSERVER",
+                score: obsDetails?.meetings?.informedObservation?.observerScore,
+              },
+              {
+                color: completeColor,
+                text: "TOTAL SCORE",
+                score:
+                  (obsDetails?.meetings?.informedObservation?.facultyScore +
+                    obsDetails?.meetings?.informedObservation?.observerScore) /
+                  2,
+              },
+            ].map((item) => (
+              <span
+                className="digits"
+                style={{
+                  backgroundColor: item.color,
+                  color: "#fff",
+                  fontSize: "0.8rem",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "5px",
+                  marginLeft: "0.3rem",
+                  fontWeight: "500",
+                }}
+              >
+                {item.text}:
+                <span
+                  style={{
+                    marginLeft: "0.3rem",
+                    fontWeight: "700",
+                  }}
+                >
+                  {item.score.toFixed(2)}
+                </span>
+              </span>
+            ))}
           </Col>
         </Row>
         <RubricAccordion
@@ -101,6 +134,21 @@ const Observation_rubric = () => {
               item: insStrategies,
               code: insStrategies.code,
             },
+            {
+              title: knowledgeApp.title,
+              item: knowledgeApp,
+              code: knowledgeApp.code,
+            },
+            {
+              title: studentEngB.title,
+              item: studentEngB,
+              code: studentEngB.code,
+            },
+            {
+              title: studentQues.title,
+              item: studentQues,
+              code: studentQues.code,
+            },
           ]}
         />
 
@@ -132,8 +180,20 @@ const Observation_rubric = () => {
           />
 
           <div className="d-flex align-items-center justify-content-between">
-            <AccordButton text="Save Score" backgroundColor={completeColor2} />
-            <AccordButton text="Submit Score" backgroundColor={completeColor} />
+            <AccordButton
+              text="Save Score"
+              backgroundColor={completeColor2}
+              onClick={() =>
+                submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
+              }
+            />
+            <AccordButton
+              text="Submit Score"
+              backgroundColor={completeColor}
+              onClick={() =>
+                submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
+              }
+            />
           </div>
         </div>
       </Container>
@@ -428,107 +488,20 @@ const insStrategies = {
   code: "1-B.1",
   title: "1-B.1 Instructional Strategies",
 };
+const knowledgeApp = {
+  code: "1-B.2",
+  title: "1-B.2 Knowledge and Application of Learning Levels",
+};
 
-const rubrics = [
-  {
-    id: 1,
-    text: "Instruction shows no alignment with adopted standards, PLOs and CLOs.",
-    score: 1,
-    code: "1-A.1",
-  },
-  {
-    id: 7,
-    text: "Instruction shows partial alignment (< 50%) with adopted standards, PLOs and CLOs.",
-    score: 2,
-    code: "1-A.1",
-  },
-  {
-    id: 4,
-    text: "Instruction shows reasonable alignment (50% - 90%) with adopted standards, PLOs and CLOs.",
-    score: 3,
-    code: "1-A.1",
-  },
-  {
-    id: 10,
-    text: "Instruction shows consistent alignment (90% - 100%) with adopted standards, PLOs and CLOs.",
-    score: 4,
-    code: "1-A.1",
-  },
-  {
-    id: 11,
-    text: "Instruction demonstrates limited knowledge of the content area, its discipline-specific terminology and academic language demands.",
-    score: 1,
-    code: "1-A.2",
-  },
-  {
-    id: 8,
-    text: " Instruction demonstrates partial knowledge of the content area, its discipline-specific terminology and academic language demands.",
-    score: 2,
-    code: "1-A.2",
-  },
-  {
-    id: 5,
-    text: "Instruction demonstrates reasonable knowledge of the content area, its discipline-specific terminology and academic language demands.",
-    score: 3,
-    code: "1-A.2",
-  },
+const studentEngB = {
+  code: "1-B.3",
+  title: "1-B.3 Student Engagement Strategies",
+};
 
-  {
-    id: 2,
-    text: "Instruction demonstrates extensive knowledge of the content area, its discipline-specific terminology and academic language demands.",
-    score: 4,
-    code: "1-A.2",
-  },
-  {
-    id: 12,
-    text: "Instruction does not engage students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 1,
-    code: "1-A.3",
-  },
-  {
-    id: 9,
-    text: "Instruction partially engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 2,
-    code: "1-A.3",
-  },
-  {
-    id: 6,
-    text: "Instruction reasonably engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 3,
-    code: "1-A.3",
-  },
-
-  {
-    id: 3,
-    text: "Instruction consistently engages students in learning experiences focused on disciplinary knowledge and content specific skills.",
-    score: 4,
-    code: "1-A.3",
-  },
-  {
-    id: 13,
-    text: "Instruction does not demonstrate any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
-    score: 1,
-    code: "1-B.1",
-  },
-  {
-    id: 14,
-    text: "Instruction partially demonstrates any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
-    score: 2,
-    code: "1-B.1",
-  },
-  {
-    id: 15,
-    text: "Instruction reasonably demonstrates any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
-    score: 3,
-    code: "1-B.1",
-  },
-  {
-    id: 16,
-    text: "Instruction consistently demonstrates any of the following: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world connections) and/or resources to fit varied student learning styles and needs.",
-    score: 4,
-    code: "1-B.1",
-  },
-];
+const studentQues = {
+  code: "1-B.4",
+  title: "1-B.4 Responsiveness to Student Questions, Input and Examples",
+};
 
 const RubricTable = ({
   type,
