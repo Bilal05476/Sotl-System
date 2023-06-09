@@ -17,6 +17,7 @@ import Applink from "../applink";
 import { info } from "../../constants/Toasters";
 import { rubrics } from "./rubric-list";
 import { fetchObservation, submitScore } from "../Endpoints";
+import DiscreteSlider from "../DiscreteSlider";
 const URL = process.env.PUBLIC_URL;
 
 const Observation_rubric = () => {
@@ -86,14 +87,14 @@ const Observation_rubric = () => {
                     fontWeight: "700",
                   }}
                 >
-                  {item.score.toFixed(2)}
+                  {item.score?.toFixed(2)}
                 </span>
               </span>
             ))}
           </Col>
         </Row>
         <RubricAccordion
-          title="1-A Demonstrating Pedagogical Content Knowledge"
+          title="1-A Knowledge of Content"
           accordname={"Content"}
           accordCode={"1-A"}
           isOpen={isOpen}
@@ -101,26 +102,9 @@ const Observation_rubric = () => {
           updateTotal={updateTotal}
           rubricSection={rubricSection}
           setRubricSection={setRubricSection}
-          subAccordions={[
-            {
-              title: alignmentPLO.title,
-              item: alignmentPLO,
-              code: alignmentPLO.code,
-            },
-            {
-              title: demonnstratingDSK.title,
-              item: demonnstratingDSK,
-              code: demonnstratingDSK.code,
-            },
-            {
-              title: studentEng.title,
-              item: studentEng,
-              code: studentEng.code,
-            },
-          ]}
         />
         <RubricAccordion
-          title="1-B Demonstrating Knowledge of Pedagogy"
+          title="1-B Knowledge of Pedagogy"
           accordname={"Pedagogy"}
           accordCode={"1-B"}
           isOpen={isOpen}
@@ -128,48 +112,28 @@ const Observation_rubric = () => {
           updateTotal={updateTotal}
           rubricSection={rubricSection}
           setRubricSection={setRubricSection}
-          subAccordions={[
-            {
-              title: insStrategies.title,
-              item: insStrategies,
-              code: insStrategies.code,
-            },
-            {
-              title: knowledgeApp.title,
-              item: knowledgeApp,
-              code: knowledgeApp.code,
-            },
-            {
-              title: studentEngB.title,
-              item: studentEngB,
-              code: studentEngB.code,
-            },
-            {
-              title: studentQues.title,
-              item: studentQues,
-              code: studentQues.code,
-            },
-          ]}
         />
 
         <RubricAccordion
-          title="1-C Designing and Communicating Learning Assessments"
-          accordname={"LearningAssessmnets"}
+          title="1-C Student Assessment"
+          accordname={"Assessment"}
           accordCode={"1-C"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           updateTotal={updateTotal}
           rubricSection={rubricSection}
           setRubricSection={setRubricSection}
-          subAccordions={
-            [
-              // {
-              //   title: insStrategies.title,
-              //   item: insStrategies,
-              //   code: insStrategies.code,
-              // },
-            ]
-          }
+        />
+
+        <RubricAccordion
+          title="1-D Learning Environment"
+          accordname={"Environment"}
+          accordCode={"1-C"}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          updateTotal={updateTotal}
+          rubricSection={rubricSection}
+          setRubricSection={setRubricSection}
         />
 
         <div className="d-flex align-items-center justify-content-between py-3">
@@ -228,7 +192,6 @@ const RubricAccordion = ({
   setIsOpen,
   isOpen,
   accordname,
-  subAccordions,
   accordCode,
   updateTotal,
   rubricSection,
@@ -250,6 +213,9 @@ const RubricAccordion = ({
     });
     setAccordionScore(count);
   };
+
+  const [rubricScore, setRubricScore] = useState(0);
+  const [rubricSelected, setRubricSelected] = useState([]);
 
   return (
     <div className="accordion">
@@ -274,7 +240,7 @@ const RubricAccordion = ({
         >
           {title}
           <span className="d-flex align-items-center">
-            Rubric Score: {accordionScore.toFixed(2)}
+            Rubric Score: {accordionScore?.toFixed(2)}
             {isOpen === accordname ? (
               <ChevronsUp style={{ marginLeft: "1.5rem" }} />
             ) : (
@@ -285,14 +251,29 @@ const RubricAccordion = ({
 
         {isOpen === accordname && (
           <div className="accordion-body">
-            {subAccordions.map((item) => (
+            {/* {rubrics.map((item) => (
               <SubAccordion
                 title={item.title}
                 type={item.item}
                 addAccordionScore={addAccordionScore}
                 code={item.code}
               />
-            ))}
+            ))} */}
+
+            {rubrics.map((item) => {
+              if (item.code === accordCode)
+                return (
+                  <AccordionSubHeading
+                    key={item.id}
+                    title={item.text}
+                    id={item.id}
+                    // rubricScore={rubricScore}
+                    // rubricSelected={rubricSelected}
+                    // addAccordionScore={addAccordionScore}
+                    // code={code}
+                  />
+                );
+            })}
 
             <div
               className="bg-light py-3 text-center"
@@ -314,58 +295,53 @@ const RubricAccordion = ({
   );
 };
 
-const SubAccordion = ({ title, type, addAccordionScore, code }) => {
-  const [rubricScore, setRubricScore] = useState(0);
-  const [rubricSelected, setRubricSelected] = useState([]);
-
-  return (
-    <>
-      <AccordionSubHeading
-        title={title}
-        rubricScore={rubricScore}
-        rubricSelected={rubricSelected}
-        addAccordionScore={addAccordionScore}
-        code={code}
-      />
-      <Table borderless>
-        <TableHead />
-        <RubricTable
-          type={type}
-          rubricScore={rubricScore}
-          setRubricScore={setRubricScore}
-          rubricSelected={rubricSelected}
-          setRubricSelected={setRubricSelected}
-        />
-      </Table>
-    </>
-  );
-};
+// const SubAccordion = ({ title, type, addAccordionScore, code }) => {
+//   return (
+//     <AccordionSubHeading
+//       title={title}
+//       // rubricScore={rubricScore}
+//       // rubricSelected={rubricSelected}
+//       // addAccordionScore={addAccordionScore}
+//       // code={code}
+//     />
+//   );
+// };
 
 const AccordionSubHeading = ({
   title,
+  id,
   rubricScore,
   rubricSelected,
   addAccordionScore,
   code,
 }) => {
-  const avgScore = rubricScore / rubricSelected.length;
-  useEffect(() => {
-    if (avgScore > 0) {
-      addAccordionScore(code, avgScore);
-    }
-  }, [avgScore]);
+  // const avgScore = rubricScore / rubricSelected.length;
+  // useEffect(() => {
+  //   if (avgScore > 0) {
+  //     addAccordionScore(code, avgScore);
+  //   }
+  // }, [avgScore]);
   return (
-    <h5
-      className="d-flex p-2"
+    <div
+      className="d-flex align-items-center justify-content-between p-2"
       style={{
         fontStyle: "italic",
         fontWeight: "800",
         boxShadow: "1px 1px 2px #1e1e1e56",
         borderRadius: "2px",
+        marginBottom: "1rem",
       }}
     >
-      {title} {rubricScore > 0 && `(${rubricScore / rubricSelected.length})`}
-    </h5>
+      <h5
+        style={{
+          maxWidth: "600px",
+        }}
+      >
+        {id}. {title}
+        {/* {rubricScore > 0 && `(${rubricScore / rubricSelected.length})`} */}
+      </h5>
+      <DiscreteSlider />
+    </div>
   );
 };
 const TableHead = () => {
