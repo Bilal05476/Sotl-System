@@ -42,35 +42,20 @@ const ReflectionSteps = [
 // @route  POST api/observation/initiate
 // @access Private (only hod will initiate)
 export const initiate = asyncHandler(async (req, res) => {
-  const { facultyId, semester, observerId, hodId, courseId } = req.body;
-  const findObservation = await prisma.observations.findFirst({
-    where: {
-      OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
-      courseId,
-      facultyId,
-    },
-  });
-  if (findObservation) {
-    res.status(400).json({
-      error:
-        "Already have an ongoing observation for that course of this faculty!",
-    });
-  } else {
-    const newObservation = await prisma.observations.create({
+  const { facultyIds, semester, observerId, hodId } = req.body;
+
+  for (let i = 0; i < facultyIds.length; i++) {
+    await prisma.observations.create({
       data: {
-        facultyId,
+        facultyId: facultyIds[i],
         observerId,
         hodId,
-        courseId,
         semester,
       },
     });
-    res.status(200).json(newObservation);
   }
-
-  // if (newObservation) {
-  //   res.status(200).json(newObservation);
-  // }
+  const findObservations = await prisma.observations.findMany();
+  res.status(200).json(findObservations);
 
   // let obsUsers = [facultyId, observerId, hodId];
   // if (newObservation) {
@@ -93,42 +78,31 @@ export const initiate = asyncHandler(async (req, res) => {
 export const getAllObs = asyncHandler(async (req, res) => {
   const allObs = await prisma.observations.findMany({
     include: {
-      faculty: true,
-      observer: true,
-      hod: true,
+      faculty: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      observer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      hod: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       course: true,
     },
   });
-
-  const returnObss = [];
-  allObs.map((item) => {
-    returnObss.push({
-      id: item.id,
-      faculty: {
-        id: item.faculty.id,
-        name: item.faculty.name,
-        email: item.faculty.email,
-      },
-      observer: {
-        id: item.observer.id,
-        name: item.observer.name,
-        email: item.observer.email,
-      },
-      hod: {
-        id: item.hod.id,
-        name: item.hod.name,
-        email: item.hod.email,
-      },
-      starting: item.starting,
-      ending: item.ending,
-      semester: item.semester,
-      observationProgress: item.observationProgress,
-      observationStatus: item.observationStatus,
-      course: item.course,
-      createdAt: item.createdAt,
-    });
-  });
-  res.status(200).json(returnObss);
+  res.status(200).json(allObs);
 });
 
 // @desc   Get observation by id
@@ -223,17 +197,28 @@ export const getObs = asyncHandler(async (req, res) => {
 // @route  POST api/observations/scheduling
 // @access Private for Observer
 export const obsScheduleCreate = asyncHandler(async (req, res) => {
-  const { observationsId, facultyId } = req.body;
-  const findSheduling = await prisma.obsScheduling.findFirst({
+  const { observationsId, facultyId, courseId } = req.body;
+  const findObservation = await prisma.observations.findFirst({
     where: {
-      observationsId,
+      OR: [{ observationStatus: "Pending" }, { observationStatus: "Ongoing" }],
+      courseId,
+      facultyId,
     },
   });
-  if (findSheduling) {
+  if (findObservation) {
     res.status(400).json({
-      error: "Scheduling already created for this observation by observer!",
+      error:
+        "Already have an ongoing observation for that course of this faculty!",
     });
   } else {
+    await prisma.observations.update({
+      where: {
+        id: observationsId,
+      },
+      data: {
+        courseId,
+      },
+    });
     const createdReq = await prisma.obsScheduling.create({
       data: {
         observationsId,
