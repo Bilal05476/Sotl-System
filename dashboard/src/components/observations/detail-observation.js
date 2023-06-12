@@ -8,11 +8,15 @@ import { fetchObservation, startScheduling } from "../Endpoints";
 import { errors, info } from "../../constants/Toasters";
 import { completeColor } from "../colors";
 import { dateFormater } from "../DateFormater";
+import PopupModal from "../PopupModal";
 
 const Detail_observation = () => {
   const { id } = useParams();
   const [isOpen, setIsOpen] = useState("open");
   const [obsDetail, setObsDetail] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
+  const [cid, setcid] = useState("");
+  const toastId = useRef(null);
 
   const [{ user }] = useStateValue();
 
@@ -30,7 +34,8 @@ const Detail_observation = () => {
   // };
 
   const startSchedule = () => {
-    startScheduling(obsDetail?.facultyId, Number(id));
+    setOpenPopup(false);
+    startScheduling(obsDetail?.facultyId, Number(id), cid, toastId);
     info("Scheduling Creating...");
     setTimeout(() => {
       fetchObservation(setObsDetail, Number(id));
@@ -42,46 +47,61 @@ const Detail_observation = () => {
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
+      <PopupModal
+        open={openPopup}
+        setOpen={setOpenPopup}
+        facultycourses={[
+          { id: 1, n: "Communication Skills" },
+          { id: 2, n: "E-Business" },
+        ]}
+        course={cid}
+        setCourse={setcid}
+        startSchedule={startSchedule}
+      />
       {/* <SchedulingModel id="exampleModal" /> */}
       {obsDetail && (
         <Container fluid={true}>
-          <Row className="mb-3">
-            <Col className="xl-25">
-              {" "}
-              <span style={{ fontWeight: "200" }}>Faculty:</span>{" "}
-              {obsDetail?.faculty.name}
-            </Col>
-            <Col className="xl-25">
-              {" "}
-              <span style={{ fontWeight: "200" }}>Observer:</span>{" "}
-              {obsDetail?.observer.name}
-            </Col>
-            <Col className="xl-25 text-right">
-              <span style={{ fontWeight: "200" }}>Head of Department:</span>{" "}
-              {obsDetail?.hod.name}
-            </Col>
-            <Col className="xl-25 text-right">
+          {/* <Row className="mb-3"> */}
+          {/* {user.role !== "Faculty" && (
+              <Col className="xl-25">
+                <span style={{ fontWeight: "200" }}>Faculty:</span>{" "}
+                {obsDetail?.faculty.name}
+              </Col>
+            )} */}
+          {/* {user.role !== "Observer" && (
+              <Col className="xl-25">
+                <span style={{ fontWeight: "200" }}>Observer:</span>{" "}
+                {obsDetail?.observer.name}
+              </Col>
+            )} */}
+          {/* {user.role !== "Head_of_Department" && (
+              <Col className="xl-25 text-right">
+                <span style={{ fontWeight: "200" }}>Head of Department:</span>{" "}
+                {obsDetail?.hod.name}
+              </Col>
+            )} */}
+          {/* <Col className="xl-25 text-right">
               <span style={{ fontWeight: "200" }}>Progress:</span>{" "}
               {obsDetail?.observationProgress}%
               <span style={{ marginLeft: "1rem", fontWeight: "200" }}>
                 Status:
               </span>{" "}
               {obsDetail?.observationStatus}
-            </Col>
-          </Row>
-          <Row className="mb-3">
-            <Col className="xl-50 text-right">
+            </Col> */}
+          {/* </Row> */}
+          {/* <Row className="mb-3"> */}
+          {/* <Col className="xl-50 text-right">
               <span style={{ fontWeight: "200" }}>Course:</span>{" "}
               {obsDetail?.course.name}
-            </Col>
-            <Col className="xl-25 text-right">
+            </Col> */}
+          {/* <Col className="xl-25 text-right">
               <span style={{ fontWeight: "200" }}>(F):</span> Faculty
               <span style={{ marginLeft: "1rem", fontWeight: "200" }}>
                 (O):
               </span>{" "}
               Observer
-            </Col>
-          </Row>
+            </Col> */}
+          {/* </Row> */}
           <div className="accordion">
             <div className="accordion-item overflow-hidden mb-5">
               <button
@@ -190,9 +210,9 @@ const Detail_observation = () => {
                       {user.role === "Observer" && (
                         <button
                           className="mt-2 btn btn-primary"
-                          onClick={() => startSchedule()}
+                          onClick={() => setOpenPopup(!openPopup)}
                         >
-                          Start Scheduling
+                          Select Course
                         </button>
                       )}
                     </div>

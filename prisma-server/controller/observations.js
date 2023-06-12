@@ -171,11 +171,7 @@ export const getObs = asyncHandler(async (req, res) => {
           reasons: true,
         },
       },
-      course: {
-        include: {
-          slots: true,
-        },
-      },
+      course: true,
       meetings: {
         include: {
           informedObservation: true,
@@ -211,26 +207,25 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
         "Already have an ongoing observation for that course of this faculty!",
     });
   } else {
-    await prisma.observations.update({
+    const createdReq = await prisma.observations.update({
       where: {
         id: observationsId,
       },
       data: {
         courseId,
-      },
-    });
-    const createdReq = await prisma.obsScheduling.create({
-      data: {
-        observationsId,
-        teachingPlan: {
+        obsRequest: {
           create: {
-            type: "Teaching",
-            steps: {
-              createMany: {
-                data: TeachingSteps,
+            teachingPlan: {
+              create: {
+                type: "Teaching",
+                steps: {
+                  createMany: {
+                    data: TeachingSteps,
+                  },
+                },
+                assignedId: facultyId,
               },
             },
-            assignedId: facultyId,
           },
         },
       },

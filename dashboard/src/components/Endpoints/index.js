@@ -1,7 +1,7 @@
 // import { toast } from "react-toastify";
 import { successes, errors } from "../../constants/Toasters";
 // import { useRef } from "react";
-
+import { toast } from "react-toastify";
 const BASEURL = process.env.REACT_APP_BASE_URL;
 // const toastId = useRef(null);
 
@@ -74,26 +74,32 @@ export async function fetchObservation(setObs, id) {
   }
 }
 
-export async function startScheduling(facultyId, observationsId, tid) {
+export async function startScheduling(
+  facultyId,
+  observationsId,
+  courseId,
+  toastId
+) {
   try {
     const res = await fetch(`${BASEURL}/observation/scheduling`, {
       method: "POST",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-      body: JSON.stringify({ facultyId, observationsId }),
+      body: JSON.stringify({ facultyId, observationsId, courseId }),
     });
 
     const data = await res.json();
     if (data.error) {
-      // toast.dismiss(toastId.current);
+      toast.dismiss(toastId.current);
       errors(data.error);
     } else {
-      // toast.dismiss(toastId.current);
+      toast.dismiss(toastId.current);
       successes("Scheduling Created Successfully!");
     }
   } catch (err) {
-    errors(err);
+    toast.dismiss(toastId.current);
+    errors("Something Went Wrong, Try Again!");
   }
 }
 

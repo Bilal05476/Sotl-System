@@ -10,13 +10,12 @@ import { completeColor2 } from "../colors";
 const TabsetObservation = () => {
   const [{ user, usersandcourses }] = useStateValue();
   const [createObs, setCreateObs] = useState({
-    facultyId: "Select",
     observerId: "Select",
     semester: "Select",
     loader: false,
     faculties: [],
   });
-  const { facultyId, observerId, semester, loader, faculties } = createObs;
+  const { observerId, semester, loader, faculties } = createObs;
 
   const toastId = useRef(null);
 
@@ -85,9 +84,8 @@ const TabsetObservation = () => {
         });
       }
     }
-
     if (observerId === "Select" || faculties.length === 0) {
-      info("Provide select observer and faculty both!");
+      info("Provide select observer and faculties both!");
     } else if (semester === "Select") {
       info("Provide select semester!");
     } else {
@@ -192,7 +190,7 @@ const TabsetObservation = () => {
                   id="validationCustom4"
                   type="select"
                   required={true}
-                  value={facultyId}
+                  // value={facultyId}
                   onChange={(e) => onSelectFaculty(e)}
                 >
                   <option value="Select">Select</option>
