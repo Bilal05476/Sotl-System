@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { fetchCoursesAndUsers } from "../Endpoints";
-import { ongoingColor } from "../colors";
+import { completeColor2, ongoingColor } from "../colors";
 
 const TabsetUser = () => {
   const [{ usersandcourses, user }, dispatch] = useStateValue();
@@ -124,7 +124,9 @@ const TabsetUser = () => {
         ...createUser,
         courseId: cid,
       });
-      const [temp] = usersandcourses.courses.filter((item) => item.id === cid);
+      const [temp] = usersandcourses.courses.filter(
+        (item) => item.id === Number(cid)
+      );
       // console.log(temp);
       const filteredSlots = temp.slots.filter((item) => item.faculty === null);
       if (filteredSlots.length === 0) {
@@ -133,6 +135,12 @@ const TabsetUser = () => {
       } else {
         setSlots(filteredSlots);
       }
+    } else {
+      setCreateUser({
+        ...createUser,
+        courseId: cid,
+      });
+      setSlots([]);
     }
   };
 
@@ -353,13 +361,13 @@ const TabsetUser = () => {
                       <span
                         className="mb-2"
                         style={{
-                          border: `1px solid ${ongoingColor}`,
+                          border: `1px solid ${completeColor2}`,
                           marginRight: "0.5rem",
                           padding: "0.2rem 0.8rem",
-                          borderRadius: "15px",
+                          borderRadius: "5px",
                           cursor: "pointer",
                           backgroundColor:
-                            slotsId.includes(item.id) && ongoingColor,
+                            slotsId.includes(item.id) && completeColor2,
                           color: slotsId.includes(item.id) && "#fff",
                         }}
                         onClick={() => onSelectSlot(item.id)}

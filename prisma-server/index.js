@@ -56,7 +56,11 @@ app.listen(port, () => {
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 // async function main() {
-//   const d = await prisma.observations.deleteMany({});
+//   const d = await prisma.user.delete({
+//     where: {
+//       id: 5,
+//     },
+//   });
 //   console.log(d);
 // }
 // main();

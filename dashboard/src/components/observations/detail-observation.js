@@ -2,10 +2,14 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { Loader, DownloadCloud, Eye } from "react-feather";
+import { Loader, DownloadCloud } from "react-feather";
 import { useStateValue } from "../../StateProvider";
-import { fetchObservation, startScheduling } from "../Endpoints";
-import { errors, info } from "../../constants/Toasters";
+import {
+  fetchCoursesAndUsers,
+  fetchObservation,
+  startScheduling,
+} from "../Endpoints";
+import { info } from "../../constants/Toasters";
 import { completeColor } from "../colors";
 import { dateFormater } from "../DateFormater";
 import PopupModal from "../PopupModal";
@@ -16,12 +20,14 @@ const Detail_observation = () => {
   const [obsDetail, setObsDetail] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
   const [cid, setcid] = useState("");
+  const [facultycourses, setfacultycourses] = useState([]);
   const toastId = useRef(null);
 
-  const [{ user }] = useStateValue();
+  const [{ user, usersandcourses }, dispatch] = useStateValue();
 
   useEffect(() => {
     fetchObservation(setObsDetail, Number(id));
+    fetchCoursesAndUsers(dispatch);
     window.scrollTo(0, 0);
   }, []);
 
@@ -33,13 +39,31 @@ const Detail_observation = () => {
   //   }
   // };
 
+  console.log(usersandcourses);
+
   const startSchedule = () => {
     setOpenPopup(false);
     startScheduling(obsDetail?.facultyId, Number(id), cid, toastId);
+    // console.log(obsDetail?.facultyId, Number(id), cid, toastId);
     info("Scheduling Creating...");
     setTimeout(() => {
       fetchObservation(setObsDetail, Number(id));
     }, 1500);
+  };
+
+  const selectCourse = () => {
+    setOpenPopup(!openPopup);
+    usersandcourses.courses.map((item) => {
+      item.slots.map((slot) =>
+        slot.facultyId === obsDetail.facultyId &&
+        !facultycourses.includes(item.id)
+          ? setfacultycourses([
+              ...facultycourses,
+              { id: item.id, n: item.name },
+            ])
+          : ""
+      );
+    });
   };
 
   // return;
@@ -50,10 +74,7 @@ const Detail_observation = () => {
       <PopupModal
         open={openPopup}
         setOpen={setOpenPopup}
-        facultycourses={[
-          { id: 1, n: "Communication Skills" },
-          { id: 2, n: "E-Business" },
-        ]}
+        facultycourses={facultycourses}
         course={cid}
         setCourse={setcid}
         startSchedule={startSchedule}
@@ -210,7 +231,7 @@ const Detail_observation = () => {
                       {user.role === "Observer" && (
                         <button
                           className="mt-2 btn btn-primary"
-                          onClick={() => setOpenPopup(!openPopup)}
+                          onClick={() => selectCourse()}
                         >
                           Select Course
                         </button>

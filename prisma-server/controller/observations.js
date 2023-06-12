@@ -1,43 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
+import { TeachingSteps, Rubrics } from "../rubrics.js";
 // import nodemailer from "nodemailer";
 
-const TeachingSteps = [
-  {
-    field: "Program Outcomes for this Program (PLOs)",
-    name: "ProgramOutcomes",
-  },
-  {
-    field: "Learning Outcomes for this Course (CLOs)",
-    name: "LearningOutcomes",
-  },
-  {
-    field: "Learning Resources",
-    name: "LearningResources",
-  },
-  {
-    field: "Teaching Summary",
-    name: "TeachingSummary",
-  },
-  {
-    field: "Pre Teaching / Warm-up",
-    name: "PreTeaching",
-  },
-  {
-    field: "Post Teaching",
-    name: "PostTeaching",
-  },
-  {
-    field: "Learning Feedbacks (activity, quiz, no-graded/graded assessments)",
-    name: "Feedback",
-  },
-];
-const ReflectionSteps = [
-  {
-    field: "Abhi nahi pata",
-  },
-];
 // @desc   Initiate Observation by Head of department
 // @route  POST api/observation/initiate
 // @access Private (only hod will initiate)
@@ -364,7 +330,13 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
             meetings: {
               create: {
                 informedObservation: {
-                  create: {},
+                  create: {
+                    rubrics: {
+                      createMany: {
+                        data: Rubrics
+                      }
+                    }
+                   },
                 },
               },
             },
