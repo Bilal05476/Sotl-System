@@ -5,6 +5,7 @@ import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
+import { completeColor2 } from "../colors";
 
 const TabsetObservation = () => {
   const [{ user, usersandcourses }] = useStateValue();
@@ -13,9 +14,9 @@ const TabsetObservation = () => {
     observerId: "Select",
     semester: "Select",
     loader: false,
-    courseId: "",
+    faculties: [],
   });
-  const { facultyId, observerId, semester, loader, courseId } = createObs;
+  const { facultyId, observerId, semester, loader, faculties } = createObs;
 
   const toastId = useRef(null);
 
@@ -25,10 +26,9 @@ const TabsetObservation = () => {
 
   const onCreateObservation = () => {
     const obsDetail = {
-      facultyId: Number(facultyId),
+      facultyIds: faculties,
       observerId: Number(observerId),
-      courseId: Number(courseId),
-      hodId: user.id,
+      hodId: Number(user.id),
       semester,
     };
     async function postObs() {
@@ -72,7 +72,7 @@ const TabsetObservation = () => {
               facultyId: "Select",
               observerId: "Select",
               semester: "Select",
-              courseId: "",
+              faculties: [],
             });
           }, 2000);
         }
@@ -86,57 +86,63 @@ const TabsetObservation = () => {
       }
     }
 
-    if (observerId === "Select" || facultyId === "Select") {
+    if (observerId === "Select" || faculties.length === 0) {
       info("Provide select observer and faculty both!");
     } else if (semester === "Select") {
       info("Provide select semester!");
-    } else if (!courseId) {
-      info("Provide select course for faculty!");
     } else {
       postObs();
       // console.log(obsDetail);
     }
   };
 
-  const [fCourses, setFCourses] = useState([]);
-  const onSelectFaculty = async (e) => {
-    setFCourses([]);
-    let fid = e.target.value;
+  // const onSelectFaculty = async (e) => {
+  //   setFCourses([]);
+  //   let fid = e.target.value;
 
-    if (fid !== "Select") {
-      let id = Number(fid);
-      setCreateObs({
-        ...createObs,
-        facultyId: id,
-        courseId: "",
-      });
-      const findCourse = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/user/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const data = await findCourse.json();
-      if (data.error) {
-        errors(data.error);
-      } else {
-        setFCourses(data.slots);
-      }
-    } else {
-      setCreateObs({
-        ...createObs,
-        facultyId: fid,
-        courseId: "",
-      });
-    }
-  };
+  //   if (fid !== "Select") {
+  //     let id = Number(fid);
+  //     setCreateObs({
+  //       ...createObs,
+  //       facultyId: id,
+  //       courseId: "",
+  //     });
+  //     const findCourse = await fetch(
+  //       `${process.env.REACT_APP_BASE_URL}/user/${id}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-type": "application/json; charset=UTF-8",
+  //         },
+  //       }
+  //     );
+  //     const data = await findCourse.json();
+  //     if (data.error) {
+  //       errors(data.error);
+  //     } else {
+  //       setFCourses(data.slots);
+  //     }
+  //   } else {
+  //     setCreateObs({
+  //       ...createObs,
+  //       facultyId: fid,
+  //       courseId: "",
+  //     });
+  //   }
+  // };
 
   // return null;
 
   // console.log(fCourses);
+
+  const onSelectFaculty = async (e) => {
+    console.log(e.target.value);
+    const id = Number(e.target.value);
+    setCreateObs({
+      ...createObs,
+      faculties: [...faculties, id],
+    });
+  };
 
   return (
     <Fragment>
@@ -190,18 +196,46 @@ const TabsetObservation = () => {
                   onChange={(e) => onSelectFaculty(e)}
                 >
                   <option value="Select">Select</option>
-                  {usersandcourses?.users.map(
-                    (item) =>
-                      item.role === "Faculty" && (
-                        <option key={item.id} value={item.id}>
-                          {item.name} ({item.id})
-                        </option>
-                      )
+                  {usersandcourses?.users.map((item) =>
+                    item.role === "Faculty" && !faculties.includes(item.id) ? (
+                      <option key={item.id} value={item.id}>
+                        {item.name} ({item.id})
+                      </option>
+                    ) : (
+                      ""
+                    )
                   )}
                 </Input>
               </div>
             </FormGroup>
-            <FormGroup className="row">
+            {faculties.length > 0 && (
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">Selected Faculty</Label>
+                <div className="col-xl-8 col-md-7">
+                  {usersandcourses?.users.map((item) =>
+                    item.role === "Faculty" && faculties.includes(item.id) ? (
+                      <span
+                        style={{
+                          backgroundColor: completeColor2,
+                          padding: "0.2rem 0.6rem",
+                          marginRight: "0.3rem",
+                          borderRadius: "5px",
+                          color: "white",
+                          boxShadow: "1px 1px 1px #1e1e1e54",
+                        }}
+                        key={item.id}
+                        value={item.id}
+                      >
+                        {item.name} ({item.id})
+                      </span>
+                    ) : (
+                      ""
+                    )
+                  )}
+                </div>
+              </FormGroup>
+            )}
+            {/* <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Faculty Course
               </Label>
@@ -227,7 +261,7 @@ const TabsetObservation = () => {
                   ))}
                 </Input>
               </div>
-            </FormGroup>
+            </FormGroup> */}
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Semester

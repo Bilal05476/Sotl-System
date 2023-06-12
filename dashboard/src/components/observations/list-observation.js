@@ -214,7 +214,9 @@ const List_observation = () => {
                       <tbody>
                         {observationData?.map((item) => (
                           <tr key={item.id}>
-                            <td className="digits">{item.course.name}</td>
+                            <td className="digits">
+                              {item.course ? item.course.name : "---"}
+                            </td>
                             <td className="digits">{item.semester}</td>
                             {user.role !== "Faculty" && (
                               <td className="digits">{item.faculty.name}</td>
