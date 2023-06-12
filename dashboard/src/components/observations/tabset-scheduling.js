@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
@@ -9,6 +9,7 @@ import FileBase from "react-file-base64";
 import { fetchObservation } from "../Endpoints";
 import { Frown } from "react-feather";
 import MultiStepForm from "../MultiStep";
+import { toast } from "react-toastify";
 
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
@@ -16,6 +17,8 @@ const TabsetScheduling = ({ role }) => {
   const [{ user }] = useStateValue();
   const { id } = useParams();
   const [obs, setObs] = useState("");
+
+  const toastId = useRef(null);
 
   const [obsSchedule, setObsSchedule] = useState({
     timeSlotsByFaculty: [],
@@ -71,9 +74,11 @@ const TabsetScheduling = ({ role }) => {
       const data = await res.json();
 
       if (data.error) {
+        toast.dismiss(toastId.current);
         errors(data.error);
       } else {
-        successes(data.message);
+        toast.dismiss(toastId.current);
+        successes("Observation updated!");
         fetchObservation(setObs, Number(id));
       }
     } catch (err) {
@@ -231,6 +236,7 @@ const TabsetScheduling = ({ role }) => {
                             day={item.day}
                             onClick={() => onSelectSlotObserver(item.id)}
                             slots={timeSlotByObserver}
+                            cursor={true}
                           />
                         ))}
                       </div>
