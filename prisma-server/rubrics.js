@@ -144,6 +144,15 @@ export const Rubrics = [
   },
 ];
 
+// export const Rubrics = [
+//   {
+//     title: "Hello world",
+//     facultyScore: 0,
+//     observerScore: 0,
+//     code: "1-D",
+//   },
+// ];
+
 export const TeachingSteps = [
   {
     field: "Program Outcomes for this Program (PLOs)",

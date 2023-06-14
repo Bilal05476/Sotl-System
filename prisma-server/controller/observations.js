@@ -144,7 +144,11 @@ export const getObs = asyncHandler(async (req, res) => {
       },
       meetings: {
         include: {
-          informedObservation: true,
+          informedObservation: {
+            include: {
+              rubrics: true,
+            },
+          },
           postObservation: true,
           uninformedObservation: true,
           professionalDPlan: true,
