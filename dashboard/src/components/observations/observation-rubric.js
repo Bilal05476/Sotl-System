@@ -193,25 +193,25 @@ const RubricAccordion = ({
   isOpen,
   accordname,
   accordCode,
-  updateTotal,
-  rubricSection,
-  setRubricSection,
+  // updateTotal,
+  // rubricSection,
+  // setRubricSection,
 }) => {
-  const [accordionScore, setAccordionScore] = useState(0);
-  const [subSections, setSubSections] = useState([]);
+  // const [accordionScore, setAccordionScore] = useState(0);
+  // const [subSections, setSubSections] = useState([]);
 
-  const addAccordionScore = (code, score) => {
-    const filterPrev = subSections.filter((item) => item.code !== code);
-    setSubSections([...filterPrev, { code, score }]);
-  };
+  // const addAccordionScore = (code, score) => {
+  //   const filterPrev = subSections.filter((item) => item.code !== code);
+  //   setSubSections([...filterPrev, { code, score }]);
+  // };
 
   const updateAccordionscore = () => {
     let count = 0;
-    subSections.map((item) => {
-      count += item.score;
-      return null;
-    });
-    setAccordionScore(count);
+    // subSections.map((item) => {
+    //   count += item.score;
+    //   return null;
+    // });
+    // setAccordionScore(count);
   };
 
   const [rubricScore, setRubricScore] = useState(0);
@@ -240,7 +240,7 @@ const RubricAccordion = ({
         >
           {title}
           <span className="d-flex align-items-center">
-            Rubric Score: {accordionScore?.toFixed(2)}
+            {/* Rubric Score: {accordionScore?.toFixed(2)} */}
             {isOpen === accordname ? (
               <ChevronsUp style={{ marginLeft: "1.5rem" }} />
             ) : (
@@ -260,15 +260,15 @@ const RubricAccordion = ({
               />
             ))} */}
 
-            {rubrics.map((item) => {
+            {rubrics.map((item, ind) => {
               if (item.code === accordCode)
                 return (
                   <AccordionSubHeading
                     key={item.id}
                     title={item.text}
-                    id={item.id}
-                    // rubricScore={rubricScore}
-                    // rubricSelected={rubricSelected}
+                    ind={ind + 1}
+                    rubricScore={rubricScore}
+                    rubricSelected={rubricSelected}
                     // addAccordionScore={addAccordionScore}
                     // code={code}
                   />
@@ -309,7 +309,7 @@ const RubricAccordion = ({
 
 const AccordionSubHeading = ({
   title,
-  id,
+  ind,
   rubricScore,
   rubricSelected,
   addAccordionScore,
@@ -321,49 +321,60 @@ const AccordionSubHeading = ({
   //     addAccordionScore(code, avgScore);
   //   }
   // }, [avgScore]);
+  // const [rubricScore, setRubricScore] = useState(0);
+  // const [rubricSelected, setRubricSelected] = useState(0);
   return (
     <div
-      className="d-flex align-items-center justify-content-between p-2"
+      className="p-4"
       style={{
         fontStyle: "italic",
         fontWeight: "800",
-        boxShadow: "1px 1px 2px #1e1e1e56",
+        boxShadow: "inset 2px 0px 5px #1e1e1e45",
         borderRadius: "2px",
         marginBottom: "1rem",
       }}
     >
-      <h5
-        style={{
-          maxWidth: "600px",
-        }}
-      >
-        {id}. {title}
+      <h5>
+        {ind}. {title}
         {/* {rubricScore > 0 && `(${rubricScore / rubricSelected.length})`} */}
       </h5>
-      <DiscreteSlider />
+      <div className="d-flex align-items-center justify-content-between">
+        {ScoringPlot.map((item) => (
+          <RubricPoints
+            scorePlot={item}
+            rubricScore={rubricScore}
+            // setRubricScore={setRubricScore}
+            rubricSelected={rubricSelected}
+            // setRubricSelected={setRubricSelected}
+          />
+        ))}
+      </div>
     </div>
   );
 };
-const TableHead = () => {
-  return (
-    <thead>
-      <tr>
-        <th className="col">
-          <RadioInput value={"Not Demonstrating (1)"} />
-        </th>
-        <th className="col">
-          <RadioInput value={"Developing (2)"} />
-        </th>
-        <th className="col">
-          <RadioInput value={"Applying (3)"} />
-        </th>
-        <th className="col">
-          <RadioInput value={"Innovating (4)"} />
-        </th>
-      </tr>
-    </thead>
-  );
-};
+// const TableHead = () => {
+//   return (
+//     <thead>
+//       <tr>
+//         <th className="col">
+//           <RadioInput value={"Not Demonstrating (0)"} />
+//         </th>
+//         <th className="col">
+//           <RadioInput value={"Limitng (1)"} />
+//         </th>
+//         <th className="col">
+//           <RadioInput value={"Developing (2)"} />
+//         </th>
+//         <th className="col">
+//           <RadioInput value={"Applying (3)"} />
+//         </th>
+//         <th className="col">
+//           <RadioInput value={"Innovating (4)"} />
+//         </th>
+//       </tr>
+//     </thead>
+//   );
+// };
 
 const RadioInput = ({ value }) => {
   return (
@@ -376,8 +387,36 @@ const RadioInput = ({ value }) => {
   );
 };
 
+const ScoringPlot = [
+  {
+    id: 0,
+    score: 0,
+    text: "Non Demonstrating",
+  },
+  {
+    id: 1,
+    score: 1,
+    text: "Limiting",
+  },
+  {
+    id: 2,
+    score: 2,
+    text: "Developing",
+  },
+  {
+    id: 3,
+    score: 3,
+    text: "Applying",
+  },
+  {
+    id: 4,
+    score: 4,
+    text: "Innovating",
+  },
+];
+
 const RubricPoints = ({
-  rubricDesc,
+  scorePlot,
   rubricScore,
   setRubricScore,
   rubricSelected,
@@ -405,79 +444,77 @@ const RubricPoints = ({
   // }, [rubricSelected]);
 
   return (
-    <div className="my-2 d-flex flex-column flex-wrap align-items-start">
-      <div
-        key={rubricDesc.id}
-        className="rubric-points d-flex align-items-start my-2 "
-        style={{
-          backgroundColor:
-            rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 1
-              ? blue3
-              : rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 2
-              ? blue2
-              : rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 3
-              ? blue1
-              : rubricSelected.includes(rubricDesc.id) && rubricDesc.score === 4
-              ? blue4
-              : "",
-          boxShadow:
-            rubricSelected.includes(rubricDesc.id) &&
-            "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
-        }}
-        onClick={() => toggleSelected(rubricDesc.id, rubricDesc.score)}
-      >
-        <input
-          type="radio"
-          className="mt-1"
-          checked={rubricSelected.includes(rubricDesc.id) && true}
-          style={{ marginRight: "0.5rem" }}
-          readOnly={true}
-        />
+    <div
+      key={scorePlot.id}
+      className="rubric-points d-flex align-items-start my-1 mx-1"
+      style={{
+        backgroundColor:
+          rubricSelected.includes(scorePlot.id) && scorePlot.score === 1
+            ? blue3
+            : rubricSelected.includes(scorePlot.id) && scorePlot.score === 2
+            ? blue2
+            : rubricSelected.includes(scorePlot.id) && scorePlot.score === 3
+            ? blue1
+            : rubricSelected.includes(scorePlot.id) && scorePlot.score === 4
+            ? blue4
+            : "",
+        boxShadow:
+          rubricSelected.includes(scorePlot.id) &&
+          "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
+      }}
+      onClick={() => toggleSelected(scorePlot.id, scorePlot.score)}
+    >
+      <input
+        type="radio"
+        className="mt-1"
+        checked={rubricSelected.includes(scorePlot.id) && true}
+        style={{ marginRight: "0.5rem" }}
+        readOnly={true}
+      />
 
-        <span
-          style={{
-            textAlign: "left",
-          }}
-        >
-          {rubricDesc.text}
-        </span>
-      </div>
+      <span
+        style={{
+          textAlign: "left",
+        }}
+      >
+        {scorePlot.text}
+      </span>
     </div>
   );
 };
 
-const alignmentPLO = {
-  code: "1-A.1",
-  title: "1-A.1 Alignment with Program and Course Learning Goals",
-};
-const demonnstratingDSK = {
-  code: "1-A.2",
-  title: "1-A.2 Demonstrating Discipline-Specific Knowledge",
-};
+// const alignmentPLO = {
+//   code: "1-A.1",
+//   title: "1-A.1 Alignment with Program and Course Learning Goals",
+// };
+// const demonnstratingDSK = {
+//   code: "1-A.2",
+//   title: "1-A.2 Demonstrating Discipline-Specific Knowledge",
+// };
 
-const studentEng = {
-  code: "1-A.3",
-  title: "1-A.3 Student Engagement in Discipline-Specific Learning Experiences",
-};
+// const studentEng = {
+//   code: "1-A.3",
+//   title: "1-A.3 Student Engagement in Discipline-Specific Learning Experiences",
+// };
 
-const insStrategies = {
-  code: "1-B.1",
-  title: "1-B.1 Instructional Strategies",
-};
-const knowledgeApp = {
-  code: "1-B.2",
-  title: "1-B.2 Knowledge and Application of Learning Levels",
-};
+// const insStrategies = {
+//   code: "1-B.1",
+//   title: "1-B.1 Instructional Strategies",
+// };
+// const knowledgeApp = {
+//   code: "1-B.2",
+//   title: "1-B.2 Knowledge and Application of Learning Levels",
+// };
 
-const studentEngB = {
-  code: "1-B.3",
-  title: "1-B.3 Student Engagement Strategies",
-};
+// const studentEngB = {
+//   code: "1-B.3",
+//   title: "1-B.3 Student Engagement Strategies",
+// };
 
-const studentQues = {
-  code: "1-B.4",
-  title: "1-B.4 Responsiveness to Student Questions, Input and Examples",
-};
+// const studentQues = {
+//   code: "1-B.4",
+//   title: "1-B.4 Responsiveness to Student Questions, Input and Examples",
+// };
 
 const RubricTable = ({
   type,

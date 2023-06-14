@@ -85,14 +85,14 @@
   width: 100%;
   // position: relative;
   cursor: pointer;
-  box-shadow: 0.1rem 0.1rem 0.1rem rgba(109, 158, 207, 0.5);
+  box-shadow: inset 0.1rem 0.1rem 0.1rem rgba(109, 158, 207, 0.5);
 }
 .rubric-points input[type="radio"]:checked {
   accent-color: $theme-default !important;
 }
 .rubric-points:hover{
-  background-color: #6fa2d875;
-  box-shadow: 0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823);
+  // background-color: #6fa2d875;
+  box-shadow: 0.1rem 0.1rem 0.1rem rgba(109, 158, 207, 0.5);
 }
 // .rubric-points:hover .rubric-point-delete {
 //   margin-right: 0.4rem;
