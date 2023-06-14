@@ -122,13 +122,13 @@ model Informed {
 }
 
 model Rubric {
-    id            Int      @id @default(autoincrement())
+    id            Int       @id @default(autoincrement())
     title         String
     code          String
     observerScore Int
     facultyScore  Int
-    informed      Informed @relation(fields: [informedId], references: [id])
-    informedId    Int
+    informed      Informed? @relation(fields: [informedId], references: [id])
+    informedId    Int?
 }
 
 model Post {

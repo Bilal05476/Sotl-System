@@ -265,7 +265,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     },
   });
 
-  if (existedReq && existedReq.status !== "Completed") {
+  if (existedReq && existedReq.status === "Completed") {
     if (templateResponse) {
       try {
         await prisma.templatePlan.update({
