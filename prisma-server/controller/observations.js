@@ -22,21 +22,21 @@ export const initiate = asyncHandler(async (req, res) => {
   }
   const findObservations = await prisma.observations.findMany();
   res.status(200).json(findObservations);
-
-  // let obsUsers = [facultyId, observerId, hodId];
-  // if (newObservation) {
-  //   let toSendMail = [];
-  //   for (let i = 0; i < obsUsers.length; i++) {
-  //     const findemail = await prisma.user.findMany({
-  //       where: {
-  //         id: obsUsers[i],
-  //       },
-  //     });
-  //     toSendMail.push(findemail[0].email);
-  //   }
-  //   res.status(200).json(toSendMail);
-  // }
 });
+
+// let obsUsers = [facultyId, observerId, hodId];
+// if (newObservation) {
+//   let toSendMail = [];
+//   for (let i = 0; i < obsUsers.length; i++) {
+//     const findemail = await prisma.user.findMany({
+//       where: {
+//         id: obsUsers[i],
+//       },
+//     });
+//     toSendMail.push(findemail[0].email);
+//   }
+//   res.status(200).json(toSendMail);
+// }
 
 // @desc   Get all observations
 // @route  Get api/observations

@@ -54,12 +54,10 @@ export const getCourses = asyncHandler(async (req, res) => {
   else res.status(200).json(getAllCourses);
 });
 
-// @desc   Create course
+// @desc   Create course (Only Head of Department Create Courses)
 // @route  POST api/courses
-// @access Public
+// @access Private
 export const createCourse = asyncHandler(async (req, res) => {
-  // await prisma.courseSlots.deleteMany();
-  // await prisma.courses.deleteMany();
   const {
     courseCode,
     name,
@@ -90,9 +88,9 @@ export const createCourse = asyncHandler(async (req, res) => {
   res.status(200).json(newCourse);
 });
 
-// @desc   Update User Courses
+// @desc   Update User Courses (Only Hod assign courses)
 // @route  PUT api/courses/user/:id
-// @access Only Hod assign courses
+// @access Private
 export const assignCourses = asyncHandler(async (req, res) => {
   const { slots } = req.body;
   if (slots) {
