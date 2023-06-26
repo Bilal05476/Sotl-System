@@ -10,7 +10,7 @@ import {
   startScheduling,
 } from "../Endpoints";
 import { info } from "../../constants/Toasters";
-import { completeColor } from "../colors";
+import { completeColor, completeColor2 } from "../colors";
 import { dateFormater } from "../DateFormater";
 import PopupModal from "../PopupModal";
 
@@ -163,12 +163,16 @@ const Detail_observation = () => {
                           <tr>
                             <td className="digits">
                               {obsDetail?.obsRequest?.timeSlotByObserver?.map(
-                                (item) => `${item.day} ${item.time} `
+                                (item) => (
+                                  <Spanner day={item.day} time={item.time} />
+                                )
                               )}
                             </td>
                             <td className="digits">
                               {obsDetail?.obsRequest?.timeSlotsByFaculty?.map(
-                                (item) => `${item.day} ${item.time} `
+                                (item) => (
+                                  <Spanner day={item.day} time={item.time} />
+                                )
                               )}
                             </td>
                             <td className="digits" title="Download">
@@ -415,6 +419,22 @@ const Detail_observation = () => {
         <Loader size={28} style={{ display: "block", margin: "1.5rem auto" }} />
       )}
     </Fragment>
+  );
+};
+
+const Spanner = ({ day, time }) => {
+  return (
+    <span
+      style={{
+        background: completeColor2,
+        color: "#fff",
+        padding: "0.1rem 0.4rem",
+        marginRight: "0.2rem",
+        borderRadius: "5px",
+      }}
+    >
+      {day} {time}
+    </span>
   );
 };
 
