@@ -17,6 +17,7 @@ function PopupModal({
       setCourse(Number(id));
     }
   };
+  console.log(facultycourses);
   return (
     <Modal isOpen={open} centered={true} size="lg">
       <ModalHeader>Select Faculty Course</ModalHeader>

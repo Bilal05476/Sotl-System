@@ -54,14 +54,17 @@ const Detail_observation = () => {
   const selectCourse = () => {
     setOpenPopup(!openPopup);
     usersandcourses.courses.map((item) => {
-      item.slots.map((slot) =>
-        slot.facultyId === obsDetail.facultyId &&
-        !facultycourses.includes(item.id)
-          ? setfacultycourses([
-              ...facultycourses,
-              { id: item.id, n: item.name },
-            ])
-          : ""
+      item.slots.map(
+        (slot) =>
+          slot.facultyId === obsDetail.facultyId &&
+          // !facultycourses.includes(slot.id) &&
+          setfacultycourses([
+            ...facultycourses,
+            {
+              id: item.id,
+              n: `${item.name} on ${slot.time} at ${slot.location}`,
+            },
+          ])
       );
     });
   };
