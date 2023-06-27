@@ -112,13 +112,13 @@ model Meetings {
 
 // -> Meetings => Informed/Post/Uninformed/PDP
 model Informed {
-    id         Int      @id @default(autoincrement()) // auto-inc
-    finalScore Int?     @default(0)
-    savedScore Int?     @default(0)
-    status     Status   @default(Ongoing)
-    meeting    Meetings @relation(fields: [meetingId], references: [id])
-    meetingId  Int      @unique
-    rubrics    Rubric[]
+    id            Int      @id @default(autoincrement()) // auto-inc
+    observerScore Int?     @default(0)
+    facultyScore  Int?     @default(0)
+    status        Status   @default(Ongoing)
+    meeting       Meetings @relation(fields: [meetingId], references: [id])
+    meetingId     Int      @unique
+    rubrics       Rubric[]
 }
 
 model Rubric {

@@ -334,7 +334,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
           data: {
             observationStatus: "Ongoing",
             starting: existedReq.scheduledOn,
-            observationProgress: 0,
+            observationProgress: 10,
             meetings: {
               create: {
                 informedObservation: {
