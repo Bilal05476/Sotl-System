@@ -123,7 +123,7 @@ model Informed {
 
 model Rubric {
     id            Int       @id @default(autoincrement())
-    title         String
+    title         String    @db.VarChar(500)
     code          String
     observerScore Int
     facultyScore  Int

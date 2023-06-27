@@ -37,7 +37,7 @@ export const Rubrics = [
 
   {
     title:
-      "Instruction (including class activities) demonstrates ANY of the followinginstructional strategies: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world examples) and/or resources to fit varied student learning styles and needs.",
+      "Instruction (including class activities) demonstrates ANY of the following instructional strategies: student-centered approaches (e.g. Active Learning), differentiated instruction (e.g. Universal Design for Learning), experiential learning approaches (e.g. field tours, authentic real-world examples) and/or resources to fit varied student learning styles and needs.",
     facultyScore: 0,
     observerScore: 0,
     code: "1-B",
@@ -143,15 +143,6 @@ export const Rubrics = [
     code: "1-D",
   },
 ];
-
-// export const Rubrics = [
-//   {
-//     title: "Hello world",
-//     facultyScore: 0,
-//     observerScore: 0,
-//     code: "1-D",
-//   },
-// ];
 
 export const TeachingSteps = [
   {
