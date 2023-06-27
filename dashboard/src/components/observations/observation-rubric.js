@@ -261,6 +261,7 @@ const RubricAccordion = ({
                   return (
                     <AccordionSubHeading
                       key={item.id}
+                      rid={item.id}
                       title={item.title}
                       ind={ind + 1}
                       rubricScore={
@@ -293,9 +294,10 @@ const RubricAccordion = ({
   );
 };
 
-const AccordionSubHeading = ({ title, ind, rubricScore }) => {
-  const [rubricSc, setRubricSc] = useState(rubricScore ? rubricScore : "");
-  const [rubricSelected, setRubricSelected] = useState([]);
+const AccordionSubHeading = ({ rid, title, ind, rubricScore }) => {
+  const [rubricSc, setRubricSc] = useState(rubricScore > 0 ? rubricScore : 0);
+  const [scoreSelected, setScoreSelected] = useState([]);
+
   return (
     <div
       className="p-4"
@@ -307,14 +309,17 @@ const AccordionSubHeading = ({ title, ind, rubricScore }) => {
     >
       <h5>
         {ind}. {title}
-        {rubricSc > 0 && `(${rubricSc / rubricSelected.length})`}
+        {/* {rubricSc > 0 && `(${rubricSc / rubricSelected.length})`} */}
       </h5>
       <div className="d-flex align-items-center justify-content-between">
         {ScoringPlot.map((item) => (
           <RubricPoints
             scorePlot={item}
-            rubricScore={rubricSc}
-            rubricSelected={rubricSelected}
+            rubricSc={rubricSc}
+            setRubricSc={setRubricSc}
+            scoreSelected={scoreSelected}
+            setScoreSelected={setScoreSelected}
+            rid={rid}
           />
         ))}
       </div>
@@ -324,27 +329,22 @@ const AccordionSubHeading = ({ title, ind, rubricScore }) => {
 
 const ScoringPlot = [
   {
-    id: 0,
     score: 0,
     text: "Non Demonstrating",
   },
   {
-    id: 1,
     score: 1,
     text: "Limiting",
   },
   {
-    id: 2,
     score: 2,
     text: "Developing",
   },
   {
-    id: 3,
     score: 3,
     text: "Applying",
   },
   {
-    id: 4,
     score: 4,
     text: "Innovating",
   },
@@ -352,66 +352,77 @@ const ScoringPlot = [
 
 const RubricPoints = ({
   scorePlot,
-  rubricScore,
-  setRubricScore,
-  rubricSelected,
-  setRubricSelected,
+  rubricSc,
+  setRubricSc,
+  scoreSelected,
+  setScoreSelected,
+  rid,
 }) => {
-  const toggleSelected = (id, sc) => {
-    // if (rubricSelected.includes(id)) {
-    //   const filtered = rubricSelected.filter((item) => item !== id);
-    //   setRubricSelected(filtered);
-    //   setRubricScore(rubricScore - sc);
-    // } else {
-    //   if (rubricSelected.length < 2) {
-    //     setRubricSelected([...rubricSelected, id]);
-    //     setRubricScore(rubricScore + sc);
-    //   } else {
-    //     info("You can only select any two of the rubric sub points...");
-    //   }
-    // }
+  const toggleSelected = (sc) => {
+    const plotExists = scoreSelected.some((obj) => obj.plot.includes(sc));
+    if (plotExists) {
+      const updatedArray = scoreSelected.map((obj) => {
+        if (obj.rid === rid) {
+          const popPlot = obj.plot.filter((pl) => pl !== pl);
+          return { ...obj, sc: obj.sc - sc, plot: popPlot };
+        }
+        return obj;
+      });
+      setScoreSelected(updatedArray);
+      setRubricSc(rubricSc - sc);
+    } else {
+      // if (scoreSelected.length < 2) {
+      const ridExists = scoreSelected.some((obj) => obj.rid === rid);
+      if (ridExists) {
+        const updatedArray = scoreSelected.map((obj) => {
+          if (obj.rid === rid && obj.plot.length < 2) {
+            return { ...obj, sc: obj.sc + sc, plot: [...obj.plot, sc] };
+          } else {
+            info("You can only select any two of the rubric sub points...");
+          }
+          return obj;
+        });
+        setScoreSelected(updatedArray);
+        setRubricSc(rubricSc + sc);
+      } else {
+        setScoreSelected([...scoreSelected, { rid, sc, plot: [sc] }]);
+        setRubricSc(rubricSc + sc);
+      }
+      // } else {
+      //   info("You can only select any two of the rubric sub points...");
+      // }
+    }
   };
   return (
     <div
-      key={scorePlot.id}
+      key={scorePlot.score}
       className="rubric-points d-flex align-items-start my-1 mx-1"
       // style={{
       //   backgroundColor:
-      //     rubricSelected.includes(scorePlot.id) && scorePlot.score === 1
+      //     scoreSelected.includes(scorePlot.score) && scorePlot.score === 1
       //       ? blue3
-      //       : rubricSelected.includes(scorePlot.id) && scorePlot.score === 2
+      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 2
       //       ? blue2
-      //       : rubricSelected.includes(scorePlot.id) && scorePlot.score === 3
+      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 3
       //       ? blue1
-      //       : rubricSelected.includes(scorePlot.id) && scorePlot.score === 4
+      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 4
       //       ? blue4
+      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 0
+      //       ? blue5
       //       : "",
       //   boxShadow:
-      //     rubricSelected.includes(scorePlot.id) &&
+      //     scoreSelected.includes(scorePlot.score) &&
       //     "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
       // }}
-      style={{
-        backgroundColor:
-          rubricScore === 1 && scorePlot.score === 1
-            ? blue3
-            : rubricScore === 2 && scorePlot.score === 2
-            ? blue2
-            : rubricScore === 3 && scorePlot.score === 3
-            ? blue1
-            : rubricScore === 4 && scorePlot.score === 4
-            ? blue4
-            : rubricScore === 0 && scorePlot.score === 0
-            ? blue5
-            : "",
-        boxShadow:
-          rubricScore && "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
-      }}
-      onClick={() => toggleSelected(scorePlot.id, scorePlot.score)}
+      onClick={() => toggleSelected(scorePlot.score)}
     >
       <input
         type="radio"
         className="mt-1"
-        checked={rubricScore === scorePlot.score && true}
+        checked={
+          scoreSelected.some((obj) => obj.plot.includes(scorePlot.score)) &&
+          true
+        }
         style={{ marginRight: "0.5rem" }}
         readOnly={true}
       />
