@@ -10,12 +10,14 @@ import {
   blue2,
   blue3,
   blue4,
+  blue5,
   completeColor,
   completeColor2,
 } from "../colors";
 import Applink from "../applink";
 import { info } from "../../constants/Toasters";
 import { fetchObservation, submitScore } from "../Endpoints";
+import { useStateValue } from "../../StateProvider";
 // import DiscreteSlider from "../DiscreteSlider";
 const URL = process.env.PUBLIC_URL;
 
@@ -208,8 +210,9 @@ const RubricAccordion = ({
   isOpen,
   accordname,
   accordCode,
-  obsDetails = { obsDetails },
+  obsDetails,
 }) => {
+  const [{ user }] = useStateValue();
   const updateAccordionscore = () => {
     let count = 0;
     // subSections.map((item) => {
@@ -218,10 +221,6 @@ const RubricAccordion = ({
     // });
     // setAccordionScore(count);
   };
-
-  const [rubricScore, setRubricScore] = useState(0);
-  const [rubricSelected, setRubricSelected] = useState([]);
-
   return (
     <div className="accordion">
       <div className="accordion-item overflow-hidden mb-5">
@@ -264,8 +263,11 @@ const RubricAccordion = ({
                       key={item.id}
                       title={item.title}
                       ind={ind + 1}
-                      rubricScore={rubricScore}
-                      rubricSelected={rubricSelected}
+                      rubricScore={
+                        user.role === "Faculty"
+                          ? item.facultyScore
+                          : item.observerScore
+                      }
                     />
                   );
               }
@@ -291,27 +293,27 @@ const RubricAccordion = ({
   );
 };
 
-const AccordionSubHeading = ({ title, ind, rubricScore, rubricSelected }) => {
+const AccordionSubHeading = ({ title, ind, rubricScore }) => {
+  const [rubricSc, setRubricSc] = useState(rubricScore ? rubricScore : "");
+  const [rubricSelected, setRubricSelected] = useState([]);
   return (
     <div
       className="p-4"
       style={{
         fontStyle: "italic",
-        fontWeight: "800",
-        boxShadow: "1px 1px 2px #1e1e1e56s",
-        borderRadius: "2px",
+        fontWeight: "500",
         marginBottom: "1rem",
       }}
     >
       <h5>
         {ind}. {title}
-        {/* {rubricScore > 0 && `(${rubricScore / rubricSelected.length})`} */}
+        {rubricSc > 0 && `(${rubricSc / rubricSelected.length})`}
       </h5>
       <div className="d-flex align-items-center justify-content-between">
         {ScoringPlot.map((item) => (
           <RubricPoints
             scorePlot={item}
-            rubricScore={rubricScore}
+            rubricScore={rubricSc}
             rubricSelected={rubricSelected}
           />
         ))}
@@ -356,44 +358,60 @@ const RubricPoints = ({
   setRubricSelected,
 }) => {
   const toggleSelected = (id, sc) => {
-    if (rubricSelected.includes(id)) {
-      const filtered = rubricSelected.filter((item) => item !== id);
-      setRubricSelected(filtered);
-      setRubricScore(rubricScore - sc);
-    } else {
-      if (rubricSelected.length < 2) {
-        setRubricSelected([...rubricSelected, id]);
-        setRubricScore(rubricScore + sc);
-      } else {
-        info("You can only select any two of the rubric sub points...");
-      }
-    }
+    // if (rubricSelected.includes(id)) {
+    //   const filtered = rubricSelected.filter((item) => item !== id);
+    //   setRubricSelected(filtered);
+    //   setRubricScore(rubricScore - sc);
+    // } else {
+    //   if (rubricSelected.length < 2) {
+    //     setRubricSelected([...rubricSelected, id]);
+    //     setRubricScore(rubricScore + sc);
+    //   } else {
+    //     info("You can only select any two of the rubric sub points...");
+    //   }
+    // }
   };
   return (
     <div
       key={scorePlot.id}
       className="rubric-points d-flex align-items-start my-1 mx-1"
+      // style={{
+      //   backgroundColor:
+      //     rubricSelected.includes(scorePlot.id) && scorePlot.score === 1
+      //       ? blue3
+      //       : rubricSelected.includes(scorePlot.id) && scorePlot.score === 2
+      //       ? blue2
+      //       : rubricSelected.includes(scorePlot.id) && scorePlot.score === 3
+      //       ? blue1
+      //       : rubricSelected.includes(scorePlot.id) && scorePlot.score === 4
+      //       ? blue4
+      //       : "",
+      //   boxShadow:
+      //     rubricSelected.includes(scorePlot.id) &&
+      //     "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
+      // }}
       style={{
         backgroundColor:
-          rubricSelected.includes(scorePlot.id) && scorePlot.score === 1
+          rubricScore === 1 && scorePlot.score === 1
             ? blue3
-            : rubricSelected.includes(scorePlot.id) && scorePlot.score === 2
+            : rubricScore === 2 && scorePlot.score === 2
             ? blue2
-            : rubricSelected.includes(scorePlot.id) && scorePlot.score === 3
+            : rubricScore === 3 && scorePlot.score === 3
             ? blue1
-            : rubricSelected.includes(scorePlot.id) && scorePlot.score === 4
+            : rubricScore === 4 && scorePlot.score === 4
             ? blue4
+            : rubricScore === 0 && scorePlot.score === 0
+            ? blue5
             : "",
         boxShadow:
-          rubricSelected.includes(scorePlot.id) &&
-          "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
+          rubricScore && "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
       }}
       onClick={() => toggleSelected(scorePlot.id, scorePlot.score)}
     >
       <input
         type="radio"
         className="mt-1"
-        checked={rubricSelected.includes(scorePlot.id) && true}
+        checked={rubricScore === scorePlot.score && true}
         style={{ marginRight: "0.5rem" }}
         readOnly={true}
       />

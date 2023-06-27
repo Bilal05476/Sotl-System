@@ -8,3 +8,4 @@ export const blue1 = "#4ad6efb7";
 export const blue2 = "#4ad6ef7a";
 export const blue3 = "#4ad6ef3f";
 export const blue4 = "#4AD6EF";
+export const blue5 = "#4ad6ef1f";
