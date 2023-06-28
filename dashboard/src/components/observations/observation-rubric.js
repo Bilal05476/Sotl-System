@@ -213,14 +213,23 @@ const RubricAccordion = ({
   obsDetails,
 }) => {
   const [{ user }] = useStateValue();
+  const [accordionScore, setAccordionScore] = useState(0);
+  const [subSections, setSubSections] = useState([]);
   const updateAccordionscore = () => {
     let count = 0;
-    // subSections.map((item) => {
-    //   count += item.score;
-    //   return null;
-    // });
-    // setAccordionScore(count);
+    if (subSections.length > 0) {
+      subSections.map((item) => {
+        item.sc.map((sco) => {
+          count += sco;
+          return null;
+        });
+        return null;
+      });
+      // console.log(count);
+      setAccordionScore(count);
+    }
   };
+
   return (
     <div className="accordion">
       <div className="accordion-item overflow-hidden mb-5">
@@ -244,7 +253,7 @@ const RubricAccordion = ({
         >
           {title}
           <span className="d-flex align-items-center">
-            Rubric Score: 0.00
+            Rubric Score: {accordionScore.toFixed(2)}
             {isOpen === accordname ? (
               <ChevronsUp style={{ marginLeft: "1.5rem" }} />
             ) : (
@@ -269,11 +278,12 @@ const RubricAccordion = ({
                           ? item.facultyScore
                           : item.observerScore
                       }
+                      subSections={subSections}
+                      setSubSections={setSubSections}
                     />
                   );
               }
             )}
-
             <div
               className="bg-light py-3 text-center"
               style={{
@@ -294,9 +304,40 @@ const RubricAccordion = ({
   );
 };
 
-const AccordionSubHeading = ({ rid, title, ind, rubricScore }) => {
+const AccordionSubHeading = ({
+  rid,
+  title,
+  ind,
+  rubricScore,
+  subSections,
+  setSubSections,
+}) => {
   const [rubricSc, setRubricSc] = useState(rubricScore > 0 ? rubricScore : 0);
   const [scoreSelected, setScoreSelected] = useState([]);
+
+  useEffect(() => {
+    let count = 0;
+    if (scoreSelected[0]?.sc) {
+      scoreSelected[0]?.sc.map((obj) => {
+        count = count + obj;
+        return null;
+      });
+      setRubricSc(count / scoreSelected[0]?.sc.length);
+      if (subSections.some((obj) => obj.rid == rid)) {
+        const updatedArray = subSections.map((obj) => {
+          if (obj.rid === rid) {
+            return { ...obj, sc: [...obj.sc, scoreSelected[0].sc[1]] };
+          }
+          return obj;
+        });
+        setSubSections(updatedArray);
+      } else {
+        setSubSections([...subSections, scoreSelected[0]]);
+      }
+    }
+  }, [scoreSelected]);
+
+  console.log(subSections);
 
   return (
     <div
@@ -309,7 +350,14 @@ const AccordionSubHeading = ({ rid, title, ind, rubricScore }) => {
     >
       <h5>
         {ind}. {title}
-        {/* {rubricSc > 0 && `(${rubricSc / rubricSelected.length})`} */}
+        <span
+          style={{
+            fontWeight: "600",
+            marginLeft: "0.4rem",
+          }}
+        >
+          {rubricSc > 0 && `(${rubricSc})`}
+        </span>
       </h5>
       <div className="d-flex align-items-center justify-content-between">
         {ScoringPlot.map((item) => (
@@ -352,76 +400,73 @@ const ScoringPlot = [
 
 const RubricPoints = ({
   scorePlot,
-  rubricSc,
-  setRubricSc,
+  // rubricSc,
+  // setRubricSc,
   scoreSelected,
   setScoreSelected,
   rid,
 }) => {
   const toggleSelected = (sc) => {
-    const plotExists = scoreSelected.some((obj) => obj.plot.includes(sc));
-    if (plotExists) {
+    const ridExists = scoreSelected.some((obj) => obj.rid === rid);
+    if (ridExists) {
+      // const scoreExists = scoreSelected.some((obj) => obj.sc.includes(sc));
+      // if (scoreExists) {
+      //   const updatedArray = scoreSelected.map((obj) => {
+      //     if (obj.rid === rid) {
+      //       const popScore = obj.sc.filter((sco) => sco !== sc);
+      //       return { ...obj, sc: popScore };
+      //     }
+      //     return obj;
+      //   });
+      //   setScoreSelected(updatedArray);
+      // } else {
       const updatedArray = scoreSelected.map((obj) => {
-        if (obj.rid === rid) {
-          const popPlot = obj.plot.filter((pl) => pl !== pl);
-          return { ...obj, sc: obj.sc - sc, plot: popPlot };
+        if (obj.rid === rid && obj.sc.length < 2) {
+          return { ...obj, sc: [...obj.sc, sc] };
+        } else {
+          info("You can only select any two of the rubric sub points...");
         }
         return obj;
       });
       setScoreSelected(updatedArray);
-      setRubricSc(rubricSc - sc);
-    } else {
-      // if (scoreSelected.length < 2) {
-      const ridExists = scoreSelected.some((obj) => obj.rid === rid);
-      if (ridExists) {
-        const updatedArray = scoreSelected.map((obj) => {
-          if (obj.rid === rid && obj.plot.length < 2) {
-            return { ...obj, sc: obj.sc + sc, plot: [...obj.plot, sc] };
-          } else {
-            info("You can only select any two of the rubric sub points...");
-          }
-          return obj;
-        });
-        setScoreSelected(updatedArray);
-        setRubricSc(rubricSc + sc);
-      } else {
-        setScoreSelected([...scoreSelected, { rid, sc, plot: [sc] }]);
-        setRubricSc(rubricSc + sc);
-      }
-      // } else {
-      //   info("You can only select any two of the rubric sub points...");
       // }
+    } else {
+      setScoreSelected([...scoreSelected, { rid, sc: [sc] }]);
     }
   };
   return (
     <div
       key={scorePlot.score}
       className="rubric-points d-flex align-items-start my-1 mx-1"
-      // style={{
-      //   backgroundColor:
-      //     scoreSelected.includes(scorePlot.score) && scorePlot.score === 1
-      //       ? blue3
-      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 2
-      //       ? blue2
-      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 3
-      //       ? blue1
-      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 4
-      //       ? blue4
-      //       : scoreSelected.includes(scorePlot.score) && scorePlot.score === 0
-      //       ? blue5
-      //       : "",
-      //   boxShadow:
-      //     scoreSelected.includes(scorePlot.score) &&
-      //     "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
-      // }}
+      style={{
+        backgroundColor:
+          scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+          scorePlot.score === 1
+            ? blue3
+            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+              scorePlot.score === 2
+            ? blue2
+            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+              scorePlot.score === 3
+            ? blue1
+            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+              scorePlot.score === 4
+            ? blue4
+            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+              scorePlot.score === 0
+            ? blue5
+            : "",
+        boxShadow:
+          scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+          "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
+      }}
       onClick={() => toggleSelected(scorePlot.score)}
     >
       <input
         type="radio"
         className="mt-1"
         checked={
-          scoreSelected.some((obj) => obj.plot.includes(scorePlot.score)) &&
-          true
+          scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) && true
         }
         style={{ marginRight: "0.5rem" }}
         readOnly={true}

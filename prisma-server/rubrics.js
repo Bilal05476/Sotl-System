@@ -1,7 +1,7 @@
 export const Rubrics = [
   {
     title:
-      "Instruction (including class activities) shows alignment with the programme and course learning outcomes (PLOs and CLOs) and any specified standards. ",
+      "Instruction (including class activities) shows alignment with the programme and course learning outcomes (PLOs and CLOs) and any specified standards.",
     facultyScore: 0,
     observerScore: 0,
     code: "1-A",
@@ -87,7 +87,7 @@ export const Rubrics = [
   },
   {
     title:
-      "Assessments (formative and/or summative) are SMART i.e. specific, measurable, achievable, relevant, and time-bound. ",
+      "Assessments (formative and/or summative) are SMART i.e. specific, measurable, achievable, relevant, and time-bound.",
     facultyScore: 0,
     observerScore: 0,
     code: "1-C",
