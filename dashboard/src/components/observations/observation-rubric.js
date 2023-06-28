@@ -220,12 +220,11 @@ const RubricAccordion = ({
     if (subSections.length > 0) {
       subSections.map((item) => {
         item.sc.map((sco) => {
-          count += sco;
+          count = count + sco / item.sc.length;
           return null;
         });
         return null;
       });
-      // console.log(count);
       setAccordionScore(count);
     }
   };
@@ -337,8 +336,6 @@ const AccordionSubHeading = ({
     }
   }, [scoreSelected]);
 
-  console.log(subSections);
-
   return (
     <div
       className="p-4"
@@ -407,29 +404,29 @@ const RubricPoints = ({
   rid,
 }) => {
   const toggleSelected = (sc) => {
-    const ridExists = scoreSelected.some((obj) => obj.rid === rid);
-    if (ridExists) {
-      // const scoreExists = scoreSelected.some((obj) => obj.sc.includes(sc));
-      // if (scoreExists) {
-      //   const updatedArray = scoreSelected.map((obj) => {
-      //     if (obj.rid === rid) {
-      //       const popScore = obj.sc.filter((sco) => sco !== sc);
-      //       return { ...obj, sc: popScore };
-      //     }
-      //     return obj;
-      //   });
-      //   setScoreSelected(updatedArray);
-      // } else {
-      const updatedArray = scoreSelected.map((obj) => {
-        if (obj.rid === rid && obj.sc.length < 2) {
-          return { ...obj, sc: [...obj.sc, sc] };
-        } else {
-          info("You can only select any two of the rubric sub points...");
-        }
-        return obj;
-      });
-      setScoreSelected(updatedArray);
-      // }
+    const ridExists = scoreSelected.findIndex((obj) => obj.rid === rid);
+    if (ridExists !== -1) {
+      const scoreExists = scoreSelected[ridExists].sc.includes(sc);
+      if (scoreExists) {
+        const updatedArray = scoreSelected.map((obj) => {
+          if (obj.rid === rid) {
+            const popScore = obj.sc.filter((sco) => sco !== sc);
+            return { ...obj, sc: popScore };
+          }
+          return obj;
+        });
+        setScoreSelected(updatedArray);
+      } else {
+        const updatedArray = scoreSelected.map((obj) => {
+          if (obj.rid === rid && obj.sc.length < 2) {
+            return { ...obj, sc: [...obj.sc, sc] };
+          } else {
+            info("You can only select any two of the rubric sub points...");
+            return obj;
+          }
+        });
+        setScoreSelected(updatedArray);
+      }
     } else {
       setScoreSelected([...scoreSelected, { rid, sc: [sc] }]);
     }
