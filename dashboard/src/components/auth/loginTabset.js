@@ -5,8 +5,11 @@ import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { info, errors, successes } from "../../constants/Toasters";
 import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const LoginTabset = () => {
+  const navigate = useNavigate();
+
   const [loginState, setLoginState] = useState({
     email: "",
     password: "",
@@ -46,6 +49,7 @@ const LoginTabset = () => {
             loader: false,
           });
           localStorage.setItem("user", JSON.stringify(data));
+          navigate("/");
         }
       } catch (error) {
         setLoginState({

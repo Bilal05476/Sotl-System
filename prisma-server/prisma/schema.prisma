@@ -125,8 +125,8 @@ model Rubric {
     id            Int       @id @default(autoincrement())
     title         String    @db.VarChar(500)
     code          String
-    observerScore Int
-    facultyScore  Int
+    observerScore Int       @default(0)
+    facultyScore  Int       @default(0)
     informed      Informed? @relation(fields: [informedId], references: [id])
     informedId    Int?
 }

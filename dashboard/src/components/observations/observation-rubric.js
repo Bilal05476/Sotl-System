@@ -14,7 +14,7 @@ import {
   completeColor,
   completeColor2,
 } from "../colors";
-import Applink from "../applink";
+import { Applink, AccordButton } from "../applink";
 import { info } from "../../constants/Toasters";
 import { fetchObservation, submitScore } from "../Endpoints";
 import { useStateValue } from "../../StateProvider";
@@ -22,11 +22,17 @@ import { useStateValue } from "../../StateProvider";
 const URL = process.env.PUBLIC_URL;
 
 const Observation_rubric = () => {
+  const [{ user }] = useStateValue();
   const [isOpen, setIsOpen] = useState("");
-  const [totalScore, setTotalScore] = useState(0);
-  const [rubricSection, setRubricSection] = useState([]);
+  const [accordionTab, setaccordionTab] = useState([]);
   const { id } = useParams();
   const [obsDetails, setObsDetail] = useState("");
+  const [scoresState, setscoresState] = useState({
+    facultySc: 30,
+    observerSc: 30,
+    avgSc: 30,
+  });
+  const { facultySc, observerSc, avgSc } = scoresState;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,28 +41,38 @@ const Observation_rubric = () => {
 
   const updateTotal = () => {
     let count = 0;
-    rubricSection.map((item) => {
+    accordionTab.map((item) => {
       count += item.accordionScore;
       return null;
     });
-    setTotalScore(count);
+
+    if (user.role === "Faculty") {
+      setscoresState({
+        ...scoresState,
+        facultySc: count,
+        observerSc: count,
+      });
+    } else {
+      setscoresState({
+        ...scoresState,
+        facultySc: count,
+        observerSc: count,
+      });
+    }
+    // submitScore()
   };
 
-  const facultySc = obsDetails?.meetings?.informedObservation?.facultyScore
-    ? obsDetails?.meetings?.informedObservation?.facultyScore
-    : 0;
-  const observerSc = obsDetails?.meetings?.informedObservation?.observerScore
-    ? obsDetails?.meetings?.informedObservation?.observerScore
-    : 0;
+  // const facultySc = obsDetails?.meetings?.informedObservation?.facultyScore;
+  // const observerSc = obsDetails?.meetings?.informedObservation?.observerScore;
 
   // avgSc = true && true ? (12 + 12) / 2 : 0;
-  const avgSc =
-    obsDetails?.meetings?.informedObservation?.observerScore &&
-    obsDetails?.meetings?.informedObservation?.facultyScore
-      ? (obsDetails?.meetings?.informedObservation?.observerScore +
-          obsDetails?.meetings?.informedObservation?.facultyScore) /
-        2
-      : 0;
+  // const avgSc =
+  //   obsDetails?.meetings?.informedObservation?.observerScore &&
+  //   obsDetails?.meetings?.informedObservation?.facultyScore
+  //     ? (obsDetails?.meetings?.informedObservation?.observerScore +
+  //         obsDetails?.meetings?.informedObservation?.facultyScore) /
+  //       2
+  //     : 0;
 
   return (
     <Fragment>
@@ -79,16 +95,17 @@ const Observation_rubric = () => {
               {
                 color: completeColor,
                 text: "TOTAL SCORE",
-                score: avgSc,
+                score: (facultySc + observerSc) / 2,
               },
-            ].map((item) => (
+            ].map((item, index) => (
               <span
+                key={index}
                 className="digits"
                 style={{
                   backgroundColor: item.color,
                   color: "#fff",
                   fontSize: "0.8rem",
-                  padding: "0.5rem 1rem",
+                  padding: "0.5rem 0.8rem",
                   borderRadius: "5px",
                   marginLeft: "0.3rem",
                   fontWeight: "500",
@@ -110,47 +127,42 @@ const Observation_rubric = () => {
 
         <RubricAccordion
           title="1-A Knowledge of Content"
-          accordname={"Content"}
           accordCode={"1-A"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          updateTotal={updateTotal}
-          rubricSection={rubricSection}
-          setRubricSection={setRubricSection}
+          accordionTab={accordionTab}
+          setaccordionTab={setaccordionTab}
           obsDetails={obsDetails}
         />
-        {/* <RubricAccordion
+        <RubricAccordion
           title="1-B Knowledge of Pedagogy"
-          accordname={"Pedagogy"}
           accordCode={"1-B"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          updateTotal={updateTotal}
-          rubricSection={rubricSection}
-          setRubricSection={setRubricSection}
+          accordionTab={accordionTab}
+          setaccordionTab={setaccordionTab}
+          obsDetails={obsDetails}
         />
 
         <RubricAccordion
           title="1-C Student Assessment"
-          accordname={"Assessment"}
           accordCode={"1-C"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          updateTotal={updateTotal}
-          rubricSection={rubricSection}
-          setRubricSection={setRubricSection}
+          accordionTab={accordionTab}
+          setaccordionTab={setaccordionTab}
+          obsDetails={obsDetails}
         />
 
         <RubricAccordion
           title="1-D Learning Environment"
-          accordname={"Environment"}
-          accordCode={"1-C"}
+          accordCode={"1-D"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          updateTotal={updateTotal}
-          rubricSection={rubricSection}
-          setRubricSection={setRubricSection}
-        /> */}
+          accordionTab={accordionTab}
+          setaccordionTab={setaccordionTab}
+          obsDetails={obsDetails}
+        />
 
         <div className="d-flex align-items-center justify-content-between py-3">
           <Applink
@@ -163,16 +175,17 @@ const Observation_rubric = () => {
             <AccordButton
               text="Save Score"
               backgroundColor={completeColor2}
-              onClick={() =>
-                submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
-              }
+              // onClick={() =>
+              //   submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
+              // }
             />
             <AccordButton
               text="Submit Score"
               backgroundColor={completeColor}
-              onClick={() =>
-                submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
-              }
+              // onClick={() =>
+              //   submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
+              // }
+              onClick={() => updateTotal()}
             />
           </div>
         </div>
@@ -183,58 +196,57 @@ const Observation_rubric = () => {
 
 export default Observation_rubric;
 
-const AccordButton = ({ backgroundColor, text, onClick }) => {
-  return (
-    <button
-      style={{
-        backgroundColor: backgroundColor,
-        outline: "none",
-        boxShadow: "none",
-        padding: "15px",
-        marginLeft: "0.4rem",
-        border: "0",
-        color: "#fff",
-        borderRadius: "5px",
-        fontWeight: "700",
-      }}
-      onClick={onClick}
-    >
-      {text}
-    </button>
-  );
-};
-
 const RubricAccordion = ({
   title,
   setIsOpen,
   isOpen,
-  accordname,
   accordCode,
   obsDetails,
+  accordionTab,
+  setaccordionTab,
 }) => {
   const [{ user }] = useStateValue();
   const [accordionScore, setAccordionScore] = useState(0);
   const [subSections, setSubSections] = useState([]);
+
   const updateAccordionscore = () => {
     let count = 0;
+
     if (subSections.length > 0) {
       subSections.map((item) => {
-        item.sc.map((sco) => {
-          count = count + sco / item.sc.length;
-          return null;
-        });
-        return null;
+        if (item.code === accordCode) count += item.sc;
       });
       setAccordionScore(count);
+      if (accordionTab.some((obj) => obj.accordCode === accordCode)) {
+        const popPrev = accordionTab.filter(
+          (item) => item.accordCode !== accordCode
+        );
+        setaccordionTab([
+          ...popPrev,
+          {
+            accordCode,
+            accordionScore: count,
+          },
+        ]);
+      } else {
+        setaccordionTab([
+          ...accordionTab,
+          {
+            accordCode,
+            accordionScore: count,
+          },
+        ]);
+      }
     }
   };
 
+  console.log(accordionTab);
   return (
     <div className="accordion">
       <div className="accordion-item overflow-hidden mb-5">
         <button
           className="btn btn-block text-light"
-          onClick={() => setIsOpen(isOpen === accordname ? "" : accordname)}
+          onClick={() => setIsOpen(isOpen === accordCode ? "" : accordCode)}
           style={{
             backgroundColor: completeColor,
             outline: "none",
@@ -253,7 +265,7 @@ const RubricAccordion = ({
           {title}
           <span className="d-flex align-items-center">
             Rubric Score: {accordionScore.toFixed(2)}
-            {isOpen === accordname ? (
+            {isOpen === accordCode ? (
               <ChevronsUp style={{ marginLeft: "1.5rem" }} />
             ) : (
               <ChevronsDown style={{ marginLeft: "1.5rem" }} />
@@ -261,7 +273,7 @@ const RubricAccordion = ({
           </span>
         </button>
 
-        {isOpen === accordname && (
+        {isOpen === accordCode && (
           <div className="accordion-body">
             {obsDetails?.meetings?.informedObservation?.rubrics.map(
               (item, ind) => {
@@ -279,6 +291,7 @@ const RubricAccordion = ({
                       }
                       subSections={subSections}
                       setSubSections={setSubSections}
+                      accordCode={accordCode}
                     />
                   );
               }
@@ -310,31 +323,39 @@ const AccordionSubHeading = ({
   rubricScore,
   subSections,
   setSubSections,
+  accordCode,
 }) => {
   const [rubricSc, setRubricSc] = useState(rubricScore > 0 ? rubricScore : 0);
   const [scoreSelected, setScoreSelected] = useState([]);
 
   useEffect(() => {
-    let count = 0;
+    let score = 0;
+    let sclen = 0;
+    console.log(scoreSelected);
     if (scoreSelected[0]?.sc) {
       scoreSelected[0]?.sc.map((obj) => {
-        count = count + obj;
+        score += obj;
+        sclen += 1;
         return null;
       });
-      setRubricSc(count / scoreSelected[0]?.sc.length);
+      setRubricSc(score / sclen);
       if (subSections.some((obj) => obj.rid == rid)) {
         const updatedArray = subSections.map((obj) => {
           if (obj.rid === rid) {
-            return { ...obj, sc: [...obj.sc, scoreSelected[0].sc[1]] };
+            return { ...obj, sc: score / sclen };
           }
           return obj;
         });
         setSubSections(updatedArray);
       } else {
-        setSubSections([...subSections, scoreSelected[0]]);
+        setSubSections([
+          ...subSections,
+          { rid: scoreSelected[0].rid, sc: score / sclen, code: accordCode },
+        ]);
       }
     }
   }, [scoreSelected]);
+  console.log(subSections);
 
   return (
     <div
@@ -365,6 +386,7 @@ const AccordionSubHeading = ({
             scoreSelected={scoreSelected}
             setScoreSelected={setScoreSelected}
             rid={rid}
+            k={item.score}
           />
         ))}
       </div>
@@ -402,6 +424,7 @@ const RubricPoints = ({
   scoreSelected,
   setScoreSelected,
   rid,
+  k,
 }) => {
   const toggleSelected = (sc) => {
     const ridExists = scoreSelected.findIndex((obj) => obj.rid === rid);
@@ -433,7 +456,7 @@ const RubricPoints = ({
   };
   return (
     <div
-      key={scorePlot.score}
+      key={k}
       className="rubric-points d-flex align-items-start my-1 mx-1"
       style={{
         backgroundColor:

@@ -39,7 +39,7 @@ const Detail_observation = () => {
   //   }
   // };
 
-  console.log(usersandcourses);
+  // console.log(usersandcourses);
 
   const startSchedule = () => {
     setOpenPopup(false);
@@ -53,20 +53,23 @@ const Detail_observation = () => {
 
   const selectCourse = () => {
     setOpenPopup(!openPopup);
-    usersandcourses.courses.map((item) => {
-      item.slots.map(
-        (slot) =>
-          slot.facultyId === obsDetail.facultyId &&
-          // !facultycourses.includes(slot.id) &&
-          setfacultycourses([
-            ...facultycourses,
-            {
-              id: item.id,
-              n: `${item.name} on ${slot.time} at ${slot.location}`,
-            },
-          ])
-      );
-    });
+    if (facultycourses.length === 0) {
+      usersandcourses.courses.map((item) => {
+        item.slots.map(
+          (slot) =>
+            slot.facultyId === obsDetail.facultyId &&
+            setfacultycourses([
+              ...facultycourses,
+              {
+                id: item.id,
+                n: `${item.name} on ${slot.time} at ${slot.location}`,
+              },
+            ])
+        );
+      });
+    } else {
+      info("Refresh your window if you want to see udpated slots!");
+    }
   };
 
   // return;
