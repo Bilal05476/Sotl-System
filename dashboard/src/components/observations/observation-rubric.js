@@ -13,6 +13,7 @@ import {
   blue5,
   completeColor,
   completeColor2,
+  pendingColor,
 } from "../colors";
 import { Applink, AccordButton } from "../applink";
 import { info } from "../../constants/Toasters";
@@ -85,6 +86,15 @@ const Observation_rubric = () => {
         2
       : 0;
 
+  const perSc =
+    obsDetails?.meetings?.informedObservation?.observerScore &&
+    obsDetails?.meetings?.informedObservation?.facultyScore
+      ? ((obsDetails?.meetings?.informedObservation?.observerScore +
+          obsDetails?.meetings?.informedObservation?.facultyScore) /
+          160) *
+        100
+      : 0;
+
   return (
     <Fragment>
       <Breadcrumb title="Observation Rubrics" parent="Informed Observations" />
@@ -95,22 +105,26 @@ const Observation_rubric = () => {
               {
                 color: completeColor2,
                 text: "SCORE BY FACULTY",
-                score: facultySc,
+                score: `${facultySc?.toFixed(1)} / 80.0`,
               },
               {
                 color: completeColor2,
                 text: "SCORE BY OBSERVER",
-                score: observerSc,
+                score: `${observerSc?.toFixed(1)} / 80.0`,
               },
               {
-                color: completeColor,
-                text: "TOTAL SCORE",
-                score: avgSc,
+                color: avgSc > 60 ? completeColor : pendingColor,
+                text: "FINAL SCORE",
+                score: `${avgSc?.toFixed(1)} / 80.0`,
+              },
+              {
+                color: perSc > 80 ? completeColor : pendingColor,
+                text: "SCORE PERCENTAGE",
+                score: `${perSc?.toFixed(1)}%`,
               },
             ].map((item, index) => (
               <span
                 key={index}
-                className="digits"
                 style={{
                   backgroundColor: item.color,
                   color: "#fff",
@@ -128,7 +142,7 @@ const Observation_rubric = () => {
                     fontWeight: "700",
                   }}
                 >
-                  {item.score?.toFixed(2)}
+                  {item.score}
                 </span>
               </span>
             ))}
