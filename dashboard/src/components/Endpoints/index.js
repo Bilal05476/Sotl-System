@@ -177,8 +177,6 @@ export async function submitScore(
   } else {
     response.observerScore = score;
   }
-  console.log(response);
-
   try {
     const res = await fetch(`${BASEURL}/observation/informed`, {
       method: "PUT",

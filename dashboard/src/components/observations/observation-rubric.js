@@ -28,11 +28,6 @@ const Observation_rubric = () => {
   const { id } = useParams();
   const [obsDetails, setObsDetail] = useState("");
   const [loader, setLoader] = useState(false);
-  const [scoresState, setscoresState] = useState({
-    facultySc: 0,
-    observerSc: 0,
-  });
-  const { facultySc, observerSc } = scoresState;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,7 +38,7 @@ const Observation_rubric = () => {
 
   const updateTotal = () => {
     let count = 0;
-
+    setLoader(true);
     accordionTab.map((item) => {
       count += item.accordionScore;
       item.accordionSections.map((item) => {
@@ -60,7 +55,7 @@ const Observation_rubric = () => {
         count,
         "Faculty",
         rubricsFinal,
-        loader,
+        setLoader,
         obsDetails?.meetings?.informedObservation?.id,
         obsDetails?.meetings?.observationsId,
         setObsDetail
@@ -78,17 +73,17 @@ const Observation_rubric = () => {
     }
   };
 
-  // const facultySc = obsDetails?.meetings?.informedObservation?.facultyScore;
-  // const observerSc = obsDetails?.meetings?.informedObservation?.observerScore;
+  const facultySc = obsDetails?.meetings?.informedObservation?.facultyScore;
+  const observerSc = obsDetails?.meetings?.informedObservation?.observerScore;
 
   // avgSc = true && true ? (12 + 12) / 2 : 0;
-  // const avgSc =
-  //   obsDetails?.meetings?.informedObservation?.observerScore &&
-  //   obsDetails?.meetings?.informedObservation?.facultyScore
-  //     ? (obsDetails?.meetings?.informedObservation?.observerScore +
-  //         obsDetails?.meetings?.informedObservation?.facultyScore) /
-  //       2
-  //     : 0;
+  const avgSc =
+    obsDetails?.meetings?.informedObservation?.observerScore &&
+    obsDetails?.meetings?.informedObservation?.facultyScore
+      ? (obsDetails?.meetings?.informedObservation?.observerScore +
+          obsDetails?.meetings?.informedObservation?.facultyScore) /
+        2
+      : 0;
 
   return (
     <Fragment>
@@ -110,7 +105,7 @@ const Observation_rubric = () => {
               {
                 color: completeColor,
                 text: "TOTAL SCORE",
-                score: (facultySc + observerSc) / 2,
+                score: avgSc,
               },
             ].map((item, index) => (
               <span
@@ -227,7 +222,7 @@ const RubricAccordion = ({
   const updateAccordionscore = () => {
     let count = 0;
 
-    if (subSections.length > 0) {
+    if (subSections.length > 0 && subSections.length === 5) {
       subSections.map((item) => {
         if (item.code === accordCode) count += item.sc;
       });
@@ -254,6 +249,8 @@ const RubricAccordion = ({
           },
         ]);
       }
+    } else {
+      info("Please Select all Rubrics Point!");
     }
   };
 
@@ -341,13 +338,12 @@ const AccordionSubHeading = ({
   setSubSections,
   accordCode,
 }) => {
-  const [rubricSc, setRubricSc] = useState(rubricScore > 0 ? rubricScore : 0);
+  const [rubricSc, setRubricSc] = useState(rubricScore);
   const [scoreSelected, setScoreSelected] = useState([]);
 
   useEffect(() => {
     let score = 0;
     let sclen = 0;
-    console.log(scoreSelected);
     if (scoreSelected[0]?.sc) {
       scoreSelected[0]?.sc.map((obj) => {
         score += obj;

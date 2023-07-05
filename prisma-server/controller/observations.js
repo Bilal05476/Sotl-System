@@ -442,7 +442,7 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
       rubricsFinal.map(async (item) => {
         await prisma.rubric.update({
           where: {
-            id: item.id,
+            id: item.rid,
           },
           data: {
             facultyScore: item.score,
