@@ -168,7 +168,16 @@ export async function submitScore(
   observationsId,
   setObs
 ) {
-  console.log(score, role, rubricsFinal, informedId, observationsId);
+  const response = {
+    informedId,
+    rubricsFinal,
+  };
+  if (role === "Faculty") {
+    response.facultyScore = score;
+  } else {
+    response.observerScore = score;
+  }
+  console.log(response);
 
   try {
     const res = await fetch(`${BASEURL}/observation/informed`, {
@@ -176,13 +185,7 @@ export async function submitScore(
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-      body: JSON.stringify({
-        observationsId,
-        informedId,
-        rubricsFinal,
-        facultyScore: role === "Faculty" && score,
-        observerScore: role === "Observer" && score,
-      }),
+      body: JSON.stringify(response),
     });
 
     const data = await res.json();

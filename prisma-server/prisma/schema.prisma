@@ -113,8 +113,8 @@ model Meetings {
 // -> Meetings => Informed/Post/Uninformed/PDP
 model Informed {
     id            Int      @id @default(autoincrement()) // auto-inc
-    observerScore Int?     @default(0)
-    facultyScore  Int?     @default(0)
+    observerScore Float?   @default(0)
+    facultyScore  Float?   @default(0)
     status        Status   @default(Ongoing)
     meeting       Meetings @relation(fields: [meetingId], references: [id])
     meetingId     Int      @unique
@@ -125,8 +125,8 @@ model Rubric {
     id            Int       @id @default(autoincrement())
     title         String    @db.VarChar(500)
     code          String
-    observerScore Int       @default(0)
-    facultyScore  Int       @default(0)
+    observerScore Float     @default(0)
+    facultyScore  Float     @default(0)
     informed      Informed? @relation(fields: [informedId], references: [id])
     informedId    Int?
 }

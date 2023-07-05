@@ -422,3 +422,70 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
     res.status(404).json({ error: "Scheduling does not exist or completed!" });
   }
 });
+
+// @desc   Informed Observation rubrics scoring
+// @route  PUT api/observation/informed
+// @access Private (only faculty and observer update scoring)
+export const informedObsCycle = asyncHandler(async (req, res) => {
+  const { informedId, rubricsFinal, facultyScore, observerScore } = req.body;
+
+  if (facultyScore) {
+    try {
+      await prisma.informed.update({
+        where: {
+          id: informedId,
+        },
+        data: {
+          facultyScore,
+        },
+      });
+      rubricsFinal.map(async (item) => {
+        await prisma.rubric.update({
+          where: {
+            id: item.id,
+          },
+          data: {
+            facultyScore: item.score,
+          },
+        });
+      });
+      res.status(200).json({
+        message: "Rubrics Score Successfully Submitted!",
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err,
+      });
+    }
+  }
+  if (observerScore) {
+    try {
+      await prisma.informed.update({
+        where: {
+          id: informedId,
+        },
+        data: {
+          observerScore,
+        },
+      });
+      rubricsFinal.map(async (item) => {
+        await prisma.rubric.update({
+          where: {
+            id: item.rid,
+          },
+          data: {
+            observerScore: item.score,
+          },
+        });
+      });
+
+      res.status(200).json({
+        message: "Rubrics Score Successfully Submitted!",
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err,
+      });
+    }
+  }
+});
