@@ -27,39 +27,55 @@ const Observation_rubric = () => {
   const [accordionTab, setaccordionTab] = useState([]);
   const { id } = useParams();
   const [obsDetails, setObsDetail] = useState("");
+  const [loader, setLoader] = useState(false);
   const [scoresState, setscoresState] = useState({
-    facultySc: 30,
-    observerSc: 30,
-    avgSc: 30,
+    facultySc: 0,
+    observerSc: 0,
   });
-  const { facultySc, observerSc, avgSc } = scoresState;
+  const { facultySc, observerSc } = scoresState;
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchObservation(setObsDetail, Number(id));
   }, []);
 
+  const rubricsFinal = [];
+
   const updateTotal = () => {
     let count = 0;
+
     accordionTab.map((item) => {
       count += item.accordionScore;
+      item.accordionSections.map((item) => {
+        rubricsFinal.push({
+          rid: item.rid,
+          score: item.sc,
+        });
+        return null;
+      });
       return null;
     });
-
     if (user.role === "Faculty") {
-      setscoresState({
-        ...scoresState,
-        facultySc: count,
-        observerSc: count,
-      });
+      submitScore(
+        count,
+        "Faculty",
+        rubricsFinal,
+        loader,
+        obsDetails?.meetings?.informedObservation?.id,
+        obsDetails?.meetings?.observationsId,
+        setObsDetail
+      );
     } else {
-      setscoresState({
-        ...scoresState,
-        facultySc: count,
-        observerSc: count,
-      });
+      submitScore(
+        count,
+        "Observer",
+        rubricsFinal,
+        setLoader,
+        obsDetails?.meetings?.informedObservation?.id,
+        obsDetails?.meetings?.observationsId,
+        setObsDetail
+      );
     }
-    // submitScore()
   };
 
   // const facultySc = obsDetails?.meetings?.informedObservation?.facultyScore;
@@ -80,7 +96,6 @@ const Observation_rubric = () => {
       <Container fluid={true}>
         <Row className="mb-2">
           <Col className="xl-100 d-flex align-items-center justify-content-end">
-            {" "}
             {[
               {
                 color: completeColor2,
@@ -226,6 +241,7 @@ const RubricAccordion = ({
           {
             accordCode,
             accordionScore: count,
+            accordionSections: subSections,
           },
         ]);
       } else {
@@ -234,13 +250,13 @@ const RubricAccordion = ({
           {
             accordCode,
             accordionScore: count,
+            accordionSections: subSections,
           },
         ]);
       }
     }
   };
 
-  console.log(accordionTab);
   return (
     <div className="accordion">
       <div className="accordion-item overflow-hidden mb-5">
@@ -355,7 +371,6 @@ const AccordionSubHeading = ({
       }
     }
   }, [scoreSelected]);
-  console.log(subSections);
 
   return (
     <div

@@ -159,9 +159,17 @@ export async function submitTeachingTemplate(
   }
 }
 
-export async function submitScore(informedId, score) {
-  console.log(informedId, score);
-  return;
+export async function submitScore(
+  score,
+  role,
+  rubricsFinal,
+  loader,
+  informedId,
+  observationsId,
+  setObs
+) {
+  console.log(score, role, rubricsFinal, informedId, observationsId);
+
   try {
     const res = await fetch(`${BASEURL}/observation/informed`, {
       method: "PUT",
@@ -169,18 +177,25 @@ export async function submitScore(informedId, score) {
         "Content-type": "application/json; charset=UTF-8",
       },
       body: JSON.stringify({
+        observationsId,
         informedId,
-        score,
+        rubricsFinal,
+        facultyScore: role === "Faculty" && score,
+        observerScore: role === "Observer" && score,
       }),
     });
 
     const data = await res.json();
     if (data.error) {
       errors(data.error);
+      loader(false);
     } else {
-      // setObs(data);
+      loader(false);
+      successes(data.message);
+      fetchObservation(setObs, observationsId);
     }
   } catch (err) {
     errors(err);
+    loader(false);
   }
 }
