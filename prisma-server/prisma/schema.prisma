@@ -132,10 +132,17 @@ model Rubric {
 }
 
 model Post {
-    id        Int      @id @default(autoincrement()) // auto-inc
-    status    Status   @default(Ongoing)
-    meeting   Meetings @relation(fields: [meetingId], references: [id])
-    meetingId Int      @unique
+    id                 Int            @id @default(autoincrement()) // auto-inc
+    status             Status         @default(Ongoing)
+    reflectionPlan     TemplatePlan[] @relation("Reflection")
+    // artifacts          TemplatePlan[] @relation("Artifacts")
+    facultyAccepted    Boolean        @default(false)
+    observerAccepted   Boolean        @default(false)
+    timeSlotByObserver Json
+    timeSlotsByFaculty Json
+    scheduledOn        DateTime?
+    meeting            Meetings       @relation(fields: [meetingId], references: [id])
+    meetingId          Int            @unique
 }
 
 model Uninformed {
@@ -206,23 +213,29 @@ model Messages {
     timeStamp  DateTime @default(now())
 }
 
-// -> User => Scheduling => Template
+// -> User => Scheduling => Template, -> User => Post => Template
 model TemplatePlan {
     id              Int                @id @default(autoincrement()) // auto-inc
     steps           TemplatePlanStep[]
-    type            TemplateType       @default(Teaching)
+    type            TemplateType
     assignedTo      User?              @relation("Filled", fields: [assignedId], references: [id])
     assignedId      Int?
     editedBy        User?              @relation("Edited", fields: [editedById], references: [id])
     editedById      Int?
     schedulingT     ObsScheduling?     @relation(fields: [obsSchedulingId], references: [id])
     obsSchedulingId Int?
+
+    // post observation templates
+    PostObsReflection   Post? @relation("Reflection", fields: [postObsReflectionId], references: [id])
+    postObsReflectionId Int?
+    // PostObsArtifacts    Post? @relation("Artifacts", fields: [postObsArtifactsId], references: [id])
+    // postObsArtifactsId  Int?
 }
 
 model TemplatePlanStep {
     id             Int           @id @default(autoincrement())
     field          String
-    name           String
+    name           String?
     response       String?
     TemplatePlan   TemplatePlan? @relation(fields: [templatePlanId], references: [id])
     templatePlanId Int?

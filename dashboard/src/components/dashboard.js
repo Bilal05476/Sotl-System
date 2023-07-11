@@ -106,10 +106,19 @@ const Dashboard = () => {
     return counter;
   };
 
+  const filterSemesterObservation = (semester, status) => {
+    let counter = 0;
+    userData?.observations.map((item) => {
+      if (item.semester === semester && item.observationStatus === status)
+        counter += 1;
+    });
+    return counter;
+  };
+
   const lineData = {
     labels:
       streamFilter === "Yearly"
-        ? ["2023"]
+        ? ["2022", "2023", "2024"]
         : streamFilter === "Quarter"
         ? ["Jan - Mar", "Apr - June", "Jul - Sep", "Oct - Dec"]
         : streamFilter === "Semesters"
@@ -132,11 +141,28 @@ const Dashboard = () => {
       {
         data:
           streamFilter === "Yearly"
-            ? [filterStreamObservation("2023", "Pending")]
+            ? [0, filterStreamObservation("2023", "Pending"), 0]
             : streamFilter === "Quarter"
-            ? [27, 39, 12, 32]
+            ? [
+                filterStreamObservation("Jan", "Pending") +
+                  filterStreamObservation("Feb", "Pending") +
+                  filterStreamObservation("Mar", "Pending"),
+                filterStreamObservation("Apr", "Pending") +
+                  filterStreamObservation("May", "Pending") +
+                  filterStreamObservation("June", "Pending"),
+                filterStreamObservation("July", "Pending") +
+                  filterStreamObservation("Aug", "Pending") +
+                  filterStreamObservation("Sep", "Pending"),
+                filterStreamObservation("Oct", "Pending") +
+                  filterStreamObservation("Nov", "Pending") +
+                  filterStreamObservation("Dec", "Pending"),
+              ]
             : streamFilter === "Semesters"
-            ? [19, 25, 22]
+            ? [
+                filterSemesterObservation("Spring", "Pending"),
+                filterSemesterObservation("Summer", "Pending"),
+                filterSemesterObservation("Fall", "Pending"),
+              ]
             : [
                 filterStreamObservation("Jan", "Pending"),
                 filterStreamObservation("Feb", "Pending"),
@@ -163,11 +189,28 @@ const Dashboard = () => {
       {
         data:
           streamFilter === "Yearly"
-            ? [67]
+            ? [0, filterStreamObservation("2023", "Ongoing"), 0]
             : streamFilter === "Quarter"
-            ? [33, 34, 36, 58]
+            ? [
+                filterStreamObservation("Jan", "Ongoing") +
+                  filterStreamObservation("Feb", "Ongoing") +
+                  filterStreamObservation("Mar", "Ongoing"),
+                filterStreamObservation("Apr", "Ongoing") +
+                  filterStreamObservation("May", "Ongoing") +
+                  filterStreamObservation("June", "Ongoing"),
+                filterStreamObservation("July", "Ongoing") +
+                  filterStreamObservation("Aug", "Ongoing") +
+                  filterStreamObservation("Sep", "Ongoing"),
+                filterStreamObservation("Oct", "Ongoing") +
+                  filterStreamObservation("Nov", "Ongoing") +
+                  filterStreamObservation("Dec", "Ongoing"),
+              ]
             : streamFilter === "Semesters"
-            ? [21, 23, 23]
+            ? [
+                filterSemesterObservation("Spring", "Ongoing"),
+                filterSemesterObservation("Summer", "Ongoing"),
+                filterSemesterObservation("Fall", "Ongoing"),
+              ]
             : [
                 filterStreamObservation("Jan", "Ongoing"),
                 filterStreamObservation("Feb", "Ongoing"),
@@ -194,11 +237,28 @@ const Dashboard = () => {
       {
         data:
           streamFilter === "Yearly"
-            ? [75]
+            ? [0, filterStreamObservation("2023", "Completed"), 0]
             : streamFilter === "Quarter"
-            ? [36, 39, 45, 25]
+            ? [
+                filterStreamObservation("Jan", "Completed") +
+                  filterStreamObservation("Feb", "Completed") +
+                  filterStreamObservation("Mar", "Completed"),
+                filterStreamObservation("Apr", "Completed") +
+                  filterStreamObservation("May", "Completed") +
+                  filterStreamObservation("June", "Completed"),
+                filterStreamObservation("July", "Completed") +
+                  filterStreamObservation("Aug", "Completed") +
+                  filterStreamObservation("Sep", "Completed"),
+                filterStreamObservation("Oct", "Completed") +
+                  filterStreamObservation("Nov", "Completed") +
+                  filterStreamObservation("Dec", "Completed"),
+              ]
             : streamFilter === "Semesters"
-            ? [23, 29, 21]
+            ? [
+                filterSemesterObservation("Spring", "Completed"),
+                filterSemesterObservation("Summer", "Completed"),
+                filterSemesterObservation("Fall", "Completed"),
+              ]
             : [
                 filterStreamObservation("Jan", "Completed"),
                 filterStreamObservation("Feb", "Completed"),
