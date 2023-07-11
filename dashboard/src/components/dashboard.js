@@ -13,7 +13,7 @@ import {
   Loader,
 } from "react-feather";
 import CountUp from "react-countup";
-import { Chart } from "react-google-charts";
+// import { Chart } from "react-google-charts";
 
 import { Bar, Line } from "react-chartjs-2";
 import {
@@ -64,7 +64,7 @@ import {
   pendingColor,
 } from "./colors";
 import welcome from "../assets/images/dashboard/welcome_img.svg";
-import { dateFormater } from "./DateFormater";
+import { dateFormater, dateFormater2 } from "./DateFormater";
 
 ChartJS.register(
   CategoryScale,
@@ -84,7 +84,27 @@ ChartJS.register(
 const URL = process.env.PUBLIC_URL;
 
 const Dashboard = () => {
+  const [{ user, usersandcourses, userData }, dispatch] = useStateValue();
+
   const [streamFilter, setStreamFilter] = useState("Monthly");
+  // const [streamFilterData, setStreamFilterData] = useState({
+  //   pendingObs: 0,
+  //   ongoingObs: 0,
+  //   completeObs: 0,
+  // });
+
+  const filterStreamObservation = (constraint, status) => {
+    let counter = 0;
+    userData?.observations.map((item) => {
+      const formatted = dateFormater2(item.createdAt);
+      if (
+        formatted.split(" ").includes(constraint) &&
+        item.observationStatus === status
+      )
+        counter += 1;
+    });
+    return counter;
+  };
 
   const lineData = {
     labels:
@@ -112,12 +132,25 @@ const Dashboard = () => {
       {
         data:
           streamFilter === "Yearly"
-            ? [66]
+            ? [filterStreamObservation("2023", "Pending")]
             : streamFilter === "Quarter"
             ? [27, 39, 12, 32]
             : streamFilter === "Semesters"
             ? [19, 25, 22]
-            : [5, 3, 6, 5, 4, 4, 8, 9, 5, 4, 3, 10],
+            : [
+                filterStreamObservation("Jan", "Pending"),
+                filterStreamObservation("Feb", "Pending"),
+                filterStreamObservation("Mar", "Pending"),
+                filterStreamObservation("Apr", "Pending"),
+                filterStreamObservation("May", "Pending"),
+                filterStreamObservation("June", "Pending"),
+                filterStreamObservation("July", "Pending"),
+                filterStreamObservation("Aug", "Pending"),
+                filterStreamObservation("Sep", "Pending"),
+                filterStreamObservation("Oct", "Pending"),
+                filterStreamObservation("Nov", "Pending"),
+                filterStreamObservation("Dec", "Pending"),
+              ],
         // borderColor: "gold",
         backgroundColor: pendingColor,
         borderWidth: 0,
@@ -135,7 +168,20 @@ const Dashboard = () => {
             ? [33, 34, 36, 58]
             : streamFilter === "Semesters"
             ? [21, 23, 23]
-            : [5, 6, 3, 7, 9, 3, 4, 7, 6, 5, 8, 4],
+            : [
+                filterStreamObservation("Jan", "Ongoing"),
+                filterStreamObservation("Feb", "Ongoing"),
+                filterStreamObservation("Mar", "Ongoing"),
+                filterStreamObservation("Apr", "Ongoing"),
+                filterStreamObservation("May", "Ongoing"),
+                filterStreamObservation("June", "Ongoing"),
+                filterStreamObservation("July", "Ongoing"),
+                filterStreamObservation("Aug", "Ongoing"),
+                filterStreamObservation("Sep", "Ongoing"),
+                filterStreamObservation("Oct", "Ongoing"),
+                filterStreamObservation("Nov", "Ongoing"),
+                filterStreamObservation("Dec", "Ongoing"),
+              ],
 
         // borderColor: "lightblue",
         backgroundColor: ongoingColor,
@@ -153,7 +199,20 @@ const Dashboard = () => {
             ? [36, 39, 45, 25]
             : streamFilter === "Semesters"
             ? [23, 29, 21]
-            : [6, 8, 5, 4, 6, 7, 8, 8, 4, 6, 7, 4],
+            : [
+                filterStreamObservation("Jan", "Completed"),
+                filterStreamObservation("Feb", "Completed"),
+                filterStreamObservation("Mar", "Completed"),
+                filterStreamObservation("Apr", "Completed"),
+                filterStreamObservation("May", "Completed"),
+                filterStreamObservation("June", "Completed"),
+                filterStreamObservation("July", "Completed"),
+                filterStreamObservation("Aug", "Completed"),
+                filterStreamObservation("Sep", "Completed"),
+                filterStreamObservation("Oct", "Completed"),
+                filterStreamObservation("Nov", "Completed"),
+                filterStreamObservation("Dec", "Completed"),
+              ],
 
         // borderColor: "#040b5b",
         backgroundColor: completeColor,
@@ -289,7 +348,7 @@ const Dashboard = () => {
     chartArea: { left: 0, top: 0, width: "100%", height: "100%" },
     legend: "none",
   };
-  const [{ user, usersandcourses, userData }, dispatch] = useStateValue();
+
   useEffect(() => {
     if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
     fetchUserData(user.id, dispatch);

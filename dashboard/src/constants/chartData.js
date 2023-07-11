@@ -263,6 +263,12 @@ export const lineOptions = {
   },
 
   scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1,
+      },
+    },
     // xAxes: {
     //   barPercentage: 0.7,
     //   categoryPercentage: 0.4,
