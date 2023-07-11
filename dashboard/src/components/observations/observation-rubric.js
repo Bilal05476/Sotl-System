@@ -19,6 +19,7 @@ import { Applink, AccordButton } from "../applink";
 import { info } from "../../constants/Toasters";
 import { fetchObservation, submitScore } from "../Endpoints";
 import { useStateValue } from "../../StateProvider";
+import { ConfirmModal } from "../PopupModal";
 // import DiscreteSlider from "../DiscreteSlider";
 const URL = process.env.PUBLIC_URL;
 
@@ -95,9 +96,14 @@ const Observation_rubric = () => {
         100
       : 0;
 
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const doneRubricScoring = () => {
+    setOpenConfirm(!openConfirm);
+  };
   return (
     <Fragment>
       <Breadcrumb title="Observation Rubrics" parent="Informed Observations" />
+      <ConfirmModal open={openConfirm} setOpen={setOpenConfirm} />
       <Container fluid={true}>
         <Row className="mb-2">
           <Col className="xl-100 d-flex align-items-center justify-content-end">
@@ -202,15 +208,15 @@ const Observation_rubric = () => {
               // onClick={() =>
               //   submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
               // }
-            />
-            <AccordButton
-              text="Submit Score"
-              backgroundColor={completeColor}
-              // onClick={() =>
-              //   submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
-              // }
               onClick={() => updateTotal()}
             />
+            {avgSc > 0 && (
+              <AccordButton
+                text="Done"
+                backgroundColor={completeColor}
+                onClick={() => doneRubricScoring()}
+              />
+            )}
           </div>
         </div>
       </Container>

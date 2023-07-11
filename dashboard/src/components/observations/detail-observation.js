@@ -12,7 +12,7 @@ import {
 import { info } from "../../constants/Toasters";
 import { completeColor, completeColor2 } from "../colors";
 import { dateFormater } from "../DateFormater";
-import PopupModal from "../PopupModal";
+import { PopupModal } from "../PopupModal";
 
 const Detail_observation = () => {
   const { id } = useParams();
