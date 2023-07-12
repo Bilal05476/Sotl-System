@@ -7,6 +7,8 @@ import {
   informedObsCycle,
   obsScheduleCreate,
   obsScheduleCycle,
+  postScheduleCreate,
+  postScheduleCycle,
 } from "../controller/observations.js";
 
 import { protectInitiateObs } from "../middleware/protectRoutes.js";
@@ -18,6 +20,11 @@ obsRoutes
   .put(obsScheduleCycle);
 
 obsRoutes.route("/observation/informed").put(informedObsCycle);
+
+obsRoutes
+  .route("/observation/post-scheduling")
+  .post(postScheduleCreate)
+  .put(postScheduleCycle);
 
 obsRoutes.route("/observations").get(getAllObs);
 obsRoutes.route("/observation/:id").get(getObs);

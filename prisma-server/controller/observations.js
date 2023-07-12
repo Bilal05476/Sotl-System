@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
-import { TeachingSteps, Rubrics } from "../rubrics.js";
+import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
 // import nodemailer from "nodemailer";
 
 // @desc   Initiate Observation by Head of department
@@ -149,7 +149,17 @@ export const getObs = asyncHandler(async (req, res) => {
               rubrics: true,
             },
           },
-          postObservation: true,
+          postObservation: {
+            include: {
+              timeSlotsByObserver: true,
+              timeSlotsByFaculty: true,
+              reflectionPlan: {
+                include: {
+                  steps: true,
+                },
+              },
+            },
+          },
           uninformedObservation: true,
           professionalDPlan: true,
         },
@@ -164,7 +174,7 @@ export const getObs = asyncHandler(async (req, res) => {
 });
 
 // @desc   Create observation scheduling
-// @route  POST api/observations/scheduling
+// @route  POST api/observation/scheduling
 // @access Private for Observer
 export const obsScheduleCreate = asyncHandler(async (req, res) => {
   const { observationsId, facultyId, courseId } = req.body;
@@ -209,7 +219,7 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
 });
 
 // @desc   update observation scheduling
-// @route  PUT api/observations/scheduling
+// @route  PUT api/observation/scheduling
 // @access Private for Observer and Faculty
 export const obsScheduleCycle = asyncHandler(async (req, res) => {
   const {
@@ -488,4 +498,75 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
       });
     }
   }
+});
+
+// @desc   Create post observation scheduling
+// @route  POST api/observation/post-scheduling
+// @access Private for Observer
+export const postScheduleCreate = asyncHandler(async (req, res) => {
+  const { timeSlots, observationsId, facultyId } = req.body;
+
+  let odates = [];
+  if (timeSlots) {
+    timeSlots.map((item) => odates.push({ date: item }));
+    // [{date: "2023-07-09:00:00:00Z", date: "2023-07-10:00:00:00Z"}]
+  }
+
+  const createPostObs = await prisma.observations.update({
+    where: {
+      id: observationsId,
+    },
+    data: {
+      meetings: {
+        create: {
+          postObservation: {
+            create: {
+              timeSlotsByObserver: {
+                createMany: {
+                  data: odates,
+                },
+              },
+              reflectionPlan: {
+                create: {
+                  type: "Reflection",
+                  steps: {
+                    createMany: {
+                      data: ReflectionSteps,
+                    },
+                  },
+                  assignedId: facultyId,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  res.status(200).json(createPostObs);
+});
+
+// @desc   Update post observation scheduling
+// @route  Put api/observation/post-scheduling
+// @access Private for Observer and Faculty
+export const postScheduleCycle = asyncHandler(async (req, res) => {
+  const {
+    observationsId,
+    timeSlotsByFaculty,
+    scheduledOn,
+    status,
+    observerAccepted,
+    facultyAccepted,
+    templateResponse,
+    templateId,
+    editedById,
+  } = req.body;
+
+  const updatedPostObs = await prisma.observations.update({
+    where: {
+      id: observationsId,
+    },
+    data: {},
+  });
+  res.status(200).json(updatedPostObs);
 });

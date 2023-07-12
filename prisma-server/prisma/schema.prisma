@@ -244,10 +244,12 @@ model TemplatePlanStep {
 
 // Store Mutliple Date Time
 model DateTimes {
-    id            Int      @id @default(autoincrement())
-    date          DateTime
-    observerDates Post[]   @relation("Observer")
-    facultyDates  Post[]   @relation("Faculty")
+    id             Int      @id @default(autoincrement())
+    date           DateTime
+    observerDate   Post?    @relation("Observer", fields: [observerDateId], references: [id])
+    observerDateId Int?
+    facultyDate    Post?    @relation("Faculty", fields: [facultyDateId], references: [id])
+    facultyDateId  Int?
 }
 
 // enums
