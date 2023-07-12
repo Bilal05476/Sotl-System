@@ -147,100 +147,113 @@ export const Rubrics = [
 export const TeachingSteps = [
   {
     field: "Program Outcomes for this Program (PLOs)",
-    // name: "ProgramOutcomes",
+    name: "ProgramOutcomes",
   },
   {
     field: "Learning Outcomes for this Course (CLOs)",
-    // name: "LearningOutcomes",
+    name: "LearningOutcomes",
   },
   {
     field: "Learning Resources",
-    // name: "LearningResources",
+    name: "LearningResources",
   },
   {
     field: "Teaching Summary",
-    // name: "TeachingSummary",
+    name: "TeachingSummary",
   },
   {
     field: "Pre Teaching / Warm-up",
-    // name: "PreTeaching",
+    name: "PreTeaching",
   },
   {
     field: "Post Teaching",
-    // name: "PostTeaching",
+    name: "PostTeaching",
   },
   {
     field: "Learning Feedbacks (activity, quiz, no-graded/graded assessments)",
-    // name: "Feedback",
+    name: "Feedback",
   },
 ];
 
 export const ReflectionSteps = [
   {
     field: "My overall perception of today’s class in ONE word:",
-    name: "Teacher Perspective",
+    code: "Teacher Perspective",
+    name: "Perception",
   },
   {
     field:
       "THREE ideas/strategies that usually work for my students in this class:",
-    name: "Teacher Perspective",
+    code: "Teacher Perspective",
+    name: "StrategiesWork",
   },
   {
     field:
       "THREE ideas/strategies that will never work for students in this class:",
-    name: "Teacher Perspective",
+    code: "Teacher Perspective",
+    name: "StrategiesNeverWork",
   },
   {
     field:
       "TWO ideas/strategies I would like to take forward to my next teaching session:",
-    name: "Teacher Perspective",
+    code: "Teacher Perspective",
+    name: "ForwardStrategies",
   },
   {
     field:
       "TWO ideas/strategies/factors I would like to see removed from my next teaching session:",
-    name: "Teacher Perspective",
+    code: "Teacher Perspective",
+    name: "RemoveStrategies",
   },
   {
     field:
       "List as many words you remember that your students used in today’s class:",
-    name: "Teacher Perspective",
+    code: "Teacher Perspective",
+    name: "WordsRemember",
   },
 
   {
     field:
       "Cite TWO supportive factors and how they supported your teaching effort.",
-    name: "Teaching Context",
+    code: "Teaching Context",
+    name: "SupportiveFactors",
   },
   {
     field:
       "Cite TWO constraining factors and how they constrained your teaching effort.",
-    name: "Teaching Context",
+    code: "Teaching Context",
+    name: "TeachingConstrain",
   },
 
   {
     field:
       "Cite any student or group of students you remember from today’s class. Why they stood out for you?",
-    name: "Student Learning",
+    code: "Student Learning",
+    name: "CiteOfStudent",
   },
   {
     field:
       "How do I know that my students (some if not all) achieved the planned course learning outcomes? Cite 1-2 specific examples.",
-    name: "Student Learning",
+    code: "Student Learning",
+    name: "CourseLeaning",
   },
 
   {
     field:
       "Go back to your teaching plan’s summary and analyze the differences across the plan and its implementation. Be specific.",
-    name: "Reflective Write-ups",
+    code: "Reflective Write-ups",
+    name: "PlanAndImplementation",
   },
   {
     field:
       "Analyze the constraining factors in today’s class. What could you change in your teaching plan to address these factors. Be specific.",
-    name: "Reflective Write-ups",
+    code: "Reflective Write-ups",
+    name: "ConstrainingFactors",
   },
   {
     field:
       "Imagine an ideal teaching day in this class. What would make it ‘ideal’. Be specific",
-    name: "Reflective Write-ups",
+    code: "Reflective Write-ups",
+    name: "IdealTeaching",
   },
 ];
