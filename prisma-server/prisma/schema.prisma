@@ -132,17 +132,17 @@ model Rubric {
 }
 
 model Post {
-    id                 Int            @id @default(autoincrement()) // auto-inc
-    status             Status         @default(Ongoing)
-    reflectionPlan     TemplatePlan[] @relation("Reflection")
+    id                  Int            @id @default(autoincrement()) // auto-inc
+    status              Status         @default(Ongoing)
+    reflectionPlan      TemplatePlan[] @relation("Reflection")
     // artifacts          TemplatePlan[] @relation("Artifacts")
-    facultyAccepted    Boolean        @default(false)
-    observerAccepted   Boolean        @default(false)
-    timeSlotByObserver Json
-    timeSlotsByFaculty Json
-    scheduledOn        DateTime?
-    meeting            Meetings       @relation(fields: [meetingId], references: [id])
-    meetingId          Int            @unique
+    facultyAccepted     Boolean        @default(false)
+    observerAccepted    Boolean        @default(false)
+    timeSlotsByObserver DateTimes[]    @relation("Observer")
+    timeSlotsByFaculty  DateTimes[]    @relation("Faculty")
+    scheduledOn         DateTime?
+    meeting             Meetings       @relation(fields: [meetingId], references: [id])
+    meetingId           Int            @unique
 }
 
 model Uninformed {
@@ -239,6 +239,14 @@ model TemplatePlanStep {
     response       String?
     TemplatePlan   TemplatePlan? @relation(fields: [templatePlanId], references: [id])
     templatePlanId Int?
+}
+
+// Store Mutliple Date Time
+model DateTimes {
+    id            Int      @id @default(autoincrement())
+    date          DateTime
+    observerDates Post[]   @relation("Observer")
+    facultyDates  Post[]   @relation("Faculty")
 }
 
 // enums
