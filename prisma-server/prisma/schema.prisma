@@ -164,7 +164,8 @@ model Courses {
     id              Int            @id @default(autoincrement()) // auto-inc
     courseCode      String
     name            String
-    department      Department
+    // department      Departments[]
+    department      String
     campus          Campus
     isElective      Boolean        @default(false)
     isDepthElective Boolean        @default(false)
@@ -251,6 +252,12 @@ model DateTimes {
     facultyDate    Post?    @relation("Faculty", fields: [facultyDateId], references: [id])
     facultyDateId  Int?
 }
+
+// model Departments {
+//     id      Int       @id @default(autoincrement())
+//     dept    String
+//     Courses Courses[]
+// }
 
 // enums
 enum Role {

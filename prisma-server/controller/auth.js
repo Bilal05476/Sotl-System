@@ -37,43 +37,26 @@ export const createUser = asyncHandler(async (req, res) => {
     const newUser = await prisma.user.create({
       data: newUserData,
     });
-    // const newUser = null;
 
     let ids = [];
-    if (courses) {
-      courses.map((item) => ids.push({ id: item }));
-    }
 
-    if (newUser) {
-      // if (newUser.role === "Observer") {
-      //   await prisma.user.update({
-      //     where: {
-      //       id: newUser.id,
-      //     },
-      //     data: {
-      //       observerCourses: {
-      //         set: ids,
-      //       },
-      //     },
-      //   });
-      // } else
-      if (newUser.role === "Faculty") {
-        await prisma.user.update({
-          where: {
-            id: newUser.id,
+    if (newUser?.role === "Faculty") {
+      courses.map((item) => ids.push({ id: item }));
+      await prisma.user.update({
+        where: {
+          id: newUser.id,
+        },
+        data: {
+          courseSlots: {
+            set: ids,
           },
-          data: {
-            courseSlots: {
-              set: ids,
-            },
-          },
-        });
-      }
-      // create user session token
-      const token = generateJWT(newUser.id);
-      newUser.token = token;
-      res.status(200).json(newUser);
+        },
+      });
     }
+    // create user session token
+    const token = generateJWT(newUser.id);
+    newUser.token = token;
+    res.status(200).json(newUser);
   }
 });
 

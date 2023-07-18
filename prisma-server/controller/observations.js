@@ -10,18 +10,42 @@ import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
 export const initiate = asyncHandler(async (req, res) => {
   const { facultyIds, semester, observerId, hodId } = req.body;
 
+  let exitedObsForFaculty = [];
+
   for (let i = 0; i < facultyIds.length; i++) {
-    await prisma.observations.create({
-      data: {
+    const existed = await prisma.observations.findFirst({
+      where: {
         facultyId: facultyIds[i],
-        observerId,
-        hodId,
-        semester,
+      },
+      select: {
+        observationStatus: true,
+        faculty: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
+    if (existed && existed.observationStatus !== "Completed") {
+      exitedObsForFaculty.push({
+        message: `Observation is already ongoing or pending for that faculty: ${existed.faculty.id}) ${existed.faculty.name}`,
+      });
+    } else {
+      await prisma.observations.create({
+        data: {
+          facultyId: facultyIds[i],
+          observerId,
+          hodId,
+          semester,
+        },
+      });
+    }
   }
   const findObservations = await prisma.observations.findMany();
-  res.status(200).json(findObservations);
+  res
+    .status(200)
+    .json({ observations: findObservations, existed: exitedObsForFaculty });
 });
 
 // let obsUsers = [facultyId, observerId, hodId];
@@ -82,6 +106,7 @@ export const getObs = asyncHandler(async (req, res) => {
         select: {
           name: true,
           email: true,
+          courseSlots: true,
         },
       },
       observer: {
@@ -137,11 +162,7 @@ export const getObs = asyncHandler(async (req, res) => {
           reasons: true,
         },
       },
-      course: {
-        include: {
-          slots: true,
-        },
-      },
+      course: true,
       meetings: {
         include: {
           informedObservation: {
@@ -437,7 +458,8 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 // @route  PUT api/observation/informed
 // @access Private (only faculty and observer update scoring)
 export const informedObsCycle = asyncHandler(async (req, res) => {
-  const { informedId, rubricsFinal, facultyScore, observerScore } = req.body;
+  const { informedId, rubricsFinal, facultyScore, observerScore, status } =
+    req.body;
 
   if (facultyScore) {
     try {
@@ -491,6 +513,25 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
 
       res.status(200).json({
         message: "Rubrics Score Successfully Submitted!",
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err,
+      });
+    }
+  }
+  if (status) {
+    try {
+      await prisma.informed.update({
+        where: {
+          id: informedId,
+        },
+        data: {
+          status,
+        },
+      });
+      res.status(200).json({
+        message: "Informed Rubrics Observation Successfully Completed!",
       });
     } catch (err) {
       res.status(400).json({

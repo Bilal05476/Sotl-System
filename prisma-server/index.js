@@ -58,9 +58,34 @@ app.listen(port, () => {
 // async function main() {
 //   const d = await prisma.observations.delete({
 //     where: {
-//       id: 25,
+//       id: 3,
 //     },
 //   });
 //   console.log(d);
 // }
 // main();
+
+// "rubricsFinal": [
+//     {"rid": 3340, "score": 4},
+//     {"rid": 4032, "score": 4},
+//     {"rid": 2320, "score": 4},
+//     {"rid": 430, "score": 4},
+//     {"rid": 23320, "score": 4},
+//     {"rid": 3230, "score": 4},
+//     {"rid": 23320, "score": 4},
+//     {"rid": 2320, "score": 4},
+//     {"rid": 3230, "score": 4},
+//     {"rid": 23230, "score": 4},
+//     {"rid": 1132, "score": 4},
+//     {"rid": 132322, "score": 4},
+//     {"rid": 1323, "score": 4},
+//     {"rid": 132324, "score": 4},
+//     {"rid": 132325, "score": 4},
+//     {"rid": 1326, "score": 4},
+//     {"rid": 123237, "score": 4},
+//     {"rid": 132328, "score": 4},
+//     {"rid": 13239, "score": 4},
+//     {"rid": 23230, "score": 4}
+//   ],
+//   "facultyScore": 80,
+//   "observerScore": 80
