@@ -15,10 +15,19 @@ export const initiate = asyncHandler(async (req, res) => {
   for (let i = 0; i < facultyIds.length; i++) {
     const existed = await prisma.observations.findFirst({
       where: {
+        OR: [
+          { observationStatus: "Pending" },
+          { observationStatus: "Ongoing" },
+        ],
         facultyId: facultyIds[i],
       },
       select: {
         observationStatus: true,
+        course: {
+          select: {
+            name: true,
+          },
+        },
         faculty: {
           select: {
             id: true,
@@ -27,9 +36,9 @@ export const initiate = asyncHandler(async (req, res) => {
         },
       },
     });
-    if (existed && existed.observationStatus !== "Completed") {
+    if (existed) {
       exitedObsForFaculty.push({
-        message: `Observation is already ongoing or pending for that faculty: ${existed.faculty.id}) ${existed.faculty.name}`,
+        message: `Observation is already ${existed.observationStatus} for the faculty: ${existed.faculty.id}) ${existed.faculty.name} for the ${existed.course.name} course`,
       });
     } else {
       await prisma.observations.create({
@@ -553,31 +562,27 @@ export const postScheduleCreate = asyncHandler(async (req, res) => {
     // [{date: "2023-07-09:00:00:00Z", date: "2023-07-10:00:00:00Z"}]
   }
 
-  const createPostObs = await prisma.observations.update({
+  const createPostObs = await prisma.meetings.update({
     where: {
-      id: observationsId,
+      observationsId,
     },
     data: {
-      meetings: {
+      postObservation: {
         create: {
-          postObservation: {
+          timeSlotsByObserver: {
+            createMany: {
+              data: odates,
+            },
+          },
+          reflectionPlan: {
             create: {
-              timeSlotsByObserver: {
+              type: "Reflection",
+              steps: {
                 createMany: {
-                  data: odates,
+                  data: ReflectionSteps,
                 },
               },
-              reflectionPlan: {
-                create: {
-                  type: "Reflection",
-                  steps: {
-                    createMany: {
-                      data: ReflectionSteps,
-                    },
-                  },
-                  assignedId: facultyId,
-                },
-              },
+              assignedId: facultyId,
             },
           },
         },
