@@ -119,12 +119,12 @@ const Observation_rubric = () => {
                 score: `${observerSc?.toFixed(1)} / 80.0`,
               },
               {
-                color: avgSc > 60 ? completeColor : pendingColor,
+                color: completeColor,
                 text: "FINAL SCORE",
                 score: `${avgSc?.toFixed(1)} / 80.0`,
               },
               {
-                color: perSc > 80 ? completeColor : pendingColor,
+                color: completeColor,
                 text: "SCORE PERCENTAGE",
                 score: `${perSc?.toFixed(1)}%`,
               },
@@ -201,23 +201,23 @@ const Observation_rubric = () => {
             text="Back"
           />
 
-          <div className="d-flex align-items-center justify-content-between">
-            <AccordButton
-              text="Save Score"
-              backgroundColor={completeColor2}
-              // onClick={() =>
-              //   submitScore(obsDetails?.meetings?.informedObservation?.id, 23)
-              // }
-              onClick={() => updateTotal()}
-            />
-            {avgSc > 0 && (
+          {obsDetails?.meetings?.informedObservation?.status !==
+            "Completed" && (
+            <div className="d-flex align-items-center justify-content-between">
               <AccordButton
-                text="Done"
-                backgroundColor={completeColor}
-                onClick={() => doneRubricScoring()}
+                text="Save Score"
+                backgroundColor={completeColor2}
+                onClick={() => updateTotal()}
               />
-            )}
-          </div>
+              {avgSc > 0 && (
+                <AccordButton
+                  text="Done"
+                  backgroundColor={completeColor}
+                  onClick={() => doneRubricScoring()}
+                />
+              )}
+            </div>
+          )}
         </div>
       </Container>
     </Fragment>

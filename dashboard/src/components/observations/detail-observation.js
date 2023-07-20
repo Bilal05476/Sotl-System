@@ -333,7 +333,7 @@ const Detail_observation = () => {
                 <>
                   {isOpen === "open" && (
                     <div className="accordion-body text-center">
-                      <strong>No data!</strong>
+                      <strong>Not started!</strong>
                     </div>
                   )}
                 </>
@@ -362,8 +362,67 @@ const Detail_observation = () => {
               {obsDetail.meetings?.postObservation ? (
                 <>
                   {isOpen === "open" && (
-                    <div className="accordion-body">
-                      <strong>Ruko zara, sabar karo!</strong>
+                    <div className="accordion-body px-2 user-status table-responsive latest-order-table">
+                      <Table borderless>
+                        <thead>
+                          <tr>
+                            {/* <th scope="col">Id</th> */}
+                            <th scope="col">Reflection Plan</th>
+                            <th scope="col">Artifacts</th>
+                            <th scope="col">Schedule On</th>
+                            <th scope="col">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            {[0, 1].map((item) => (
+                              <td
+                                key={item}
+                                className="digits"
+                                title="Download"
+                              >
+                                {obsDetail?.meetings?.postObservation
+                                  ?.reflectionPlan[0]?.editedBy && (
+                                  <span
+                                    className="d-flex alogn-items-center"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => alert("PDF Downloaded")}
+                                  >
+                                    <DownloadCloud
+                                      className="mx-2"
+                                      color={completeColor}
+                                      size={20}
+                                    />{" "}
+                                    Download
+                                  </span>
+                                )}
+                              </td>
+                            ))}
+                            {dateFormater(
+                              obsDetail?.meetings?.postObservation?.scheduledOn
+                            )}
+                            <td
+                              className={`digits ${
+                                obsDetail?.meetings.postObservation.status ===
+                                "Completed"
+                                  ? "text-success"
+                                  : "text-primary"
+                              }`}
+                            >
+                              {obsDetail?.meetings.postObservation.status}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+
+                      <div style={{ textAlign: "right" }}>
+                        <NavLink
+                          to={`/observations/post-observation-meeting/${id}`}
+                          className="btn btn-primary mx-2"
+                        >
+                          Open
+                        </NavLink>
+                      </div>
                     </div>
                   )}
                 </>
@@ -371,7 +430,7 @@ const Detail_observation = () => {
                 <>
                   {isOpen === "open" && (
                     <div className="accordion-body text-center">
-                      <strong>No data!</strong>
+                      <strong>Not started!</strong>
                     </div>
                   )}
                 </>
@@ -409,7 +468,7 @@ const Detail_observation = () => {
                 <>
                   {isOpen === "open" && (
                     <div className="accordion-body text-center">
-                      <strong>No data!</strong>
+                      <strong>Not started!</strong>
                     </div>
                   )}
                 </>

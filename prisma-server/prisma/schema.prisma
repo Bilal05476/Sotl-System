@@ -140,6 +140,7 @@ model Post {
     observerAccepted    Boolean        @default(false)
     timeSlotsByObserver DateTimes[]    @relation("Observer")
     timeSlotsByFaculty  DateTimes[]    @relation("Faculty")
+    location            String?
     scheduledOn         DateTime?
     meeting             Meetings       @relation(fields: [meetingId], references: [id])
     meetingId           Int            @unique
@@ -165,7 +166,7 @@ model Courses {
     courseCode      String
     name            String
     // department      Departments[]
-    department      String
+    department      Department
     campus          Campus
     isElective      Boolean        @default(false)
     isDepthElective Boolean        @default(false)
@@ -246,7 +247,7 @@ model TemplatePlanStep {
 // Store Mutliple Date Time
 model DateTimes {
     id             Int      @id @default(autoincrement())
-    date           DateTime
+    dateTime       DateTime
     observerDate   Post?    @relation("Observer", fields: [observerDateId], references: [id])
     observerDateId Int?
     facultyDate    Post?    @relation("Faculty", fields: [facultyDateId], references: [id])

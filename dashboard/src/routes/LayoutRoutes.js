@@ -47,6 +47,7 @@ import Reflection from "../components/Templates/Reflection";
 import Artifacts from "../components/Templates/Artifacts";
 import ParentComponent from "../components/ParentComponent";
 import ChildComponent from "../components/ChildComponent";
+import Postobservation from "../components/observations/post-observation";
 
 const URL = process.env.PUBLIC_URL;
 const LayoutRoutes = () => {
@@ -146,7 +147,6 @@ const LayoutRoutes = () => {
           /> */}
           <Route path={`${URL}/users/list-user`} element={<Listuser />} />
           <Route path={`${URL}/users/create-user`} element={<Createuser />} />
-
           <Route
             path={`${URL}/courses/list-courses`}
             element={<Listcourses />}
@@ -159,7 +159,6 @@ const LayoutRoutes = () => {
             path={`${URL}/courses/assign-courses`}
             element={<Assigncourses />}
           />
-
           <Route
             path={`${URL}/templates/teaching-plan`}
             element={<Teaching />}
@@ -169,7 +168,6 @@ const LayoutRoutes = () => {
             element={<Reflection />}
           />
           <Route path={`${URL}/templates/artifacts`} element={<Artifacts />} />
-
           <Route
             path={`${URL}/observations/list-observation`}
             element={<Listobservation />}
@@ -190,6 +188,11 @@ const LayoutRoutes = () => {
             path={`${URL}/observations/observation-scheduling/:id`}
             element={<SchedulingPage />}
           />
+          <Route
+            path={`${URL}/observations/post-observation-meeting/:id`}
+            element={<Postobservation />}
+          />
+
           {/* <Route
             path={`${URL}/vendors/list_vendors`}
             element={<Listvendors />}

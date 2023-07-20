@@ -554,13 +554,11 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
 // @route  POST api/observation/post-scheduling
 // @access Private for Observer
 export const postScheduleCreate = asyncHandler(async (req, res) => {
-  const { timeSlots, observationsId, facultyId } = req.body;
+  const { timeSlotsByObserver, observationsId, facultyId, location } = req.body;
 
   let odates = [];
-  if (timeSlots) {
-    timeSlots.map((item) => odates.push({ date: item }));
-    // [{date: "2023-07-09:00:00:00Z", date: "2023-07-10:00:00:00Z"}]
-  }
+  timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
+  // [{date: "2023-07-09:00:00:00Z", date: "2023-07-10:00:00:00Z"}]
 
   const createPostObs = await prisma.meetings.update({
     where: {
@@ -569,6 +567,7 @@ export const postScheduleCreate = asyncHandler(async (req, res) => {
     data: {
       postObservation: {
         create: {
+          location,
           timeSlotsByObserver: {
             createMany: {
               data: odates,
@@ -593,7 +592,7 @@ export const postScheduleCreate = asyncHandler(async (req, res) => {
 });
 
 // @desc   Update post observation scheduling
-// @route  Put api/observation/post-scheduling
+// @route  PUT api/observation/post-scheduling
 // @access Private for Observer and Faculty
 export const postScheduleCycle = asyncHandler(async (req, res) => {
   const {
@@ -606,13 +605,31 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
     templateResponse,
     templateId,
     editedById,
+    timeSlotsByObserver,
+    facultyId,
+    location,
   } = req.body;
 
-  const updatedPostObs = await prisma.observations.update({
+  let odates = [];
+  timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
+  // [{date: "2023-07-09:00:00:00Z", date: "2023-07-10:00:00:00Z"}]
+
+  const updatedPostObs = await prisma.meetings.update({
     where: {
-      id: observationsId,
+      observationsId,
     },
-    data: {},
+    data: {
+      postObservation: {
+        update: {
+          location,
+          timeSlotsByObserver: {
+            createMany: {
+              data: odates,
+            },
+          },
+        },
+      },
+    },
   });
   res.status(200).json(updatedPostObs);
 });
