@@ -19,3 +19,16 @@ export const dateFormater2 = (dateToFromat) => {
   }
   return "---";
 };
+
+export const streamDateFormater = (dateToFromat) => {
+  if (dateToFromat) {
+    const date = new Date(dateToFromat);
+    const formattedDate = date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return formattedDate;
+  }
+  return "--";
+};

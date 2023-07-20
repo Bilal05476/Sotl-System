@@ -63,8 +63,8 @@ import {
   ongoingColor,
   pendingColor,
 } from "./colors";
-import welcome from "../assets/images/dashboard/welcome_img.svg";
-import { dateFormater, dateFormater2 } from "./DateFormater";
+// import welcome from "../assets/images/dashboard/welcome_img.svg";
+import { dateFormater, streamDateFormater } from "./DateFormater";
 
 ChartJS.register(
   CategoryScale,
@@ -96,7 +96,7 @@ const Dashboard = () => {
   const filterStreamObservation = (constraint, status) => {
     let counter = 0;
     userData?.observations.map((item) => {
-      const formatted = dateFormater2(item.createdAt);
+      const formatted = streamDateFormater(item.createdAt);
       if (
         formatted.split(" ").includes(constraint) &&
         item.observationStatus === status

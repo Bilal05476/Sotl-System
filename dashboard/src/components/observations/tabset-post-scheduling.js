@@ -370,29 +370,31 @@ const TabsetPostScheduling = ({ role }) => {
       )}
       {role === "Faculty" && (
         <>
-          {!obs?.obsRequest?.teachingPlan[0]?.editedBy && (
+          {!obs?.meetings?.postObservation?.reflectionPlan[0]?.editedBy && (
             <MultiStepForm
-              tabtitle={"Provide Teaching Plan Details"}
-              steps={obs?.obsRequest?.teachingPlan[0]?.steps}
+              tabtitle={"Provide Relfection Plan Details"}
+              steps={obs?.meetings?.postObservation?.reflectionPlan[0]?.steps}
               tempId={
-                obs?.obsRequest?.teachingPlan[0]?.steps[0]?.templatePlanId
+                obs?.meetings?.postObservation?.reflectionPlan[0]?.steps[0]
+                  ?.templatePlanId
               }
               observationsId={Number(id)}
               setObs={setObs}
+              tempType={"Reflection"}
             />
           )}
 
           <Tabs>
             <TabPanel>
-              {obs?.obsRequest?.teachingPlan[0]?.editedBy && (
+              {obs?.meetings?.postObservation?.reflectionPlan[0]?.editedBy && (
                 <>
                   <Form className="needs-validation user-add" noValidate="">
                     <FormGroup className="row">
                       <Label className="col-xl-3 col-md-4">
-                        <span>*</span> Provide Avalaible Slots
+                        <span>*</span> Select One Available Slot
                       </Label>
                       <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                        {obs?.course?.slots.map((item) => {
+                        {/* {obs?.course?.slots.map((item) => {
                           if (item.facultyId === user.id)
                             return (
                               <TimeSlotSpan
@@ -406,7 +408,7 @@ const TabsetPostScheduling = ({ role }) => {
                                 slots={timeSlotsByObserver}
                               />
                             );
-                        })}
+                        })} */}
                       </div>
                     </FormGroup>
                     <FormGroup className="row">

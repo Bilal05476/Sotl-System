@@ -282,6 +282,7 @@ const TabsetScheduling = ({ role }) => {
               }
               observationsId={Number(id)}
               setObs={setObs}
+              tempType={"Teaching"}
             />
           )}
 
