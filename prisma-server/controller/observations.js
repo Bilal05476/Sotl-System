@@ -600,36 +600,103 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
     timeSlotsByFaculty,
     scheduledOn,
     status,
-    observerAccepted,
-    facultyAccepted,
     templateResponse,
     templateId,
-    editedById,
     timeSlotsByObserver,
-    facultyId,
+    editedById,
     location,
   } = req.body;
 
-  let odates = [];
-  timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
-  // [{date: "2023-07-09:00:00:00Z", date: "2023-07-10:00:00:00Z"}]
+  if (timeSlotsByObserver) {
+    let odates = [];
+    timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
+    // [{dateTime: "2023-07-09:00:00:00Z", dateTime: "2023-07-10:00:00:00Z"}]
 
-  const updatedPostObs = await prisma.meetings.update({
-    where: {
-      observationsId,
-    },
-    data: {
-      postObservation: {
-        update: {
-          location,
-          timeSlotsByObserver: {
-            createMany: {
-              data: odates,
+    const updatedPostObs = await prisma.meetings.update({
+      where: {
+        observationsId,
+      },
+      data: {
+        postObservation: {
+          update: {
+            location,
+            timeSlotsByObserver: {
+              createMany: {
+                data: odates,
+              },
             },
           },
         },
       },
-    },
-  });
-  res.status(200).json(updatedPostObs);
+    });
+    res.status(200).json(updatedPostObs);
+  }
+  if (timeSlotsByFaculty) {
+    // "2023-07-09:00:00:00Z"
+    const updatedPostObs = await prisma.meetings.update({
+      where: {
+        observationsId,
+      },
+      data: {
+        postObservation: {
+          update: {
+            timeSlotsByFaculty: {
+              create: {
+                dateTime: timeSlotsByFaculty,
+              },
+            },
+          },
+        },
+      },
+    });
+    res.status(200).json(updatedPostObs);
+  }
+  if (status && scheduledOn) {
+    const updatedPostObs = await prisma.meetings.update({
+      where: {
+        observationsId,
+      },
+      data: {
+        postObservation: {
+          update: {
+            facultyAccepted: true,
+            observerAccepted: true,
+            scheduledOn,
+          },
+        },
+      },
+    });
+    res.status(200).json(updatedPostObs);
+  }
+  if (templateResponse) {
+    try {
+      await prisma.templatePlan.update({
+        where: {
+          id: templateId,
+        },
+        data: {
+          editedById,
+        },
+      });
+      templateResponse.map(async (item) => {
+        const { id, response } = item;
+        await prisma.templatePlanStep.update({
+          where: {
+            id,
+          },
+          data: {
+            response,
+          },
+        });
+      });
+
+      res.status(200).json({
+        message: "Reflection Template Successfully Submitted!",
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err,
+      });
+    }
+  }
 });

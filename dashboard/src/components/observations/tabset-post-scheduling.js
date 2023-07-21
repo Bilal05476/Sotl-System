@@ -20,7 +20,7 @@ import { dateFormater2 } from "../DateFormater";
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
 const TabsetPostScheduling = ({ role }) => {
-  const [{ user }] = useStateValue();
+  // const [{ user }] = useStateValue();
   const { id } = useParams();
   const [obs, setObs] = useState("");
 
