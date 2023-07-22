@@ -78,7 +78,8 @@ export async function startScheduling(
   facultyId,
   observationsId,
   courseId,
-  toastId
+  toastId,
+  setObsDetail
 ) {
   try {
     const res = await fetch(`${BASEURL}/observation/scheduling`, {
@@ -96,6 +97,7 @@ export async function startScheduling(
     } else {
       toast.dismiss(toastId.current);
       successes("Scheduling Created Successfully!");
+      fetchObservation(setObsDetail, observationsId);
     }
   } catch (err) {
     toast.dismiss(toastId.current);

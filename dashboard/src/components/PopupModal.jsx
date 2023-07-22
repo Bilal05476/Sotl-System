@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { completeColor2 } from "./colors";
 import warning from "../assets/images/dashboard/redwarning.png";
@@ -7,15 +7,22 @@ export function PopupModal({
   open,
   setOpen,
   facultycourses,
+  setfacultycourses,
   course,
   setCourse,
   startSchedule,
 }) {
-  const toggleCourse = (id) => {
-    if (Number(course) === Number(id)) {
-      setCourse("");
+  const [ssid, setsid] = useState("");
+
+  const toggleCourse = (cid, sid) => {
+    if (Number(ssid) === Number(sid)) {
+      setsid("");
     } else {
-      setCourse(Number(id));
+      if (!course) {
+        setCourse(Number(cid));
+        console.log("called");
+      }
+      setsid(Number(sid));
     }
   };
   return (
@@ -28,17 +35,17 @@ export function PopupModal({
         {facultycourses.map((item) => (
           <span
             style={{
-              backgroundColor: course === item.id && completeColor2,
+              backgroundColor: ssid === item.sid && completeColor2,
               padding: "0.2rem 0.6rem",
               marginRight: "0.3rem",
               borderRadius: "5px",
-              color: course === item.id && "white",
-              boxShadow: course === item.id && "1px 1px 1px #1e1e1e54",
+              color: ssid === item.sid && "white",
+              boxShadow: ssid === item.sid && "2px 2px 4px #1e1e1e54",
               border: `1px solid ${completeColor2}`,
               cursor: "pointer",
             }}
-            key={item.id}
-            onClick={() => toggleCourse(item.id)}
+            key={item.sid}
+            onClick={() => toggleCourse(item.cid, item.sid)}
           >
             {item.n}
           </span>
@@ -48,7 +55,15 @@ export function PopupModal({
         <Button color="primary" onClick={startSchedule}>
           Start Scheduling
         </Button>
-        <Button color="secondary" onClick={() => setOpen(!open)}>
+        <Button
+          color="secondary"
+          onClick={() => {
+            setCourse("");
+            setsid("");
+            setfacultycourses([]);
+            setOpen(!open);
+          }}
+        >
           Cancel
         </Button>
       </ModalFooter>

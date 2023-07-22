@@ -296,21 +296,18 @@ const TabsetScheduling = ({ role }) => {
                         <span>*</span> Provide Avalaible Slots
                       </Label>
                       <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                        {obs?.course?.slots.map((item) => {
-                          if (item.facultyId === user.id)
-                            return (
-                              <TimeSlotSpan
-                                key={item.id}
-                                id={item.id}
-                                location={item.location}
-                                time={item.time}
-                                day={item.day}
-                                cursor={true}
-                                onClick={() => onSelectSlotFaculty(item.id)}
-                                slots={timeSlotsByFaculty}
-                              />
-                            );
-                        })}
+                        {obs?.faculty.courseSlots.map((item) => (
+                          <TimeSlotSpan
+                            key={item.id}
+                            id={item.id}
+                            location={item.location}
+                            time={item.time}
+                            day={item.day}
+                            cursor={true}
+                            onClick={() => onSelectSlotFaculty(item.id)}
+                            slots={timeSlotsByFaculty}
+                          />
+                        ))}
                       </div>
                     </FormGroup>
                     <FormGroup className="row">

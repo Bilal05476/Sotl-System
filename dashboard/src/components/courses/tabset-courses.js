@@ -12,7 +12,7 @@ const TabsetCourses = () => {
   const [{ user, users }] = useStateValue();
   const [slotsLength, setSlotsLength] = useState([1]);
   const [createCourse, setCreateCourse] = useState({
-    id: "",
+    courseCode: "",
     name: "",
     department: user.department.replaceAll("_", " "),
     campus: user.campus.replaceAll("_", " "),
@@ -21,14 +21,15 @@ const TabsetCourses = () => {
   });
 
   const [createSlot, setCreateSlot] = useState({
-    sid: "",
+    sectionCode: "",
     day: "",
     time: "",
     location: "",
   });
 
-  const { id, name, department, campus, credits, loader } = createCourse;
-  const { sid, day, time, location } = createSlot;
+  const { courseCode, name, department, campus, credits, loader } =
+    createCourse;
+  const { sectionCode, day, time, location } = createSlot;
 
   const toastId = useRef(null);
 
@@ -40,7 +41,7 @@ const TabsetCourses = () => {
 
   const onCreateCourse = () => {
     const courseDetails = {
-      id,
+      courseCode,
       name,
       department: user.department,
       campus: user.campus,
@@ -75,7 +76,7 @@ const TabsetCourses = () => {
           setCreateCourse({
             ...createCourse,
             loader: false,
-            id: "",
+            courseCode: "",
             name: "",
             credits: "",
           });
@@ -92,10 +93,10 @@ const TabsetCourses = () => {
         });
       }
     }
-    if (!id || !name || !credits) {
+    if (!courseCode || !name || !credits) {
       info("Provide course details properly!");
     } else if (createSlots.length === 0) {
-      info("Please provide and save minimum slot details!");
+      info("Please provide and save minimum 1 slot details!");
     } else {
       addCourse();
       // console.log(courseDetails);
@@ -103,19 +104,19 @@ const TabsetCourses = () => {
   };
 
   const onSaveAddSlot = async () => {
-    if (sid && day && time && location) {
+    if (sectionCode && day && time && location) {
       setSlotsLength([...slotsLength, slotsLength.length + 1]);
       setCreateSlots([
         ...createSlots,
         {
-          id: sid,
+          sectionCode,
           day,
           time,
           location,
         },
       ]);
       setCreateSlot({
-        sid: "",
+        sectionCode: "",
         day: "",
         time: "",
         location: "",
@@ -136,11 +137,11 @@ const TabsetCourses = () => {
             <TextInput
               label="Course code"
               placeholder="CSC-011"
-              value={id}
+              value={courseCode}
               onChange={(e) =>
                 setCreateCourse({
                   ...createCourse,
-                  id: e.target.value,
+                  courseCode: e.target.value,
                 })
               }
             />
@@ -182,11 +183,11 @@ const TabsetCourses = () => {
             <TextInput
               label="Slot code"
               placeholder="0210000"
-              value={sid}
+              value={sectionCode}
               onChange={(e) =>
                 setCreateSlot({
                   ...createSlot,
-                  sid: e.target.value,
+                  sectionCode: e.target.value,
                 })
               }
             />
@@ -253,8 +254,8 @@ const TabsetCourses = () => {
               </thead>
               <tbody>
                 {createSlots.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
+                  <tr key={item.sectionCode}>
+                    <td>{item.sectionCode}</td>
                     <td>{item.day}</td>
                     <td>{item.time}</td>
                     <td>{item.location}</td>

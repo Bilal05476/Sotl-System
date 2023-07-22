@@ -39,41 +39,35 @@ const Detail_observation = () => {
   //   }
   // };
 
-  // console.log(usersandcourses);
-
   const startSchedule = () => {
     setOpenPopup(false);
-    startScheduling(obsDetail?.facultyId, Number(id), cid, toastId);
+    startScheduling(
+      obsDetail?.facultyId,
+      Number(id),
+      cid,
+      toastId,
+      setObsDetail
+    );
     // console.log(obsDetail?.facultyId, Number(id), cid, toastId);
     info("Scheduling Creating...");
-    setTimeout(() => {
-      fetchObservation(setObsDetail, Number(id));
-    }, 1500);
   };
 
   const selectCourse = () => {
     setOpenPopup(!openPopup);
-    if (facultycourses.length === 0) {
-      usersandcourses.courses.map((item) => {
-        item.slots.map(
-          (slot) =>
-            slot.facultyId === obsDetail.facultyId &&
-            setfacultycourses([
-              ...facultycourses,
-              {
-                id: item.id,
-                n: `${item.name} on ${slot.time} at ${slot.location}`,
-              },
-            ])
-        );
-      });
-    } else {
-      info("Refresh your window if you want to see udpated slots!");
-    }
+    obsDetail?.faculty.courseSlots.map((item) =>
+      setfacultycourses([
+        ...facultycourses,
+        {
+          sid: item.id,
+          cid: item.course.id,
+          n: `${item.course.name} on ${item.day} ${item.time} at ${item.location}`,
+        },
+      ])
+    );
   };
 
   // return;
-  // console.log(obsDetail);
+  console.log(obsDetail);
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
@@ -81,6 +75,7 @@ const Detail_observation = () => {
         open={openPopup}
         setOpen={setOpenPopup}
         facultycourses={facultycourses}
+        setfacultycourses={setfacultycourses}
         course={cid}
         setCourse={setcid}
         startSchedule={startSchedule}
@@ -236,7 +231,7 @@ const Detail_observation = () => {
                 <>
                   {isOpen === "open" && (
                     <div className="accordion-body text-center">
-                      <strong>No data!</strong>
+                      <strong>Not started!</strong>
                       <br />
                       {user.role === "Observer" && (
                         <button
