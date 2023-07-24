@@ -55,7 +55,7 @@ const TabsetCourses = () => {
         loader: true,
       });
       try {
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/courses`, {
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/course`, {
           method: "POST",
           body: JSON.stringify(courseDetails),
           headers: {

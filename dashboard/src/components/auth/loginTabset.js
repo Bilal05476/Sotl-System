@@ -26,13 +26,16 @@ const LoginTabset = () => {
   const handleSignin = () => {
     async function fetchData() {
       try {
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/login`, {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/auth/login`,
+          {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }
+        );
         const data = await res.json();
         if (data.error) {
           setLoginState({ ...loginState, loader: false });

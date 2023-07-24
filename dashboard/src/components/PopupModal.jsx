@@ -93,7 +93,11 @@ export function ConfirmModal({ open, setOpen }) {
           be reversed!
         </p>
         <div className="mt-3">
-          <Button className="mx-1" color="secondary" onClick={() => {}}>
+          <Button
+            className="mx-1"
+            color="secondary"
+            onClick={() => setOpen(!open)}
+          >
             No, Go Back
           </Button>
           <Button

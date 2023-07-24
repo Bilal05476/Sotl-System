@@ -434,7 +434,7 @@ const Dashboard = () => {
       <Breadcrumb title="Dashboard" parent="Dashboard" />
 
       <Container fluid={true}>
-        <Row>
+        {/* <Row>
           <Col xl="12 xl-100" md="12" className="">
             <Card
               className=" o-hidden widget-cards"
@@ -458,11 +458,11 @@ const Dashboard = () => {
                     SOTL System
                   </span>
                 </h4>
-                {/* <img src={welcome} width={150} /> */}
+                <img src={welcome} width={150} />
               </CardBody>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
         <Row>
           {/* {user.role === "Admin" || user.role === "Campus_Director" ? (
             <>
@@ -732,36 +732,22 @@ const Dashboard = () => {
             </>
           )}
 
-          {user.role !== "Faculty" ? (
+          {user.role !== "Faculty" && (
             <Col xl="12 xl-100">
               <Card>
                 <CardHeader className="d-flex align-items-center justify-content-between">
                   <h5>Observations Stream</h5>
                   <div>
-                    <ObservationStreamFilter
-                      streamFilter={streamFilter}
-                      setStreamFilter={setStreamFilter}
-                      text="Monthly"
-                      ongoingColor={ongoingColor}
-                    />
-                    <ObservationStreamFilter
-                      streamFilter={streamFilter}
-                      setStreamFilter={setStreamFilter}
-                      text="Semesters"
-                      ongoingColor={ongoingColor}
-                    />
-                    <ObservationStreamFilter
-                      streamFilter={streamFilter}
-                      setStreamFilter={setStreamFilter}
-                      text="Quarter"
-                      ongoingColor={ongoingColor}
-                    />
-                    <ObservationStreamFilter
-                      streamFilter={streamFilter}
-                      setStreamFilter={setStreamFilter}
-                      text="Yearly"
-                      ongoingColor={ongoingColor}
-                    />
+                    {["Monthly", "Semesters", "Quarter", "Yearly"].map(
+                      (item) => (
+                        <ObservationStreamFilter
+                          streamFilter={streamFilter}
+                          setStreamFilter={setStreamFilter}
+                          text={item}
+                          ongoingColor={ongoingColor}
+                        />
+                      )
+                    )}
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -776,8 +762,6 @@ const Dashboard = () => {
                 </CardBody>
               </Card>
             </Col>
-          ) : (
-            <></>
           )}
 
           <Col xl="12 xl-100">

@@ -56,7 +56,7 @@ const TabsetUser = () => {
     };
     async function postUser() {
       info("User Creating...");
-      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/create`, {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/auth/create`, {
         method: "POST",
         body: JSON.stringify(userDetail),
         headers: {

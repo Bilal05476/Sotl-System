@@ -55,7 +55,7 @@ const TabsetEditProfile = () => {
     async function putUser() {
       info("Profile Updating...");
       const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/update/${user.id}`,
+        `${process.env.REACT_APP_BASE_URL}/user/update/${user.id}`,
         {
           method: "PUT",
           body: JSON.stringify(userDetail),
