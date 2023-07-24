@@ -48,6 +48,7 @@ import Artifacts from "../components/Templates/Artifacts";
 import ParentComponent from "../components/ParentComponent";
 import ChildComponent from "../components/ChildComponent";
 import Postobservation from "../components/observations/post-observation";
+// import Hello from "../components/Hello";
 
 const URL = process.env.PUBLIC_URL;
 const LayoutRoutes = () => {
@@ -73,6 +74,7 @@ const LayoutRoutes = () => {
             }
           /> */}
           <Route path={`${URL}/dashboard`} element={<Dashboard />} />
+          {/* <Route path={`${URL}/hello`} element={<Hello />} /> */}
           {/* <Route
             path={`${URL}/products/physical/category`}
             element={<Category />}
