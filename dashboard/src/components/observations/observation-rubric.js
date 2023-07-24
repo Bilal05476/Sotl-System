@@ -205,28 +205,29 @@ const Observation_rubric = () => {
             text="Back"
           />
 
-          {user.role === "Observer" ||
-            (user.role === "Faculty" && (
-              <div>
-                {obsDetails?.meetings?.informedObservation?.status !==
-                  "Completed" && (
-                  <div className="d-flex align-items-center justify-content-between">
+          {user.role === "Observer" || user.role === "Faculty" ? (
+            <div>
+              {obsDetails?.meetings?.informedObservation?.status !==
+                "Completed" && (
+                <div className="d-flex align-items-center justify-content-between">
+                  <AccordButton
+                    text="Save Score"
+                    backgroundColor={completeColor2}
+                    onClick={() => updateTotal()}
+                  />
+                  {avgSc > 0 && user.role === "Observer" && (
                     <AccordButton
-                      text="Save Score"
-                      backgroundColor={completeColor2}
-                      onClick={() => updateTotal()}
+                      text="Done"
+                      backgroundColor={completeColor}
+                      onClick={() => doneRubricScoring()}
                     />
-                    {avgSc > 0 && user.role === "Observer" && (
-                      <AccordButton
-                        text="Done"
-                        backgroundColor={completeColor}
-                        onClick={() => doneRubricScoring()}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </Container>
     </Fragment>
@@ -341,22 +342,23 @@ const RubricAccordion = ({
                   );
               }
             )}
-            {role === "Observer" ||
-              (role === "Faculty" && (
-                <div
-                  className="bg-light py-3 text-center"
-                  style={{
-                    boxShadow: "1px 1px 2px #1e1e1e56",
-                    borderRadius: "2px",
-                  }}
-                >
-                  <AccordButton
-                    backgroundColor={completeColor2}
-                    text="Submit Rubric Score"
-                    onClick={() => updateAccordionscore()}
-                  />
-                </div>
-              ))}
+            {role === "Observer" || role === "Faculty" ? (
+              <div
+                className="bg-light py-3 text-center"
+                style={{
+                  boxShadow: "1px 1px 2px #1e1e1e56",
+                  borderRadius: "2px",
+                }}
+              >
+                <AccordButton
+                  backgroundColor={completeColor2}
+                  text="Submit Rubric Score"
+                  onClick={() => updateAccordionscore()}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         )}
       </div>
@@ -389,7 +391,7 @@ const AccordionSubHeading = ({
         return null;
       });
       setRubricSc(score / sclen);
-      if (subSections.some((obj) => obj.rid == rid)) {
+      if (subSections.some((obj) => obj.rid === rid)) {
         const updatedArray = subSections.map((obj) => {
           if (obj.rid === rid) {
             return { ...obj, sc: score / sclen };
@@ -438,22 +440,23 @@ const AccordionSubHeading = ({
         </small>
       </div>
 
-      {role === "Faculty" ||
-        (role === "Observer" && (
-          <div className="d-flex align-items-center justify-content-between">
-            {ScoringPlot.map((item) => (
-              <RubricPoints
-                scorePlot={item}
-                rubricSc={rubricSc}
-                setRubricSc={setRubricSc}
-                scoreSelected={scoreSelected}
-                setScoreSelected={setScoreSelected}
-                rid={rid}
-                k={item.score}
-              />
-            ))}
-          </div>
-        ))}
+      {role === "Faculty" || role === "Observer" ? (
+        <div className="d-flex align-items-center justify-content-between">
+          {ScoringPlot.map((item) => (
+            <RubricPoints
+              scorePlot={item}
+              rubricSc={rubricSc}
+              setRubricSc={setRubricSc}
+              scoreSelected={scoreSelected}
+              setScoreSelected={setScoreSelected}
+              rid={rid}
+              k={item.score}
+            />
+          ))}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
