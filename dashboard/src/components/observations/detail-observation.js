@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { Col, Container, Row, Table } from "reactstrap";
+import { Button, Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { Loader, DownloadCloud } from "react-feather";
@@ -12,7 +12,7 @@ import {
 import { info } from "../../constants/Toasters";
 import { completeColor, completeColor2 } from "../colors";
 import { dateFormater } from "../DateFormater";
-import { PopupModal } from "../PopupModal";
+import { PopupModal, PostTimeModal } from "../PopupModal";
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -68,6 +68,8 @@ const Detail_observation = () => {
 
   // return;
   console.log(obsDetail);
+
+  const [postTimingOpen, setPostTimingOpen] = useState(false);
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
@@ -336,6 +338,7 @@ const Detail_observation = () => {
             </div>
           </div>
           <div className="accordion">
+            <PostTimeModal open={postTimingOpen} setOpen={setPostTimingOpen} />
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
@@ -426,6 +429,18 @@ const Detail_observation = () => {
                   {isOpen === "open" && (
                     <div className="accordion-body text-center">
                       <strong>Not started!</strong>
+                      <br />
+                      {/* {obsDetail?.meetings?.informedObservation
+                        ?.facultyScore !== 0 &&
+                        obsDetail?.meetings?.informedObservation
+                          ?.observerScore !== 0 && ( */}
+                      <button
+                        onClick={() => setPostTimingOpen(!postTimingOpen)}
+                        className="btn btn-primary mt-2 mx-2"
+                      >
+                        Schedule Post Observation
+                      </button>
+                      {/* )} */}
                     </div>
                   )}
                 </>
