@@ -338,7 +338,6 @@ const Detail_observation = () => {
             </div>
           </div>
           <div className="accordion">
-            <PostTimeModal open={postTimingOpen} setOpen={setPostTimingOpen} />
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
@@ -430,17 +429,20 @@ const Detail_observation = () => {
                     <div className="accordion-body text-center">
                       <strong>Not started!</strong>
                       <br />
-                      {/* {obsDetail?.meetings?.informedObservation
-                        ?.facultyScore !== 0 &&
-                        obsDetail?.meetings?.informedObservation
-                          ?.observerScore !== 0 && ( */}
-                      <button
-                        onClick={() => setPostTimingOpen(!postTimingOpen)}
-                        className="btn btn-primary mt-2 mx-2"
-                      >
-                        Schedule Post Observation
-                      </button>
-                      {/* )} */}
+                      {obsDetail?.meetings?.informedObservation
+                        ?.facultyScore === 0 &&
+                      obsDetail?.meetings?.informedObservation
+                        ?.observerScore !== 0 &&
+                      user.role === "Observer" ? (
+                        <NavLink
+                          to={`/observations/post-observation-meeting/${id}`}
+                          className="btn btn-primary mt-2 mx-2"
+                        >
+                          Schedule Post Observation
+                        </NavLink>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   )}
                 </>
