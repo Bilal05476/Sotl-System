@@ -124,16 +124,23 @@ export async function updateScheduling(facultyId, observationsId, errors) {
   }
 }
 
-export async function submitTeachingTemplate(
+export async function submitTemplate(
   templateResponse,
-  loader,
   templateId,
   editedById,
   observationsId,
-  setObs
+  setObs,
+  loader,
+  type
 ) {
+  let endPoint = "";
+  if (type === "Reflection") {
+    endPoint = "post-scheduling";
+  } else {
+    endPoint = "scheduling";
+  }
   try {
-    const res = await fetch(`${BASEURL}/observation/scheduling`, {
+    const res = await fetch(`${BASEURL}/observation/${endPoint}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json; charset=UTF-8",

@@ -2,15 +2,8 @@ import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
-import { useStateValue } from "../../StateProvider";
 import { errors, successes, info, warning } from "../../constants/Toasters";
-import {
-  completeColor,
-  completeColor2,
-  pendingColor,
-  ongoingColor,
-} from "../colors";
-import FileBase from "react-file-base64";
+import { completeColor, completeColor2 } from "../colors";
 import { fetchObservation } from "../Endpoints";
 import { Frown, PlusCircle } from "react-feather";
 import MultiStepForm from "../MultiStep";
@@ -20,7 +13,6 @@ import { dateFormater2 } from "../DateFormater";
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
 const TabsetPostScheduling = ({ role }) => {
-  // const [{ user }] = useStateValue();
   const { id } = useParams();
   const [obs, setObs] = useState("");
 
@@ -32,6 +24,8 @@ const TabsetPostScheduling = ({ role }) => {
     providedDate: "",
     location: "",
   });
+
+  const [facultySelect, setFacultySelect] = useState("");
 
   const { timeSlotsByObserver, providedDate, location } = obsSchedule;
 
@@ -80,138 +74,116 @@ const TabsetPostScheduling = ({ role }) => {
   }
 
   async function updatePostObsSlots() {
-    if (timeSlotsByObserver.length > 0) {
-      const modified = {
-        observationsId: Number(id),
-        timeSlotsByObserver,
-        location: location
-          ? location
-          : obs?.meetings?.postObservation?.location,
-      };
-      console.log(modified);
-      info("Post Observation Scheduling Updating...");
-      try {
-        const res = await fetch(`${BASEURL}/observation/post-scheduling`, {
-          method: "PUT",
-          body: JSON.stringify(modified),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
-        const data = await res.json();
-
-        if (data.error) {
-          toast.dismiss(toastId.current);
-          errors(data.error);
-        } else {
-          toast.dismiss(toastId.current);
-          successes("Post Observation updated!");
-          fetchObservation(setObs, Number(id));
-          setObsSchedule({
-            timeSlotsByObserver: [],
-            providedDate: "",
-            location: "",
+    if (role === "Observer") {
+      if (timeSlotsByObserver.length > 0) {
+        const modified = {
+          observationsId: Number(id),
+          timeSlotsByObserver,
+          location: location
+            ? location
+            : obs?.meetings?.postObservation?.location,
+        };
+        console.log(modified);
+        info("Post Observation Scheduling Updating...");
+        try {
+          const res = await fetch(`${BASEURL}/observation/post-scheduling`, {
+            method: "PUT",
+            body: JSON.stringify(modified),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
           });
+          const data = await res.json();
+
+          if (data.error) {
+            toast.dismiss(toastId.current);
+            errors(data.error);
+          } else {
+            toast.dismiss(toastId.current);
+            successes("Post Observation updated!");
+            fetchObservation(setObs, Number(id));
+            setObsSchedule({
+              timeSlotsByObserver: [],
+              providedDate: "",
+              location: "",
+            });
+          }
+        } catch (err) {
+          toast.dismiss(toastId.current);
+          console.log(err);
+          errors("Server not responding at that time!");
         }
-      } catch (err) {
-        toast.dismiss(toastId.current);
-        console.log(err);
-        errors("Server not responding at that time!");
+      } else {
+        info("Please provide appropriate timings...");
       }
     } else {
-      info("Please provide appropriate timings...");
+      if (facultySelect) {
+        const fSlot = {
+          observationsId: Number(id),
+          timeSlotByFaculty: facultySelect,
+        };
+        info("Post Observation Scheduling Updating...");
+        try {
+          const res = await fetch(`${BASEURL}/observation/post-scheduling`, {
+            method: "PUT",
+            body: JSON.stringify(fSlot),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          });
+          const data = await res.json();
+
+          if (data.error) {
+            toast.dismiss(toastId.current);
+            errors(data.error);
+          } else {
+            toast.dismiss(toastId.current);
+            successes("Post Observation updated!");
+            fetchObservation(setObs, Number(id));
+            setFacultySelect("");
+          }
+        } catch (err) {
+          toast.dismiss(toastId.current);
+          console.log(err);
+          errors("Server not responding at that time!");
+        }
+      } else {
+        info("Please provide appropriate timings...");
+      }
     }
   }
 
-  // const onObservationEditing = () => {
-  //   if (role === "Faculty") {
-  //     if (timeSlotsByFaculty.length === 0) {
-  //       info("Provide your slots!");
-  //     } else {
-  //       editObs();
-  //     }
-  //   }
-  //   if (role === "Observer") {
-  //     if (!scheduledOn || timeSlotByObserver.length === 0) {
-  //       info("Provide all required fields!");
-  //     } else {
-  //       editObs();
-  //     }
-  //   }
-  // };
+  const onPosObsDone = async () => {
+    const finalObsDetails = {
+      observationsId: Number(id),
+      status: "Completed",
+    };
 
-  // const onSchedulingAccept = () => {
-  //   const accepted = {
-  //     observationsId: Number(id),
-  //   };
+    info("Done Post Observation Scheduling...");
+    const res = await fetch(`${BASEURL}/observation/post-scheduling`, {
+      method: "PUT",
+      body: JSON.stringify(finalObsDetails),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
 
-  //   async function acceptScheduling() {
-  //     info("Observation accepting...");
-  //     const res = await fetch(`${BASEURL}/observation/scheduling`, {
-  //       method: "PUT",
-  //       body: JSON.stringify(accepted),
-  //       headers: {
-  //         "Content-type": "application/json; charset=UTF-8",
-  //       },
-  //     });
-  //     const data = await res.json();
+    if (data.error) {
+      errors(data.error);
+    } else {
+      successes(data.message);
+      fetchObservation(setObs, Number(id));
+    }
+  };
 
-  //     if (data.error) {
-  //       errors(data.error);
-  //     } else {
-  //       successes("Observation Accepted");
-  //       fetchObservation(setObs, Number(id));
-  //     }
-  //   }
-
-  //   if (role === "Faculty") {
-  //     accepted.facultyAccepted = true;
-  //     acceptScheduling();
-  //   }
-  //   if (role === "Observer") {
-  //     accepted.observerAccepted = true;
-  //     acceptScheduling();
-  //   }
-  // };
-
-  // const onSchedulingDone = async () => {
-  //   const finalObsDetails = {
-  //     observationsId: Number(id),
-  //     status: "Completed",
-  //   };
-
-  //   info("Done Scheduling...");
-  //   const res = await fetch(`${BASEURL}/observation/scheduling`, {
-  //     method: "PUT",
-  //     body: JSON.stringify(finalObsDetails),
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8",
-  //     },
-  //   });
-  //   const data = await res.json();
-
-  //   if (data.error) {
-  //     errors(data.error);
-  //   } else {
-  //     successes("Observation Scheduling Done!");
-  //     fetchObservation(setObs, Number(id));
-  //   }
-  // };
-
-  // const onSelectSlotFaculty = (id) => {
-  //   if (timeSlotsByFaculty.includes(id)) {
-  //     const temp = timeSlotsByFaculty.filter((item) => item !== id);
-  //     setObsSchedule({
-  //       ...obsSchedule,
-  //       timeSlotsByFaculty: temp,
-  //     });
-  //   } else {
-  //     setObsSchedule({
-  //       ...obsSchedule,
-  //       timeSlotsByFaculty: [...timeSlotsByFaculty, id],
-  //     });
-  //   }
-  // };
+  const SlotSelectFaculty = (id) => {
+    const [findTime] =
+      obs?.meetings?.postObservation?.timeSlotsByObserver.filter(
+        (item) => item.id === id
+      );
+    setFacultySelect(findTime.dateTime);
+  };
 
   useEffect(() => {
     fetchObservation(setObs, Number(id));
@@ -237,6 +209,7 @@ const TabsetPostScheduling = ({ role }) => {
     });
   };
 
+  // console.log(obs);
   return (
     <Fragment>
       {role === "Observer" && (
@@ -262,22 +235,21 @@ const TabsetPostScheduling = ({ role }) => {
                 <TabPanel>
                   <Form className="needs-validation user-add" noValidate="">
                     {obs?.meetings?.postObservation?.timeSlotsByObserver
-                      .length > 0 && (
+                      ?.length > 0 && (
                       <FormGroup className="row">
                         <Label className="col-xl-3 col-md-4">
-                          <span>*</span> Provided By Observer
+                          <span>*</span> Provided Slots
                         </Label>
                         <div className="col-xl-8 col-md-7 d-flex flex-wrap">
                           {obs?.meetings?.postObservation?.timeSlotsByObserver.map(
                             (item) => (
                               <TimeSlotSpan
                                 key={item.id}
-                                id={item.id}
                                 location={
                                   obs?.meetings?.postObservation?.location
                                 }
                                 time={item.dateTime}
-                                slots={timeSlotsByObserver}
+                                slot={timeSlotsByObserver}
                                 cursor={false}
                               />
                             )
@@ -285,25 +257,19 @@ const TabsetPostScheduling = ({ role }) => {
                         </div>
                       </FormGroup>
                     )}
-                    {obs?.meetings?.postObservation?.timeSlotsByFaculty.length >
-                      0 && (
+                    {obs?.meetings?.postObservation?.timeSlotByFaculty && (
                       <FormGroup className="row">
                         <Label className="col-xl-3 col-md-4">
                           <span>*</span> Select By Faculty
                         </Label>
                         <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                          {obs?.meetings?.postObservation?.timeSlotsByFaculty.map(
-                            (item) => (
-                              <TimeSlotSpan
-                                key={item.id}
-                                id={item.id}
-                                location={item.location}
-                                time={item.date}
-                                slots={timeSlotsByObserver}
-                                cursor={false}
-                              />
-                            )
-                          )}
+                          <TimeSlotSpan
+                            location={obs?.meetings?.postObservation?.location}
+                            time={
+                              obs?.meetings?.postObservation?.timeSlotByFaculty
+                            }
+                            cursor={false}
+                          />
                         </div>
                       </FormGroup>
                     )}
@@ -341,27 +307,40 @@ const TabsetPostScheduling = ({ role }) => {
               </Tabs>
 
               <div className="pull-right">
-                {obs?.meetings?.postObservation?.timeSlotsByObserver.length ===
-                0 ? (
+                {!obs?.meetings?.postObservation ? (
                   <Button
                     onClick={() => createPostObs()}
                     type="button"
                     color="primary"
+                    className="mx-2"
                   >
                     Create
                   </Button>
                 ) : (
                   <>
-                    {!obs?.meetings?.postObservation?.observerAccepted && (
+                    {obs?.meetings?.postObservation?.status === "Ongoing" && (
                       <Button
                         onClick={() => updatePostObsSlots()}
                         type="button"
                         color="primary"
+                        className="mx-2"
                       >
                         Update
                       </Button>
                     )}
                   </>
+                )}
+                {obs?.meetings?.postObservation?.timeSlotByFaculty &&
+                obs?.meetings?.postObservation?.status === "Ongoing" ? (
+                  <Button
+                    onClick={() => onPosObsDone()}
+                    type="button"
+                    color="primary"
+                  >
+                    Done
+                  </Button>
+                ) : (
+                  <></>
                 )}
               </div>
             </>
@@ -370,7 +349,7 @@ const TabsetPostScheduling = ({ role }) => {
       )}
       {role === "Faculty" && (
         <>
-          {!obs?.meetings?.postObservation?.reflectionPlan[0]?.editedBy && (
+          {!obs?.meetings?.postObservation?.reflectionPlan[0]?.editedById && (
             <MultiStepForm
               tabtitle={"Provide Relfection Plan Details"}
               steps={obs?.meetings?.postObservation?.reflectionPlan[0]?.steps}
@@ -386,101 +365,67 @@ const TabsetPostScheduling = ({ role }) => {
 
           <Tabs>
             <TabPanel>
-              {obs?.meetings?.postObservation?.reflectionPlan[0]?.editedBy && (
-                <>
-                  <Form className="needs-validation user-add" noValidate="">
+              {obs?.meetings?.postObservation?.reflectionPlan[0]
+                ?.editedById && (
+                <Form className="needs-validation user-add" noValidate="">
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
+                      <span>*</span> Select One Available Slot
+                    </Label>
+                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                      {obs?.meetings?.postObservation?.timeSlotsByObserver.map(
+                        (item) => (
+                          <TimeSlotSpan
+                            key={item.id}
+                            time={item.dateTime}
+                            cursor={true}
+                            location={obs?.meetings?.postObservation?.location}
+                            onClick={() => SlotSelectFaculty(item.id)}
+                            slot={facultySelect}
+                          />
+                        )
+                      )}
+                    </div>
+                  </FormGroup>
+                  {obs?.meetings?.postObservation?.timeSlotByFaculty && (
                     <FormGroup className="row">
                       <Label className="col-xl-3 col-md-4">
-                        <span>*</span> Select One Available Slot
+                        <span>*</span> Selected Slot
                       </Label>
                       <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                        {/* {obs?.course?.slots.map((item) => {
-                          if (item.facultyId === user.id)
-                            return (
-                              <TimeSlotSpan
-                                key={item.id}
-                                id={item.id}
-                                location={item.location}
-                                time={item.time}
-                                day={item.day}
-                                cursor={true}
-                                // onClick={() => onSelectSlotFaculty(item.id)}
-                                slots={timeSlotsByObserver}
-                              />
-                            );
-                        })} */}
+                        <TimeSlotSpan
+                          location={obs?.meetings?.postObservation?.location}
+                          time={
+                            obs?.meetings?.postObservation?.timeSlotByFaculty
+                          }
+                          cursor={false}
+                        />
                       </div>
                     </FormGroup>
-                    <FormGroup className="row">
-                      <Label className="col-xl-3 col-md-4">
-                        <span>*</span> Slot(s) Selected by Observer
-                      </Label>
-                      <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                        {obs?.obsRequest?.timeSlotByObserver?.map((item) => {
-                          return (
-                            <TimeSlotSpan
-                              key={item.id}
-                              id={item.id}
-                              location={item.location}
-                              time={item.time}
-                              day={item.day}
-                              cursor={false}
-                              // onClick={() => onSelectSlotFaculty(item.id)}
-                              slots={timeSlotsByObserver}
-                            />
-                          );
-                        })}
-                      </div>
-                    </FormGroup>
-                  </Form>
-                  <div className="pull-right">
-                    {!obs?.obsRequest?.facultyAccepted && (
-                      <Button
-                        // onClick={() => onObservationEditing()}
-                        type="button"
-                        color="primary"
-                      >
-                        Update
-                      </Button>
-                    )}
-                  </div>
-                </>
+                  )}
+                </Form>
               )}
             </TabPanel>
           </Tabs>
-        </>
-      )}
-
-      <div className="pull-right">
-        {obs?.obsRequest?.facultyAccepted &&
-        obs?.obsRequest?.observerAccepted ? (
-          <Button
-            // onClick={() => onSchedulingDone()}
-            type="button"
-            color="primary"
-          >
-            Done
-          </Button>
-        ) : (
-          <>
-            {obs?.obsRequest?.scheduledOn && (
+          <div className="pull-right">
+            {obs?.meetings?.postObservation?.status === "Ongoing" && (
               <Button
-                // onClick={() => onSchedulingAccept()}
+                onClick={() => updatePostObsSlots()}
                 type="button"
                 color="primary"
-                className="mx-3"
               >
-                Confirm
+                Update
               </Button>
             )}
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </Fragment>
   );
 };
 
-const TimeSlotSpan = ({ key, onClick, location, time, slots, id, cursor }) => {
+const TimeSlotSpan = ({ key, onClick, time, slot, cursor, location }) => {
+  console.log(slot);
   return (
     <span
       className="mb-2"
@@ -492,8 +437,8 @@ const TimeSlotSpan = ({ key, onClick, location, time, slots, id, cursor }) => {
         borderRadius: "5px",
         cursor: cursor && "pointer",
         backgroundColor:
-          (slots.includes(id) && completeColor) || (!cursor && completeColor),
-        color: (slots.includes(id) && "#fff") || (!cursor && "#fff"),
+          (slot === time && completeColor) || (!cursor && completeColor),
+        color: (slot === time && "#fff") || (!cursor && "#fff"),
       }}
       onClick={onClick}
     >

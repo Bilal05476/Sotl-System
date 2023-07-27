@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, FormGroup, Label, Form } from "reactstrap";
 import { info } from "../constants/Toasters";
-import { submitTeachingTemplate } from "./Endpoints";
+import { submitTemplate } from "./Endpoints";
 import { useStateValue } from "../StateProvider";
 
 const MultiStepForm = ({
@@ -18,6 +18,8 @@ const MultiStepForm = ({
   const [{ user }] = useStateValue();
   // const [currentStep, setCurrentStep] = useState(0);
   const [loader, setLoader] = useState(false);
+
+  console.log("Steps Length", steps?.length);
 
   const [text, setText] = useState({
     ProgramOutcomes: "",
@@ -83,18 +85,6 @@ const MultiStepForm = ({
         ConstrainingFactors,
         IdealTeaching,
       ];
-
-      for (let t = 0; t < tempRes.length; t++) {
-        templateResponse.push({
-          id: steps[t].id,
-          response: tempRes[t],
-        });
-      }
-
-      return templateResponse;
-    };
-
-    const submitTemplateReposne = () => {
       if (
         Perception &&
         StrategiesWork &&
@@ -110,22 +100,32 @@ const MultiStepForm = ({
         ConstrainingFactors &&
         IdealTeaching
       ) {
-        // setLoader(true);
-        const tempResponses = handleNextStep();
-        console.log(tempResponses, tempId, user?.id, observationsId);
-        //   if (tempResponses?.length > 0) {
-        //     submitTeachingTemplate(
-        //       tempResponses,
-        //       setLoader,
-        //       tempId,
-        //       user?.id,
-        //       observationsId,
-        //       setObs
-        //     );
-        //   }
-        // } else {
-        //   info("Please provide all the required details...");
-        // }
+        for (let t = 0; t < tempRes.length; t++) {
+          templateResponse.push({
+            id: steps[t].id,
+            response: tempRes[t],
+          });
+        }
+        return templateResponse;
+      }
+      return null;
+    };
+
+    const submitTemplateReposne = () => {
+      const tempResponses = handleNextStep();
+      if (tempResponses) {
+        setLoader(true);
+        submitTemplate(
+          tempResponses,
+          tempId,
+          user?.id,
+          observationsId,
+          setObs,
+          setLoader,
+          tempType
+        );
+      } else {
+        info("Please provide all the required details...");
       }
     };
 
@@ -329,22 +329,6 @@ const MultiStepForm = ({
         PostTeaching,
         Feedback,
       ];
-
-      for (let t = 0; t < tempRes.length; t++) {
-        templateResponse.push({
-          id: steps[t].id,
-          response: tempRes[t],
-        });
-      }
-
-      return templateResponse;
-    };
-
-    // const handlePreviousStep = () => {
-    //   setCurrentStep(currentStep - 1);
-    // };
-
-    const submitTemplateReposne = () => {
       if (
         ProgramOutcomes &&
         LearningOutcomes &&
@@ -354,18 +338,31 @@ const MultiStepForm = ({
         PostTeaching &&
         Feedback
       ) {
-        setLoader(true);
-        const tempResponses = handleNextStep();
-        if (tempResponses?.length > 0) {
-          submitTeachingTemplate(
-            tempResponses,
-            setLoader,
-            tempId,
-            user?.id,
-            observationsId,
-            setObs
-          );
+        for (let t = 0; t < tempRes.length; t++) {
+          templateResponse.push({
+            id: steps[t].id,
+            response: tempRes[t],
+          });
         }
+
+        return templateResponse;
+      }
+      return null;
+    };
+
+    const submitTemplateReposne = () => {
+      const tempResponses = handleNextStep();
+      if (tempResponses) {
+        setLoader(true);
+        submitTemplate(
+          tempResponses,
+          tempId,
+          user?.id,
+          observationsId,
+          setObs,
+          setLoader,
+          tempType
+        );
       } else {
         info("Please provide all the required details...");
       }

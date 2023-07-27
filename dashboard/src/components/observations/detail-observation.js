@@ -11,7 +11,7 @@ import {
 } from "../Endpoints";
 import { info } from "../../constants/Toasters";
 import { completeColor, completeColor2 } from "../colors";
-import { dateFormater } from "../DateFormater";
+import { dateFormater, dateFormater2 } from "../DateFormater";
 import { PopupModal, PostTimeModal } from "../PopupModal";
 
 const Detail_observation = () => {
@@ -367,6 +367,7 @@ const Detail_observation = () => {
                             <th scope="col">Reflection Plan</th>
                             <th scope="col">Artifacts</th>
                             <th scope="col">Schedule On</th>
+                            <th scope="col">Location</th>
                             <th scope="col">Status</th>
                           </tr>
                         </thead>
@@ -395,9 +396,15 @@ const Detail_observation = () => {
                                 )}
                               </td>
                             ))}
-                            {dateFormater(
-                              obsDetail?.meetings?.postObservation?.scheduledOn
-                            )}
+                            <td>
+                              {dateFormater2(
+                                obsDetail?.meetings?.postObservation
+                                  ?.scheduledOn
+                              )}
+                            </td>
+                            <td>
+                              {obsDetail?.meetings?.postObservation?.location}
+                            </td>
                             <td
                               className={`digits ${
                                 obsDetail?.meetings.postObservation.status ===
@@ -430,7 +437,7 @@ const Detail_observation = () => {
                       <strong>Not started!</strong>
                       <br />
                       {obsDetail?.meetings?.informedObservation
-                        ?.facultyScore === 0 &&
+                        ?.facultyScore !== 0 &&
                       obsDetail?.meetings?.informedObservation
                         ?.observerScore !== 0 &&
                       user.role === "Observer" ? (
