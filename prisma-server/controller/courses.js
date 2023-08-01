@@ -22,6 +22,7 @@ export const getCourse = asyncHandler(async (req, res) => {
         },
       },
       observations: true,
+      department: true,
     },
   });
 
@@ -46,7 +47,6 @@ export const getCourses = asyncHandler(async (req, res) => {
           },
         },
       },
-      observations: true,
     },
   });
   if (getAllCourses.length === 0)
@@ -61,7 +61,7 @@ export const createCourse = asyncHandler(async (req, res) => {
   const {
     courseCode,
     name,
-    department,
+    departments,
     campus,
     slots,
     isElective,
@@ -71,7 +71,6 @@ export const createCourse = asyncHandler(async (req, res) => {
   const newCourse = await prisma.courses.create({
     data: {
       courseCode,
-      department,
       name,
       campus,
       isDepthElective,
@@ -84,6 +83,23 @@ export const createCourse = asyncHandler(async (req, res) => {
       },
     },
   });
+
+  if (newCourse) {
+    departments.map(async (item) => {
+      await prisma.courses.update({
+        where: {
+          id: newCourse.id,
+        },
+        data: {
+          department: {
+            connect: {
+              id: item,
+            },
+          },
+        },
+      });
+    });
+  }
 
   res.status(200).json(newCourse);
 });

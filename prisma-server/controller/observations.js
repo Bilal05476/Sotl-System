@@ -107,7 +107,8 @@ export const getAllObs = asyncHandler(async (req, res) => {
       course: true,
     },
   });
-  res.status(200).json(allObs);
+  if (allObs.length === 0) res.status(200).json({ message: "No observations" });
+  else res.status(200).json(allObs);
 });
 
 // @desc   Get observation by id

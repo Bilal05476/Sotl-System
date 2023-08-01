@@ -26,7 +26,6 @@ model User {
     ending              DateTime?
     role                Role
     campus              Campus
-    department          Department
     //observations
     facultyObs          Observations[] @relation("Faculty")
     hodObs              Observations[] @relation("Hod")
@@ -46,6 +45,8 @@ model User {
     //templates
     TemplatePlansFilled TemplatePlan[] @relation("Filled")
     TemplatePlansEdit   TemplatePlan[] @relation("Edited")
+    department          Departments?   @relation(fields: [departmentId], references: [id])
+    departmentId        Int?
 }
 
 // -> User => Observations
@@ -165,8 +166,7 @@ model Courses {
     id              Int            @id @default(autoincrement()) // auto-inc
     courseCode      String
     name            String
-    // department      Departments[]
-    department      Department
+    department      Departments[]
     campus          Campus
     isElective      Boolean        @default(false)
     isDepthElective Boolean        @default(false)
@@ -217,18 +217,17 @@ model Messages {
 
 // -> User => Scheduling => Template, -> User => Post => Template
 model TemplatePlan {
-    id              Int                @id @default(autoincrement()) // auto-inc
-    steps           TemplatePlanStep[]
-    type            TemplateType
-    assignedTo      User?              @relation("Filled", fields: [assignedId], references: [id])
-    assignedId      Int?
-    editedBy        User?              @relation("Edited", fields: [editedById], references: [id])
-    editedById      Int?
-    schedulingT     ObsScheduling?     @relation(fields: [obsSchedulingId], references: [id])
-    obsSchedulingId Int?
-
+    id                  Int                @id @default(autoincrement()) // auto-inc
+    steps               TemplatePlanStep[]
+    type                TemplateType
+    assignedTo          User?              @relation("Filled", fields: [assignedId], references: [id])
+    assignedId          Int?
+    editedBy            User?              @relation("Edited", fields: [editedById], references: [id])
+    editedById          Int?
+    schedulingT         ObsScheduling?     @relation(fields: [obsSchedulingId], references: [id])
+    obsSchedulingId     Int?
     // post observation templates
-    PostObsReflection   Post? @relation("Reflection", fields: [postObsReflectionId], references: [id])
+    PostObsReflection   Post?              @relation("Reflection", fields: [postObsReflectionId], references: [id])
     postObsReflectionId Int?
     // PostObsArtifacts    Post? @relation("Artifacts", fields: [postObsArtifactsId], references: [id])
     // postObsArtifactsId  Int?
@@ -252,11 +251,12 @@ model DateTimes {
     observerDateId Int?
 }
 
-// model Departments {
-//     id      Int       @id @default(autoincrement())
-//     dept    String
-//     Courses Courses[]
-// }
+model Departments {
+    id      Int       @id @default(autoincrement())
+    name    String
+    Courses Courses[]
+    users   User[]
+}
 
 // enums
 enum Role {
@@ -266,15 +266,6 @@ enum Role {
     Head_of_Department
     Faculty
     Observer
-}
-
-enum Department {
-    Computer_Science
-    Software_Engineering
-    Business_Accounting
-    Business_Adminitration
-    Animation
-    Film_and_TV
 }
 
 enum Specialization {

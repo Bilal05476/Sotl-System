@@ -1,4 +1,4 @@
-import { PrismaClient, Campus, Role, Department } from "@prisma/client";
+import { PrismaClient, Campus, Role } from "@prisma/client";
 const prisma = new PrismaClient();
 import bcrypt from "bcryptjs";
 import asyncHandler from "express-async-handler";
@@ -30,12 +30,15 @@ export const createUser = asyncHandler(async (req, res) => {
       password: hashedPassword,
       role: Role[role],
       campus: Campus[campus],
-      department: Department[department],
+      departmentId: department,
     };
 
     // create new user in database
     const newUser = await prisma.user.create({
       data: newUserData,
+      include: {
+        department: true,
+      },
     });
 
     let ids = [];

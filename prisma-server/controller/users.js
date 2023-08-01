@@ -1,4 +1,4 @@
-import { PrismaClient, Campus, Role, Department } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
@@ -24,7 +24,8 @@ export const getUsers = asyncHandler(async (req, res) => {
       department: true,
     },
   });
-  res.status(200).json(allUsers);
+  if (allUsers.length === 0) res.status(200).json({ message: "No users" });
+  else res.status(200).json(allUsers);
 });
 
 // @desc   Get User by id
