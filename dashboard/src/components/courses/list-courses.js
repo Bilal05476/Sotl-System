@@ -52,6 +52,7 @@ const List_courses = () => {
                             <th scope="col">Campus</th>
                             <th scope="col">Elective</th>
                             <th scope="col">Depth Elective</th>
+                            <th scope="col">Slots</th>
                             <th scope="col"></th>
                           </tr>
                         </thead>
@@ -62,7 +63,7 @@ const List_courses = () => {
                               <td className="digits">{item.name}</td>
                               <td className="digits">{item.credits}</td>
                               <td className="digits">
-                                {item.department.replaceAll("_", " ")}
+                                {/* {item.department.name} */}
                               </td>
                               <td className="digits">
                                 {item.campus.replaceAll("_", " ")}
@@ -85,14 +86,16 @@ const List_courses = () => {
                               >
                                 {item.isDepthElective ? "Yes" : "No"}
                               </td>
-                              {/* <td className="digits font-primary">
+
+                              <td className="digits">{item.slots.length}</td>
+                              <td className="digits font-primary">
                                 <NavLink
                                   className="d-flex align-items-center"
-                                  to={`${process.env.PUBLIC_URL}/observations/detail-observation/${item.id}`}
+                                  to={`/`}
                                 >
                                   <Eye size={20} />
                                 </NavLink>
-                              </td> */}
+                              </td>
                             </tr>
                           ))}
                           {usersandcourses?.courses.length === 0 && (

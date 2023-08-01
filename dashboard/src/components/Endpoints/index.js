@@ -22,7 +22,7 @@ export async function fetchUserData(id, dispatch) {
   }
 }
 
-export async function fetchCoursesAndUsers(dispatch) {
+export async function fetchCoursesAndUsers(dispatch, department) {
   try {
     const usercourses = await fetch(`${BASEURL}/courses-users/`, {
       headers: {
@@ -30,9 +30,13 @@ export async function fetchCoursesAndUsers(dispatch) {
       },
     });
     const data = await usercourses.json();
+    console.log(data.users.filter((item) => item.department.id === department));
     dispatch({
       type: "SET_USERS_COURSES",
-      payload: data,
+      payload: {
+        users: data.users.filter((item) => item.department.id === department),
+        courses: data.courses,
+      },
     });
   } catch (error) {
     console.log(error.message);

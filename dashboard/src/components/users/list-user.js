@@ -1,8 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import data from "../../assets/data/listUser";
-import Datatable from "../common/datatable";
 import { Card, CardBody, CardHeader, Container, Table } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { Loader } from "react-feather";
@@ -11,7 +9,8 @@ import { fetchCoursesAndUsers } from "../Endpoints";
 const List_user = () => {
   const [{ usersandcourses, user }, dispatch] = useStateValue();
   useEffect(() => {
-    fetchCoursesAndUsers(dispatch);
+    const deptId = user.department.id;
+    fetchCoursesAndUsers(dispatch, deptId);
     window.scrollTo(0, 0);
   }, []);
 
@@ -53,9 +52,7 @@ const List_user = () => {
                         <td className="digits">
                           {item.campus.replaceAll("_", " ")}
                         </td>
-                        <td className="digits">
-                          {item.department.replaceAll("_", " ")}
-                        </td>
+                        <td className="digits">{item.department.name}</td>
                         <td className="digits">
                           {item.role.replaceAll("_", " ")}
                         </td>
