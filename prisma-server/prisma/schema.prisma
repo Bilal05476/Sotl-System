@@ -138,8 +138,8 @@ model Post {
     // artifacts          TemplatePlan[] @relation("Artifacts")
     facultyAccepted     Boolean        @default(false)
     observerAccepted    Boolean        @default(false)
-    timeSlotsByObserver DateTimes[]    @relation("Observer")
-    timeSlotsByFaculty  DateTimes[]    @relation("Faculty")
+    timeSlotsByObserver DateTimes[]
+    timeSlotByFaculty   DateTime?
     location            String?
     scheduledOn         DateTime?
     meeting             Meetings       @relation(fields: [meetingId], references: [id])
@@ -248,10 +248,8 @@ model TemplatePlanStep {
 model DateTimes {
     id             Int      @id @default(autoincrement())
     dateTime       DateTime
-    observerDate   Post?    @relation("Observer", fields: [observerDateId], references: [id])
+    observerDate   Post?    @relation(fields: [observerDateId], references: [id])
     observerDateId Int?
-    facultyDate    Post?    @relation("Faculty", fields: [facultyDateId], references: [id])
-    facultyDateId  Int?
 }
 
 // model Departments {

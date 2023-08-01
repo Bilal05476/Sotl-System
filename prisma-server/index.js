@@ -2,7 +2,19 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+
+// for socket.io
+// import { createServer } from "http";
+// import { Server } from "socket.io";
+
 const app = express();
+
+// for socket.io
+// const httpServer = createServer(app);
+// const io = new Server(httpServer, {
+//   cors: ["http://localhost:3000", "https://sotlsystem.tech"],
+// });
+
 app.use(cors());
 
 const port = process.env.PORT || 8080;
@@ -25,19 +37,19 @@ app.use(
 
 // login, create role
 import authRoutes from "./routes/auth.js";
-app.use("/api", authRoutes);
+app.use("/api/auth", authRoutes);
 
 // users
 import userRoutes from "./routes/user.js";
-app.use("/api", userRoutes);
+app.use("/api/user", userRoutes);
 
 // observation and meetings
 import obsRoutes from "./routes/observation.js";
-app.use("/api", obsRoutes);
+app.use("/api/observation", obsRoutes);
 
 // courses
 import courseRoutes from "./routes/course.js";
-app.use("/api", courseRoutes);
+app.use("/api/course", courseRoutes);
 
 // utility
 import utilityRoutes from "./routes/utility.js";
@@ -49,9 +61,23 @@ app.use("/", (req, res) => {
   });
 });
 
+// for socket.io
+// io.on("connection", (socket) => {
+//   console.log(`Client Connected ${socket.id}`);
+//   socket.on("send", (data) => {
+//     console.log(data);
+//     socket.broadcast.emit("receive", data);
+//   });
+// });
+
 app.listen(port, () => {
   console.log(`Server Running at port: ${port}`);
 });
+
+// for socket.io
+// httpServer.listen(port, () => {
+//   console.log(`Server Running at port: ${port}`);
+// });
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();

@@ -9,9 +9,9 @@ import {
   getCourses,
 } from "../controller/courses.js";
 
-courseRoutes.route("/courses").get(getCourses).post(createCourse);
-courseRoutes.route("/course/:id").get(getCourse);
-courseRoutes.route("/courses/user/:id").put(assignCourses);
-courseRoutes.route("/courses/slots").post(createCourseSlots);
+courseRoutes.route("/").get(getCourses).post(createCourse);
+courseRoutes.route("/:id").get(getCourse);
+courseRoutes.route("/user/:id").put(assignCourses);
+courseRoutes.route("/slots").post(createCourseSlots);
 
 export default courseRoutes;

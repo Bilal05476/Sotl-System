@@ -8,7 +8,7 @@
   "scripts": {
     "devStart": "nodemon index.js",
     "postinstall": "prisma generate",
-    "build": "prisma generate && node index.js",
+    "build": "prisma generate && nohup node index.js &",
     "start": "node index.js"
   },
   "keywords": [],
@@ -36,6 +36,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.1"
+    "nodemailer": "^6.9.1",
+    "socket.io": "^4.7.1"
   }
 }

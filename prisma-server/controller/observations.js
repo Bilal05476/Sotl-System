@@ -38,7 +38,13 @@ export const initiate = asyncHandler(async (req, res) => {
     });
     if (existed) {
       exitedObsForFaculty.push({
-        message: `Observation is already ${existed.observationStatus} for the faculty: ${existed.faculty.id}) ${existed.faculty.name} for the ${existed.course.name} course`,
+        message: `Observation is already ${
+          existed?.observationStatus
+        } for the faculty: ${existed.faculty?.id}) ${
+          existed.faculty?.name
+        } for the ${
+          existed.course ? existed.course.name : "not decided"
+        } course`,
       });
     } else {
       await prisma.observations.create({
@@ -115,7 +121,11 @@ export const getObs = asyncHandler(async (req, res) => {
         select: {
           name: true,
           email: true,
-          courseSlots: true,
+          courseSlots: {
+            include: {
+              course: true,
+            },
+          },
         },
       },
       observer: {
@@ -182,7 +192,6 @@ export const getObs = asyncHandler(async (req, res) => {
           postObservation: {
             include: {
               timeSlotsByObserver: true,
-              timeSlotsByFaculty: true,
               reflectionPlan: {
                 include: {
                   steps: true,
@@ -558,7 +567,7 @@ export const postScheduleCreate = asyncHandler(async (req, res) => {
 
   let odates = [];
   timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
-  // [{date: "2023-07-09:00:00:00Z", date: "2023-07-10:00:00:00Z"}]
+  // [{dateTime: "2023-07-09:00:00:00Z", dateTime: "2023-07-10:00:00:00Z"}]
 
   const createPostObs = await prisma.meetings.update({
     where: {
@@ -607,7 +616,7 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
     location,
   } = req.body;
 
-  const exited = await prisma.meetings.findFirst({
+  const existed = await prisma.meetings.findFirst({
     where: {
       observationsId,
     },
@@ -615,13 +624,13 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
       postObservation: {
         select: {
           status: true,
-          timeSlotsByFaculty: true,
+          timeSlotByFaculty: true,
         },
       },
     },
   });
 
-  if (exited.postObservation.status !== "Completed") {
+  if (existed.postObservation.status === "Ongoing") {
     if (timeSlotsByObserver) {
       let odates = [];
       timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
@@ -650,7 +659,7 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
       res.status(200).json(updatedPostObs);
     }
     if (timeSlotByFaculty) {
-      // "2023-07-09:00:00:00Z"
+      // "2023-07-09:00:00:00Z" only one slot by faculty
       const updatedPostObs = await prisma.meetings.update({
         where: {
           observationsId,
@@ -658,11 +667,7 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
         data: {
           postObservation: {
             update: {
-              timeSlotsByFaculty: {
-                create: {
-                  dateTime: timeSlotByFaculty,
-                },
-              },
+              timeSlotByFaculty,
             },
           },
         },
@@ -672,8 +677,9 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
       });
       res.status(200).json(updatedPostObs);
     }
-    if (status && scheduledOn) {
-      if (exited.postObservation.timeSlotsByFaculty.length > 0) {
+    if (status) {
+      // scheduledOn === timeslotByFaculty
+      if (existed.postObservation.timeSlotByFaculty) {
         const updatedPostObs = await prisma.meetings.update({
           where: {
             observationsId,
@@ -683,7 +689,7 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
               update: {
                 facultyAccepted: true,
                 observerAccepted: true,
-                scheduledOn,
+                scheduledOn: existed.postObservation.timeSlotByFaculty,
                 status,
               },
             },
@@ -692,7 +698,7 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
             postObservation: true,
           },
         });
-        res.status(200).json(updatedPostObs);
+        res.status(200).json({ message: "Post Observation Scheduling Done!" });
       } else {
         res
           .status(400)

@@ -13,20 +13,17 @@ import {
 
 import { protectInitiateObs } from "../middleware/protectRoutes.js";
 
-obsRoutes.route("/observation/initiate").post(protectInitiateObs, initiate);
-obsRoutes
-  .route("/observation/scheduling")
-  .post(obsScheduleCreate)
-  .put(obsScheduleCycle);
+obsRoutes.route("/initiate").post(protectInitiateObs, initiate);
+obsRoutes.route("/scheduling").post(obsScheduleCreate).put(obsScheduleCycle);
 
-obsRoutes.route("/observation/informed").put(informedObsCycle);
+obsRoutes.route("/informed").put(informedObsCycle);
 
 obsRoutes
-  .route("/observation/post-scheduling")
+  .route("/post-scheduling")
   .post(postScheduleCreate)
   .put(postScheduleCycle);
 
-obsRoutes.route("/observations").get(getAllObs);
-obsRoutes.route("/observation/:id").get(getObs);
+obsRoutes.route("/").get(getAllObs);
+obsRoutes.route("/:id").get(getObs);
 
 export default obsRoutes;
