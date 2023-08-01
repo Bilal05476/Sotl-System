@@ -143,7 +143,7 @@ const Detail_observation = () => {
                 type="button"
                 aria-expanded="true"
               >
-                Observation Scheduling
+                Informed Observation Scheduling
               </button>
               {obsDetail.obsRequest ? (
                 <>
@@ -354,7 +354,7 @@ const Detail_observation = () => {
                 type="button"
                 aria-expanded="true"
               >
-                Post Informed Meeting
+                Post Informed Observation Meeting Scheduling (Face to Face)
               </button>
               {obsDetail.meetings?.postObservation ? (
                 <>

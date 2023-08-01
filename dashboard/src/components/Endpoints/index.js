@@ -13,7 +13,6 @@ export async function fetchUserData(id, dispatch) {
       },
     });
     const data = await res.json();
-    // console.log(data);
     dispatch({
       type: "SET_USER_DATA",
       payload: data,

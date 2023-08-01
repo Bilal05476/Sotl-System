@@ -21,39 +21,17 @@ import { useStateValue } from "../../StateProvider";
 import { Eye, Filter, Loader } from "react-feather";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 import { dateFormater } from "../DateFormater";
+import { fetchUserData } from "../Endpoints";
 
 const URL = process.env.PUBLIC_URL;
 
 const List_observation = () => {
   const [{ user, userData }, dispatch] = useStateValue();
-
-  console.log(userData);
-
-  async function fetchData() {
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/user/${user.id}`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
-      const data = await res.json();
-      const specificData = {
-        observations: data.observations,
-        courses: data.courses,
-      };
-      dispatch({
-        type: "SET_USER_DATA",
-        payload: specificData,
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
+  const [observationData, setObservationData] = useState(
+    userData?.observations
+  );
   useEffect(() => {
-    fetchData();
+    fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
 
@@ -67,9 +45,7 @@ const List_observation = () => {
     start: "All",
   });
   const { course, semester, faculty, observer, status, start } = obsFilter;
-  const [observationData, setObservationData] = useState(
-    userData?.observations
-  );
+
   const applyFilter = () => {
     if (course !== 0) {
       const filteredByCourse = userData?.observations?.filter(
@@ -180,12 +156,6 @@ const List_observation = () => {
                           />
                         </FormGroup>
                       </Form>
-                      <Button
-                        onClick={() => applyFilter()}
-                        className="btn btn-primary d-flex justify-self-flex-end"
-                      >
-                        Apply Filter
-                      </Button>
                     </div>
                   )}
                   <div className="user-status table-responsive latest-order-table">

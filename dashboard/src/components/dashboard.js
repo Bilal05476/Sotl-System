@@ -120,22 +120,27 @@ const Dashboard = () => {
       streamFilter === "Yearly"
         ? ["2022", "2023", "2024"]
         : streamFilter === "Quarter"
-        ? ["Jan - Mar", "Apr - June", "Jul - Sep", "Oct - Dec"]
+        ? [
+            "January - March",
+            "April - June",
+            "July - September",
+            "October - December",
+          ]
         : streamFilter === "Semesters"
         ? ["Spring", "Summer", "Fall"]
         : [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
+            "January",
+            "February",
+            "March",
+            "April",
             "May",
             "June",
             "July",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
           ],
     datasets: [
       {
@@ -144,18 +149,18 @@ const Dashboard = () => {
             ? [0, filterStreamObservation("2023", "Pending"), 0]
             : streamFilter === "Quarter"
             ? [
-                filterStreamObservation("Jan", "Pending") +
-                  filterStreamObservation("Feb", "Pending") +
-                  filterStreamObservation("Mar", "Pending"),
-                filterStreamObservation("Apr", "Pending") +
+                filterStreamObservation("January", "Pending") +
+                  filterStreamObservation("February", "Pending") +
+                  filterStreamObservation("March", "Pending"),
+                filterStreamObservation("April", "Pending") +
                   filterStreamObservation("May", "Pending") +
                   filterStreamObservation("June", "Pending"),
                 filterStreamObservation("July", "Pending") +
-                  filterStreamObservation("Aug", "Pending") +
-                  filterStreamObservation("Sep", "Pending"),
-                filterStreamObservation("Oct", "Pending") +
-                  filterStreamObservation("Nov", "Pending") +
-                  filterStreamObservation("Dec", "Pending"),
+                  filterStreamObservation("August", "Pending") +
+                  filterStreamObservation("September", "Pending"),
+                filterStreamObservation("October", "Pending") +
+                  filterStreamObservation("November", "Pending") +
+                  filterStreamObservation("December", "Pending"),
               ]
             : streamFilter === "Semesters"
             ? [
@@ -164,18 +169,18 @@ const Dashboard = () => {
                 filterSemesterObservation("Fall", "Pending"),
               ]
             : [
-                filterStreamObservation("Jan", "Pending"),
-                filterStreamObservation("Feb", "Pending"),
-                filterStreamObservation("Mar", "Pending"),
-                filterStreamObservation("Apr", "Pending"),
+                filterStreamObservation("January", "Pending"),
+                filterStreamObservation("February", "Pending"),
+                filterStreamObservation("March", "Pending"),
+                filterStreamObservation("April", "Pending"),
                 filterStreamObservation("May", "Pending"),
                 filterStreamObservation("June", "Pending"),
                 filterStreamObservation("July", "Pending"),
-                filterStreamObservation("Aug", "Pending"),
-                filterStreamObservation("Sep", "Pending"),
-                filterStreamObservation("Oct", "Pending"),
-                filterStreamObservation("Nov", "Pending"),
-                filterStreamObservation("Dec", "Pending"),
+                filterStreamObservation("August", "Pending"),
+                filterStreamObservation("September", "Pending"),
+                filterStreamObservation("October", "Pending"),
+                filterStreamObservation("November", "Pending"),
+                filterStreamObservation("December", "Pending"),
               ],
         // borderColor: "gold",
         backgroundColor: pendingColor,
@@ -192,18 +197,18 @@ const Dashboard = () => {
             ? [0, filterStreamObservation("2023", "Ongoing"), 0]
             : streamFilter === "Quarter"
             ? [
-                filterStreamObservation("Jan", "Ongoing") +
-                  filterStreamObservation("Feb", "Ongoing") +
-                  filterStreamObservation("Mar", "Ongoing"),
-                filterStreamObservation("Apr", "Ongoing") +
+                filterStreamObservation("January", "Ongoing") +
+                  filterStreamObservation("February", "Ongoing") +
+                  filterStreamObservation("March", "Ongoing"),
+                filterStreamObservation("April", "Ongoing") +
                   filterStreamObservation("May", "Ongoing") +
                   filterStreamObservation("June", "Ongoing"),
                 filterStreamObservation("July", "Ongoing") +
-                  filterStreamObservation("Aug", "Ongoing") +
-                  filterStreamObservation("Sep", "Ongoing"),
-                filterStreamObservation("Oct", "Ongoing") +
-                  filterStreamObservation("Nov", "Ongoing") +
-                  filterStreamObservation("Dec", "Ongoing"),
+                  filterStreamObservation("August", "Ongoing") +
+                  filterStreamObservation("September", "Ongoing"),
+                filterStreamObservation("October", "Ongoing") +
+                  filterStreamObservation("November", "Ongoing") +
+                  filterStreamObservation("December", "Ongoing"),
               ]
             : streamFilter === "Semesters"
             ? [
@@ -212,18 +217,18 @@ const Dashboard = () => {
                 filterSemesterObservation("Fall", "Ongoing"),
               ]
             : [
-                filterStreamObservation("Jan", "Ongoing"),
-                filterStreamObservation("Feb", "Ongoing"),
-                filterStreamObservation("Mar", "Ongoing"),
-                filterStreamObservation("Apr", "Ongoing"),
+                filterStreamObservation("January", "Ongoing"),
+                filterStreamObservation("February", "Ongoing"),
+                filterStreamObservation("March", "Ongoing"),
+                filterStreamObservation("April", "Ongoing"),
                 filterStreamObservation("May", "Ongoing"),
                 filterStreamObservation("June", "Ongoing"),
                 filterStreamObservation("July", "Ongoing"),
-                filterStreamObservation("Aug", "Ongoing"),
-                filterStreamObservation("Sep", "Ongoing"),
-                filterStreamObservation("Oct", "Ongoing"),
-                filterStreamObservation("Nov", "Ongoing"),
-                filterStreamObservation("Dec", "Ongoing"),
+                filterStreamObservation("August", "Ongoing"),
+                filterStreamObservation("September", "Ongoing"),
+                filterStreamObservation("October", "Ongoing"),
+                filterStreamObservation("November", "Ongoing"),
+                filterStreamObservation("December", "Ongoing"),
               ],
 
         // borderColor: "lightblue",
@@ -240,18 +245,18 @@ const Dashboard = () => {
             ? [0, filterStreamObservation("2023", "Completed"), 0]
             : streamFilter === "Quarter"
             ? [
-                filterStreamObservation("Jan", "Completed") +
-                  filterStreamObservation("Feb", "Completed") +
-                  filterStreamObservation("Mar", "Completed"),
-                filterStreamObservation("Apr", "Completed") +
+                filterStreamObservation("January", "Completed") +
+                  filterStreamObservation("February", "Completed") +
+                  filterStreamObservation("March", "Completed"),
+                filterStreamObservation("April", "Completed") +
                   filterStreamObservation("May", "Completed") +
                   filterStreamObservation("June", "Completed"),
                 filterStreamObservation("July", "Completed") +
-                  filterStreamObservation("Aug", "Completed") +
-                  filterStreamObservation("Sep", "Completed"),
-                filterStreamObservation("Oct", "Completed") +
-                  filterStreamObservation("Nov", "Completed") +
-                  filterStreamObservation("Dec", "Completed"),
+                  filterStreamObservation("August", "Completed") +
+                  filterStreamObservation("September", "Completed"),
+                filterStreamObservation("October", "Completed") +
+                  filterStreamObservation("November", "Completed") +
+                  filterStreamObservation("December", "Completed"),
               ]
             : streamFilter === "Semesters"
             ? [
@@ -260,18 +265,18 @@ const Dashboard = () => {
                 filterSemesterObservation("Fall", "Completed"),
               ]
             : [
-                filterStreamObservation("Jan", "Completed"),
-                filterStreamObservation("Feb", "Completed"),
-                filterStreamObservation("Mar", "Completed"),
-                filterStreamObservation("Apr", "Completed"),
+                filterStreamObservation("January", "Completed"),
+                filterStreamObservation("February", "Completed"),
+                filterStreamObservation("March", "Completed"),
+                filterStreamObservation("April", "Completed"),
                 filterStreamObservation("May", "Completed"),
                 filterStreamObservation("June", "Completed"),
                 filterStreamObservation("July", "Completed"),
-                filterStreamObservation("Aug", "Completed"),
-                filterStreamObservation("Sep", "Completed"),
-                filterStreamObservation("Oct", "Completed"),
-                filterStreamObservation("Nov", "Completed"),
-                filterStreamObservation("Dec", "Completed"),
+                filterStreamObservation("August", "Completed"),
+                filterStreamObservation("September", "Completed"),
+                filterStreamObservation("October", "Completed"),
+                filterStreamObservation("November", "Completed"),
+                filterStreamObservation("December", "Completed"),
               ],
 
         // borderColor: "#040b5b",

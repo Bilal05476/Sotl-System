@@ -63,7 +63,12 @@ const TabsetObservation = () => {
             ...createObs,
             loader: false,
           });
-          successes("Observation initiated successfully!");
+          if (data?.existed.length > 0) {
+            if (data.existed.length < faculties.length) {
+              successes("Observation initiated successfully!");
+            }
+            data.existed.map((item) => warning(item.message));
+          }
 
           setTimeout(() => {
             setCreateObs({
@@ -73,7 +78,7 @@ const TabsetObservation = () => {
               semester: "Select",
               faculties: [],
             });
-          }, 2000);
+          }, 2500);
         }
       } catch (error) {
         toast.dismiss(toastId.current);
