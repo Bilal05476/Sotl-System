@@ -37,36 +37,43 @@ const List_observation = () => {
 
   const [openFilter, setOpenFilter] = useState(false);
   const [obsFilter, setObsFilter] = useState({
-    course: 0,
-    semester: "All",
-    faculty: 0,
-    observer: 0,
-    status: "All",
-    start: "All",
+    course: null,
+    semester: null,
+    faculty: null,
+    observer: null,
+    status: null,
+    start: null,
   });
   const { course, semester, faculty, observer, status, start } = obsFilter;
 
-  const applyFilter = () => {
-    if (course !== 0) {
-      const filteredByCourse = userData?.observations?.filter(
-        (item) => item.courseId === course
-      );
-      setObservationData(filteredByCourse);
-    }
-    if (semester !== "All") {
-      const filteredByCourse = userData?.observations?.filter(
-        (item) => item.semester === semester
-      );
-      setObservationData(filteredByCourse);
-    } else {
-      setObservationData(userData?.observations);
-    }
-    // const filteredBy = userData?.observations?.filter(
-    //   (item) =>
-    //     (item.courseId === course !== 0 && course) ||
-    //     (item.facultyId === faculty !== 0 && faculty)
-    // );
+  // console.log(userData?.observations);
+
+  const onSelectfilter = () => {
+    console.log(obsFilter);
+    // if (
+    //   (!course || course === "Course") &&
+    //   (!semester || semester === "Semester") &&
+    //   (!faculty || faculty === "Faculty") &&
+    //   (!observer || observer === "Observer") &&
+    //   (!status || status === "Status") &&
+    //   (!start || start === "Start")
+    // ) {
+    //   setObservationData(userData?.observations);
+    // } else {
+    //   const filterByCourse = userData?.observations.filter(
+    //     (item) => course && item?.courseId === Number(course)
+    //   );
+    //   console.log(filterByCourse);
+    //   const filterByStatus = filterByCourse.filter(
+    //     (item) => course && item?.observationStatus === status
+    //   );
+    //   setObservationData(filterByStatus);
+    // }
   };
+
+  useEffect(() => {
+    onSelectfilter();
+  }, [obsFilter]);
   return (
     <Fragment>
       <Breadcrumb title="Observation List" parent="Observations" />
@@ -99,19 +106,31 @@ const List_observation = () => {
                       <Form className="needs-validation user-add" noValidate="">
                         <FormGroup className="row">
                           <FilterOptions
-                            filtername="Course"
-                            filterOption={[]}
+                            filterOption={[
+                              {
+                                id: null,
+                                name: "Course",
+                              },
+                              {
+                                id: 1,
+                                name: "Applied Physics",
+                              },
+                            ]}
                             filterValue={course}
-                            changeValue={(value) =>
+                            changeValue={(e) =>
                               setObsFilter({
                                 ...obsFilter,
-                                course: value,
+                                course: e.target.value,
                               })
                             }
+                            // onSelectfilter={onSelectfilter}
                           />
                           <FilterOptions
-                            filtername="Semester"
                             filterOption={[
+                              {
+                                id: null,
+                                name: "Semester",
+                              },
                               {
                                 id: "Spring",
                                 name: "Spring",
@@ -126,33 +145,85 @@ const List_observation = () => {
                               },
                             ]}
                             filterValue={semester}
-                            changeValue={(value) =>
+                            changeValue={(e) =>
                               setObsFilter({
                                 ...obsFilter,
-                                semester: value,
+                                semester: e.target.value,
+                              })
+                            }
+                            // onSelectfilter={onSelectfilter}
+                          />
+                          <FilterOptions
+                            filterOption={[
+                              {
+                                id: null,
+                                name: "Faculty",
+                              },
+                            ]}
+                            filterValue={faculty}
+                            changeValue={(e) =>
+                              setObsFilter({
+                                ...obsFilter,
+                                faculty: e.target.value,
                               })
                             }
                           />
                           <FilterOptions
-                            filtername="Faculty"
-                            filterOption={[]}
-                            filterValue={faculty}
-                            setObsFilter={setObsFilter}
-                            obsFilter={obsFilter}
-                          />
-                          <FilterOptions
-                            filtername="Observer"
-                            filterOption={[]}
+                            filterOption={[
+                              {
+                                id: null,
+                                name: "Observer",
+                              },
+                            ]}
                             filterValue={observer}
-                            setObsFilter={setObsFilter}
-                            obsFilter={obsFilter}
+                            changeValue={(e) =>
+                              setObsFilter({
+                                ...obsFilter,
+                                observer: e.target.value,
+                              })
+                            }
                           />
                           <FilterOptions
-                            filtername="Status"
-                            filterOption={[]}
+                            filterOption={[
+                              {
+                                id: null,
+                                name: "Status",
+                              },
+                              {
+                                id: "Pending",
+                                name: "Pending",
+                              },
+                              {
+                                id: "Ongoing",
+                                name: "Ongoing",
+                              },
+                              {
+                                id: "Completed",
+                                name: "Completed",
+                              },
+                            ]}
                             filterValue={status}
-                            setObsFilter={setObsFilter}
-                            obsFilter={obsFilter}
+                            changeValue={(e) =>
+                              setObsFilter({
+                                ...obsFilter,
+                                status: e.target.value,
+                              })
+                            }
+                          />
+                          <FilterOptions
+                            filterOption={[
+                              {
+                                id: null,
+                                name: "Starting",
+                              },
+                            ]}
+                            filterValue={start}
+                            changeValue={(e) =>
+                              setObsFilter({
+                                ...obsFilter,
+                                start: e.target.value,
+                              })
+                            }
                           />
                         </FormGroup>
                       </Form>
@@ -298,35 +369,24 @@ const List_observation = () => {
   );
 };
 
-const FilterOptions = ({
-  filtername,
-  filterOption,
-  filterValue,
-  changeValue,
-}) => {
+const FilterOptions = ({ filterOption, filterValue, changeValue }) => {
   return (
-    <>
-      <Label className="col-xl-2 col-3 mb-2">
-        <span>*</span> {filtername}
-      </Label>
-      <div className="col-xl-2 col-3 mb-2">
-        <Input
-          className="form-control"
-          id="validationCustom3"
-          type="select"
-          required={true}
-          value={filterValue}
-          onChange={(e) => changeValue(e.target.value)}
-        >
-          <option value="Select">Select</option>
-          {filterOption?.map((item) => (
-            <option key={item?.id} value={item?.id}>
-              {item?.name}
-            </option>
-          ))}
-        </Input>
-      </div>
-    </>
+    <div className="col-2 mb-2">
+      <Input
+        className="form-control"
+        id="validationCustom3"
+        type="select"
+        required={true}
+        value={filterValue}
+        onChange={changeValue}
+      >
+        {filterOption?.map((item) => (
+          <option key={item.id} value={item.id}>
+            {item.name}
+          </option>
+        ))}
+      </Input>
+    </div>
   );
 };
 
