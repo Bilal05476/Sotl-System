@@ -15,7 +15,7 @@ const TabsetEditProfile = () => {
     email: user?.email,
     role: user?.role.replaceAll("_", " "),
     campus: user?.campus?.replaceAll("_", " "),
-    department: user?.department?.replaceAll("_", " "),
+    department: user?.department.name,
     dateOfBirth: user?.dateOfBirth ? user?.dateOfBirth : "",
     designation: user?.designation ? user?.designation : "",
     institute: user?.institute ? user?.institute : "",

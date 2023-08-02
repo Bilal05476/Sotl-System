@@ -52,7 +52,7 @@ const TabsetProfile = ({ user, personal, academic }) => {
                     </tr>
                     <tr>
                       <td>Department:</td>
-                      <td>{user.department}</td>
+                      <td>{user.department.name}</td>
                     </tr>
                   </tbody>
                 </Table>

@@ -14,7 +14,7 @@ const TabsetCourses = () => {
   const [createCourse, setCreateCourse] = useState({
     courseCode: "",
     name: "",
-    department: user.department.replaceAll("_", " "),
+    department: user.department.name,
     campus: user.campus.replaceAll("_", " "),
     credits: "",
     loader: false,

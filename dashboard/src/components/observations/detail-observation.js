@@ -23,11 +23,11 @@ const Detail_observation = () => {
   const [facultycourses, setfacultycourses] = useState([]);
   const toastId = useRef(null);
 
-  const [{ user, usersandcourses }, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
     fetchObservation(setObsDetail, Number(id));
-    fetchCoursesAndUsers(dispatch);
+    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
     window.scrollTo(0, 0);
   }, []);
 
@@ -67,7 +67,7 @@ const Detail_observation = () => {
   };
 
   // return;
-  console.log(obsDetail);
+  // console.log(obsDetail);
 
   const [postTimingOpen, setPostTimingOpen] = useState(false);
   return (

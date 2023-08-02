@@ -31,7 +31,7 @@ const TabsetObservation = () => {
       semester,
     };
     async function postObs() {
-      info("Observation initiating...");
+      info("Observation(s) initiating...");
       setCreateObs({
         ...createObs,
         loader: true,
@@ -63,22 +63,24 @@ const TabsetObservation = () => {
             ...createObs,
             loader: false,
           });
-          if (data?.existed.length > 0) {
-            if (data.existed.length < faculties.length) {
-              successes("Observation initiated successfully!");
-            }
-            data.existed.map((item) => warning(item.message));
-          }
 
-          setTimeout(() => {
-            setCreateObs({
-              ...createObs,
-              facultyId: "Select",
-              observerId: "Select",
-              semester: "Select",
-              faculties: [],
-            });
-          }, 2500);
+          if (data.existed.length > 0) {
+            data.existed.map((item) => warning(item.message));
+            if (data.existed.length < faculties.length) {
+              successes("Other Observation(s) initiated successfully!");
+            }
+          } else {
+            successes("Observation(s) initiated successfully!");
+            setTimeout(() => {
+              setCreateObs({
+                ...createObs,
+                facultyId: "Select",
+                observerId: "Select",
+                semester: "Select",
+                faculties: [],
+              });
+            }, 2500);
+          }
         }
       } catch (error) {
         toast.dismiss(toastId.current);
@@ -139,12 +141,19 @@ const TabsetObservation = () => {
   // console.log(fCourses);
 
   const onSelectFaculty = async (e) => {
-    console.log(e.target.value);
-    const id = Number(e.target.value);
-    setCreateObs({
-      ...createObs,
-      faculties: [...faculties, id],
-    });
+    const id = Number(e);
+    if (faculties.includes(id)) {
+      const filtered = faculties.filter((item) => item !== id);
+      setCreateObs({
+        ...createObs,
+        faculties: filtered,
+      });
+    } else {
+      setCreateObs({
+        ...createObs,
+        faculties: [...faculties, id],
+      });
+    }
   };
 
   return (
@@ -196,7 +205,7 @@ const TabsetObservation = () => {
                   type="select"
                   required={true}
                   // value={facultyId}
-                  onChange={(e) => onSelectFaculty(e)}
+                  onChange={(e) => onSelectFaculty(e.target.value)}
                 >
                   <option value="Select">Select</option>
                   {usersandcourses?.users.map((item) =>
@@ -225,9 +234,11 @@ const TabsetObservation = () => {
                           borderRadius: "5px",
                           color: "white",
                           boxShadow: "1px 1px 1px #1e1e1e54",
+                          cursor: "pointer",
                         }}
                         key={item.id}
                         value={item.id}
+                        onClick={() => onSelectFaculty(item.id)}
                       >
                         {item.name} ({item.id})
                       </span>

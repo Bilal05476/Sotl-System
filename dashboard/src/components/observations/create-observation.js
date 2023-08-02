@@ -6,9 +6,9 @@ import { useStateValue } from "../../StateProvider";
 import { fetchCoursesAndUsers } from "../Endpoints";
 
 const Create_observation = () => {
-  const [{}, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
-    fetchCoursesAndUsers(dispatch);
+    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
   }, []);
   return (
     <Fragment>

@@ -15,11 +15,13 @@ import {
 import { useStateValue } from "../../StateProvider";
 import { Eye, Loader } from "react-feather";
 import { fetchCoursesAndUsers, fetchUserData } from "../Endpoints";
+import { completeColor, completeColor2 } from "../colors";
 
 const List_courses = () => {
   const [{ user, usersandcourses }, dispatch] = useStateValue();
   useEffect(() => {
-    if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
+    if (user.role === "Head_of_Department")
+      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
     fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
@@ -63,7 +65,24 @@ const List_courses = () => {
                               <td className="digits">{item.name}</td>
                               <td className="digits">{item.credits}</td>
                               <td className="digits">
-                                {/* {item.department.name} */}
+                                {item.department.map((dept) => (
+                                  <span
+                                    style={{
+                                      color:
+                                        dept.id === user.department.id
+                                          ? completeColor2
+                                          : "#979797",
+                                      fontWeight:
+                                        dept.id === user.department.id
+                                          ? "600"
+                                          : "300",
+                                    }}
+                                  >
+                                    {dept.name}{" "}
+                                    {item.department.indexOf(dept) !==
+                                      item.department.length - 1 && ","}{" "}
+                                  </span>
+                                ))}
                               </td>
                               <td className="digits">
                                 {item.campus.replaceAll("_", " ")}

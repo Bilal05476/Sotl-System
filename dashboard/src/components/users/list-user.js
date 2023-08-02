@@ -10,7 +10,7 @@ const List_user = () => {
   const [{ usersandcourses, user }, dispatch] = useStateValue();
   useEffect(() => {
     const deptId = user.department.id;
-    fetchCoursesAndUsers(dispatch, deptId);
+    fetchCoursesAndUsers(dispatch, deptId, user.role);
     window.scrollTo(0, 0);
   }, []);
 

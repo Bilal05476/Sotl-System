@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
-import { XCircle } from "react-feather";
+// import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,7 +18,7 @@ const TabsetUser = () => {
     email: "",
     role: "Select",
     campus: user?.campus?.replaceAll("_", " "),
-    department: user?.department,
+    department: user?.department.name,
     courseId: "",
     password: "",
     cPassword: "",
@@ -51,7 +51,7 @@ const TabsetUser = () => {
       password,
       role,
       campus: user?.campus,
-      department: user?.department,
+      department: user?.department.id,
       courses: slotsId,
     };
     async function postUser() {
@@ -80,20 +80,13 @@ const TabsetUser = () => {
             cPassword: "",
             courseId: "",
             role: "Select",
-            campus: user.campus ? user.campus : "Select",
-            department: user.department ? user.department : "Select",
           });
           setSlots([]);
           setSelectedSlot([]);
         }, 2000);
       }
     }
-    if (
-      role === "Select" ||
-      department === "Select" ||
-      campus === "Select" ||
-      !fullname
-    ) {
+    if (role === "Select" || !fullname) {
       info("Please provide required data!");
     } else if (!validateEmail(email)) {
       warning("Please enter valid email address!");
@@ -168,7 +161,7 @@ const TabsetUser = () => {
   };
 
   useEffect(() => {
-    fetchCoursesAndUsers(dispatch);
+    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
     window.scrollTo(0, 0);
   }, []);
 
@@ -232,27 +225,9 @@ const TabsetUser = () => {
                   className="form-control"
                   id="validationCustom3"
                   type="text"
-                  // required={true}
                   readOnly={true}
                   value={campus}
-                  // onChange={(e) =>
-                  //   setCreateUser({
-                  //     ...createUser,
-                  //     campus: e.target.value,
-                  //   })
-                  // }
                 />
-
-                {/* 
-                <option value="Select">Select</option>
-                  <option value="Main_Campus">Main Campus</option>
-                  <option value="Gulshan_Campus">Gulshan Campus</option>
-                  <option value="North_Campus">North Campus</option>
-                  <option value="Airport_Campus">Airport Campus</option>
-                  <option value="Bahria_Campus">Bahria Campus</option>
-                  <option value="Islamabad_Campus">Islamabad Campus</option> 
-                  </Input>
-                  */}
               </div>
             </FormGroup>
             <FormGroup className="row">
@@ -266,19 +241,7 @@ const TabsetUser = () => {
                   type="text"
                   readOnly={true}
                   value={department}
-                  // onChange={(e) =>
-                  //   setCreateUser({
-                  //     ...createUser,
-                  //     department: e.target.value,
-                  //   })
-                  // }
                 />
-                {/* <option value="Select">Select</option>
-                  <option value="Fest">FEST</option>
-                  <option value="Aifd">AIFD</option>
-                  <option value="Media">Media</option>
-                  <option value="Business">Business</option>
-                </Input> */}
               </div>
             </FormGroup>
             <FormGroup className="row">
@@ -356,10 +319,11 @@ const TabsetUser = () => {
                   <Label className="col-xl-3 col-md-4">
                     <span>*</span> Course Slots
                   </Label>
-                  <div className="col-xl-8 col-md-7">
+                  <div className="col-xl-8 col-md-7 d-flex flex-wrap">
                     {slots.map((item) => (
                       <span
                         className="mb-2"
+                        key={item.id}
                         style={{
                           border: `1px solid ${completeColor2}`,
                           marginRight: "0.5rem",

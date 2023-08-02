@@ -55,8 +55,9 @@ const LayoutRoutes = () => {
   const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
-    if (user.role === "Head_of_Department") fetchCoursesAndUsers(dispatch);
-    fetchUserData(user.id, dispatch);
+    if (user.role === "Head_of_Department")
+      fetchCoursesAndUsers(dispatch, user?.department.id, user?.role);
+    fetchUserData(user?.id, dispatch);
   }, []);
 
   return (

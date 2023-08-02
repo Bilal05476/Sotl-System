@@ -417,7 +417,7 @@ const Dashboard = () => {
   useEffect(() => {
     const deptId = user.department.id;
     if (user.role === "Head_of_Department")
-      fetchCoursesAndUsers(dispatch, deptId);
+      fetchCoursesAndUsers(dispatch, deptId, user.role);
     fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
