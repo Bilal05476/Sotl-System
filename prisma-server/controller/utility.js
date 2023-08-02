@@ -3,42 +3,86 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
 // @desc   Get users and courses for Admin, Campus Director, HOD
-// @route  GET api/courses-users
+// @route  GET api/courses-users/:departmentId/:role
 // @access Private (Parent Role Like (Admin, Campus Director, HOD))
 export const getUsersAndCourses = asyncHandler(async (req, res) => {
-  const getUsers = await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      phone: true,
-      avatar: true,
-      designation: true,
-      dateOfBirth: true,
-      institute: true,
-      degree: true,
-      starting: true,
-      ending: true,
-      role: true,
-      campus: true,
-      department: true,
+  let { departmentId, role } = req.params;
+
+  departmentId = Number(departmentId);
+
+  const department = await prisma.departments.findFirst({
+    where: {
+      id: departmentId,
     },
   });
-  const getCourses = await prisma.courses.findMany({
-    include: {
-      slots: {
-        include: {
-          faculty: {
-            select: {
-              name: true,
-              email: true,
+
+  const getUsers =
+    departmentId && role === "Head_of_Department"
+      ? await prisma.user.findMany({
+          where: {
+            departmentId,
+            NOT: {
+              role,
             },
           },
-        },
-      },
-    },
+          include: {
+            department: true,
+          },
+        })
+      : await prisma.user.findMany({
+          include: {
+            department: true,
+          },
+        });
+
+  const getCourses =
+    departmentId && role === "Head_of_Department"
+      ? await prisma.courses.findMany({
+          where: {
+            department: {
+              some: {
+                name: department.name,
+              },
+            },
+          },
+          include: {
+            slots: {
+              include: {
+                faculty: {
+                  select: {
+                    name: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+            department: true,
+          },
+        })
+      : await prisma.courses.findMany({
+          include: {
+            slots: {
+              include: {
+                faculty: {
+                  select: {
+                    name: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+            department: true,
+          },
+        });
+
+  // // exclude user password from getUsers
+  const userWithoutPass = getUsers.map((obj) => {
+    const newObj = { ...obj };
+    ["password"].forEach((field) => delete newObj[field]);
+    return newObj;
   });
-  const data = { users: getUsers, courses: getCourses };
+
+  const data = { users: userWithoutPass, courses: getCourses };
   res.status(200).json(data);
 });
 

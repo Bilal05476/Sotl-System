@@ -30,7 +30,6 @@ export async function fetchCoursesAndUsers(dispatch, department) {
       },
     });
     const data = await usercourses.json();
-    console.log(data.users.filter((item) => item.department.id === department));
     dispatch({
       type: "SET_USERS_COURSES",
       payload: {

@@ -7,7 +7,9 @@ import {
   getTemplates,
 } from "../controller/templates.js";
 
-utilityRoutes.route("/courses-users").get(getUsersAndCourses);
+utilityRoutes
+  .route("/courses-users/:departmentId/:role")
+  .get(getUsersAndCourses);
 utilityRoutes.route("/template").post(createTemplate).get(getTemplates);
 utilityRoutes.route("/template/:id").get(getTemplate);
 
