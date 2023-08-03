@@ -1,4 +1,5 @@
 import { FormGroup, Input, Label } from "reactstrap";
+import { completeColor, ongoingColor } from "../colors";
 
 export const TextInput = ({ label, placeholder, value, onChange }) => {
   return (
@@ -38,7 +39,16 @@ export const TextInputReadOnly = ({ label, value }) => {
   );
 };
 
-export const SelectInput = ({ label, value, options, onChange }) => {
+export const SelectInput = ({
+  label,
+  value,
+  options,
+  onChange,
+  departments,
+  setDepartments,
+}) => {
+  console.log(options);
+  console.log(departments);
   return (
     <FormGroup className="row">
       <Label className="col-xl-3 col-md-4">
@@ -53,12 +63,40 @@ export const SelectInput = ({ label, value, options, onChange }) => {
           onChange={onChange}
         >
           <option value="Select">Select</option>
-          {options?.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.name}
-            </option>
-          ))}
+          {options?.map(
+            (item) =>
+              departments.includes(item.id) === false && (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              )
+          )}
         </Input>
+        {departments.length > 0 && (
+          <div className="d-flex align-items-center flex-wrap">
+            {options?.map(
+              (item) =>
+                departments.includes(item.id) && (
+                  <span
+                    className="px-2 py-1 m-1 text-dark"
+                    style={{
+                      background: ongoingColor,
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                    key={item.id}
+                    onClick={() => {
+                      setDepartments(
+                        departments.filter((item) => item !== item.id)
+                      );
+                    }}
+                  >
+                    {item.name}
+                  </span>
+                )
+            )}
+          </div>
+        )}
       </div>
     </FormGroup>
   );

@@ -211,3 +211,15 @@ export async function submitScore(
     loader(false);
   }
 }
+
+export async function fetchDepartments(id, setAllDept) {
+  const res = await fetch(`${BASEURL}/department`, {
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
+  const data = await res.json();
+  if (!data.message) {
+    setAllDept(data);
+  }
+}

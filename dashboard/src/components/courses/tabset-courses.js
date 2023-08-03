@@ -7,14 +7,17 @@ import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 import { SelectInput, TextInput, TextInputReadOnly } from "../Input";
 import { PlusCircle } from "react-feather";
+import { fetchDepartments } from "../Endpoints";
 
 const TabsetCourses = () => {
-  const [{ user, users }] = useStateValue();
+  const [{ user }] = useStateValue();
   const [slotsLength, setSlotsLength] = useState([1]);
+  const [alldept, setAllDept] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [createCourse, setCreateCourse] = useState({
     courseCode: "",
     name: "",
-    departments: [],
+
     campus: user.campus.replaceAll("_", " "),
     credits: "",
     loader: false,
@@ -27,8 +30,7 @@ const TabsetCourses = () => {
     location: "",
   });
 
-  const { courseCode, name, departments, campus, credits, loader } =
-    createCourse;
+  const { courseCode, name, campus, credits, loader } = createCourse;
   const { sectionCode, day, time, location } = createSlot;
 
   const toastId = useRef(null);
@@ -37,6 +39,7 @@ const TabsetCourses = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchDepartments(user.id, setAllDept);
   }, []);
 
   const onCreateCourse = () => {
@@ -79,6 +82,7 @@ const TabsetCourses = () => {
             courseCode: "",
             name: "",
             credits: "",
+            departments: [],
           });
           successes("Course created successfully!");
           setTimeout(() => {
@@ -170,12 +174,12 @@ const TabsetCourses = () => {
             <SelectInput
               label="Departments"
               value={departments}
-              onChange={(e) => {
-                setCreateCourse({
-                  ...createCourse,
-                  departments: [...departments, e.target.value],
-                });
-              }}
+              departments={departments}
+              setDepartments={setDepartments}
+              options={alldept}
+              onChange={(e) =>
+                setDepartments([...departments, Number(e.target.value)])
+              }
             />
             {/* <TextInputReadOnly label="Department" value={department} /> */}
             <TextInputReadOnly label="Campus" value={campus} />
