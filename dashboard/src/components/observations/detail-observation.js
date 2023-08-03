@@ -437,8 +437,9 @@ const Detail_observation = () => {
                     <div className="accordion-body text-center">
                       <strong>Not started!</strong>
                       <br />
-                      {obsDetail?.meetings?.informedObservation
-                        ?.facultyScore !== 0 &&
+                      {obsDetail?.meetings?.informedObservation &&
+                      obsDetail?.meetings?.informedObservation?.facultyScore !==
+                        0 &&
                       obsDetail?.meetings?.informedObservation
                         ?.observerScore !== 0 &&
                       user.role === "Observer" ? (

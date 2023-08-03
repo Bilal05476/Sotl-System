@@ -6,8 +6,10 @@ import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 import { completeColor2 } from "../colors";
+import { useNavigate } from "react-router-dom";
 
 const TabsetObservation = () => {
+  const nav = useNavigate();
   const [{ user, usersandcourses }] = useStateValue();
   const [createObs, setCreateObs] = useState({
     observerId: "Select",
@@ -79,6 +81,7 @@ const TabsetObservation = () => {
                 semester: "Select",
                 faculties: [],
               });
+              nav("/observations/list-observation");
             }, 2500);
           }
         }
