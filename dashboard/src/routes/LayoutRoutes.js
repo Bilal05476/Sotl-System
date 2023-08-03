@@ -45,9 +45,10 @@ import Assigncourses from "../components/courses/assign-courses";
 import Teaching from "../components/Templates/Teaching";
 import Reflection from "../components/Templates/Reflection";
 import Artifacts from "../components/Templates/Artifacts";
-import ParentComponent from "../components/ParentComponent";
-import ChildComponent from "../components/ChildComponent";
+// import ParentComponent from "../components/ParentComponent";
+// import ChildComponent from "../components/ChildComponent";
 import Postobservation from "../components/observations/post-observation";
+
 // import Hello from "../components/Hello";
 
 const URL = process.env.PUBLIC_URL;
@@ -148,6 +149,7 @@ const LayoutRoutes = () => {
             path={`${URL}/menus/create-menu`}
             element={<Createmenu />}
           /> */}
+
           <Route path={`${URL}/users/list-user`} element={<Listuser />} />
           <Route path={`${URL}/users/create-user`} element={<Createuser />} />
           <Route

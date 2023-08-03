@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
@@ -17,6 +17,7 @@ const TabsetScheduling = ({ role }) => {
   const [{ user }] = useStateValue();
   const { id } = useParams();
   const [obs, setObs] = useState("");
+  const nav = useNavigate();
 
   const toastId = useRef(null);
 
@@ -62,6 +63,8 @@ const TabsetScheduling = ({ role }) => {
       editedObsDetail.scheduledOn = formattedDate;
     }
 
+    // return editedObsDetail;
+
     info("Scheduling uppdating...");
     try {
       const res = await fetch(`${BASEURL}/observation/scheduling`, {
@@ -80,6 +83,11 @@ const TabsetScheduling = ({ role }) => {
         toast.dismiss(toastId.current);
         successes("Observation updated!");
         fetchObservation(setObs, Number(id));
+        setObsSchedule({
+          timeSlotsByFaculty: [],
+          timeSlotByObserver: [],
+          scheduledOn: "",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -156,8 +164,11 @@ const TabsetScheduling = ({ role }) => {
     if (data.error) {
       errors(data.error);
     } else {
-      successes("Observation Scheduling Done!");
+      successes("Observation Scheduling Completed!");
       fetchObservation(setObs, Number(id));
+      setTimeout(() => {
+        nav(`/observations/detail-observation/${id}`);
+      }, 3000);
     }
   };
 
@@ -239,6 +250,17 @@ const TabsetScheduling = ({ role }) => {
                             cursor={true}
                           />
                         ))}
+                        {obs?.obsRequest?.timeSlotsByFaculty.length === 0 && (
+                          <span
+                            style={{
+                              fontStyle: "italic",
+                            }}
+                            className="d-flex align-items-center justify-content-center"
+                          >
+                            Faculty not provided any time slots yet...{" "}
+                            <Frown color="brown" size={18} />{" "}
+                          </span>
+                        )}
                       </div>
                     </FormGroup>
                     <FormPool
@@ -251,22 +273,54 @@ const TabsetScheduling = ({ role }) => {
                           scheduledOn: e.target.value,
                         })
                       }
-                      type={"dateTime-local"}
+                      type={"date"}
                     />
                   </Form>
                 </TabPanel>
               </Tabs>
-              <div className="pull-right">
-                {!obs?.obsRequest?.observerAccepted && (
-                  <Button
-                    onClick={() => onObservationEditing()}
-                    type="button"
-                    color="primary"
-                  >
-                    Update
-                  </Button>
-                )}
-              </div>
+
+              {obs?.obsRequest?.facultyAccepted &&
+              obs?.obsRequest?.observerAccepted ? (
+                <div className="pull-right">
+                  {obs?.obsRequest?.facultyAccepted &&
+                    obs?.obsRequest?.observerAccepted && (
+                      <Button
+                        onClick={() => onSchedulingDone()}
+                        type="button"
+                        color="primary"
+                      >
+                        Done
+                      </Button>
+                    )}
+                </div>
+              ) : (
+                <div className="pull-right">
+                  {obs?.obsRequest?.timeSlotsByFaculty.length > 0 ? (
+                    <Button
+                      onClick={() => onObservationEditing()}
+                      type="button"
+                      color="primary"
+                    >
+                      Update
+                    </Button>
+                  ) : (
+                    <Button disabled color="primary">
+                      Update
+                    </Button>
+                  )}
+                  {obs?.obsRequest?.scheduledOn &&
+                    obs?.obsRequest?.facultyAccepted && (
+                      <Button
+                        onClick={() => onSchedulingAccept()}
+                        type="button"
+                        color="primary"
+                        className="mx-3"
+                      >
+                        Confirm
+                      </Button>
+                    )}
+                </div>
+              )}
             </>
           )}
         </>
@@ -275,7 +329,7 @@ const TabsetScheduling = ({ role }) => {
         <>
           {!obs?.obsRequest?.teachingPlan[0]?.editedBy && (
             <MultiStepForm
-              tabtitle={"Provide Teaching Plan Details"}
+              tabtitle={"Provide Teaching Plan Details (Words limit: 500 each)"}
               steps={obs?.obsRequest?.teachingPlan[0]?.steps}
               tempId={
                 obs?.obsRequest?.teachingPlan[0]?.steps[0]?.templatePlanId
@@ -310,39 +364,64 @@ const TabsetScheduling = ({ role }) => {
                         ))}
                       </div>
                     </FormGroup>
-                    <FormGroup className="row">
-                      <Label className="col-xl-3 col-md-4">
-                        <span>*</span> Slot(s) Selected by Observer
-                      </Label>
-                      <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                        {obs?.obsRequest?.timeSlotByObserver?.map((item) => {
-                          return (
-                            <TimeSlotSpan
-                              key={item.id}
-                              id={item.id}
-                              location={item.location}
-                              time={item.time}
-                              day={item.day}
-                              cursor={false}
-                              // onClick={() => onSelectSlotFaculty(item.id)}
-                              slots={timeSlotsByFaculty}
-                            />
-                          );
-                        })}
-                      </div>
-                    </FormGroup>
+                    {obs?.obsRequest?.timeSlotByObserver.length > 0 && (
+                      <FormGroup className="row">
+                        <Label className="col-xl-3 col-md-4">
+                          <span>*</span> Slot(s) Selected by Observer
+                        </Label>
+                        <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                          {obs?.obsRequest?.timeSlotByObserver?.map((item) => {
+                            return (
+                              <TimeSlotSpan
+                                key={item.id}
+                                id={item.id}
+                                location={item.location}
+                                time={item.time}
+                                day={item.day}
+                                cursor={false}
+                                // onClick={() => onSelectSlotFaculty(item.id)}
+                                slots={timeSlotsByFaculty}
+                              />
+                            );
+                          })}
+                        </div>
+                      </FormGroup>
+                    )}
                   </Form>
-                  <div className="pull-right">
-                    {!obs?.obsRequest?.facultyAccepted && (
+                  {!obs?.obsRequest?.facultyAccepted && (
+                    <div className="pull-right">
                       <Button
                         onClick={() => onObservationEditing()}
                         type="button"
                         color="primary"
+                        className="mx-3"
                       >
                         Update
                       </Button>
+                      {obs?.obsRequest?.scheduledOn && (
+                        <Button
+                          onClick={() => onSchedulingAccept()}
+                          type="button"
+                          color="primary"
+                        >
+                          Confirm
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                  {obs?.obsRequest?.facultyAccepted &&
+                    !obs?.obsRequest?.observerAccepted && (
+                      <span
+                        style={{
+                          fontStyle: "italic",
+                        }}
+                        className="d-flex align-items-center justify-content-center"
+                      >
+                        Observer not confirmed yet...{" "}
+                        <Frown color="brown" size={18} /> You will receive
+                        notification once confirmed...
+                      </span>
                     )}
-                  </div>
                 </>
               )}
             </TabPanel>
@@ -350,31 +429,9 @@ const TabsetScheduling = ({ role }) => {
         </>
       )}
 
-      <div className="pull-right">
-        {obs?.obsRequest?.facultyAccepted &&
-        obs?.obsRequest?.observerAccepted ? (
-          <Button
-            onClick={() => onSchedulingDone()}
-            type="button"
-            color="primary"
-          >
-            Done
-          </Button>
-        ) : (
-          <>
-            {obs?.obsRequest?.scheduledOn && (
-              <Button
-                onClick={() => onSchedulingAccept()}
-                type="button"
-                color="primary"
-                className="mx-3"
-              >
-                Confirm
-              </Button>
-            )}
-          </>
-        )}
-      </div>
+      {/* <div className="pull-right">
+        
+      </div> */}
     </Fragment>
   );
 };

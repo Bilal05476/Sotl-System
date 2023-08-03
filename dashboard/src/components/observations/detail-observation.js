@@ -2,8 +2,10 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { Loader, DownloadCloud } from "react-feather";
+import { Loader, DownloadCloud, Eye, EyeOff } from "react-feather";
 import { useStateValue } from "../../StateProvider";
+import logo from "../../assets/images/blue-version.png";
+
 import {
   fetchCoursesAndUsers,
   fetchObservation,
@@ -13,6 +15,7 @@ import { info } from "../../constants/Toasters";
 import { completeColor, completeColor2 } from "../colors";
 import { dateFormater, dateFormater2 } from "../DateFormater";
 import { PopupModal, PostTimeModal } from "../PopupModal";
+import { useReactToPrint } from "react-to-print";
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -71,9 +74,100 @@ const Detail_observation = () => {
   // console.log(obsDetail);
 
   // const [postTimingOpen, setPostTimingOpen] = useState(false);
+
+  const [teahingTempView, setTeachingTempView] = useState(false);
+
+  const componentRef = useRef();
+  const printTeaching = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  const TemplatePrint = React.forwardRef((props, ref) => {
+    const currentDate = new Date();
+    const { template, obsId, type, faculty, observer } = props;
+
+    const formattedDate = `${currentDate.getDate()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getFullYear()}`;
+
+    const divStyle = {
+      background: "white",
+      position: "relative",
+    };
+
+    return (
+      <div className="p-4" style={divStyle} ref={ref}>
+        <img
+          src={logo}
+          style={{
+            position: "absolute",
+            width: "110px",
+            height: "100px",
+            opacity: 1,
+            right: 20,
+            top: 62,
+          }}
+        />
+        <div className="d-flex flex-wrap align-items-center justify-content-between">
+          <small>Date: {formattedDate}</small>
+          <small>SOTL | Observation Portal</small>
+          <small>Observation ID: {obsId}</small>
+        </div>
+        <div className="d-flex flex-wrap align-items-center justify-content-between">
+          <small>Faculty: {faculty}</small>
+          <small>Obsever: {observer} </small>
+        </div>
+        <div className="mt-4 text-center">
+          <h3 className="text-dark" style={{ fontWeight: "600" }}>
+            {type} TEMPLATE
+          </h3>
+        </div>
+
+        {template.map((item, ind) => (
+          <Content
+            key={item.id}
+            field={item.field}
+            response={item?.response}
+            index={ind}
+            len={template.length}
+          />
+        ))}
+      </div>
+    );
+  });
+  const Content = ({ field, response, index, len }) => {
+    let humanIndex = index + 1;
+    return (
+      <div
+        style={{
+          padding: "1rem 0rem",
+          borderBottom: humanIndex !== len && "1px dotted #ccc",
+        }}
+      >
+        <h5>
+          {humanIndex}. {field}
+        </h5>
+        <p className="m-0">{response}</p>
+      </div>
+    );
+  };
+  // console.log(obsDetail);
+
+  const AccordButton = ({ onClick, icon }) => {
+    return (
+      <Button
+        color="primary"
+        className="d-flex align-items-center justify-content-center mx-2"
+        onClick={onClick}
+      >
+        {icon}
+      </Button>
+    );
+  };
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
+
       <PopupModal
         open={openPopup}
         setOpen={setOpenPopup}
@@ -156,7 +250,6 @@ const Detail_observation = () => {
                             <th scope="col">Slot By Observer</th>
                             <th scope="col">Slots By Faculty</th>
                             <th scope="col">Teaching Plan</th>
-
                             <th scope="col">Status</th>
                           </tr>
                         </thead>
@@ -176,20 +269,35 @@ const Detail_observation = () => {
                                 )
                               )}
                             </td>
-                            <td className="digits" title="Download">
+                            <td className="digits">
                               {obsDetail?.obsRequest?.teachingPlan[0]
                                 ?.editedBy && (
                                 <span
                                   className="d-flex alogn-items-center"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => alert("PDF Downloaded")}
                                 >
-                                  <DownloadCloud
-                                    className="mx-2"
-                                    color={completeColor}
-                                    size={20}
-                                  />{" "}
-                                  Download
+                                  {teahingTempView ? (
+                                    <AccordButton
+                                      onClick={() => printTeaching()}
+                                      icon={
+                                        <DownloadCloud
+                                          color="white"
+                                          size={20}
+                                        />
+                                      }
+                                    />
+                                  ) : (
+                                    <AccordButton
+                                      onClick={() => setTeachingTempView(true)}
+                                      icon={<Eye color="white" size={20} />}
+                                    />
+                                  )}
+                                  {teahingTempView && (
+                                    <AccordButton
+                                      onClick={() => setTeachingTempView(false)}
+                                      icon={<EyeOff color="white" size={20} />}
+                                    />
+                                  )}
                                 </span>
                               )}
                             </td>
@@ -206,6 +314,18 @@ const Detail_observation = () => {
                           </tr>
                         </tbody>
                       </Table>
+                      {teahingTempView && (
+                        <TemplatePrint
+                          ref={componentRef}
+                          template={
+                            obsDetail?.obsRequest?.teachingPlan[0].steps
+                          }
+                          obsId={obsDetail?.id}
+                          type={"TEACHING"}
+                          faculty={obsDetail?.faculty.name}
+                          observer={obsDetail?.observer.name}
+                        />
+                      )}
                       {obsDetail.obsRequest?.status !== "Completed" && (
                         <>
                           {user.role === "Faculty" ||

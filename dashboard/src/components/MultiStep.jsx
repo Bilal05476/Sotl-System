@@ -19,8 +19,6 @@ const MultiStepForm = ({
   // const [currentStep, setCurrentStep] = useState(0);
   const [loader, setLoader] = useState(false);
 
-  console.log("Steps Length", steps?.length);
-
   const [text, setText] = useState({
     ProgramOutcomes: "",
     LearningOutcomes: "",

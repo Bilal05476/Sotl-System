@@ -239,7 +239,7 @@ model TemplatePlanStep {
     field          String
     name           String?
     code           String?
-    response       String?
+    response       String?       @db.VarChar(500)
     TemplatePlan   TemplatePlan? @relation(fields: [templatePlanId], references: [id])
     templatePlanId Int?
 }

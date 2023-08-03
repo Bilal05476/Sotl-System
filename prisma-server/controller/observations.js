@@ -330,6 +330,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
             editedById,
           },
         });
+
         templateResponse.map(async (item) => {
           await prisma.templatePlanStep.update({
             where: {
