@@ -86,6 +86,14 @@ export const getUsersAndCourses = asyncHandler(async (req, res) => {
   res.status(200).json(data);
 });
 
-// @desc   Add Departments into Specialization
-// @route  POST api/spec/dept/
-// @access Private (Parent Role Like (Admin, Campus Director, Dean))
+// @desc   Send all Departments
+// @route  GET api/department/
+// @access Private (Parent Role Like (Admin, Campus Director, HOd))
+export const getDepartments = asyncHandler(async (req, res) => {
+  const alldepart = await prisma.departments.findMany({});
+  alldepart?.length > 0
+    ? res.status(200).json(alldepart)
+    : res.status(404).json({
+        message: "No departments!",
+      });
+});

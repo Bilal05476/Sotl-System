@@ -1,6 +1,6 @@
 import express from "express";
 const utilityRoutes = express.Router();
-import { getUsersAndCourses } from "../controller/utility.js";
+import { getDepartments, getUsersAndCourses } from "../controller/utility.js";
 import {
   createTemplate,
   getTemplate,
@@ -12,5 +12,6 @@ utilityRoutes
   .get(getUsersAndCourses);
 utilityRoutes.route("/template").post(createTemplate).get(getTemplates);
 utilityRoutes.route("/template/:id").get(getTemplate);
+utilityRoutes.route("/department").get(getDepartments);
 
 export default utilityRoutes;

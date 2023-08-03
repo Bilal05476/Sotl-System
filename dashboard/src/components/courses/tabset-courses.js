@@ -5,7 +5,7 @@ import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
-import { TextInput, TextInputReadOnly } from "../Input";
+import { SelectInput, TextInput, TextInputReadOnly } from "../Input";
 import { PlusCircle } from "react-feather";
 
 const TabsetCourses = () => {
@@ -14,7 +14,7 @@ const TabsetCourses = () => {
   const [createCourse, setCreateCourse] = useState({
     courseCode: "",
     name: "",
-    department: user.department.name,
+    departments: [],
     campus: user.campus.replaceAll("_", " "),
     credits: "",
     loader: false,
@@ -27,7 +27,7 @@ const TabsetCourses = () => {
     location: "",
   });
 
-  const { courseCode, name, department, campus, credits, loader } =
+  const { courseCode, name, departments, campus, credits, loader } =
     createCourse;
   const { sectionCode, day, time, location } = createSlot;
 
@@ -43,7 +43,7 @@ const TabsetCourses = () => {
     const courseDetails = {
       courseCode,
       name,
-      department: user.department,
+      departments,
       campus: user.campus,
       credits: Number(credits),
       slots: createSlots,
@@ -167,7 +167,17 @@ const TabsetCourses = () => {
                 })
               }
             />
-            <TextInputReadOnly label="Department" value={department} />
+            <SelectInput
+              label="Departments"
+              value={departments}
+              onChange={(e) => {
+                setCreateCourse({
+                  ...createCourse,
+                  departments: [...departments, e.target.value],
+                });
+              }}
+            />
+            {/* <TextInputReadOnly label="Department" value={department} /> */}
             <TextInputReadOnly label="Campus" value={campus} />
           </Form>
         </TabPanel>
