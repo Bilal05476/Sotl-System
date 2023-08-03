@@ -6,10 +6,11 @@ import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
+import { fetchCoursesAndUsers } from "../Endpoints";
 
 const TabsetAssignCourses = () => {
-  const [{ usersandcourses }] = useStateValue();
-  const [selectedCourse, setselectedCourse] = useState("");
+  const [{ usersandcourses, user }, dispatch] = useStateValue();
+  const [selectedCourse, setselectedCourse] = useState([]);
 
   const [assignCourses, setassignCourses] = useState({
     slots: [],
@@ -33,7 +34,7 @@ const TabsetAssignCourses = () => {
       });
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/courses/user/${facultyId}`,
+          `${process.env.REACT_APP_BASE_URL}/course/user/${facultyId}`,
           {
             method: "PUT",
             body: JSON.stringify(courseDetails),
@@ -80,7 +81,8 @@ const TabsetAssignCourses = () => {
   };
 
   const onSelectCousre = async () => {
-    warning("Slots loading...");
+    info("Slots loading...");
+
     try {
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/course/${courseId}`,
@@ -92,13 +94,25 @@ const TabsetAssignCourses = () => {
         }
       );
       const data = await res.json();
+      // console.log(data);
       if (data.error) {
         toast.dismiss(toastId.current);
         errors(data.error);
       } else {
+        let availableSlots = [];
+        data?.slots?.map((item) => {
+          if (item.facultyId === null) availableSlots.push(item);
+          return null;
+        });
         toast.dismiss(toastId.current);
-        setselectedCourse(data);
-        successes("Slots load sucessfully!");
+
+        if (availableSlots.length === 0) {
+          setselectedCourse([]);
+          info("Oops, sorry no availabe slots for that course!");
+        } else {
+          setselectedCourse(availableSlots);
+          successes("Slots load sucessfully!");
+        }
       }
     } catch (err) {
       toast.dismiss(toastId.current);
@@ -113,6 +127,7 @@ const TabsetAssignCourses = () => {
       ...assignCourses,
       slots: [],
     });
+    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
   }, []);
 
   useEffect(() => {
@@ -168,7 +183,7 @@ const TabsetAssignCourses = () => {
                     (item) =>
                       item.role === "Faculty" && (
                         <option key={item.id} value={item.id}>
-                          {item.name}
+                          {item.name}({item.id})
                         </option>
                       )
                   )}
@@ -221,8 +236,8 @@ const TabsetAssignCourses = () => {
                   }
                 >
                   <option value="Select">Select</option>
-                  {selectedCourse?.slots?.map((item) => {
-                    if (!slots.includes(item.id) && item.facultyId === null) {
+                  {selectedCourse?.map((item) => {
+                    if (!slots.includes(item.id)) {
                       return (
                         <option key={item.id} value={item.id}>
                           {item.day} | {item.time} | {item.location}
@@ -239,7 +254,7 @@ const TabsetAssignCourses = () => {
                   <span>*</span> Selected Slots
                 </Label>
                 <div className="col-xl-8 col-md-7">
-                  {selectedCourse?.slots?.map((item) => {
+                  {selectedCourse?.map((item) => {
                     if (slots.includes(item.id))
                       return (
                         <span

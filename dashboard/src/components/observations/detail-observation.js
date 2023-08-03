@@ -60,7 +60,8 @@ const Detail_observation = () => {
         {
           sid: item.id,
           cid: item.course.id,
-          n: `${item.course.name} on ${item.day} ${item.time} at ${item.location}`,
+          n: item.course.name,
+          // n: `${item.course.name} on ${item.day} ${item.time} at ${item.location}`,
         },
       ])
     );
@@ -69,7 +70,7 @@ const Detail_observation = () => {
   // return;
   // console.log(obsDetail);
 
-  const [postTimingOpen, setPostTimingOpen] = useState(false);
+  // const [postTimingOpen, setPostTimingOpen] = useState(false);
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
