@@ -81,11 +81,16 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
-// async function main() {
-//   const c = await prisma.user.findMany({});
-//   console.log(c);
+// async function main(id) {
+//   await prisma.courses.delete({
+//     where: {
+//       id,
+//     },
+//   });
 // }
-// main();
+// for (let i = 12; i < 15; i++) {
+//   main(i);
+// }
 
 // "rubricsFinal": [
 //     {"rid": 3340, "score": 4},

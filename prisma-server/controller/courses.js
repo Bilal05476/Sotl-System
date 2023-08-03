@@ -68,6 +68,7 @@ export const createCourse = asyncHandler(async (req, res) => {
     isDepthElective,
     credits,
   } = req.body;
+
   const newCourse = await prisma.courses.create({
     data: {
       courseCode,
@@ -81,25 +82,15 @@ export const createCourse = asyncHandler(async (req, res) => {
           data: slots,
         },
       },
+      department: {
+        connect: departments.map((id) => ({ id })),
+      },
+    },
+    include: {
+      slots: true,
+      department: true,
     },
   });
-
-  if (newCourse) {
-    departments.map(async (item) => {
-      await prisma.courses.update({
-        where: {
-          id: newCourse.id,
-        },
-        data: {
-          department: {
-            connect: {
-              id: item,
-            },
-          },
-        },
-      });
-    });
-  }
 
   res.status(200).json(newCourse);
 });

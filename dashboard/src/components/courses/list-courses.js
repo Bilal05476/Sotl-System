@@ -25,6 +25,8 @@ const List_courses = () => {
     fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
+
+  console.log(usersandcourses);
   return (
     <Fragment>
       <Breadcrumb title="Courses List" parent="Courses" />

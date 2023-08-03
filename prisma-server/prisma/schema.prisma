@@ -12,7 +12,7 @@ datasource db {
 
 // -> User => Observations || => Courses || => Feedbacks || => Messages
 model User {
-    id                  Int            @id @default(autoincrement()) // auto-inc
+    id                  Int             @id @default(autoincrement()) // auto-inc
     name                String
     email               String
     phone               String?
@@ -26,26 +26,27 @@ model User {
     ending              DateTime?
     role                Role
     campus              Campus
+    specialization      Specialization?
     //observations
-    facultyObs          Observations[] @relation("Faculty")
-    hodObs              Observations[] @relation("Hod")
-    observerObs         Observations[] @relation("Observer")
+    facultyObs          Observations[]  @relation("Faculty")
+    hodObs              Observations[]  @relation("Hod")
+    observerObs         Observations[]  @relation("Observer")
     //courses
     courseSlots         CourseSlots[]
     // observerCourses  Courses[]      @relation("Observer")
     //feedbacks
-    feedbackAuthor      FeedBacks[]    @relation("Author")
-    feedbackReceiver    FeedBacks[]    @relation("Receiver")
+    feedbackAuthor      FeedBacks[]     @relation("Author")
+    feedbackReceiver    FeedBacks[]     @relation("Receiver")
     //messages
-    messageSender       Messages[]     @relation("Sender")
-    messageReceiver     Messages[]     @relation("Receiver")
+    messageSender       Messages[]      @relation("Sender")
+    messageReceiver     Messages[]      @relation("Receiver")
     //reasons
-    reasonSender        ObsReasons[]   @relation("Sender")
-    reasonReceiver      ObsReasons[]   @relation("Receiver")
+    reasonSender        ObsReasons[]    @relation("Sender")
+    reasonReceiver      ObsReasons[]    @relation("Receiver")
     //templates
-    TemplatePlansFilled TemplatePlan[] @relation("Filled")
-    TemplatePlansEdit   TemplatePlan[] @relation("Edited")
-    department          Departments?   @relation(fields: [departmentId], references: [id])
+    TemplatePlansFilled TemplatePlan[]  @relation("Filled")
+    TemplatePlansEdit   TemplatePlan[]  @relation("Edited")
+    department          Departments?    @relation(fields: [departmentId], references: [id])
     departmentId        Int?
 }
 

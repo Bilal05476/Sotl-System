@@ -47,8 +47,9 @@ export const SelectInput = ({
   departments,
   setDepartments,
 }) => {
-  console.log(options);
-  console.log(departments);
+  const deleteDept = (id) => {
+    setDepartments(departments.filter((item) => item !== id));
+  };
   return (
     <FormGroup className="row">
       <Label className="col-xl-3 col-md-4">
@@ -85,11 +86,7 @@ export const SelectInput = ({
                       cursor: "pointer",
                     }}
                     key={item.id}
-                    onClick={() => {
-                      setDepartments(
-                        departments.filter((item) => item !== item.id)
-                      );
-                    }}
+                    onClick={() => deleteDept(item.id)}
                   >
                     {item.name}
                   </span>

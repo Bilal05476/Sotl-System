@@ -15,7 +15,6 @@ export const getUsersAndCourses = asyncHandler(async (req, res) => {
       id: departmentId,
     },
   });
-
   const getUsers =
     departmentId && role === "Head_of_Department"
       ? await prisma.user.findMany({

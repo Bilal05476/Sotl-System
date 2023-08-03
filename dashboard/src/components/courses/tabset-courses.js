@@ -82,11 +82,12 @@ const TabsetCourses = () => {
             courseCode: "",
             name: "",
             credits: "",
-            departments: [],
           });
+
           successes("Course created successfully!");
           setTimeout(() => {
             setCreateSlots([]);
+            setDepartments([]);
           }, 1500);
         }
       } catch (err) {
