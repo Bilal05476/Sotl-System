@@ -939,7 +939,6 @@ const Dashboard = () => {
                             <th scope="col">Time slot</th>
                             <th scope="col">Location</th>
                             <th scope="col">Campus</th>
-                            <th scope="col">Department</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -956,9 +955,6 @@ const Dashboard = () => {
                               <td className="digits">{item.location}</td>
                               <td className="digits">
                                 {item.course.campus?.replaceAll("_", " ")}
-                              </td>
-                              <td className="digits">
-                                {item.course.department}
                               </td>
                             </tr>
                           ))}

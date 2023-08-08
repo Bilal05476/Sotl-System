@@ -171,7 +171,6 @@ export async function submitTemplate(
 }
 
 export async function submitScore(
-  score,
   role,
   rubricsFinal,
   loader,
@@ -182,12 +181,9 @@ export async function submitScore(
   const response = {
     informedId,
     rubricsFinal,
+    role,
   };
-  if (role === "Faculty") {
-    response.facultyScore = score;
-  } else {
-    response.observerScore = score;
-  }
+
   try {
     const res = await fetch(`${BASEURL}/observation/informed`, {
       method: "PUT",

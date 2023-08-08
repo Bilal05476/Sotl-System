@@ -36,26 +36,29 @@ const Observation_rubric = () => {
     fetchObservation(setObsDetail, Number(id));
   }, []);
 
-  const rubricsFinal = [];
-
   const updateTotal = () => {
-    let count = 0;
-    setLoader(true);
-    accordionTab.map((item) => {
-      count += item.accordionScore;
-      item.accordionSections.map((item) => {
-        rubricsFinal.push({
-          rid: item.rid,
-          score: item.sc,
+    const rubricsFinal = [];
+
+    if (accordionTab.length > 0) {
+      setLoader(true);
+      accordionTab.map((item) => {
+        // count += item.accordionScore;
+        item.accordionSections.map((item) => {
+          rubricsFinal.push({
+            rid: item.rid,
+            score: item.sc,
+          });
+          return null;
         });
         return null;
       });
-      return null;
-    });
-    if (user.role === "Faculty") {
+
+      // console.log(rubricsFinal, user.role);
+
+      // return null;
+
       submitScore(
-        count,
-        "Faculty",
+        user.role,
         rubricsFinal,
         setLoader,
         obsDetails?.meetings?.informedObservation?.id,
@@ -63,15 +66,7 @@ const Observation_rubric = () => {
         setObsDetail
       );
     } else {
-      submitScore(
-        count,
-        "Observer",
-        rubricsFinal,
-        setLoader,
-        obsDetails?.meetings?.informedObservation?.id,
-        obsDetails?.meetings?.observationsId,
-        setObsDetail
-      );
+      info("Submit Rubrics scores for atleast one!");
     }
   };
 

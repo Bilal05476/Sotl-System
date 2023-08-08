@@ -478,19 +478,26 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 // @route  PUT api/observation/informed
 // @access Private (only faculty and observer update scoring)
 export const informedObsCycle = asyncHandler(async (req, res) => {
-  const { informedId, rubricsFinal, facultyScore, observerScore, status } =
-    req.body;
+  const { informedId, rubricsFinal, role, status } = req.body;
 
-  if (facultyScore) {
+  const Find = async () => {
+    let findInformed = await prisma.informed.findFirst({
+      where: { id: informedId },
+      select: {
+        rubrics: true,
+        facultyScore: role === "Faculty" && true,
+        observerScore: role === "Observer" && true,
+      },
+    });
+    return findInformed;
+  };
+
+  // res.status(200).json({ sc: scoreByRole });
+
+  // return;
+
+  if (role === "Faculty") {
     try {
-      await prisma.informed.update({
-        where: {
-          id: informedId,
-        },
-        data: {
-          facultyScore,
-        },
-      });
       rubricsFinal.map(async (item) => {
         await prisma.rubric.update({
           where: {
@@ -501,6 +508,21 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
           },
         });
       });
+
+      let facultyScore = 0;
+
+      let find = await Find();
+      if (find) {
+        find.rubrics.map((item) => (facultyScore += item.observerScore));
+        await prisma.informed.update({
+          where: {
+            id: informedId,
+          },
+          data: {
+            facultyScore,
+          },
+        });
+      }
       res.status(200).json({
         message: "Rubrics Score Successfully Submitted!",
       });
@@ -510,16 +532,8 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
       });
     }
   }
-  if (observerScore) {
+  if (role === "Observer") {
     try {
-      await prisma.informed.update({
-        where: {
-          id: informedId,
-        },
-        data: {
-          observerScore,
-        },
-      });
       rubricsFinal.map(async (item) => {
         await prisma.rubric.update({
           where: {
@@ -531,12 +545,28 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
         });
       });
 
+      let observerScore = 0;
+
+      let find = await Find();
+
+      if (find) {
+        find.rubrics.map((item) => (observerScore += item.observerScore));
+        await prisma.informed.update({
+          where: {
+            id: informedId,
+          },
+          data: {
+            observerScore,
+          },
+        });
+      }
+
       res.status(200).json({
         message: "Rubrics Score Successfully Submitted!",
       });
     } catch (err) {
       res.status(400).json({
-        error: err,
+        err,
       });
     }
   }
