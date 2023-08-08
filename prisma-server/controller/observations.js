@@ -480,9 +480,9 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 export const informedObsCycle = asyncHandler(async (req, res) => {
   const { informedId, rubricsFinal, role, status } = req.body;
 
-  const Find = async () => {
+  const Find = async (id) => {
     let findInformed = await prisma.informed.findFirst({
-      where: { id: informedId },
+      where: { id },
       select: {
         rubrics: true,
         facultyScore: role === "Faculty" && true,
@@ -493,6 +493,11 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
   };
 
   // res.status(200).json({ sc: scoreByRole });
+
+  let getOnlyIds = [];
+  let getOnlyScores = [];
+  rubricsFinal.map((item) => getOnlyIds.push(item.rid));
+  rubricsFinal.map((item) => getOnlyScores.push(item.score));
 
   // return;
 
@@ -513,7 +518,13 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
 
       let find = await Find();
       if (find) {
-        find.rubrics.map((item) => (facultyScore += item.facultyScore));
+        // which are not included in coming response
+        const notIncluded = find.rubrics.filter(
+          (item) => !getOnlyIds.includes(item.id)
+        );
+        notIncluded.map((item) => (facultyScore += item.facultyScore));
+        getOnlyScores.map((item) => (facultyScore += item));
+
         await prisma.informed.update({
           where: {
             id: informedId,
@@ -523,6 +534,7 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
           },
         });
       }
+
       res.status(200).json({
         message: "Rubrics Score Successfully Submitted!",
       });
@@ -547,10 +559,16 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
 
       let observerScore = 0;
 
-      let find = await Find();
+      let find = await Find(informedId);
 
       if (find) {
-        find.rubrics.map((item) => (observerScore += item.observerScore));
+        // which are not included in coming response
+        const notIncluded = find.rubrics.filter(
+          (item) => !getOnlyIds.includes(item.id)
+        );
+        notIncluded.map((item) => (observerScore += item.observerScore));
+        getOnlyScores.map((item) => (observerScore += item));
+
         await prisma.informed.update({
           where: {
             id: informedId,

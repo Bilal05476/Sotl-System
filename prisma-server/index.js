@@ -92,6 +92,15 @@ app.listen(port, () => {
 //   main(i);
 // }
 
+// function hello() {
+//   let arr = [1];
+//   const obj = [
+//     { id: 1, sc: 2 },
+//     { id: 2, sc: 2 },
+//   ];
+//   return obj.map((item) => item.id);
+// }
+// console.log(hello());
 // "rubricsFinal": [
 //     {"rid": 3340, "score": 4},
 //     {"rid": 4032, "score": 4},
