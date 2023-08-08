@@ -513,7 +513,7 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
 
       let find = await Find();
       if (find) {
-        find.rubrics.map((item) => (facultyScore += item.observerScore));
+        find.rubrics.map((item) => (facultyScore += item.facultyScore));
         await prisma.informed.update({
           where: {
             id: informedId,
