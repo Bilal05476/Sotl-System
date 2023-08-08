@@ -70,8 +70,12 @@ const Observation_rubric = () => {
     }
   };
 
-  const facultySc = obsDetails?.meetings?.informedObservation?.facultyScore;
-  const observerSc = obsDetails?.meetings?.informedObservation?.observerScore;
+  const facultySc = obsDetails
+    ? obsDetails?.meetings?.informedObservation?.facultyScore
+    : 0;
+  const observerSc = obsDetails
+    ? obsDetails?.meetings?.informedObservation?.observerScore
+    : 0;
 
   // avgSc = true && true ? (12 + 12) / 2 : 0;
   const avgSc =
