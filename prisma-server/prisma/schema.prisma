@@ -232,8 +232,8 @@ model TemplatePlan {
     postObsReflectionId Int?
     // PostObsArtifacts    Post? @relation("Artifacts", fields: [postObsArtifactsId], references: [id])
     // postObsArtifactsId  Int?
-    headSign            Boolean?           @default(false)
-    obsSign             Boolean?           @default(false)
+    // headSign            Boolean?           @default(false)
+    // obsSign             Boolean?           @default(false)
 }
 
 model TemplatePlanStep {

@@ -87,8 +87,7 @@ const Detail_observation = () => {
 
   const TemplatePrint = React.forwardRef((props, ref) => {
     const currentDate = new Date();
-    const { template, obsId, type, faculty, observer, obsSign, headSign } =
-      props;
+    const { template, obsId, type, faculty, observer } = props;
 
     const formattedDate = `${currentDate.getDate()}-${
       currentDate.getMonth() + 1
@@ -140,15 +139,11 @@ const Detail_observation = () => {
         <div className="d-flex my-5 align-items-center justify-content-between">
           <p className="m-0 text-dark">
             Signature of Obsever:{" "}
-            <span style={{ color: completeColor2 }}>
-              {obsSign ? obsSign : "_____________"}
-            </span>
+            <span style={{ color: completeColor2 }}>_____________</span>
           </p>
           <p className="m-0 text-dark">
             Signature of Head of Department:{" "}
-            <span style={{ color: completeColor2 }}>
-              {headSign ? headSign : "_____________"}
-            </span>
+            <span style={{ color: completeColor2 }}>_____________</span>
           </p>
         </div>
       </div>
