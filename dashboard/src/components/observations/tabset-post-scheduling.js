@@ -155,13 +155,13 @@ const TabsetPostScheduling = ({ role }) => {
     }
   }
 
-  const onPosObsDone = async () => {
+  const onPosObsSccheduled = async () => {
     const finalObsDetails = {
       observationsId: Number(id),
       status: "Scheduled",
     };
 
-    info("Done Post Observation Scheduling...");
+    info("Scheduling Post Observation Scheduling...");
     const res = await fetch(`${BASEURL}/observation/post-scheduling`, {
       method: "PUT",
       body: JSON.stringify(finalObsDetails),
@@ -406,7 +406,7 @@ const TabsetPostScheduling = ({ role }) => {
           obs?.meetings?.postObservation?.status === "Ongoing" &&
           user?.role === "Observer" && (
             <Button
-              onClick={() => onPosObsDone()}
+              onClick={() => onPosObsSccheduled()}
               type="button"
               color="primary"
             >

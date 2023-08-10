@@ -680,7 +680,10 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
     },
   });
 
-  if (existed.postObservation.status === "Ongoing") {
+  if (
+    existed.postObservation.status === "Ongoing" ||
+    existed.postObservation.status === "Scheduled"
+  ) {
     if (timeSlotsByObserver) {
       let odates = [];
       timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
@@ -730,7 +733,7 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
     if (status) {
       // scheduledOn === timeslotByFaculty
       if (existed.postObservation.timeSlotByFaculty) {
-        const updatedPostObs = await prisma.meetings.update({
+        await prisma.meetings.update({
           where: {
             observationsId,
           },
