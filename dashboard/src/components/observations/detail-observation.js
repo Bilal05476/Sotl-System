@@ -11,11 +11,13 @@ import {
   fetchObservation,
   startScheduling,
 } from "../Endpoints";
-import { info } from "../../constants/Toasters";
+import { errors, info, successes } from "../../constants/Toasters";
 import { completeColor, completeColor2 } from "../colors";
 import { dateFormater, dateFormater2 } from "../DateFormater";
 import { PopupModal, PostTimeModal } from "../PopupModal";
 import { useReactToPrint } from "react-to-print";
+
+const BASEURL = process.env.REACT_APP_BASE_URL;
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -163,6 +165,30 @@ const Detail_observation = () => {
         {icon}
       </Button>
     );
+  };
+
+  const onPosObsDone = async () => {
+    const finalObsDetails = {
+      observationsId: Number(id),
+      status: "Completed",
+    };
+
+    info("Done Post Observation Scheduling...");
+    const res = await fetch(`${BASEURL}/observation/post-scheduling`, {
+      method: "PUT",
+      body: JSON.stringify(finalObsDetails),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      errors(data.error);
+    } else {
+      successes(data.message);
+      fetchObservation(setObsDetail, Number(id));
+    }
   };
   return (
     <Fragment>
@@ -443,6 +469,16 @@ const Detail_observation = () => {
                         >
                           Open Rubrics
                         </NavLink>
+                        {obsDetail?.meetings.informedObservation.status ===
+                          "Scheduled" && (
+                          <Button
+                            onClick={() => onPosObsDone()}
+                            type="button"
+                            color="primary"
+                          >
+                            Mark Completed
+                          </Button>
+                        )}
                       </div>
                     </div>
                   )}
