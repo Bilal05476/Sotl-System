@@ -9,10 +9,10 @@ import {
 } from "../../../constants/menu";
 
 // image import
-import logo from "../../../assets/images/sotllogo-white.png";
-import logo2 from "../../../assets/images/white-version.png";
+import logo from "../../../assets/images/sotllogo.png";
+import logo2 from "../../../assets/images/blue-version.png";
 import { useStateValue } from "../../../StateProvider";
-import { Settings } from "react-feather";
+// import { Settings } from "react-feather";
 
 const URL = process.env.PUBLIC_URL;
 
@@ -250,7 +250,7 @@ const Sidebar = () => {
                 src={logo}
                 alt="sotl system"
                 style={{
-                  width: "70%",
+                  width: "80%",
                   display: "block",
                   margin: "1px auto",
                 }}

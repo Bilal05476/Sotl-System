@@ -136,7 +136,7 @@ const Detail_observation = () => {
           />
         ))}
 
-        <div className="d-flex my-5 align-items-center justify-content-between">
+        {/* <div className="d-flex my-5 align-items-center justify-content-between">
           <p className="m-0 text-dark">
             Signature of Obsever:{" "}
             <span style={{ color: completeColor2 }}>_____________</span>
@@ -145,7 +145,7 @@ const Detail_observation = () => {
             Signature of Head of Department:{" "}
             <span style={{ color: completeColor2 }}>_____________</span>
           </p>
-        </div>
+        </div> */}
       </div>
     );
   });
@@ -372,7 +372,7 @@ const Detail_observation = () => {
                             textAlign: "right",
                           }}
                         >
-                          {user.role === "Head_of_Department" ||
+                          {/* {user.role === "Head_of_Department" ||
                           user.role === "Observer" ? (
                             <Button
                               className="mx-2 btn btn-primary"
@@ -382,7 +382,7 @@ const Detail_observation = () => {
                             </Button>
                           ) : (
                             <></>
-                          )}
+                          )} */}
                           {user.role === "Faculty" ||
                           user.role === "Observer" ? (
                             <NavLink
@@ -623,7 +623,7 @@ const Detail_observation = () => {
                       )}
 
                       <div style={{ textAlign: "right" }}>
-                        {user.role === "Head_of_Department" ||
+                        {/* {user.role === "Head_of_Department" ||
                         user.role === "Observer" ? (
                           <Button
                             className="mx-2 btn btn-primary"
@@ -633,17 +633,19 @@ const Detail_observation = () => {
                           </Button>
                         ) : (
                           <></>
-                        )}
+                        )} */}
                         {obsDetail?.meetings.postObservation.status ===
-                          "Ongoing" && (
-                          <NavLink
-                            to={`/observations/post-observation-meeting/${id}`}
-                            className="btn btn-primary mx-2"
-                          >
-                            Edit Scheduling
-                          </NavLink>
-                        )}
-                        {obsDetail?.meetings.postObservation.status ===
+                          "Ongoing" &&
+                          (user.role === "Observer" ||
+                            user.role === "Faculty") && (
+                            <NavLink
+                              to={`/observations/post-observation-meeting/${id}`}
+                              className="btn btn-primary mx-2"
+                            >
+                              Edit Scheduling
+                            </NavLink>
+                          )}
+                        {/* {obsDetail?.meetings.postObservation.status ===
                           "Scheduled" &&
                           user.role === "Observer" && (
                             <Button
@@ -654,7 +656,7 @@ const Detail_observation = () => {
                             >
                               Mark Completed
                             </Button>
-                          )}
+                          )} */}
                       </div>
                     </div>
                   )}
@@ -686,7 +688,7 @@ const Detail_observation = () => {
               )}
             </div>
           </div>
-          <div className="accordion">
+          {/* <div className="accordion">
             <div className="accordion-item overflow-hidden mb-5">
               <button
                 className="btn btn-block text-light"
@@ -723,7 +725,7 @@ const Detail_observation = () => {
                 </>
               )}
             </div>
-          </div>
+          </div> */}
         </Container>
       )}
       {!obsDetail && (

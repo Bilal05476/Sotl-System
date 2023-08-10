@@ -2593,7 +2593,13 @@ ul.notification-dropdown.onhover-show-div {
       width: $sidebar-width;
       position: $sidebar-position;
       // background: $sidebar-background-color;
-      background: $theme-default;
+      // background: $theme-default;
+      background-color: #fff; 
+      background-image: url("../../images/dashboard/bg-pattern.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+     
       top: 0;
       height: calc(100vh);
       z-index: $sidebar-z-index;
@@ -2621,8 +2627,8 @@ ul.notification-dropdown.onhover-show-div {
         box-shadow: $sidebar-user-section-shadow;
         position: relative;
         h5 {
-          // color: $sidebar-profile-name-txt-color;
-          color: $light-body-bg-color;
+          color: $sidebar-profile-name-txt-color;
+          // color: $light-body-bg-color;
           text-transform: $sidebar-profile-name-txt-transfer;
           font-weight: $sidebar-profile-name-txt-weight;
           letter-spacing: $sidebar-profile-name-letter-specing;
@@ -2633,7 +2639,7 @@ ul.notification-dropdown.onhover-show-div {
           font-weight: $sidebar-profile-name-txt-weight;
           font-size: $sidebar-profile-sub-title-font-size;
           margin-bottom: $sidebar-profile-sub-title-margin;
-          color: $bg-color;
+          color: $theme-default3;
         }
         img {
           box-shadow: $sidebar-profile-img-shadow;
@@ -2650,7 +2656,8 @@ ul.notification-dropdown.onhover-show-div {
           padding-top: $sidebar-padding-top;
           text-transform: $sidebar-txt-transform;
           font-weight: $sidebar-font-weight;
-          color: $sidebar-font-color;
+          // color: $sidebar-font-color;
+          color: $theme-default;
           svg {
             width: $sidebar-icon-size;
             height: $sidebar-icon-size;
@@ -2667,7 +2674,8 @@ ul.notification-dropdown.onhover-show-div {
                   &:before {
                     content: "\f104";
                     transition: $sidebar-transition;
-                    color: $sidebar-font-color; 
+                    // color: $sidebar-font-color; 
+                    color: $theme-default;
                   }
                 }
               }

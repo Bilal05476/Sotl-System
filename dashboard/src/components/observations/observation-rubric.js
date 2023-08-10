@@ -316,7 +316,7 @@ const RubricAccordion = ({
         </button>
 
         {isOpen === accordCode && (
-          <div className="accordion-body">
+          <div className="accordion-body" style={{ padding: "2rem" }}>
             {obsDetails?.meetings?.informedObservation?.rubrics.map(
               (item, ind) => {
                 if (item.code === accordCode)
@@ -326,11 +326,6 @@ const RubricAccordion = ({
                       rid={item.id}
                       title={item.title}
                       ind={ind + 1}
-                      // rubricScore={
-                      //   role === "Faculty"
-                      //     ? item.facultyScore
-                      //     : item.observerScore
-                      // }
                       subSections={subSections}
                       setSubSections={setSubSections}
                       accordCode={accordCode}
@@ -346,7 +341,7 @@ const RubricAccordion = ({
                 className="bg-light py-3 text-center"
                 style={{
                   boxShadow: "1px 1px 2px #1e1e1e56",
-                  borderRadius: "2px",
+                  borderRadius: "0px",
                 }}
               >
                 <AccordButton
@@ -369,7 +364,6 @@ const AccordionSubHeading = ({
   rid,
   title,
   ind,
-  // rubricScore,
   subSections,
   setSubSections,
   accordCode,
@@ -415,9 +409,12 @@ const AccordionSubHeading = ({
         fontWeight: "500",
         // marginBottom: "1rem",
         borderBottom: "1px solid #ccc",
+        // background: "pink",
+        marginBottom: "1rem",
+        boxShadow: "0px 1px 2px #1e1e1e56",
       }}
     >
-      <h5 className="m-0">
+      <h5 className="mb-3">
         {ind}. {title}
         <span
           style={{

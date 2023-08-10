@@ -25,7 +25,7 @@ $theme-default: #071285;
 // iqra color
 // $theme-default: #040b5b;
 // advised color
-// $theme-default: #5673ED;
+$theme-default3: #5673ED;
 $theme-default2: #4AD6EF;
 $grey-darken: #393230;
 $grey-link: #948e8c;
@@ -245,7 +245,7 @@ $sidebar-sub-header-padding: 15px;
 $sidebar-sub-header-margin: 0;
 $sidebar-text-transform: capitalize;
 $sidebar-heading-hover-padding: 3px;
-$sidebar-hover-txt-color: #fff;
+$sidebar-hover-txt-color: $theme-default;
 $sidebar-arrow-margin-top: 2px;
 $sidebar-arrow-size: 15px;
 $sidebar-arrow-color: $theme-body-font-color;
