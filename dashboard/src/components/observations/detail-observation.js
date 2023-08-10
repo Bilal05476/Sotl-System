@@ -78,15 +78,17 @@ const Detail_observation = () => {
   // const [postTimingOpen, setPostTimingOpen] = useState(false);
 
   const [teahingTempView, setTeachingTempView] = useState(false);
+  const [refTempView, setRefTempView] = useState(false);
 
   const componentRef = useRef();
-  const printTeaching = useReactToPrint({
+  const printTemplatePlan = useReactToPrint({
     content: () => componentRef.current,
   });
 
   const TemplatePrint = React.forwardRef((props, ref) => {
     const currentDate = new Date();
-    const { template, obsId, type, faculty, observer } = props;
+    const { template, obsId, type, faculty, observer, obsSign, headSign } =
+      props;
 
     const formattedDate = `${currentDate.getDate()}-${
       currentDate.getMonth() + 1
@@ -134,6 +136,21 @@ const Detail_observation = () => {
             len={template.length}
           />
         ))}
+
+        <div className="d-flex my-5 align-items-center justify-content-between">
+          <p className="m-0 text-dark">
+            Signature of Obsever:{" "}
+            <span style={{ color: completeColor2 }}>
+              {obsSign ? obsSign : "_____________"}
+            </span>
+          </p>
+          <p className="m-0 text-dark">
+            Signature of Head of Department:{" "}
+            <span style={{ color: completeColor2 }}>
+              {headSign ? headSign : "_____________"}
+            </span>
+          </p>
+        </div>
       </div>
     );
   });
@@ -304,7 +321,7 @@ const Detail_observation = () => {
                                 >
                                   {teahingTempView ? (
                                     <AccordButton
-                                      onClick={() => printTeaching()}
+                                      onClick={() => printTemplatePlan()}
                                       icon={
                                         <DownloadCloud
                                           color="white"
@@ -350,28 +367,39 @@ const Detail_observation = () => {
                           type={"TEACHING"}
                           faculty={obsDetail?.faculty.name}
                           observer={obsDetail?.observer.name}
+                          // obsSign={}
+                          // headSign={}
                         />
                       )}
                       {obsDetail.obsRequest?.status !== "Completed" && (
-                        <>
-                          {user.role === "Faculty" ||
+                        <div
+                          style={{
+                            textAlign: "right",
+                          }}
+                        >
+                          {user.role === "Head_of_Department" ||
                           user.role === "Observer" ? (
-                            <div
-                              style={{
-                                textAlign: "right",
-                              }}
+                            <Button
+                              className="mx-2 btn btn-primary"
+                              // onClick={() => selectCourse()}
                             >
-                              <NavLink
-                                to={`/observations/observation-scheduling/${obsDetail?.id}`}
-                                className="btn btn-primary mx-2"
-                              >
-                                Edit Scheduling
-                              </NavLink>
-                            </div>
+                              Sign Template
+                            </Button>
                           ) : (
                             <></>
                           )}
-                        </>
+                          {user.role === "Faculty" ||
+                          user.role === "Observer" ? (
+                            <NavLink
+                              to={`/observations/observation-scheduling/${obsDetail?.id}`}
+                              className="btn btn-primary mx-2"
+                            >
+                              Edit Scheduling
+                            </NavLink>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
                       )}
                     </div>
                   )}
@@ -425,7 +453,7 @@ const Detail_observation = () => {
                           <tr>
                             {/* <th scope="col">Id</th> */}
                             <th scope="col">
-                              Final Score{" "}
+                              Rubrics Score{" "}
                               <span
                                 style={{ color: "#f1f1f1", fontSize: "0.8rem" }}
                               >
@@ -441,11 +469,18 @@ const Detail_observation = () => {
                             {/* <td className={"digits"}>
                               {obsDetail?.meetings.informedObservation.id}
                             </td> */}
-                            <td className={"digits "}>
-                              {
-                                obsDetail?.meetings.informedObservation
-                                  .finalScore
-                              }
+                            <td
+                              className={"digits "}
+                              style={{ fontWeight: "800" }}
+                            >
+                              {(
+                                (obsDetail?.meetings.informedObservation
+                                  .observerScore +
+                                  obsDetail?.meetings.informedObservation
+                                    .facultyScore) /
+                                2
+                              ).toFixed(1)}{" "}
+                              / 80.0
                             </td>
                             {dateFormater(obsDetail?.starting)}
                             <td
@@ -469,16 +504,6 @@ const Detail_observation = () => {
                         >
                           Open Rubrics
                         </NavLink>
-                        {obsDetail?.meetings.informedObservation.status ===
-                          "Scheduled" && (
-                          <Button
-                            onClick={() => onPosObsDone()}
-                            type="button"
-                            color="primary"
-                          >
-                            Mark Completed
-                          </Button>
-                        )}
                       </div>
                     </div>
                   )}
@@ -530,29 +555,39 @@ const Detail_observation = () => {
                         </thead>
                         <tbody>
                           <tr>
-                            {[0, 1].map((item) => (
-                              <td
-                                key={item}
-                                className="digits"
-                                title="Download"
-                              >
-                                {obsDetail?.meetings?.postObservation
-                                  ?.reflectionPlan[0]?.editedBy && (
-                                  <span
-                                    className="d-flex alogn-items-center"
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => alert("PDF Downloaded")}
-                                  >
-                                    <DownloadCloud
-                                      className="mx-2"
-                                      color={completeColor}
-                                      size={20}
-                                    />{" "}
-                                    Download
-                                  </span>
-                                )}
-                              </td>
-                            ))}
+                            <td className="digits">
+                              {obsDetail?.meetings?.postObservation
+                                ?.reflectionPlan[0]?.editedById && (
+                                <span
+                                  className="d-flex alogn-items-center"
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  {refTempView ? (
+                                    <AccordButton
+                                      onClick={() => printTemplatePlan()}
+                                      icon={
+                                        <DownloadCloud
+                                          color="white"
+                                          size={20}
+                                        />
+                                      }
+                                    />
+                                  ) : (
+                                    <AccordButton
+                                      onClick={() => setRefTempView(true)}
+                                      icon={<Eye color="white" size={20} />}
+                                    />
+                                  )}
+                                  {refTempView && (
+                                    <AccordButton
+                                      onClick={() => setRefTempView(false)}
+                                      icon={<EyeOff color="white" size={20} />}
+                                    />
+                                  )}
+                                </span>
+                              )}
+                            </td>
+                            <td className="digits"></td>
                             <td>
                               {dateFormater2(
                                 obsDetail?.meetings?.postObservation
@@ -576,13 +611,55 @@ const Detail_observation = () => {
                         </tbody>
                       </Table>
 
+                      {refTempView && (
+                        <TemplatePrint
+                          ref={componentRef}
+                          template={
+                            obsDetail?.meetings?.postObservation
+                              ?.reflectionPlan[0]?.steps
+                          }
+                          obsId={obsDetail?.id}
+                          type={"REFLECTION"}
+                          faculty={obsDetail?.faculty.name}
+                          observer={obsDetail?.observer.name}
+                          // obsSign={}
+                          // headSign={}
+                        />
+                      )}
+
                       <div style={{ textAlign: "right" }}>
-                        <NavLink
-                          to={`/observations/post-observation-meeting/${id}`}
-                          className="btn btn-primary mx-2"
-                        >
-                          Open
-                        </NavLink>
+                        {user.role === "Head_of_Department" ||
+                        user.role === "Observer" ? (
+                          <Button
+                            className="mx-2 btn btn-primary"
+                            // onClick={() => selectCourse()}
+                          >
+                            Sign Template
+                          </Button>
+                        ) : (
+                          <></>
+                        )}
+                        {obsDetail?.meetings.postObservation.status ===
+                          "Ongoing" && (
+                          <NavLink
+                            to={`/observations/post-observation-meeting/${id}`}
+                            className="btn btn-primary mx-2"
+                          >
+                            Edit Scheduling
+                          </NavLink>
+                        )}
+                        {obsDetail?.meetings.postObservation.status ===
+                          "Scheduled" &&
+                          user.role === "Observer" && (
+                            <Button
+                              onClick={() => onPosObsDone()}
+                              type="button"
+                              color="primary"
+                              className="mx-2"
+                            >
+                              Mark Completed
+                            </Button>
+                          )}
                       </div>
                     </div>
                   )}

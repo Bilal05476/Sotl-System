@@ -834,6 +834,9 @@ const Dashboard = () => {
                                 : item.meetings?.postObservation?.status ===
                                   "Ongoing"
                                 ? "Post Informed"
+                                : item.meetings?.postObservation?.status ===
+                                  "Scheduled"
+                                ? "Post Informed"
                                 : item.meetings?.uninformedObservation
                                     ?.status === "Ongoing"
                                 ? "Uninformed"

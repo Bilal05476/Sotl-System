@@ -411,13 +411,13 @@ const AccordionSubHeading = ({
     <div
       className="p-4"
       style={{
-        fontStyle: "italic",
+        // fontStyle: "italic",
         fontWeight: "500",
         // marginBottom: "1rem",
         borderBottom: "1px solid #ccc",
       }}
     >
-      <h5>
+      <h5 className="m-0">
         {ind}. {title}
         <span
           style={{
