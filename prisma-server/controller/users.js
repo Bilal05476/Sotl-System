@@ -51,6 +51,7 @@ export const userById = asyncHandler(async (req, res) => {
       role: true,
       campus: true,
       department: true,
+      courseSlots: true,
     },
   });
   if (validate) {

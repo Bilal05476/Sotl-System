@@ -2,9 +2,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
-// @desc   Get users and courses for Admin, Campus Director, HOD
-// @route  GET api/courses-users/:departmentId/:role
-// @access Private (Parent Role Like (Admin, Campus Director, HOD))
+// @desc   Get users and courses for HOD
+// @route  GET api/courses-users/:role/:departmentId
+// @access Private (Parent Role Like (HOD))
 export const getUsersAndCourses = asyncHandler(async (req, res) => {
   let { departmentId, role } = req.params;
 
@@ -28,11 +28,7 @@ export const getUsersAndCourses = asyncHandler(async (req, res) => {
             department: true,
           },
         })
-      : await prisma.user.findMany({
-          include: {
-            department: true,
-          },
-        });
+      : null;
 
   const getCourses =
     departmentId && role === "Head_of_Department"
@@ -58,31 +54,22 @@ export const getUsersAndCourses = asyncHandler(async (req, res) => {
             department: true,
           },
         })
-      : await prisma.courses.findMany({
-          include: {
-            slots: {
-              include: {
-                faculty: {
-                  select: {
-                    name: true,
-                    email: true,
-                  },
-                },
-              },
-            },
-            department: true,
-          },
-        });
+      : null;
 
-  // // exclude user password from getUsers
-  const userWithoutPass = getUsers.map((obj) => {
-    const newObj = { ...obj };
-    ["password"].forEach((field) => delete newObj[field]);
-    return newObj;
-  });
-
-  const data = { users: userWithoutPass, courses: getCourses };
-  res.status(200).json(data);
+  if (getUsers && getCourses) {
+    // // exclude user password from getUsers
+    const userWithoutPass = getUsers.map((obj) => {
+      const newObj = { ...obj };
+      ["password"].forEach((field) => delete newObj[field]);
+      return newObj;
+    });
+    const data = { users: userWithoutPass, courses: getCourses };
+    res.status(200).json(data);
+  } else {
+    res.status(400).json({
+      message: "Sorry, this can be only visible for head of departmets!",
+    });
+  }
 });
 
 // @desc   Send all Departments
