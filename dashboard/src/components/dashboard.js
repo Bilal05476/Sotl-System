@@ -65,6 +65,7 @@ import {
 } from "./colors";
 // import welcome from "../assets/images/dashboard/welcome_img.svg";
 import { dateFormater, streamDateFormater } from "./DateFormater";
+import ArtifactUpload from "./ArtifactUpload";
 
 ChartJS.register(
   CategoryScale,
@@ -986,6 +987,8 @@ const Dashboard = () => {
           ) : (
             <></>
           )}
+
+          <ArtifactUpload />
           {/* <Col xl="3 xl-50" md="6">
             <Card className=" order-graph sales-carousel">
               <CardHeader>

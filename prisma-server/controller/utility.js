@@ -83,3 +83,20 @@ export const getDepartments = asyncHandler(async (req, res) => {
         message: "No departments!",
       });
 });
+
+// @desc   Dummy Route to change observations createdAt
+// @route  PUT api/updateobs/
+// @access Private (Parent Role Like (Admin, Campus Director, HOd))
+export const changeDate = asyncHandler(async (req, res) => {
+  const { id, createdAt } = req.body;
+  const up = await prisma.observations.update({
+    where: {
+      id,
+    },
+    data: {
+      createdAt,
+    },
+  });
+
+  res.status(200).json(up);
+});

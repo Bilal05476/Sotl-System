@@ -81,16 +81,16 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
-// async function main(id) {
-//   await prisma.courses.delete({
-//     where: {
-//       id,
-//     },
-//   });
+// async function main() {
+//   await prisma.dateTimes.deleteMany({});
+//   await prisma.templatePlanStep.deleteMany({});
+//   await prisma.templatePlan.deleteMany({});
+//   await prisma.courseSlots.deleteMany({});
+//   await prisma.courses.deleteMany({});
+//   await prisma.obsScheduling.deleteMany({});
+//   await prisma.post.deleteMany({});
 // }
-// for (let i = 12; i < 15; i++) {
-//   main(i);
-// }
+// main();
 
 // function hello() {
 //   let arr = [1];

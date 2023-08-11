@@ -75,17 +75,17 @@ model Observations {
 
 // -> Observations => ObsScheduling
 model ObsScheduling {
-    id                 Int            @id @default(autoincrement()) // auto-inc
-    timeSlotsByFaculty CourseSlots[]  @relation("Faculty")
-    timeSlotByObserver CourseSlots[]  @relation("Observer")
+    id                 Int           @id @default(autoincrement()) // auto-inc
+    timeSlotsByFaculty CourseSlots[] @relation("Faculty")
+    timeSlotByObserver CourseSlots[] @relation("Observer")
     scheduledOn        DateTime?
-    status             Status         @default(Ongoing)
-    observation        Observations   @relation(fields: [observationsId], references: [id])
-    observationsId     Int            @unique
-    facultyAccepted    Boolean        @default(false)
-    observerAccepted   Boolean        @default(false)
+    status             Status        @default(Ongoing)
+    observation        Observations  @relation(fields: [observationsId], references: [id])
+    observationsId     Int           @unique
+    facultyAccepted    Boolean       @default(false)
+    observerAccepted   Boolean       @default(false)
     reasons            ObsReasons[]
-    teachingPlan       TemplatePlan[]
+    teachingPlan       TemplatePlan?
 }
 
 //-> Observation -> ObsScheduling -> ObsReasons
@@ -134,18 +134,27 @@ model Rubric {
 }
 
 model Post {
-    id                  Int            @id @default(autoincrement()) // auto-inc
-    status              Status         @default(Ongoing)
-    reflectionPlan      TemplatePlan[] @relation("Reflection")
-    // artifacts          TemplatePlan[] @relation("Artifacts")
-    facultyAccepted     Boolean        @default(false)
-    observerAccepted    Boolean        @default(false)
+    id                  Int           @id @default(autoincrement()) // auto-inc
+    status              Status        @default(Ongoing)
+    reflectionPlan      TemplatePlan?
+    artifacts           Artifact[]
+    facultyAccepted     Boolean       @default(false)
+    observerAccepted    Boolean       @default(false)
     timeSlotsByObserver DateTimes[]
     timeSlotByFaculty   DateTime?
     location            String?
     scheduledOn         DateTime?
-    meeting             Meetings       @relation(fields: [meetingId], references: [id])
-    meetingId           Int            @unique
+    meeting             Meetings      @relation(fields: [meetingId], references: [id])
+    meetingId           Int           @unique
+}
+
+model Artifact {
+    id       Int    @id @default(autoincrement())
+    Post     Post?  @relation(fields: [postId], references: [id])
+    postId   Int?
+    filename String
+    mimeType String
+    data     Bytes
 }
 
 model Uninformed {
@@ -226,10 +235,10 @@ model TemplatePlan {
     editedBy            User?              @relation("Edited", fields: [editedById], references: [id])
     editedById          Int?
     schedulingT         ObsScheduling?     @relation(fields: [obsSchedulingId], references: [id])
-    obsSchedulingId     Int?
+    obsSchedulingId     Int?               @unique
     // post observation templates
-    PostObsReflection   Post?              @relation("Reflection", fields: [postObsReflectionId], references: [id])
-    postObsReflectionId Int?
+    PostObsReflection   Post?              @relation(fields: [postObsReflectionId], references: [id])
+    postObsReflectionId Int?               @unique
     // PostObsArtifacts    Post? @relation("Artifacts", fields: [postObsArtifactsId], references: [id])
     // postObsArtifactsId  Int?
     // headSign            Boolean?           @default(false)

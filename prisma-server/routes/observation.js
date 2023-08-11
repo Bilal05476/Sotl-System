@@ -23,7 +23,6 @@ obsRoutes
   .post(postScheduleCreate)
   .put(postScheduleCycle);
 
-obsRoutes.route("/").get(getAllObs);
-obsRoutes.route("/:id").get(getObs);
+obsRoutes.get("/", getAllObs).get("/:id", getObs);
 
 export default obsRoutes;

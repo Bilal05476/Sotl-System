@@ -219,3 +219,19 @@ export async function fetchDepartments(id, setAllDept) {
     setAllDept(data);
   }
 }
+
+export async function uplaodArtifact(formData) {
+  const bodyData = {
+    formData,
+    postId: Number(1),
+  };
+  const res = await fetch(`http://localhost:8080/api/uplaodartifact`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(bodyData),
+  });
+  const data = await res.json();
+  console.log(data);
+}
