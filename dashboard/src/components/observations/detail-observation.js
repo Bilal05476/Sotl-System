@@ -32,7 +32,8 @@ const Detail_observation = () => {
 
   useEffect(() => {
     fetchObservation(setObsDetail, Number(id));
-    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+    if (user.role === "Head_Of_Department")
+      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
     window.scrollTo(0, 0);
   }, []);
 

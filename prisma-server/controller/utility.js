@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
 // @desc   Get users and courses for HOD
-// @route  GET api/courses-users/:role/:departmentId
+// @route  GET api/courses-users/:departmentId/:role
 // @access Private (Parent Role Like (HOD))
 export const getUsersAndCourses = asyncHandler(async (req, res) => {
   let { departmentId, role } = req.params;

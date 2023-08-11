@@ -419,9 +419,11 @@ const Dashboard = () => {
     const deptId = user.department.id;
     if (user.role === "Head_of_Department")
       fetchCoursesAndUsers(dispatch, deptId, user.role);
-    fetchUserData(user.id, dispatch);
+    else fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
+
+  console.log(user.role);
 
   let faculty = 0;
   let observer = 0;
