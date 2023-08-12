@@ -10,10 +10,7 @@ import {
   getTemplate,
   getTemplates,
 } from "../controller/templates.js";
-// import { uploadArtifacts } from "../controller/upload.js";
-// import multer from "multer";
-
-// const upload = multer({ dest: "artifacts/" });
+import { uploadArtifacts, upload } from "../controller/upload.js";
 
 utilityRoutes.route("/data/:role/:departmentId").get(getDataForHod);
 utilityRoutes.route("/template").post(createTemplate).get(getTemplates);
@@ -23,7 +20,7 @@ utilityRoutes.route("/department").get(getDepartments);
 // dummy route to change observations createdAt
 utilityRoutes.route("/updateobs").put(changeDate);
 
-// upload artifacts
-// utilityRoutes.post("/uplaodartifact", upload.single("file"), uploadArtifacts);
+// upload artifacts with postId in url
+utilityRoutes.post("/artifact/:id", upload.single("file"), uploadArtifacts);
 
 export default utilityRoutes;

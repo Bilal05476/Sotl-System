@@ -213,7 +213,7 @@ const TabsetPostScheduling = ({ role }) => {
 
   const checkRole = (role) => {
     if (role === "Faculty") {
-      if (obs?.meetings?.postObservation?.reflectionPlan[0]?.editedById) {
+      if (obs?.meetings?.postObservation?.reflectionPlan?.editedById) {
         return true;
       } else {
         return false;
@@ -305,12 +305,12 @@ const TabsetPostScheduling = ({ role }) => {
       )}
       {role === "Faculty" && (
         <>
-          {!obs?.meetings?.postObservation?.reflectionPlan[0]?.editedById ? (
+          {!obs?.meetings?.postObservation?.reflectionPlan?.editedById ? (
             <MultiStepForm
               tabtitle={"Provide Relfection Plan Details"}
-              steps={obs?.meetings?.postObservation?.reflectionPlan[0]?.steps}
+              steps={obs?.meetings?.postObservation?.reflectionPlan?.steps}
               tempId={
-                obs?.meetings?.postObservation?.reflectionPlan[0]?.steps[0]
+                obs?.meetings?.postObservation?.reflectionPlan?.steps[0]
                   ?.templatePlanId
               }
               observationsId={Number(id)}

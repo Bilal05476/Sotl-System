@@ -2595,9 +2595,11 @@ ul.notification-dropdown.onhover-show-div {
       // background: $sidebar-background-color;
       // background: $theme-default;
       background-color: #fff; 
-      background-image: url("../../images/dashboard/bg-pattern.png");
+      background-image:
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.8)),
+        url("../../images/dashboard/bg-pattern.png");
       background-size: cover;
-      background-position: center;
+      background-position: 10%;
       background-repeat: no-repeat;
      
       top: 0;
@@ -2667,7 +2669,7 @@ ul.notification-dropdown.onhover-show-div {
           }
         }
         .sidebar-submenu {
-          &.menu-open {
+          &.menu-open {   
             li {
               &.active {
                 .fa-angle-down {

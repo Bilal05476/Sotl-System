@@ -74,7 +74,7 @@ const Detail_observation = () => {
   };
 
   // return;
-  // console.log(obsDetail);
+  console.log(obsDetail);
 
   // const [postTimingOpen, setPostTimingOpen] = useState(false);
 

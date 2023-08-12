@@ -213,7 +213,7 @@ const TabsetScheduling = ({ role }) => {
     <Fragment>
       {role === "Observer" && (
         <>
-          {!obs?.obsRequest?.teachingPlan[0]?.editedBy ? (
+          {!obs?.obsRequest?.teachingPlan?.editedBy ? (
             <Tabs>
               <span
                 style={{
@@ -327,13 +327,11 @@ const TabsetScheduling = ({ role }) => {
       )}
       {role === "Faculty" && (
         <>
-          {!obs?.obsRequest?.teachingPlan[0]?.editedBy && (
+          {!obs?.obsRequest?.teachingPlan?.editedBy && (
             <MultiStepForm
               tabtitle={"Provide Teaching Plan Details (Words limit: 500 each)"}
-              steps={obs?.obsRequest?.teachingPlan[0]?.steps}
-              tempId={
-                obs?.obsRequest?.teachingPlan[0]?.steps[0]?.templatePlanId
-              }
+              steps={obs?.obsRequest?.teachingPlan?.steps}
+              tempId={obs?.obsRequest?.teachingPlan?.steps[0]?.templatePlanId}
               observationsId={Number(id)}
               setObs={setObs}
               tempType={"Teaching"}
@@ -342,7 +340,7 @@ const TabsetScheduling = ({ role }) => {
 
           <Tabs>
             <TabPanel>
-              {obs?.obsRequest?.teachingPlan[0]?.editedBy && (
+              {obs?.obsRequest?.teachingPlan?.editedBy && (
                 <>
                   <Form className="needs-validation user-add" noValidate="">
                     <FormGroup className="row">

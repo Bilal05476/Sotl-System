@@ -17,7 +17,7 @@ function ArtifactUpload() {
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
+      <input type="file" name="file" onChange={handleFileChange} />
       <button onClick={handleUpload}>Upload</button>
     </div>
   );
