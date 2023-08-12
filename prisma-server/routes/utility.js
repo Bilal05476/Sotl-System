@@ -3,7 +3,7 @@ const utilityRoutes = express.Router();
 import {
   changeDate,
   getDepartments,
-  getUsersAndCourses,
+  getDataForHod,
 } from "../controller/utility.js";
 import {
   createTemplate,
@@ -15,9 +15,7 @@ import {
 
 // const upload = multer({ dest: "artifacts/" });
 
-utilityRoutes
-  .route("/courses-users/:departmentId/:role")
-  .get(getUsersAndCourses);
+utilityRoutes.route("/data/:role/:departmentId").get(getDataForHod);
 utilityRoutes.route("/template").post(createTemplate).get(getTemplates);
 utilityRoutes.route("/template/:id").get(getTemplate);
 utilityRoutes.route("/department").get(getDepartments);

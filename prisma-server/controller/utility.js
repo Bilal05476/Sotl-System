@@ -3,71 +3,69 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
 // @desc   Get users and courses for HOD
-// @route  GET api/courses-users/:departmentId/:role
+// @route  GET api/data/:role/:departmentId
 // @access Private (Parent Role Like (HOD))
-export const getUsersAndCourses = asyncHandler(async (req, res) => {
+export const getDataForHod = asyncHandler(async (req, res) => {
   let { departmentId, role } = req.params;
 
-  departmentId = Number(departmentId);
+  if (departmentId && role === "Head_of_Department") {
+    departmentId = Number(departmentId);
 
-  const department = await prisma.departments.findFirst({
-    where: {
-      id: departmentId,
-    },
-  });
-  const getUsers =
-    departmentId && role === "Head_of_Department"
-      ? await prisma.user.findMany({
-          where: {
-            departmentId,
-            NOT: {
-              role,
-            },
+    const department = await prisma.departments.findFirst({
+      where: {
+        id: departmentId,
+      },
+    });
+
+    const getUsers = await prisma.user.findMany({
+      where: {
+        departmentId,
+        NOT: {
+          role,
+        },
+      },
+      include: {
+        department: true,
+      },
+    });
+
+    const getCourses = await prisma.courses.findMany({
+      where: {
+        department: {
+          some: {
+            name: department.name,
           },
+        },
+      },
+      include: {
+        slots: {
           include: {
-            department: true,
-          },
-        })
-      : null;
-
-  const getCourses =
-    departmentId && role === "Head_of_Department"
-      ? await prisma.courses.findMany({
-          where: {
-            department: {
-              some: {
-                name: department.name,
+            faculty: {
+              select: {
+                name: true,
+                email: true,
               },
             },
           },
-          include: {
-            slots: {
-              include: {
-                faculty: {
-                  select: {
-                    name: true,
-                    email: true,
-                  },
-                },
-              },
-            },
-            department: true,
-          },
-        })
-      : null;
+        },
+        department: true,
+      },
+    });
 
-  if (getUsers && getCourses) {
     // // exclude user password from getUsers
     const userWithoutPass = getUsers.map((obj) => {
       const newObj = { ...obj };
       ["password"].forEach((field) => delete newObj[field]);
       return newObj;
     });
-    const data = { users: userWithoutPass, courses: getCourses };
+    const data = {
+      users: userWithoutPass,
+      courses: getCourses,
+    };
     res.status(200).json(data);
   } else {
     res.status(400).json({
-      message: "Sorry, this can be only visible for head of departmets!",
+      message: "Sorry, this can be only visible for head of departments!",
     });
   }
 });
