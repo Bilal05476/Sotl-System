@@ -126,12 +126,12 @@ export const createCourseSlots = asyncHandler(async (req, res) => {
 
   const findSlot = await prisma.courseSlots.findFirst({
     where: {
-      OR: [{ sectionCode }, { time }],
+      OR: [{ sectionCode }, { location }],
     },
   });
   if (findSlot) {
     res.status(400).json({
-      error: "Slot already created",
+      error: "Slot already created for same location or section code!",
     });
   } else {
     const createSlot = await prisma.courseSlots.create({

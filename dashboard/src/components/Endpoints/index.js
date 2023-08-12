@@ -24,14 +24,11 @@ export async function fetchUserData(id, dispatch) {
 
 export async function fetchCoursesAndUsers(dispatch, department, role) {
   try {
-    const usercourses = await fetch(
-      `${BASEURL}/courses-users/${department}/${role}`,
-      {
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }
-    );
+    const usercourses = await fetch(`${BASEURL}/data/${role}/${department}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
     const data = await usercourses.json();
     dispatch({
       type: "SET_USERS_COURSES",

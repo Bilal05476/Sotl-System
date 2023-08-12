@@ -423,18 +423,18 @@ const Dashboard = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  console.log(user.role);
+  // console.log(user.role);
 
-  let faculty = 0;
-  let observer = 0;
-  let hod = 0;
-  let campusD = 0;
+  let faculty = 0,
+    observer = 0,
+    hod = 0;
+
   {
     usersandcourses?.users.map((item) => {
       if (item.role === "Faculty") faculty += 1;
       if (item.role === "Observer") observer += 1;
       if (item.role === "Head_of_Department") hod += 1;
-      if (item.role === "Campus_Director") campusD += 1;
+      // if (item.role === "Campus_Director") campusD += 1;
       return null;
     });
   }

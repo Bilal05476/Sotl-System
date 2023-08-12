@@ -65,7 +65,7 @@ export const getDataForHod = asyncHandler(async (req, res) => {
     res.status(200).json(data);
   } else {
     res.status(400).json({
-      message: "Sorry, this can be only visible for head of departments!",
+      error: "Sorry, this can be only visible for head of departments!",
     });
   }
 });
