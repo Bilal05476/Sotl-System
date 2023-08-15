@@ -40,28 +40,25 @@
   transition: opacity 500ms ease-in !important;
 }
 
-// .page-enter {
-//   opacity: 0;
-//   transform: translateX(100%);
+// Range of Rubric Page Styling
+/* Style for the slider thumb at level 0.5 */
+
+// .range.level-0-5::-webkit-slider-thumb {
+//   background-color: #3498db !important;
+//   /* Blue color */
 // }
 
-// .page-enter-active {
-//   opacity: 1;
-//   transform: translateX(0%);
-//   transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+// /* Style for the slider thumb at level 1.0 */
+// .range.level-1-0::-webkit-slider-thumb {
+//   background-color: #e74c3c;
+//   /* Red color */
 // }
 
-// .page-exit {
-//   opacity: 1;
-//   transform: translateX(0%);
+// /* Style for the slider thumb at level 1.5 */
+// .range.level-1-5::-webkit-slider-thumb {
+//   background-color: #2ecc71;
+//   /* Green color */
 // }
-
-// .page-exit-active {
-//   opacity: 0;
-//   transform: translateX(-100%);
-//   transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
-// }
-// end 
 
 .digits{
   font-weight: 400;
@@ -4498,3 +4495,4 @@ $i: 1;
 /*=====================
   Responsive CSS End
 ==========================*/
+

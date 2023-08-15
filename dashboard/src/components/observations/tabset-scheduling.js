@@ -10,6 +10,7 @@ import { fetchObservation } from "../Endpoints";
 import { Frown } from "react-feather";
 import MultiStepForm from "../MultiStep";
 import { toast } from "react-toastify";
+import { dateFormater2 } from "../DateFormater";
 
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
@@ -209,6 +210,8 @@ const TabsetScheduling = ({ role }) => {
     window.scrollTo(0, 0);
   }, []);
 
+  console.log(obs);
+
   return (
     <Fragment>
       {role === "Observer" && (
@@ -295,7 +298,8 @@ const TabsetScheduling = ({ role }) => {
                 </div>
               ) : (
                 <div className="pull-right">
-                  {obs?.obsRequest?.timeSlotsByFaculty.length > 0 ? (
+                  {obs?.obsRequest?.timeSlotsByFaculty.length > 0 &&
+                  !obs?.obsRequest?.facultyAccepted ? (
                     <Button
                       onClick={() => onObservationEditing()}
                       type="button"
@@ -305,7 +309,7 @@ const TabsetScheduling = ({ role }) => {
                     </Button>
                   ) : (
                     <Button disabled color="primary">
-                      Update
+                      Faculty Accepted Day and Slot
                     </Button>
                   )}
                   {obs?.obsRequest?.scheduledOn &&
@@ -331,7 +335,7 @@ const TabsetScheduling = ({ role }) => {
             <MultiStepForm
               tabtitle={"Provide Teaching Plan Details (Words limit: 500 each)"}
               steps={obs?.obsRequest?.teachingPlan?.steps}
-              tempId={obs?.obsRequest?.teachingPlan?.steps[0]?.templatePlanId}
+              tempId={obs?.obsRequest?.teachingPlan?.steps?.templatePlanId}
               observationsId={Number(id)}
               setObs={setObs}
               tempType={"Teaching"}
@@ -379,6 +383,9 @@ const TabsetScheduling = ({ role }) => {
                                 cursor={false}
                                 // onClick={() => onSelectSlotFaculty(item.id)}
                                 slots={timeSlotsByFaculty}
+                                date={dateFormater2(
+                                  obs?.obsRequest?.scheduledOn
+                                )}
                               />
                             );
                           })}
@@ -415,8 +422,7 @@ const TabsetScheduling = ({ role }) => {
                         }}
                         className="d-flex align-items-center justify-content-center"
                       >
-                        Observer not confirmed yet...{" "}
-                        <Frown color="brown" size={18} /> You will receive
+                        Observer not confirmed yet... You will receive
                         notification once confirmed...
                       </span>
                     )}
@@ -443,6 +449,7 @@ const TimeSlotSpan = ({
   slots,
   id,
   cursor,
+  date,
 }) => {
   return (
     <span
@@ -460,39 +467,39 @@ const TimeSlotSpan = ({
       }}
       onClick={onClick}
     >
-      {day} | {time} | {location}
+      {day} | {time} | {location} {date && date?.slice(0, 16)}
     </span>
   );
 };
 
-const DocumentsForm = ({ required, label, onDone }) => {
-  return (
-    <FormGroup className="row">
-      <Label className="col-xl-3 col-md-4">
-        {required && <span>*</span>} {label}
-      </Label>
-      <div className="col-xl-8 col-md-7">
-        <span
-          style={{
-            border: "1px solid #5673ED",
-            padding: "0.3rem",
-            borderRadius: "5px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <FileBase
-            className="form-control"
-            type="file"
-            required={required}
-            multiple={false}
-            onDone={onDone}
-          />
-        </span>
-      </div>
-    </FormGroup>
-  );
-};
+// const DocumentsForm = ({ required, label, onDone }) => {
+//   return (
+//     <FormGroup className="row">
+//       <Label className="col-xl-3 col-md-4">
+//         {required && <span>*</span>} {label}
+//       </Label>
+//       <div className="col-xl-8 col-md-7">
+//         <span
+//           style={{
+//             border: "1px solid #5673ED",
+//             padding: "0.3rem",
+//             borderRadius: "5px",
+//             display: "flex",
+//             alignItems: "center",
+//           }}
+//         >
+//           <FileBase
+//             className="form-control"
+//             type="file"
+//             required={required}
+//             multiple={false}
+//             onDone={onDone}
+//           />
+//         </span>
+//       </div>
+//     </FormGroup>
+//   );
+// };
 
 const FormPool = ({ label, value, onChange, type, required }) => {
   return (

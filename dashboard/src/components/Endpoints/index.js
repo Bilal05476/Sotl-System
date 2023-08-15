@@ -3,7 +3,6 @@ import { successes, errors } from "../../constants/Toasters";
 // import { useRef } from "react";
 import { toast } from "react-toastify";
 const BASEURL = process.env.REACT_APP_BASE_URL;
-// const toastId = useRef(null);
 
 export async function fetchUserData(id, dispatch) {
   try {

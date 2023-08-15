@@ -170,7 +170,8 @@ export const TeachingSteps = [
     name: "PostTeaching",
   },
   {
-    field: "Learning Feedbacks (activity, quiz, no-graded/graded assessments)",
+    field:
+      "Learning Feedbacks (activity/quiz and no-graded/graded assessments)",
     name: "Feedback",
   },
 ];

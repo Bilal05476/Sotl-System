@@ -283,7 +283,7 @@ const TabsetAssignCourses = () => {
 
       <div className="pull-right">
         {loader ? (
-          <Button type="button" color="primary" style={{ cursor: "progress" }}>
+          <Button disabled={loader} type="button" color="primary">
             Assigning...
           </Button>
         ) : (

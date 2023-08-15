@@ -371,7 +371,7 @@ const AccordionSubHeading = ({
   os,
   role,
 }) => {
-  const [rubricSc, setRubricSc] = useState();
+  const [rubricSc, setRubricSc] = useState(0);
   const [scoreSelected, setScoreSelected] = useState([]);
 
   useEffect(() => {
@@ -400,6 +400,32 @@ const AccordionSubHeading = ({
       }
     }
   }, [scoreSelected]);
+
+  // range input
+  // const handleChange = (event) => {
+  //   setRubricSc(parseFloat(event.target.value));
+  // };
+  // const renderBreakpoints = () => {
+  //   const breakpoints = [];
+  //   for (let i = 0; i <= 4; i += 0.5) {
+  //     breakpoints.push(
+  //       <div key={i} className="breakpoint">
+  //         {i}
+  //       </div>
+  //     );
+  //   }
+  //   return breakpoints;
+  // };
+  // const getThumbColor = (level) => {
+  //   if (level <= 0.5) {
+  //     return "#3498db"; // Blue color for level 0.5
+  //   } else if (level <= 1.0) {
+  //     return "#e74c3c"; // Red color for level 1.0
+  //   } else if (level <= 1.5) {
+  //     return "#2ecc71"; // Green color for level 1.5
+  //   }
+  //   // Add more level checks here if needed
+  // };
 
   return (
     <div
@@ -453,6 +479,22 @@ const AccordionSubHeading = ({
       ) : (
         <></>
       )}
+
+      {/* <div className="range-container">
+        <div className="breakpoints d-flex justify-content-between">
+          {renderBreakpoints()}
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="4"
+          step="0.5"
+          value={rubricSc}
+          onChange={handleChange}
+          className={`range w-100`}
+          // style={{ "--thumb-color": getThumbColor(rubricSc) }}
+        />
+      </div> */}
     </div>
   );
 };

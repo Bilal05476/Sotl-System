@@ -5,6 +5,7 @@ import Breadcrumb from "../common/breadcrumb";
 import { Loader, DownloadCloud, Eye, EyeOff } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import logo from "../../assets/images/blue-version.png";
+// import { stringify } from "csv-stringify/sync";
 
 import {
   fetchCoursesAndUsers,
@@ -74,7 +75,6 @@ const Detail_observation = () => {
   };
 
   // return;
-  console.log(obsDetail);
 
   // const [postTimingOpen, setPostTimingOpen] = useState(false);
 
@@ -166,7 +166,42 @@ const Detail_observation = () => {
       </div>
     );
   };
-  // console.log(obsDetail);
+
+  // CSV download
+  // Function to convert API response to CSV format
+  const convertToCSV = (data) => {
+    const csvRows = [];
+
+    // Determine the fields you want to include in the CSV header
+    const fields = Object.keys(data[0]).filter(
+      (field) => field === "field" || field === "response"
+    );
+    csvRows.push(fields.join(","));
+
+    // Add data rows
+    data.forEach((row) => {
+      const values = fields.map((field) => row[field]);
+      csvRows.push(values.join(","));
+    });
+
+    return csvRows.join("\n");
+  };
+
+  const downloadCsv = (data, name) => {
+    const csvContent = convertToCSV(data);
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${name} Teaching Plan.csv`;
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const AccordButton = ({ onClick, icon }) => {
     return (
@@ -309,32 +344,44 @@ const Detail_observation = () => {
                               )}
                             </td>
                             <td className="digits">
-                              {obsDetail?.obsRequest?.teachingPlan[0]
+                              {obsDetail?.obsRequest?.teachingPlan
                                 ?.editedBy && (
                                 <span
                                   className="d-flex alogn-items-center"
                                   style={{ cursor: "pointer" }}
                                 >
+                                  {/* // <DownloadCloud
+                                        //   color="white"
+                                        //   size={20}
+                                        // /> */}
+                                  {teahingTempView && (
+                                    <>
+                                      <AccordButton
+                                        onClick={() =>
+                                          downloadCsv(
+                                            obsDetail?.obsRequest?.teachingPlan
+                                              .steps,
+                                            obsDetail?.obsRequest?.teachingPlan
+                                              .editedBy.name
+                                          )
+                                        }
+                                        icon=".CSV"
+                                      />
+                                      <AccordButton
+                                        onClick={() => printTemplatePlan()}
+                                        icon=".PDF"
+                                      />
+                                    </>
+                                  )}
                                   {teahingTempView ? (
                                     <AccordButton
-                                      onClick={() => printTemplatePlan()}
-                                      icon={
-                                        <DownloadCloud
-                                          color="white"
-                                          size={20}
-                                        />
-                                      }
+                                      onClick={() => setTeachingTempView(false)}
+                                      icon={<EyeOff color="white" size={20} />}
                                     />
                                   ) : (
                                     <AccordButton
                                       onClick={() => setTeachingTempView(true)}
                                       icon={<Eye color="white" size={20} />}
-                                    />
-                                  )}
-                                  {teahingTempView && (
-                                    <AccordButton
-                                      onClick={() => setTeachingTempView(false)}
-                                      icon={<EyeOff color="white" size={20} />}
                                     />
                                   )}
                                 </span>
@@ -356,15 +403,11 @@ const Detail_observation = () => {
                       {teahingTempView && (
                         <TemplatePrint
                           ref={componentRef}
-                          template={
-                            obsDetail?.obsRequest?.teachingPlan[0].steps
-                          }
+                          template={obsDetail?.obsRequest?.teachingPlan.steps}
                           obsId={obsDetail?.id}
                           type={"TEACHING"}
                           faculty={obsDetail?.faculty.name}
                           observer={obsDetail?.observer.name}
-                          // obsSign={}
-                          // headSign={}
                         />
                       )}
                       {obsDetail.obsRequest?.status !== "Completed" && (
@@ -553,7 +596,7 @@ const Detail_observation = () => {
                           <tr>
                             <td className="digits">
                               {obsDetail?.meetings?.postObservation
-                                ?.reflectionPlan[0]?.editedById && (
+                                ?.reflectionPlan?.editedBy && (
                                 <span
                                   className="d-flex alogn-items-center"
                                   style={{ cursor: "pointer" }}
@@ -611,8 +654,8 @@ const Detail_observation = () => {
                         <TemplatePrint
                           ref={componentRef}
                           template={
-                            obsDetail?.meetings?.postObservation
-                              ?.reflectionPlan[0]?.steps
+                            obsDetail?.meetings?.postObservation?.reflectionPlan
+                              ?.steps
                           }
                           obsId={obsDetail?.id}
                           type={"REFLECTION"}
