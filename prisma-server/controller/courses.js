@@ -100,16 +100,16 @@ export const createCourse = asyncHandler(async (req, res) => {
 // @access Private
 export const assignCourses = asyncHandler(async (req, res) => {
   const { slots } = req.body;
-  slots.map(async (id) => {
+  for (var s = 0; s < slots.length; s++) {
     await prisma.courseSlots.update({
       where: {
-        id,
+        id: slots[s],
       },
       data: {
         facultyId: Number(req.params.id),
       },
     });
-  });
+  }
   res.status(200).json({
     message: "Course(s) assigned successfully!",
   });

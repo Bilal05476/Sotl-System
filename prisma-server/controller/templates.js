@@ -37,13 +37,14 @@ export const getTemplates = asyncHandler(async (req, res) => {
 // @route  POST api/template/:id
 // @access
 export const getTemplate = asyncHandler(async (req, res) => {
-  const temaplate = await prisma.templatePlan.findFirst({
-    include: {
-      steps: true,
-    },
+  const template = await prisma.templatePlan.findFirst({
     where: {
       id: Number(req.params.id),
     },
+    include: {
+      steps: true,
+      assignedTo: true,
+    },
   });
-  res.status(200).json(temaplate);
+  res.status(200).json(template);
 });

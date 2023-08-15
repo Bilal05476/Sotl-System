@@ -76,7 +76,7 @@ const TabsetAssignCourses = () => {
       info("Please select the slots!");
     } else {
       assignCourse();
-      // console.log(courseDetails);
+      // console.log(courseDetails, facultyId);
     }
   };
 
