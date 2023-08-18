@@ -53,7 +53,7 @@ const Observation_rubric = () => {
         return null;
       });
 
-      // console.log(rubricsFinal, user.role);
+      // console.log(accordionTab, rubricsFinal, user.role);
 
       // return null;
 
@@ -372,50 +372,75 @@ const AccordionSubHeading = ({
   role,
 }) => {
   const [rubricSc, setRubricSc] = useState(0);
-  const [scoreSelected, setScoreSelected] = useState([]);
+  // const [scoreSelected, setScoreSelected] = useState([]);
 
-  useEffect(() => {
-    let score = 0;
-    let sclen = 0;
-    if (scoreSelected[0]?.sc) {
-      scoreSelected[0]?.sc.map((obj) => {
-        score += obj;
-        sclen += 1;
-        return null;
-      });
-      setRubricSc(score / sclen);
-      if (subSections.some((obj) => obj.rid === rid)) {
-        const updatedArray = subSections.map((obj) => {
-          if (obj.rid === rid) {
-            return { ...obj, sc: score / sclen };
-          }
-          return obj;
-        });
-        setSubSections(updatedArray);
-      } else {
-        setSubSections([
-          ...subSections,
-          { rid: scoreSelected[0].rid, sc: score / sclen, code: accordCode },
-        ]);
-      }
-    }
-  }, [scoreSelected]);
+  // useEffect(() => {
+  //   let score = 0;
+  //   let sclen = 0;
+  //   if (scoreSelected[0]?.sc) {
+  //     scoreSelected[0]?.sc.map((obj) => {
+  //       score += obj;
+  //       sclen += 1;
+  //       return null;
+  //     });
+  //     setRubricSc(score / sclen);
+  //     if (subSections.some((obj) => obj.rid === rid)) {
+  //       const updatedArray = subSections.map((obj) => {
+  //         if (obj.rid === rid) {
+  //           return { ...obj, sc: score / sclen };
+  //         }
+  //         return obj;
+  //       });
+  //       setSubSections(updatedArray);
+  //     } else {
+  //       setSubSections([
+  //         ...subSections,
+  //         { rid: scoreSelected[0].rid, sc: score / sclen, code: accordCode },
+  //       ]);
+  //     }
+  //   }
+  // }, [scoreSelected]);
 
   // range input
-  // const handleChange = (event) => {
-  //   setRubricSc(parseFloat(event.target.value));
-  // };
-  // const renderBreakpoints = () => {
-  //   const breakpoints = [];
-  //   for (let i = 0; i <= 4; i += 0.5) {
-  //     breakpoints.push(
-  //       <div key={i} className="breakpoint">
-  //         {i}
-  //       </div>
-  //     );
-  //   }
-  //   return breakpoints;
-  // };
+  const handleChange = (event) => {
+    setRubricSc(Number(event.target.value));
+    if (subSections.some((obj) => obj.rid === rid)) {
+      const updatedArray = subSections.map((obj) => {
+        if (obj.rid === rid) {
+          return { ...obj, sc: Number(event.target.value) };
+        }
+        return obj;
+      });
+      setSubSections(updatedArray);
+    } else {
+      setSubSections([
+        ...subSections,
+        {
+          rid,
+          sc: Number(event.target.value),
+          code: accordCode,
+        },
+      ]);
+    }
+  };
+  const renderBreakpoints = () => {
+    const breakpoints = [];
+    let scoringDesc = [
+      "Non Demonstrating",
+      "Limiting",
+      "Developing",
+      "Applying",
+      "Innovating",
+    ];
+    for (let i = 0; i <= 4; i += 1) {
+      breakpoints.push(
+        <div key={i} className="breakpoint">
+          {i}. {scoringDesc[i]}
+        </div>
+      );
+    }
+    return breakpoints;
+  };
   // const getThumbColor = (level) => {
   //   if (level <= 0.5) {
   //     return "#3498db"; // Blue color for level 0.5
@@ -463,147 +488,145 @@ const AccordionSubHeading = ({
       </div>
 
       {role === "Faculty" || role === "Observer" ? (
-        <div className="d-flex align-items-center justify-content-between">
-          {ScoringPlot.map((item) => (
-            <RubricPoints
-              scorePlot={item}
-              rubricSc={rubricSc}
-              setRubricSc={setRubricSc}
-              scoreSelected={scoreSelected}
-              setScoreSelected={setScoreSelected}
-              rid={rid}
-              k={item.score}
-            />
-          ))}
+        // <div className="d-flex align-items-center justify-content-between">
+        //   {ScoringPlot.map((item) => (
+        //     <RubricPoints
+        //       scorePlot={item}
+        //       rubricSc={rubricSc}
+        //       setRubricSc={setRubricSc}
+        //       scoreSelected={scoreSelected}
+        //       setScoreSelected={setScoreSelected}
+        //       rid={rid}
+        //       k={item.score}
+        //     />
+        //   ))}
+        // </div>
+        <div className="range-container">
+          <div className="breakpoints d-flex justify-content-between">
+            {renderBreakpoints()}
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="4"
+            step="1"
+            value={rubricSc}
+            onChange={handleChange}
+            className={`range w-100`}
+          />
         </div>
       ) : (
         <></>
       )}
-
-      {/* <div className="range-container">
-        <div className="breakpoints d-flex justify-content-between">
-          {renderBreakpoints()}
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="4"
-          step="0.5"
-          value={rubricSc}
-          onChange={handleChange}
-          className={`range w-100`}
-          // style={{ "--thumb-color": getThumbColor(rubricSc) }}
-        />
-      </div> */}
     </div>
   );
 };
 
-const ScoringPlot = [
-  {
-    score: 0,
-    text: "Non Demonstrating",
-  },
-  {
-    score: 1,
-    text: "Limiting",
-  },
-  {
-    score: 2,
-    text: "Developing",
-  },
-  {
-    score: 3,
-    text: "Applying",
-  },
-  {
-    score: 4,
-    text: "Innovating",
-  },
-];
+// const ScoringPlot = [
+//   {
+//     score: 0,
+//     text: "Non Demonstrating",
+//   },
+//   {
+//     score: 1,
+//     text: "Limiting",
+//   },
+//   {
+//     score: 2,
+//     text: "Developing",
+//   },
+//   {
+//     score: 3,
+//     text: "Applying",
+//   },
+//   {
+//     score: 4,
+//     text: "Innovating",
+//   },
+// ];
 
-const RubricPoints = ({
-  scorePlot,
-  // rubricSc,
-  // setRubricSc,
-  scoreSelected,
-  setScoreSelected,
-  rid,
-  k,
-}) => {
-  const toggleSelected = (sc) => {
-    const ridExists = scoreSelected.findIndex((obj) => obj.rid === rid);
-    if (ridExists !== -1) {
-      const scoreExists = scoreSelected[ridExists].sc.includes(sc);
-      if (scoreExists) {
-        const updatedArray = scoreSelected.map((obj) => {
-          if (obj.rid === rid) {
-            const popScore = obj.sc.filter((sco) => sco !== sc);
-            return { ...obj, sc: popScore };
-          }
-          return obj;
-        });
-        setScoreSelected(updatedArray);
-      } else {
-        const updatedArray = scoreSelected.map((obj) => {
-          if (obj.rid === rid && obj.sc.length < 2) {
-            return { ...obj, sc: [...obj.sc, sc] };
-          } else {
-            info("You can only select any two of the rubric sub points...");
-            return obj;
-          }
-        });
-        setScoreSelected(updatedArray);
-      }
-    } else {
-      setScoreSelected([...scoreSelected, { rid, sc: [sc] }]);
-    }
-  };
-  return (
-    <div
-      key={k}
-      className="rubric-points d-flex align-items-start my-1 mx-1"
-      style={{
-        backgroundColor:
-          scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-          scorePlot.score === 1
-            ? blue3
-            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-              scorePlot.score === 2
-            ? blue2
-            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-              scorePlot.score === 3
-            ? blue1
-            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-              scorePlot.score === 4
-            ? blue4
-            : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-              scorePlot.score === 0
-            ? blue5
-            : "",
-        boxShadow:
-          scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-          "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
-      }}
-      onClick={() => toggleSelected(scorePlot.score)}
-    >
-      <input
-        type="radio"
-        className="mt-1"
-        checked={
-          scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) && true
-        }
-        style={{ marginRight: "0.5rem" }}
-        readOnly={true}
-      />
+// const RubricPoints = ({
+//   scorePlot,
+//   // rubricSc,
+//   // setRubricSc,
+//   scoreSelected,
+//   setScoreSelected,
+//   rid,
+//   k,
+// }) => {
+//   const toggleSelected = (sc) => {
+//     const ridExists = scoreSelected.findIndex((obj) => obj.rid === rid);
+//     if (ridExists !== -1) {
+//       const scoreExists = scoreSelected[ridExists].sc.includes(sc);
+//       if (scoreExists) {
+//         const updatedArray = scoreSelected.map((obj) => {
+//           if (obj.rid === rid) {
+//             const popScore = obj.sc.filter((sco) => sco !== sc);
+//             return { ...obj, sc: popScore };
+//           }
+//           return obj;
+//         });
+//         setScoreSelected(updatedArray);
+//       } else {
+//         const updatedArray = scoreSelected.map((obj) => {
+//           if (obj.rid === rid && obj.sc.length < 2) {
+//             return { ...obj, sc: [...obj.sc, sc] };
+//           } else {
+//             info("You can only select any two of the rubric sub points...");
+//             return obj;
+//           }
+//         });
+//         setScoreSelected(updatedArray);
+//       }
+//     } else {
+//       setScoreSelected([...scoreSelected, { rid, sc: [sc] }]);
+//     }
+//   };
+//   return (
+//     <div
+//       key={k}
+//       className="rubric-points d-flex align-items-start my-1 mx-1"
+//       style={{
+//         backgroundColor:
+//           scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+//           scorePlot.score === 1
+//             ? blue3
+//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+//               scorePlot.score === 2
+//             ? blue2
+//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+//               scorePlot.score === 3
+//             ? blue1
+//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+//               scorePlot.score === 4
+//             ? blue4
+//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+//               scorePlot.score === 0
+//             ? blue5
+//             : "",
+//         boxShadow:
+//           scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
+//           "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
+//       }}
+//       onClick={() => toggleSelected(scorePlot.score)}
+//     >
+//       <input
+//         type="radio"
+//         className="mt-1"
+//         checked={
+//           scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) && true
+//         }
+//         style={{ marginRight: "0.5rem" }}
+//         readOnly={true}
+//       />
 
-      <span
-        style={{
-          textAlign: "left",
-        }}
-      >
-        {scorePlot.text}
-      </span>
-    </div>
-  );
-};
+//       <span
+//         style={{
+//           textAlign: "left",
+//         }}
+//       >
+//         {scorePlot.text}
+//       </span>
+//     </div>
+//   );
+// };
