@@ -9,7 +9,7 @@ import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
 // @access Private (only hod will initiate)
 export const initiate = asyncHandler(async (req, res) => {
   const { facultyIds, semester, observerId, hodId } = req.body;
-
+  // "createdAt": "2023-04-12T11:51:50.445Z"
   let exitedObsForFaculty = [];
 
   for (let i = 0; i < facultyIds.length; i++) {
@@ -44,7 +44,7 @@ export const initiate = asyncHandler(async (req, res) => {
           existed.faculty?.name
         } for the ${
           existed.course ? existed.course.name : "not decided"
-        } course`,
+        } course!`,
       });
     } else {
       await prisma.observations.create({
@@ -53,6 +53,7 @@ export const initiate = asyncHandler(async (req, res) => {
           observerId,
           hodId,
           semester,
+          //createdAt, // for just add mock data
         },
       });
     }

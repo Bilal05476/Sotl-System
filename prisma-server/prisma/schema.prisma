@@ -27,10 +27,12 @@ model User {
     role                Role
     campus              Campus
     specialization      Specialization?
-    //observations
+    // For Informed observations
     facultyObs          Observations[]  @relation("Faculty")
     hodObs              Observations[]  @relation("Hod")
     observerObs         Observations[]  @relation("Observer")
+    // For Uninformed Observation (Observer is different)
+    uninformedObs       Uninformed[]    @relation("Observer")
     //courses
     courseSlots         CourseSlots[]
     // observerCourses  Courses[]      @relation("Observer")
@@ -103,16 +105,16 @@ model ObsReasons {
 
 // -> Observations => Meetings
 model Meetings {
-    id                    Int          @id @default(autoincrement()) // auto-inc 
+    id                    Int               @id @default(autoincrement()) // auto-inc 
     informedObservation   Informed?
     postObservation       Post?
     uninformedObservation Uninformed?
-    professionalDPlan     PDP?
-    observation           Observations @relation(fields: [observationsId], references: [id])
-    observationsId        Int          @unique
+    professionalDPlan     AfterObservation? // include strategies and consultative plan and observation scoring or analytics
+    observation           Observations      @relation(fields: [observationsId], references: [id])
+    observationsId        Int               @unique
 }
 
-// -> Meetings => Informed/Post/Uninformed/PDP
+// -> Meetings => Informed/Post/Uninformed/AfterObservation
 model Informed {
     id            Int      @id @default(autoincrement()) // auto-inc
     observerScore Float?   @default(0)
@@ -123,16 +125,20 @@ model Informed {
     rubrics       Rubric[]
 }
 
+// -> Informed/Uninformed => Rubric
 model Rubric {
-    id            Int       @id @default(autoincrement())
-    title         String    @db.VarChar(500)
+    id            Int         @id @default(autoincrement())
+    title         String      @db.VarChar(500)
     code          String
-    observerScore Float     @default(0)
-    facultyScore  Float     @default(0)
-    informed      Informed? @relation(fields: [informedId], references: [id])
+    observerScore Float       @default(0)
+    facultyScore  Float       @default(0)
+    informed      Informed?   @relation(fields: [informedId], references: [id])
     informedId    Int?
+    uninformed    Uninformed? @relation(fields: [uninformedId], references: [id])
+    uninformedId  Int?
 }
 
+// -> Meetings => Informed/Post/Uninformed/AfterObservation
 model Post {
     id                  Int           @id @default(autoincrement()) // auto-inc
     status              Status        @default(Ongoing)
@@ -148,6 +154,7 @@ model Post {
     meetingId           Int           @unique
 }
 
+// -> Post => Artifacts (media, docs)
 model Artifact {
     id       Int    @id @default(autoincrement())
     Post     Post?  @relation(fields: [postId], references: [id])
@@ -157,18 +164,24 @@ model Artifact {
     data     Bytes
 }
 
+// -> Meetings => Informed/Post/Uninformed/AfterObservation
 model Uninformed {
-    id        Int      @id @default(autoincrement()) // auto-inc
-    status    Status   @default(Ongoing)
-    meeting   Meetings @relation(fields: [meetingId], references: [id])
-    meetingId Int      @unique
+    id         Int      @id @default(autoincrement()) // auto-inc
+    status     Status   @default(Ongoing)
+    meeting    Meetings @relation(fields: [meetingId], references: [id])
+    meetingId  Int      @unique
+    observer   User     @relation("Observer", fields: [observerId], references: [id])
+    observerId Int
+    rubrics    Rubric[]
 }
 
-model PDP {
+// -> Meetings => Informed/Post/Uninformed/AfterObservation
+model AfterObservation {
     id        Int      @id @default(autoincrement()) // auto-inc
     pdpDoc    String
     meeting   Meetings @relation(fields: [meetingId], references: [id])
     meetingId Int      @unique
+    aggrScore Int?
 }
 
 // -> User => Courses
@@ -185,6 +198,7 @@ model Courses {
     observations    Observations[]
 }
 
+// -> Courses => Courses Slots
 model CourseSlots {
     id            Int            @id @default(autoincrement()) // auto-inc
     sectionCode   String
@@ -239,12 +253,9 @@ model TemplatePlan {
     // post observation templates
     PostObsReflection   Post?              @relation(fields: [postObsReflectionId], references: [id])
     postObsReflectionId Int?               @unique
-    // PostObsArtifacts    Post? @relation("Artifacts", fields: [postObsArtifactsId], references: [id])
-    // postObsArtifactsId  Int?
-    // headSign            Boolean?           @default(false)
-    // obsSign             Boolean?           @default(false)
 }
 
+// -> User => Template => Template Points
 model TemplatePlanStep {
     id             Int           @id @default(autoincrement())
     field          String
@@ -255,6 +266,8 @@ model TemplatePlanStep {
     templatePlanId Int?
 }
 
+// -> AfterObservation => Strategies / Consultative Plan
+
 // Store Mutliple Date Time
 model DateTimes {
     id             Int      @id @default(autoincrement())
@@ -263,6 +276,7 @@ model DateTimes {
     observerDateId Int?
 }
 
+// -> User => Departments
 model Departments {
     id      Int       @id @default(autoincrement())
     name    String
@@ -306,7 +320,6 @@ enum Status {
 enum Semester {
     Fall
     Spring
-    Summer
 }
 
 enum TemplateType {

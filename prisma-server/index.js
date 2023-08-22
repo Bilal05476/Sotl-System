@@ -82,8 +82,13 @@ app.listen(port, () => {
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 // async function main() {
-//   await prisma.courseSlots.deleteMany({});
-//   await prisma.courses.deleteMany({});
+//   console.log(
+//     await prisma.observations.updateMany({
+//       data: {
+//         semester: "Spring",
+//       },
+//     })
+//   );
 // }
 // main();
 
