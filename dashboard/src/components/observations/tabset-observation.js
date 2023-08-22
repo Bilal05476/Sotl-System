@@ -299,7 +299,7 @@ const TabsetObservation = () => {
                 >
                   <option value="Select">Select</option>
                   <option value="Spring">Spring</option>
-                  <option value="Summer">Summer</option>
+                  {/* <option value="Summer">Summer</option> */}
                   <option value="Fall">Fall</option>
                 </Input>
               </div>
