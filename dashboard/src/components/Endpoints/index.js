@@ -217,25 +217,19 @@ export async function fetchDepartments(id, setAllDept) {
   }
 }
 
-export async function uplaodArtifact(formData) {
+export async function uplaodArtifact(formData, setuploaded) {
   try {
-    const res = await axios.post(
-      `http://localhost:8080/api/upload-artifact`,
-      formData,
-      {
-        headers: {
-          // "Content-type": "application/json; charset=UTF-8",
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    console.log(res.data);
+    const res = await axios.post(`${BASEURL}/upload-artifact`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    setuploaded(res.data);
   } catch (err) {
-    // if (err.response.status === 500) {
-    //   console.log("Server Error");
-    // } else {
-    //   console.log(err.response.data.error);
-    // }
-    console.log(err);
+    if (err.response.status === 500) {
+      console.log("Server Error");
+    } else {
+      console.log(err.response.data.error);
+    }
   }
 }

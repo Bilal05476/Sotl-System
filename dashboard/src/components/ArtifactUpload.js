@@ -3,12 +3,13 @@ import { uplaodArtifact } from "./Endpoints";
 
 function ArtifactUpload() {
   const [file, setFile] = useState(null);
-  const [filename, setfilename] = useState("Choose file");
+  // const [filename, setfilename] = useState("Choose file");
+  const [uploaded, setuploaded] = useState({});
 
   const handleFileChange = (event) => {
     if (event.target.files) {
       setFile(event.target.files[0]);
-      setfilename(event.target.files[0].name);
+      // setfilename(event.target.files[0].name);
     }
   };
 
@@ -17,9 +18,13 @@ function ArtifactUpload() {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      uplaodArtifact(formData);
+      uplaodArtifact(formData, setuploaded);
     }
   };
+
+  if (uploaded) {
+    console.log(uploaded);
+  }
 
   return (
     <form onSubmit={handleUpload}>
@@ -33,9 +38,7 @@ function ArtifactUpload() {
           className="custom-file-input"
           onChange={handleFileChange}
         />
-        {/* <label htmlFor="customFile" className="custom-file-label">
-          {filename}
-        </label> */}
+
         <input
           type="submit"
           value="Submit"

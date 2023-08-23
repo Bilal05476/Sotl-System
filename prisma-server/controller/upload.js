@@ -36,20 +36,17 @@ export const uploadArtifacts = asyncHandler(async (req, res) => {
     if (err) {
       return res.status(500).json(err);
     }
-
     try {
-      await prisma.artifact.create({
-        data: {
-          filename: file.name,
-        },
-        // include: {
-        //   Post: true,
-        // },
-      });
-
+      // await prisma.a.create({
+      //   data: {
+      //     filename: file.name,
+      //   },
+      //   // include: {
+      //   //   Post: true,
+      //   // },
+      // });
       res.status(200).json({ message: "File uploaded successfully" });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Error uploading file" });
     }
   });
