@@ -47,6 +47,7 @@ export const uploadArtifacts = asyncHandler(async (req, res) => {
 
       res.status(200).json({ message: "File uploaded successfully", postId });
     } catch (error) {
+      console.warn(error);
       res.status(500).json({ message: "Error uploading file" });
     }
   });

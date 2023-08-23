@@ -160,7 +160,7 @@ model Artifact {
     Post     Post?  @relation(fields: [postId], references: [id])
     postId   Int?
     filename String
-    filepath Bytes
+    filepath String
 }
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation
