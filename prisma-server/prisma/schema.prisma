@@ -160,8 +160,7 @@ model Artifact {
     Post     Post?  @relation(fields: [postId], references: [id])
     postId   Int?
     filename String
-    mimeType String
-    data     Bytes
+    filepath Bytes
 }
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation

@@ -26,44 +26,31 @@ import asyncHandler from "express-async-handler";
 // @desc   Upload artifacts for post observations
 // @route  POST api/upload-artifact/
 // @access Private (Only Faculty)
-import { fileURLToPath } from "url";
-import path from "path";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { __dirname } from "../index.js";
 export const uploadArtifacts = asyncHandler(async (req, res) => {
   if (req.files === null) {
     return res.status(400).json({ error: "No file uploaded!" });
   }
-
   const file = req.files.file;
-  file.mv(`${__dirname}/dashboard/public/artifacts/${file.name}`, (err) => {
+  file.mv(`${__dirname}/artifacts/${file.name}`, async (err) => {
     if (err) {
-      console.error(err);
       return res.status(500).json(err);
     }
 
-    res
-      .status(200)
-      .json({ filename: file.name, filepath: `/artifacts/${file.name}` });
+    try {
+      await prisma.artifact.create({
+        data: {
+          filename: file.name,
+        },
+        // include: {
+        //   Post: true,
+        // },
+      });
+
+      res.status(200).json({ message: "File uploaded successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error uploading file" });
+    }
   });
-  // res.status(200).json({ file: req.file, body: req.file });
-
-  // try {
-  //   await prisma.artifact.create({
-  //     data: {
-  //       filename,
-  //       mimeType,
-  //       data: Buffer.from(path),
-  //       // postId,
-  //     },
-  //     // include: {
-  //     //   Post: true,
-  //     // },
-  //   });
-
-  //   res.status(200).json({ message: "File uploaded successfully" });
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ message: "Error uploading file" });
-  // }
 });
