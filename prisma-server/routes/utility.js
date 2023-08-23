@@ -21,6 +21,6 @@ utilityRoutes.route("/department").get(getDepartments);
 // utilityRoutes.route("/updateobs").put(changeDate);
 
 // upload artifacts with postId in body
-utilityRoutes.post("/upload-artifact/", uploadArtifacts);
+utilityRoutes.post("/upload-artifact", uploadArtifacts);
 
 export default utilityRoutes;
