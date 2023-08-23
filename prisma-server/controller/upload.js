@@ -1,5 +1,5 @@
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
 // import multer from "multer";
@@ -32,20 +32,20 @@ export const uploadArtifacts = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: "No file uploaded!" });
   }
   const file = req.files.file;
+  const postId = req.files.postId;
   file.mv(`${__dirname}/artifacts/${file.name}`, async (err) => {
     if (err) {
       return res.status(500).json(err);
     }
     try {
-      // await prisma.a.create({
-      //   data: {
-      //     filename: file.name,
-      //   },
-      //   // include: {
-      //   //   Post: true,
-      //   // },
-      // });
-      res.status(200).json({ message: "File uploaded successfully" });
+      await prisma.artifact.create({
+        data: {
+          filename: file.name,
+          filepath: `/artifacts/${file.name}`,
+        },
+      });
+
+      res.status(200).json({ message: "File uploaded successfully", postId });
     } catch (error) {
       res.status(500).json({ message: "Error uploading file" });
     }

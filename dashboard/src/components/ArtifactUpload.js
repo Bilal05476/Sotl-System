@@ -18,6 +18,7 @@ function ArtifactUpload() {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("postId", 2);
       uplaodArtifact(formData, setuploaded);
     }
   };
