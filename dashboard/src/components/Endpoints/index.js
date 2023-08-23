@@ -1,6 +1,7 @@
 // import { toast } from "react-toastify";
 import { successes, errors } from "../../constants/Toasters";
 // import { useRef } from "react";
+import axios from "axios";
 import { toast } from "react-toastify";
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
@@ -217,15 +218,24 @@ export async function fetchDepartments(id, setAllDept) {
 }
 
 export async function uplaodArtifact(formData) {
-  console.log(formData.entries());
-  const res = await fetch("http://localhost:8080/api/upload-artifact", {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      // "Content-Type": "multipart/form-data; boundary=*",
-    },
-    body: JSON.stringify(formData),
-  });
-  const data = await res.json();
-  console.log(data);
+  try {
+    const res = await axios.post(
+      `http://localhost:8080/api/upload-artifact`,
+      formData,
+      {
+        headers: {
+          // "Content-type": "application/json; charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    console.log(res.data);
+  } catch (err) {
+    // if (err.response.status === 500) {
+    //   console.log("Server Error");
+    // } else {
+    //   console.log(err.response.data.error);
+    // }
+    console.log(err);
+  }
 }

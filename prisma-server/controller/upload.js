@@ -26,6 +26,10 @@ import asyncHandler from "express-async-handler";
 // @desc   Upload artifacts for post observations
 // @route  POST api/upload-artifact/
 // @access Private (Only Faculty)
+import { fileURLToPath } from "url";
+import path from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 export const uploadArtifacts = asyncHandler(async (req, res) => {
   if (req.files === null) {
     return res.status(400).json({ error: "No file uploaded!" });

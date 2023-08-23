@@ -3,28 +3,46 @@ import { uplaodArtifact } from "./Endpoints";
 
 function ArtifactUpload() {
   const [file, setFile] = useState(null);
+  const [filename, setfilename] = useState("Choose file");
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+      setfilename(event.target.files[0].name);
+    }
   };
 
-  const handleUpload = async () => {
+  const handleUpload = (e) => {
+    e.preventDefault();
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      // uplaodArtifact(formData);
-      for (const [key, value] of formData) {
-        console.log(`${key}: ${value}`);
-      }
+      uplaodArtifact(formData);
     }
   };
 
   return (
-    <div>
-      <input type="file" name="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
-    </div>
+    <form onSubmit={handleUpload}>
+      <div
+        className="custom-file p-2 px-4 d-flex justify-content-between align-items-center rounded"
+        style={{ border: "1px solid #ccc" }}
+      >
+        <input
+          type="file"
+          id="customFile"
+          className="custom-file-input"
+          onChange={handleFileChange}
+        />
+        {/* <label htmlFor="customFile" className="custom-file-label">
+          {filename}
+        </label> */}
+        <input
+          type="submit"
+          value="Submit"
+          className="btn btn-primary btn-block"
+        />
+      </div>
+    </form>
   );
 }
 
