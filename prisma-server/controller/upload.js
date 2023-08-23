@@ -32,7 +32,7 @@ export const uploadArtifacts = asyncHandler(async (req, res) => {
   }
 
   const file = req.files.file;
-  file.mv(`${__dirname}/client/public/uploads/${file.name}`, (err) => {
+  file.mv(`${__dirname}/dashboard/public/artifacts/${file.name}`, (err) => {
     if (err) {
       console.error(err);
       return res.status(500).json(err);
@@ -40,7 +40,7 @@ export const uploadArtifacts = asyncHandler(async (req, res) => {
 
     res
       .status(200)
-      .json({ filename: file.name, filepath: `/uploads/${file.name}` });
+      .json({ filename: file.name, filepath: `/artifacts/${file.name}` });
   });
   // res.status(200).json({ file: req.file, body: req.file });
 
