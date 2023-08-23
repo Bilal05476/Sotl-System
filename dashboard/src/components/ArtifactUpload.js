@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { uplaodArtifact } from "./Endpoints";
+import axios from "axios";
 
 function ArtifactUpload() {
   const [file, setFile] = useState(null);
@@ -22,10 +23,6 @@ function ArtifactUpload() {
       uplaodArtifact(formData, setuploaded);
     }
   };
-
-  if (uploaded) {
-    console.log(uploaded);
-  }
 
   return (
     <form onSubmit={handleUpload}>

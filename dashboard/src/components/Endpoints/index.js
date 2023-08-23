@@ -224,7 +224,8 @@ export async function uplaodArtifact(formData, setuploaded) {
         "Content-Type": "multipart/form-data",
       },
     });
-    setuploaded(res.data);
+    // setuploaded(res.data);
+    console.log(res.data);
   } catch (err) {
     if (err.response.status === 500) {
       console.log("Server Error");

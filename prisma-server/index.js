@@ -23,6 +23,8 @@ const port = process.env.PORT || 8080;
 
 dotenv.config();
 
+// all work for media
+// without multer and /upload-artifact
 import { fileURLToPath } from "url";
 import path from "path";
 const __filename = fileURLToPath(import.meta.url);
