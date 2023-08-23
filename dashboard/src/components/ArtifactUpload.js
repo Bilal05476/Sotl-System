@@ -10,9 +10,14 @@ function ArtifactUpload() {
   };
 
   const handleUpload = async () => {
-    const formData = new FormData();
-    formData.append("file", file);
-    uplaodArtifact(formData);
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      // uplaodArtifact(formData);
+      for (const [key, value] of formData) {
+        console.log(`${key}: ${value}`);
+      }
+    }
   };
 
   return (

@@ -1,7 +1,7 @@
 import express from "express";
 const utilityRoutes = express.Router();
 import {
-  changeDate,
+  // changeDate,
   getDepartments,
   getDataForHod,
 } from "../controller/utility.js";
@@ -10,7 +10,7 @@ import {
   getTemplate,
   getTemplates,
 } from "../controller/templates.js";
-import { uploadArtifacts, upload } from "../controller/upload.js";
+import { uploadArtifacts } from "../controller/upload.js";
 
 utilityRoutes.route("/data/:role/:departmentId").get(getDataForHod);
 utilityRoutes.route("/template").post(createTemplate).get(getTemplates);
@@ -18,9 +18,9 @@ utilityRoutes.route("/template/:id").get(getTemplate);
 utilityRoutes.route("/department").get(getDepartments);
 
 // dummy route to change observations createdAt
-utilityRoutes.route("/updateobs").put(changeDate);
+// utilityRoutes.route("/updateobs").put(changeDate);
 
-// upload artifacts with postId in url
-utilityRoutes.post("/artifact/:id", upload.single("file"), uploadArtifacts);
+// upload artifacts with postId in body
+utilityRoutes.post("/upload-artifact/", uploadArtifacts);
 
 export default utilityRoutes;

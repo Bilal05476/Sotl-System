@@ -2,34 +2,38 @@
 // const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
-import multer from "multer";
-import path from "path";
+// import multer from "multer";
+// import path from "path";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "artifacts/");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "artifacts/");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(
+//       null,
+//       file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+//     );
+//   },
+// });
 
-export const upload = multer({
-  storage,
-});
+// export const upload = multer({
+//   storage,
+// });
 
 // export const upload = multer({ dest: "artifacts/" });
 
 // @desc   Upload artifacts for post observations
-// @route  POST api/uploadartifact/
+// @route  POST api/upload-artifact/
 // @access Private (Only Faculty)
 export const uploadArtifacts = asyncHandler(async (req, res) => {
-  console.log("body", req.body);
-  console.log("file", req.file);
-  res.status(200).json({ message: "Hello " });
+  if (req.files === null) {
+    return res.status(400).json({ error: "No file uploaded!" });
+  }
+
+  const file = req.files.file;
+  file.mv();
+  // res.status(200).json({ file: req.file, body: req.file });
 
   // try {
   //   await prisma.artifact.create({

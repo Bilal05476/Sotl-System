@@ -217,7 +217,8 @@ export async function fetchDepartments(id, setAllDept) {
 }
 
 export async function uplaodArtifact(formData) {
-  const res = await fetch(`http://localhost:8080/api/artifact/3`, {
+  console.log(formData.entries());
+  const res = await fetch("http://localhost:8080/api/upload-artifact", {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",

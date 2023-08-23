@@ -990,7 +990,7 @@ const Dashboard = () => {
             <></>
           )}
 
-          {/* <ArtifactUpload /> */}
+          <ArtifactUpload />
           {/* <Col xl="3 xl-50" md="6">
             <Card className=" order-graph sales-carousel">
               <CardHeader>
