@@ -25,7 +25,7 @@ const Login = () => {
                 <Card className="bg-primary">
                   {/* <div className="svg-icon"> */}
                   <img
-                    alt="SOTL Logo"
+                    alt="IU Logo"
                     src={logo2}
                     className="Img-fluid site-logo-main"
                   />

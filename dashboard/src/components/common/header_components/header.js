@@ -1,18 +1,18 @@
 import React, { Fragment, useState } from "react";
-import SearchHeader from "./searchHeader";
-import Notification from "./notification";
+// import SearchHeader from "./searchHeader";
+// import Notification from "./notification";
 import UserMenu from "./user-menu";
-import Language from "./language";
+// import Language from "./language";
 import {
   AlignLeft,
   Maximize2,
-  Bell,
-  MessageSquare,
+  // Bell,
+  // MessageSquare,
   MoreHorizontal,
 } from "react-feather";
 
 //images
-import logo from "../../../assets/images/dashboard/blue-version.png";
+// import logo from "../../../assets/images/dashboard/blue-version.png";
 
 const Header = () => {
   const [sidebar, setSidebar] = useState(true);
@@ -75,19 +75,20 @@ const Header = () => {
       {/* open */}
       <div className="page-main-header ">
         <div className="main-header-right row">
-          <div className="main-header-left d-lg-none col-auto">
+          {/* <div className="main-header-left d-lg-none col-auto">
             <div className="logo-wrapper">
               <a href="index.html">
-                {/* <img className="blur-up lazyloaded" src={logo} alt="" /> */}
+                
+                <img className="blur-up lazyloaded" src={logo} alt="pic" />
               </a>
             </div>
-          </div>
+          </div> */}
           <div className="mobile-sidebar col-auto p-0">
             <div className="media-body text-end switch-sm">
               <label className="switch">
-                <a href="#javaScript" onClick={openCloseSidebar}>
+                <span style={{ cursor: "pointer" }} onClick={openCloseSidebar}>
                   <AlignLeft />
-                </a>
+                </span>
               </label>
             </div>
           </div>

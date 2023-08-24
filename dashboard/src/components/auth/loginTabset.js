@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
-import { User, Loader } from "react-feather";
+import { User, Loader, Eye, EyeOff } from "react-feather";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { info, errors, successes } from "../../constants/Toasters";
@@ -99,7 +99,7 @@ const LoginTabset = () => {
                   name="login[username]"
                   type="email"
                   className="form-control"
-                  placeholder="Username"
+                  placeholder="Email Address (only @iqra.edu.pk)"
                   value={email}
                   onChange={(e) =>
                     setLoginState({ ...loginState, email: e.target.value })
@@ -107,7 +107,7 @@ const LoginTabset = () => {
                   id="exampleInputEmail1"
                 />
               </FormGroup>
-              <FormGroup>
+              <FormGroup style={{ position: "relative" }}>
                 <Input
                   required={true}
                   name="login[password]"

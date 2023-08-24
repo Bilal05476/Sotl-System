@@ -313,9 +313,9 @@ const List_observation = () => {
                             <th scope="col">Observer</th>
                           )}
                           {user.role !== "Head_of_Department" && (
-                            <th scope="col">Head of department</th>
+                            <th scope="col">Head of Department</th>
                           )}
-                          <th scope="col">Current Meeting</th>
+                          <th scope="col">Observation Cycle</th>
                           <th scope="col">Starting Date</th>
                           <th scope="col">Ending Date</th>
                           <th scope="col">Progress</th>

@@ -240,7 +240,7 @@ const Sidebar = () => {
                 src={logo2}
                 alt="sotl system"
                 style={{
-                  width: "30%",
+                  width: "50%",
                   display: "block",
                   margin: "1px auto",
                 }}

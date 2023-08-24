@@ -439,7 +439,7 @@ const Dashboard = () => {
     });
   }
 
-  return <ArtifactUpload />;
+  // return <ArtifactUpload />;
 
   return (
     <Fragment>
@@ -779,7 +779,7 @@ const Dashboard = () => {
           <Col xl="12 xl-100">
             <Card>
               <CardHeader>
-                <h5>Recent Observations</h5>
+                <h5>Observations</h5>
               </CardHeader>
               {userData && (
                 <CardBody>
@@ -796,9 +796,9 @@ const Dashboard = () => {
                             <th scope="col">Observer</th>
                           )}
                           {user.role !== "Head_of_Department" && (
-                            <th scope="col">Head of department</th>
+                            <th scope="col">Head of Department</th>
                           )}
-                          <th scope="col">Current Meeting</th>
+                          <th scope="col">Observation Cycle</th>
                           <th scope="col">Starting Date</th>
                           <th scope="col">Ending Date</th>
                           <th scope="col">Progress</th>
@@ -912,14 +912,16 @@ const Dashboard = () => {
                         )}
                       </tbody>
                     </Table>
-                    {userData?.observations.length > 0 && (
-                      <NavLink
-                        to="/observations/list-observation"
-                        className="btn btn-primary"
-                      >
-                        View All Observations
-                      </NavLink>
-                    )}
+                    <div className="p-2 d-flex align-items-center justify-content-end">
+                      {userData?.observations.length > 0 && (
+                        <NavLink
+                          to="/observations/list-observation"
+                          className="btn btn-primary"
+                        >
+                          View All Observations
+                        </NavLink>
+                      )}
+                    </div>
                   </div>
                 </CardBody>
               )}
