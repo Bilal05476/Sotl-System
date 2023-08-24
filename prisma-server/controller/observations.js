@@ -2,7 +2,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
-// import nodemailer from "nodemailer";
+import nodemailer from "nodemailer";
+import bcrypt from "bcryptjs";
 
 // @desc   Initiate Observation by Head of department
 // @route  POST api/observation/initiate
@@ -10,73 +11,138 @@ import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
 export const initiate = asyncHandler(async (req, res) => {
   const { facultyIds, semester, observerId, hodId } = req.body;
   // "createdAt": "2023-04-12T11:51:50.445Z"
-  let exitedObsForFaculty = [];
 
-  for (let i = 0; i < facultyIds.length; i++) {
-    const existed = await prisma.observations.findFirst({
-      where: {
-        OR: [
-          { observationStatus: "Pending" },
-          { observationStatus: "Ongoing" },
-        ],
-        facultyId: facultyIds[i],
+  // email receivers deatils lists
+  let receiversEmail = [];
+  let receiversName = [];
+  // let receiversPassword = [];
+
+  const existedObservation = await prisma.observations.findMany({
+    where: {
+      AND: [
+        {
+          observationStatus: {
+            in: ["Pending", "Ongoing"],
+          },
+        },
+        {
+          facultyId: {
+            in: facultyIds,
+          },
+        },
+      ],
+    },
+    select: {
+      observationStatus: true,
+      course: {
+        select: {
+          name: true,
+        },
       },
-      select: {
-        observationStatus: true,
-        course: {
+      faculty: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  let existedIds = existedObservation.map((item) => item.faculty.id);
+
+  const observationsToCreate = facultyIds
+    .filter((facultyId) => !existedIds.includes(facultyId))
+    .map((facultyId) => ({
+      facultyId,
+      observerId,
+      hodId,
+      semester,
+    }));
+
+  let initiateObs = null;
+  if (observationsToCreate.length > 0) {
+    initiateObs = await prisma.observations.createMany({
+      data: observationsToCreate,
+      include: {
+        faculty: {
           select: {
+            email: true,
             name: true,
           },
         },
-        faculty: {
+        observer: {
           select: {
-            id: true,
+            email: true,
             name: true,
           },
         },
       },
     });
-    if (existed) {
-      exitedObsForFaculty.push({
-        message: `Observation is already ${
-          existed?.observationStatus
-        } for the faculty: ${existed.faculty?.id}) ${
-          existed.faculty?.name
-        } for the ${
-          existed.course ? existed.course.name : "not decided"
-        } course!`,
-      });
-    } else {
-      await prisma.observations.create({
-        data: {
-          facultyId: facultyIds[i],
-          observerId,
-          hodId,
-          semester,
-          //createdAt, // for just add mock data
-        },
-      });
+  }
+
+  initiateObs?.map((item) => receiversEmail.push(item.faculty.email));
+  initiateObs?.map((item) => receiversName.push(item.faculty.name));
+  // initiateObs?.map((item) => receiversPassword.push(item.faculty.password));
+
+  initiateObs?.map((item) => {
+    if (!receiversEmail.includes(item.observer.email)) {
+      receiversEmail.push(item.observer.email);
+    }
+  });
+  initiateObs?.map((item) => {
+    if (!receiversName.includes(item.observer.name)) {
+      receiversName.push(item.observer.name);
+    }
+  });
+  // initiateObs?.map((item) => {
+  //   if (!receiversPassword.includes(item.observer.password)) {
+  //     receiversPassword.push(item.observer.password);
+  //   }
+  // });
+
+  // smtp email transporter
+  const transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    auth: {
+      user: "nikita.spinka@ethereal.email",
+      pass: "fzF1BNbHpHvYVZ3x73",
+    },
+  });
+  // async..await is not allowed in global scope, must use a wrapper
+  async function emailSender(em) {
+    // send mail with defined transport object
+
+    const emailTemplate = `Dear ${receiversName[em]}<br /><br />
+      You received this email because your new observation cycle is initiated by your head of department.<br /><br />
+      Visit: <a href="https://sotlsystem.tech" target="blank"> SOTL System </a><br />
+      Your email: ${receiversEmail[em]}<br />
+      Your password: 12345678<br /><br />
+      Please make sure to reset your password ASAP to avoid any inconvenience!<br /><br />
+      Kind Regards,<br />
+      SOTL System Team`;
+
+    const info = await transporter.sendMail({
+      from: '"SOTL System " <info@sotlsystem.tech>', // sender address
+      to: receiversEmail[em], // list of receivers
+      subject:
+        "Your new observation cycle initiated, visit SOTL system to find out more details!", // Subject line
+      text: emailTemplate, // plain text body
+      html: emailTemplate, // html body
+    });
+    console.log("Message sent: %s", info.messageId);
+  }
+
+  if (observationsToCreate.length > 0) {
+    for (let em = 0; em < receiversEmail.length; em++) {
+      emailSender(em);
     }
   }
-  const findObservations = await prisma.observations.findMany();
+
   res
     .status(200)
-    .json({ observations: findObservations, existed: exitedObsForFaculty });
+    .json({ observations: initiateObs, existed: existedObservation });
 });
-
-// let obsUsers = [facultyId, observerId, hodId];
-// if (newObservation) {
-//   let toSendMail = [];
-//   for (let i = 0; i < obsUsers.length; i++) {
-//     const findemail = await prisma.user.findMany({
-//       where: {
-//         id: obsUsers[i],
-//       },
-//     });
-//     toSendMail.push(findemail[0].email);
-//   }
-//   res.status(200).json(toSendMail);
-// }
 
 // @desc   Get all observations
 // @route  Get api/observations

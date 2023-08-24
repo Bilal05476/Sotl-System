@@ -90,8 +90,26 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
+// let ids = [21, 22];
 // async function main() {
-//   console.log(await prisma.artifact.findMany({}));
+//   console.log(
+//     await prisma.observations.findMany({
+//       where: {
+//         AND: [
+//           {
+//             observationStatus: {
+//               in: ["Pending", "Completed"],
+//             },
+//           },
+//           {
+//             facultyId: {
+//               in: ids,
+//             },
+//           },
+//         ],
+//       },
+//     })
+//   );
 // }
 // main();
 
