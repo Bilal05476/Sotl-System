@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
 import nodemailer from "nodemailer";
-import bcrypt from "bcryptjs";
 
 // @desc   Initiate Observation by Head of department
 // @route  POST api/observation/initiate
@@ -105,8 +104,8 @@ export const initiate = asyncHandler(async (req, res) => {
     host: "smtp.ethereal.email",
     port: 587,
     auth: {
-      user: "nikita.spinka@ethereal.email",
-      pass: "fzF1BNbHpHvYVZ3x73",
+      user: process.env.USER,
+      pass: process.env.PASSWORD,
     },
   });
   // async..await is not allowed in global scope, must use a wrapper
