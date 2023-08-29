@@ -2,33 +2,20 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import fileupload from "express-fileupload";
 
 // for socket.io
 // import { createServer } from "http";
 // import { Server } from "socket.io";
-
-const app = express();
-
-// for socket.io
 // const httpServer = createServer(app);
 // const io = new Server(httpServer, {
 //   cors: ["http://localhost:3000", "https://sotlsystem.tech"],
 // });
 
+const app = express();
 app.use(cors());
-app.use(fileupload());
 
 const port = process.env.PORT || 8080;
-
 dotenv.config();
-
-// all work for media
-// without multer and /upload-artifact
-import { fileURLToPath } from "url";
-import path from "path";
-const __filename = fileURLToPath(import.meta.url);
-export const __dirname = path.dirname(__filename);
 
 app.use(
   bodyParser.json({
@@ -90,26 +77,8 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
-// let ids = [21, 22];
 // async function main() {
-//   console.log(
-//     await prisma.observations.findMany({
-//       where: {
-//         AND: [
-//           {
-//             observationStatus: {
-//               in: ["Pending", "Completed"],
-//             },
-//           },
-//           {
-//             facultyId: {
-//               in: ids,
-//             },
-//           },
-//         ],
-//       },
-//     })
-//   );
+// console.log(await prisma.artifact.findMany({}));
 // }
 // main();
 

@@ -1,54 +1,55 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
-
-// import multer from "multer";
-// import path from "path";
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "artifacts/");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(
-//       null,
-//       file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-//     );
-//   },
-// });
-
-// export const upload = multer({
-//   storage,
-// });
-
-// export const upload = multer({ dest: "artifacts/" });
+import path from "path";
+import { Storage } from "@google-cloud/storage";
+// Initialize Google Cloud Storage
+const storage = new Storage({
+  keyFilename: "./google-key.json", // Path to your JSON key file
+});
+const bucket = storage.bucket("sotl-system-storage");
 
 // @desc   Upload artifacts for post observations
-// @route  POST api/upload-artifact/
+// @route  POST api/upload-artifact/:postid
 // @access Private (Only Faculty)
-import { __dirname } from "../index.js";
 export const uploadArtifacts = asyncHandler(async (req, res) => {
-  if (req.files === null) {
-    return res.status(400).json({ error: "No file uploaded!" });
-  }
-  const file = req.files.file;
-  const postId = req.files.postId;
-  file.mv(`${__dirname}/artifacts/${file.name}`, async (err) => {
-    if (err) {
-      return res.status(500).json(err);
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
     }
-    try {
-      await prisma.artifact.create({
+
+    const filename = Date.now() + "-" + path.basename(file.originalname);
+    const fileUpload = bucket.file(filename);
+
+    const stream = fileUpload.createWriteStream({
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
+
+    stream.on("error", (err) => {
+      console.error(err);
+      return res.status(500).send("Upload failed.");
+    });
+
+    stream.on("finish", async () => {
+      // Insert the file link into your database
+      const fileLink = `https://storage.cloud.google.com/${bucket.name}/${fileUpload.name}`;
+      // Here, you would use your database library to store the fileLink in your database
+      const addArtifact = await prisma.artifact.create({
         data: {
-          filename: file.name,
-          filepath: `/artifacts/${file.name}`,
+          postId: Number(req.params.id),
+          filename: fileLink.replaceAll(" ", "%20"),
+          mimetype: file.mimetype,
         },
       });
-
-      res.status(200).json({ message: "File uploaded successfully", postId });
-    } catch (error) {
-      console.warn(error);
-      res.status(500).json({ message: "Error uploading file" });
-    }
-  });
+      // console.log(addArtifact);
+      return res.status(200).json(addArtifact);
+    });
+    stream.end(file.buffer);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Server error.");
+  }
 });

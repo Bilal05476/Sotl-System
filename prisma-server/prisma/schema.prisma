@@ -159,8 +159,8 @@ model Artifact {
     id       Int    @id @default(autoincrement())
     Post     Post?  @relation(fields: [postId], references: [id])
     postId   Int?
+    mimetype String
     filename String
-    filepath String
 }
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation
