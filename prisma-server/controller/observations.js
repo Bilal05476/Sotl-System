@@ -264,6 +264,7 @@ export const getObs = asyncHandler(async (req, res) => {
                   steps: true,
                 },
               },
+              artifacts: true,
             },
           },
           uninformedObservation: true,
