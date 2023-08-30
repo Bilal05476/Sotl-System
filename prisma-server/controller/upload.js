@@ -45,7 +45,7 @@ export const uploadArtifacts = asyncHandler(async (req, res) => {
         },
       });
       // console.log(addArtifact);
-      return res.status(200).json(addArtifact);
+      return res.status(200).json({ message: "Uploaded Successfully!" });
     });
     stream.end(file.buffer);
   } catch (err) {

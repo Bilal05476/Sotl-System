@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-// import { uplaodArtifact } from "./Endpoints";
+import { uplaodArtifact } from "./Endpoints";
 
-function ArtifactUpload() {
+function ArtifactUpload({ postId }) {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -15,14 +15,14 @@ function ArtifactUpload() {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      // uplaodArtifact(formData);
+      uplaodArtifact(formData, postId);
     }
   };
 
   return (
-    <form onSubmit={handleUpload}>
+    <form onSubmit={handleUpload} className="w-100">
       <div
-        className="custom-file p-2 px-4 d-flex justify-content-between align-items-center rounded"
+        className="custom-file p-2 d-flex justify-content-between align-items-center rounded"
         style={{ border: "1px solid #ccc" }}
       >
         <input
@@ -34,8 +34,9 @@ function ArtifactUpload() {
 
         <input
           type="submit"
-          value="Submit"
+          value="Upload"
           className="btn btn-primary btn-block"
+          disabled={file ? false : true}
         />
       </div>
     </form>

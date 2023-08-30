@@ -251,6 +251,6 @@ export async function fetchDepartments(id, setAllDept) {
 export async function uplaodArtifact(formData, id) {
   await axios
     .post(`${BASEURL}/upload-artifact/${id}`, formData)
-    .then((res) => console.log(res))
+    .then((res) => successes(res.message))
     .catch((err) => console.log(err));
 }

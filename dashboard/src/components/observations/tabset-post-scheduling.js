@@ -10,6 +10,7 @@ import MultiStepForm from "../MultiStep";
 import { toast } from "react-toastify";
 import { dateFormater2 } from "../DateFormater";
 import { useStateValue } from "../../StateProvider";
+import ArtifactUpload from "../ArtifactUpload";
 
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
@@ -222,8 +223,6 @@ const TabsetPostScheduling = ({ role }) => {
       return true;
     }
   };
-
-  console.log(obs);
   return (
     <Fragment>
       {role === "Observer" && (
@@ -321,6 +320,16 @@ const TabsetPostScheduling = ({ role }) => {
             <>
               <Tabs>
                 <TabPanel>
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
+                      Upload Artifacts (.docs, .pdf, .jpeg/.png)
+                    </Label>
+                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                      <ArtifactUpload
+                        postId={obs?.meetings?.postObservation?.id}
+                      />
+                    </div>
+                  </FormGroup>
                   <Form className="needs-validation user-add" noValidate="">
                     <FormGroup className="row">
                       <Label className="col-xl-3 col-md-4">

@@ -351,10 +351,10 @@ const List_observation = () => {
                                 : item.meetings?.informedObservation?.status ===
                                   "Ongoing"
                                 ? "Informed Observation"
-                                : // : item.meetings?.postObservation?.status ===
-                                //   "Ongoing"
-                                // ? "Post-Informed Observation"
-                                item.meetings?.postObservation?.status ===
+                                : item.meetings?.postObservation?.status ===
+                                  "Ongoing"
+                                ? "Post-Informed Observation"
+                                : item.meetings?.postObservation?.status ===
                                   "Scheduled"
                                 ? "Post-Informed Observation"
                                 : item.meetings?.uninformedObservation
