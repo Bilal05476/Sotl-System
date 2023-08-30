@@ -17,7 +17,7 @@ import {
 } from "../colors";
 import { Applink, AccordButton } from "../applink";
 import { info } from "../../constants/Toasters";
-import { fetchObservation, submitScore } from "../Endpoints";
+import { doneScore, fetchObservation, submitScore } from "../Endpoints";
 import { useStateValue } from "../../StateProvider";
 import { ConfirmModal } from "../PopupModal";
 // import DiscreteSlider from "../DiscreteSlider";
@@ -39,7 +39,6 @@ const Observation_rubric = () => {
 
   const updateTotal = () => {
     const rubricsFinal = [];
-    setOpenConfirm(!openConfirm);
     if (accordionTab.length === 4) {
       setLoader(true);
       accordionTab.map((item) => {
@@ -53,8 +52,7 @@ const Observation_rubric = () => {
         });
         return null;
       });
-      // console.log(rubricsFinal);
-      // return;
+      info("Saving rubrics scores...");
       submitScore(
         user.role,
         rubricsFinal,
@@ -93,16 +91,25 @@ const Observation_rubric = () => {
         100
       : 0;
 
-  const doneRubricScoring = () => {
+  const DoneRubricScoring = () => {
     setOpenConfirm(!openConfirm);
+    info("Locking rubrics scores...");
+    doneScore(
+      obsDetails?.meetings?.informedObservation?.id,
+      setLoader,
+      obsDetails?.meetings?.observationsId,
+      setObsDetail
+    );
   };
+
+  // console.log(obsDetails?.meetings?.informedObservation);
   return (
     <Fragment>
       <Breadcrumb title="Observation Rubrics" parent="Informed Observations" />
       <ConfirmModal
         open={openConfirm}
         setOpen={setOpenConfirm}
-        updateTotal={updateTotal}
+        DoneRubricScoring={DoneRubricScoring}
       />
       <Container fluid={true}>
         <Row className="mb-2">
@@ -164,6 +171,7 @@ const Observation_rubric = () => {
           setaccordionTab={setaccordionTab}
           obsDetails={obsDetails}
           role={user.role}
+          loader={loader}
         />
         <RubricAccordion
           title="1-B Knowledge of Pedagogy"
@@ -174,6 +182,7 @@ const Observation_rubric = () => {
           setaccordionTab={setaccordionTab}
           obsDetails={obsDetails}
           role={user.role}
+          loader={loader}
         />
 
         <RubricAccordion
@@ -185,6 +194,7 @@ const Observation_rubric = () => {
           setaccordionTab={setaccordionTab}
           obsDetails={obsDetails}
           role={user.role}
+          loader={loader}
         />
 
         <RubricAccordion
@@ -196,6 +206,7 @@ const Observation_rubric = () => {
           setaccordionTab={setaccordionTab}
           obsDetails={obsDetails}
           role={user.role}
+          loader={loader}
         />
 
         <div className="d-flex align-items-center justify-content-between py-3">
@@ -211,17 +222,23 @@ const Observation_rubric = () => {
                 "Completed" && (
                 <div className="d-flex align-items-center justify-content-between">
                   <AccordButton
-                    text="Submit Score"
+                    text={loader ? "Submiting..." : "Submit Score"}
                     backgroundColor={completeColor2}
-                    onClick={() => doneRubricScoring()}
+                    onClick={() => updateTotal()}
+                    loader={loader}
                   />
-                  {user.role === "Observer" && (
-                    <AccordButton
-                      text="Done"
-                      backgroundColor={completeColor}
-                      onClick={() => {}}
-                    />
-                  )}
+                  {user.role === "Observer" &&
+                    obsDetails?.meetings?.informedObservation?.facultyScore >
+                      0 &&
+                    obsDetails?.meetings?.informedObservation?.observerScore >
+                      0 && (
+                      <AccordButton
+                        text={loader ? "...." : "Done"}
+                        backgroundColor={completeColor}
+                        onClick={() => setOpenConfirm(!openConfirm)}
+                        loader={loader}
+                      />
+                    )}
                 </div>
               )}
             </div>
@@ -245,6 +262,7 @@ const RubricAccordion = ({
   accordionTab,
   setaccordionTab,
   role,
+  loader,
 }) => {
   const [accordionScore, setAccordionScore] = useState(0);
   const [subSections, setSubSections] = useState([]);
@@ -349,6 +367,7 @@ const RubricAccordion = ({
                   backgroundColor={completeColor2}
                   text="Save Score"
                   onClick={() => updateAccordionscore()}
+                  loader={loader}
                 />
               </div>
             ) : (

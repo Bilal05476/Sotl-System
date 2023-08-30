@@ -559,11 +559,12 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
   };
 
   // res.status(200).json({ sc: scoreByRole });
-
   let getOnlyIds = [];
   let getOnlyScores = [];
-  rubricsFinal.map((item) => getOnlyIds.push(item.rid));
-  rubricsFinal.map((item) => getOnlyScores.push(item.score));
+  if (rubricsFinal) {
+    rubricsFinal.map((item) => getOnlyIds.push(item.rid));
+    rubricsFinal.map((item) => getOnlyScores.push(item.score));
+  }
 
   // return;
 

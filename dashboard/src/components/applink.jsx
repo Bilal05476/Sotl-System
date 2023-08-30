@@ -26,7 +26,7 @@ export const Applink = ({ to, backgroundColor, text }) => {
   );
 };
 
-export const AccordButton = ({ backgroundColor, text, onClick }) => {
+export const AccordButton = ({ backgroundColor, text, onClick, loader }) => {
   const [isHovered, setisHovered] = useState(false);
   return (
     <button
@@ -40,7 +40,9 @@ export const AccordButton = ({ backgroundColor, text, onClick }) => {
         color: "#fff",
         borderRadius: "5px",
         fontWeight: "700",
+        cursor: loader ? "progress" : "pointer",
       }}
+      disabled={loader}
       onClick={onClick}
       onMouseEnter={() => setisHovered(true)}
       onMouseLeave={() => setisHovered(false)}
