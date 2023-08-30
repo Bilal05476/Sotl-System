@@ -807,102 +807,104 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {userData?.observations.map((item) => (
-                          <tr key={item.id}>
-                            <td className="digits">
-                              {item.course ? item.course.name : "---"}
-                            </td>
-                            <td className="digits">{item.semester}</td>
-                            {user.role !== "Faculty" && (
-                              <td className="digits">{item.faculty.name}</td>
-                            )}
-                            {user.role !== "Observer" && (
-                              <td className="digits">{item.observer.name}</td>
-                            )}
-                            {user.role !== "Head_of_Department" && (
-                              <td className="digits">{item.hod.name}</td>
-                            )}
-
-                            {/* {item.observationStatus} */}
-
-                            <td
-                              className="digits"
-                              style={{
-                                color: completeColor,
-                              }}
-                            >
-                              {item.meetings?.obsRequest?.status === "Ongoing"
-                                ? "Scheduling"
-                                : item.meetings?.informedObservation?.status ===
-                                  "Ongoing"
-                                ? "Informed"
-                                : item.meetings?.postObservation?.status ===
-                                  "Ongoing"
-                                ? "Post Informed"
-                                : item.meetings?.postObservation?.status ===
-                                  "Scheduled"
-                                ? "Post Informed"
-                                : item.meetings?.uninformedObservation
-                                    ?.status === "Ongoing"
-                                ? "Uninformed"
-                                : item.meetings?.professionalDPlan?.status ===
-                                  "Ongoing"
-                                ? "Prof development"
-                                : "---"}
-                            </td>
-                            {item.starting ? (
-                              dateFormater(item.starting)
-                            ) : (
-                              <td>---</td>
-                            )}
-
-                            {item.ending ? (
-                              dateFormater(item.ending)
-                            ) : (
-                              <td>---</td>
-                            )}
-                            <td>
-                              <div className="progress-showcase">
-                                <div className="progress" style={{ height: 8 }}>
-                                  <div
-                                    className="progress-bar"
-                                    style={{
-                                      width: item.observationProgress,
-                                      backgroundColor:
-                                        item.observationStatus === "Ongoing"
-                                          ? ongoingColor
-                                          : completeColor,
-                                    }}
-                                    role="progressbar"
-                                    aria-valuenow="50"
-                                    aria-valuemin="0"
-                                    aria-valuemax="100"
-                                  ></div>
-                                </div>
-                              </div>
-                            </td>
-                            <td
-                              style={{
-                                color:
-                                  item.observationStatus === "Ongoing"
-                                    ? ongoingColor
-                                    : item.observationStatus === "Completed"
-                                    ? completeColor
-                                    : pendingColor,
-                              }}
-                            >
-                              {item.observationStatus}
-                            </td>
-                            <td className="digits font-primary">
-                              <NavLink
-                                className="d-flex align-items-center"
-                                to={`${URL}/observations/detail-observation/${item.id}`}
+                        {userData?.observations.map((item) => {
+                          return (
+                            <tr key={item.id}>
+                              <td className="digits">
+                                {item.course ? item.course.name : "---"}
+                              </td>
+                              <td className="digits">{item.semester}</td>
+                              {user.role !== "Faculty" && (
+                                <td className="digits">{item.faculty.name}</td>
+                              )}
+                              {user.role !== "Observer" && (
+                                <td className="digits">{item.observer.name}</td>
+                              )}
+                              {user.role !== "Head_of_Department" && (
+                                <td className="digits">{item.hod.name}</td>
+                              )}
+                              <td
+                                className="digits"
+                                style={{
+                                  color: completeColor,
+                                }}
                               >
-                                <Eye size={20} />
-                              </NavLink>
-                            </td>
-                          </tr>
-                        ))}
+                                {item?.obsRequest?.status === "Ongoing"
+                                  ? "Observation Scheduling"
+                                  : item.meetings?.informedObservation
+                                      ?.status === "Ongoing"
+                                  ? "Informed Observation"
+                                  : // : item.meetings?.postObservation?.status ===
+                                  //   "Ongoing"
+                                  // ? "Post-Informed Observation"
+                                  item.meetings?.postObservation?.status ===
+                                    "Scheduled"
+                                  ? "Post-Informed Observation"
+                                  : item.meetings?.uninformedObservation
+                                      ?.status === "Ongoing"
+                                  ? "Uninformed Observation"
+                                  : // : item.meetings?.professionalDPlan?.status ===
+                                    //   "Ongoing"
+                                    // ? "Prof development"
+                                    "---"}
+                              </td>
+                              {item.starting ? (
+                                dateFormater(item.starting)
+                              ) : (
+                                <td>---</td>
+                              )}
+
+                              {item.ending ? (
+                                dateFormater(item.ending)
+                              ) : (
+                                <td>---</td>
+                              )}
+                              <td>
+                                <div className="progress-showcase">
+                                  <div
+                                    className="progress"
+                                    style={{ height: 8 }}
+                                  >
+                                    <div
+                                      className="progress-bar"
+                                      style={{
+                                        width: item.observationProgress,
+                                        backgroundColor:
+                                          item.observationStatus === "Ongoing"
+                                            ? ongoingColor
+                                            : completeColor,
+                                      }}
+                                      role="progressbar"
+                                      aria-valuenow="50"
+                                      aria-valuemin="0"
+                                      aria-valuemax="100"
+                                    ></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td
+                                style={{
+                                  color:
+                                    item.observationStatus === "Ongoing"
+                                      ? ongoingColor
+                                      : item.observationStatus === "Completed"
+                                      ? completeColor
+                                      : pendingColor,
+                                }}
+                              >
+                                {item.observationStatus}
+                              </td>
+                              <td className="digits font-primary">
+                                <NavLink
+                                  className="d-flex align-items-center"
+                                  to={`${URL}/observations/detail-observation/${item.id}`}
+                                >
+                                  <Eye size={20} />
+                                </NavLink>
+                              </td>
+                            </tr>
+                          );
+                        })}
                         {userData?.observations.length === 0 && (
                           <tr>
                             <td className="text-center" colSpan={10}>

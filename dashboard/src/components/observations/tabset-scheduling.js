@@ -210,7 +210,7 @@ const TabsetScheduling = ({ role }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  console.log(obs);
+  // console.log(obs);
 
   return (
     <Fragment>
@@ -243,7 +243,7 @@ const TabsetScheduling = ({ role }) => {
                       <div className="col-xl-8 col-md-7 d-flex flex-wrap">
                         {obs?.obsRequest?.timeSlotsByFaculty.map((item) => (
                           <TimeSlotSpan
-                            key={item.id}
+                            keys={item.id}
                             id={item.id}
                             location={item.location}
                             time={item.time}
@@ -335,7 +335,7 @@ const TabsetScheduling = ({ role }) => {
             <MultiStepForm
               tabtitle={"Provide Teaching Plan Details (Words limit: 500 each)"}
               steps={obs?.obsRequest?.teachingPlan?.steps}
-              tempId={obs?.obsRequest?.teachingPlan?.steps?.templatePlanId}
+              tempId={obs?.obsRequest?.teachingPlan?.steps[0]?.templatePlanId}
               observationsId={Number(id)}
               setObs={setObs}
               tempType={"Teaching"}
@@ -354,7 +354,7 @@ const TabsetScheduling = ({ role }) => {
                       <div className="col-xl-8 col-md-7 d-flex flex-wrap">
                         {obs?.faculty.courseSlots.map((item) => (
                           <TimeSlotSpan
-                            key={item.id}
+                            keys={item.id}
                             id={item.id}
                             location={item.location}
                             time={item.time}
@@ -375,7 +375,7 @@ const TabsetScheduling = ({ role }) => {
                           {obs?.obsRequest?.timeSlotByObserver?.map((item) => {
                             return (
                               <TimeSlotSpan
-                                key={item.id}
+                                keys={item.id}
                                 id={item.id}
                                 location={item.location}
                                 time={item.time}
@@ -441,7 +441,7 @@ const TabsetScheduling = ({ role }) => {
 };
 
 const TimeSlotSpan = ({
-  key,
+  keys,
   onClick,
   location,
   time,
@@ -454,7 +454,7 @@ const TimeSlotSpan = ({
   return (
     <span
       className="mb-2"
-      key={key}
+      key={keys}
       style={{
         border: `1px solid ${completeColor}`,
         marginRight: "0.5rem",

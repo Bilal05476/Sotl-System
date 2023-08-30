@@ -597,7 +597,7 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
           },
           data: {
             facultyScore,
-            status: "Draft",
+            // status: "Draft",
           },
         });
       }
@@ -642,7 +642,7 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
           },
           data: {
             observerScore,
-            status: "Draft",
+            // status: "Draft",
           },
         });
       }

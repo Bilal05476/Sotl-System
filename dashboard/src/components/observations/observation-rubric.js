@@ -30,6 +30,7 @@ const Observation_rubric = () => {
   const { id } = useParams();
   const [obsDetails, setObsDetail] = useState("");
   const [loader, setLoader] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,8 +39,8 @@ const Observation_rubric = () => {
 
   const updateTotal = () => {
     const rubricsFinal = [];
-
-    if (accordionTab.length > 0) {
+    setOpenConfirm(!openConfirm);
+    if (accordionTab.length === 4) {
       setLoader(true);
       accordionTab.map((item) => {
         // count += item.accordionScore;
@@ -52,11 +53,8 @@ const Observation_rubric = () => {
         });
         return null;
       });
-
-      // console.log(accordionTab, rubricsFinal, user.role);
-
-      // return null;
-
+      // console.log(rubricsFinal);
+      // return;
       submitScore(
         user.role,
         rubricsFinal,
@@ -66,7 +64,7 @@ const Observation_rubric = () => {
         setObsDetail
       );
     } else {
-      info("Submit Rubrics scores for atleast one!");
+      info("Please save all rubrics scores!");
     }
   };
 
@@ -95,14 +93,17 @@ const Observation_rubric = () => {
         100
       : 0;
 
-  const [openConfirm, setOpenConfirm] = useState(false);
   const doneRubricScoring = () => {
     setOpenConfirm(!openConfirm);
   };
   return (
     <Fragment>
       <Breadcrumb title="Observation Rubrics" parent="Informed Observations" />
-      <ConfirmModal open={openConfirm} setOpen={setOpenConfirm} />
+      <ConfirmModal
+        open={openConfirm}
+        setOpen={setOpenConfirm}
+        updateTotal={updateTotal}
+      />
       <Container fluid={true}>
         <Row className="mb-2">
           <Col className="xl-100 d-flex align-items-center justify-content-end">
@@ -210,15 +211,15 @@ const Observation_rubric = () => {
                 "Completed" && (
                 <div className="d-flex align-items-center justify-content-between">
                   <AccordButton
-                    text="Save Score"
+                    text="Submit Score"
                     backgroundColor={completeColor2}
-                    onClick={() => updateTotal()}
+                    onClick={() => doneRubricScoring()}
                   />
-                  {avgSc > 0 && user.role === "Observer" && (
+                  {user.role === "Observer" && (
                     <AccordButton
                       text="Done"
                       backgroundColor={completeColor}
-                      onClick={() => doneRubricScoring()}
+                      onClick={() => {}}
                     />
                   )}
                 </div>
@@ -322,15 +323,15 @@ const RubricAccordion = ({
                 if (item.code === accordCode)
                   return (
                     <AccordionSubHeading
-                      key={item.id}
+                      keys={item.id}
                       rid={item.id}
                       title={item.title}
                       ind={ind + 1}
                       subSections={subSections}
                       setSubSections={setSubSections}
                       accordCode={accordCode}
-                      fs={item.facultyScore}
-                      os={item.observerScore}
+                      // fs={item.facultyScore}
+                      // os={item.observerScore}
                       role={role}
                     />
                   );
@@ -346,7 +347,7 @@ const RubricAccordion = ({
               >
                 <AccordButton
                   backgroundColor={completeColor2}
-                  text="Submit Rubric Score"
+                  text="Save Score"
                   onClick={() => updateAccordionscore()}
                 />
               </div>
@@ -362,13 +363,14 @@ const RubricAccordion = ({
 
 const AccordionSubHeading = ({
   rid,
+  keys,
   title,
   ind,
   subSections,
   setSubSections,
   accordCode,
-  fs,
-  os,
+  // fs,
+  // os,
   role,
 }) => {
   const [rubricSc, setRubricSc] = useState(0);
@@ -441,16 +443,19 @@ const AccordionSubHeading = ({
     }
     return breakpoints;
   };
-  // const getThumbColor = (level) => {
-  //   if (level <= 0.5) {
-  //     return "#3498db"; // Blue color for level 0.5
-  //   } else if (level <= 1.0) {
-  //     return "#e74c3c"; // Red color for level 1.0
-  //   } else if (level <= 1.5) {
-  //     return "#2ecc71"; // Green color for level 1.5
-  //   }
-  //   // Add more level checks here if needed
-  // };
+  const getThumbLevel = () => {
+    if (rubricSc === 1) {
+      return ".level-1";
+    } else if (rubricSc === 2) {
+      return ".level-2";
+    } else if (rubricSc === 3) {
+      return ".level-3";
+    } else if (rubricSc === 4) {
+      return ".level-4";
+    } else {
+      return ".level-0";
+    }
+  };
 
   return (
     <div
@@ -464,6 +469,7 @@ const AccordionSubHeading = ({
         marginBottom: "1rem",
         boxShadow: "0px 1px 2px #1e1e1e56",
       }}
+      key={keys}
     >
       <h5 className="mb-3">
         {ind}. {title}
@@ -476,7 +482,7 @@ const AccordionSubHeading = ({
           {rubricSc > 0 && `(${rubricSc})`}
         </span>
       </h5>
-      <div className="d-flex align-items-center justify-content-end mb-2 mx-2">
+      {/* <div className="d-flex align-items-center justify-content-end mb-2 mx-2">
         <small className="mx-2" style={{ fontSize: "0.9rem" }}>
           Score by Faculty:
           <span style={{ fontWeight: "800" }}> {fs}</span>
@@ -485,7 +491,7 @@ const AccordionSubHeading = ({
           Score by Observer:
           <span style={{ fontWeight: "800" }}> {os}</span>
         </small>
-      </div>
+      </div> */}
 
       {role === "Faculty" || role === "Observer" ? (
         // <div className="d-flex align-items-center justify-content-between">
@@ -512,7 +518,7 @@ const AccordionSubHeading = ({
             step="1"
             value={rubricSc}
             onChange={handleChange}
-            className={`range w-100`}
+            className={`range w-100 ${getThumbLevel()}`}
           />
         </div>
       ) : (

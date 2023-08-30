@@ -138,6 +138,8 @@ export async function submitTemplate(
   } else {
     endPoint = "scheduling";
   }
+  // console.log(templateResponse, templateId, editedById, observationsId, type);
+  // return;
   try {
     const res = await fetch(`${BASEURL}/observation/${endPoint}`, {
       method: "PUT",

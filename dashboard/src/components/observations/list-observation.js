@@ -346,24 +346,24 @@ const List_observation = () => {
                                 color: completeColor,
                               }}
                             >
-                              {item.meetings?.obsRequest?.status === "Ongoing"
-                                ? "Scheduling"
+                              {item?.obsRequest?.status === "Ongoing"
+                                ? "Observation Scheduling"
                                 : item.meetings?.informedObservation?.status ===
                                   "Ongoing"
-                                ? "Informed"
-                                : item.meetings?.postObservation?.status ===
-                                  "Ongoing"
-                                ? "Post Informed"
-                                : item.meetings?.postObservation?.status ===
+                                ? "Informed Observation"
+                                : // : item.meetings?.postObservation?.status ===
+                                //   "Ongoing"
+                                // ? "Post-Informed Observation"
+                                item.meetings?.postObservation?.status ===
                                   "Scheduled"
-                                ? "Post Informed"
+                                ? "Post-Informed Observation"
                                 : item.meetings?.uninformedObservation
                                     ?.status === "Ongoing"
-                                ? "Uninformed"
-                                : item.meetings?.professionalDPlan?.status ===
-                                  "Ongoing"
-                                ? "Prof development"
-                                : "---"}
+                                ? "Uninformed Observation"
+                                : // : item.meetings?.professionalDPlan?.status ===
+                                  //   "Ongoing"
+                                  // ? "Prof development"
+                                  "---"}
                             </td>
 
                             {item.starting ? (

@@ -79,7 +79,7 @@ export function PopupModal({
   );
 }
 
-export function ConfirmModal({ open, setOpen }) {
+export function ConfirmModal({ open, setOpen, updateTotal }) {
   return (
     <Modal isOpen={open} centered={true} size="lg">
       {/* <ModalHeader>Select Faculty Course</ModalHeader> */}
@@ -111,7 +111,7 @@ export function ConfirmModal({ open, setOpen }) {
           <Button
             className="mx-1"
             color="primary"
-            onClick={() => setOpen(!open)}
+            onClick={() => updateTotal()}
           >
             Yes, Done Scoring
           </Button>

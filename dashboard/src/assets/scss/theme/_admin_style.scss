@@ -43,21 +43,24 @@
 // Range of Rubric Page Styling
 /* Style for the slider thumb at level 0.5 */
 
-// .range.level-0-5::-webkit-slider-thumb {
-//   background-color: #3498db !important;
-//   /* Blue color */
+// .range::-webkit-slider-runnable-track {
+//   border-radius: 10px;
+//   padding: 0.1rem 0.3rem;
 // }
-
-// /* Style for the slider thumb at level 1.0 */
-// .range.level-1-0::-webkit-slider-thumb {
-//   background-color: #e74c3c;
-//   /* Red color */
+// .range.level-0::-webkit-slider-runnable-track {
+//   background-color: #4ad6ef1f !important;
 // }
-
-// /* Style for the slider thumb at level 1.5 */
-// .range.level-1-5::-webkit-slider-thumb {
-//   background-color: #2ecc71;
-//   /* Green color */
+// .range.level-1::-webkit-slider-runnable-track {
+//   background-color: #4ad6ef3f !important;
+// }
+// .range.level-2::-webkit-slider-runnable-track {
+//   background-color: #4ad6ef7a !important;
+// }
+// .range.level-3::-webkit-slider-runnable-track {
+//   background-color: #4ad6efb7 !important;
+// }
+// .range.level-4::-webkit-slider-runnable-track {
+//   background-color: #4AD6EF !important;
 // }
 
 .digits{
