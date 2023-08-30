@@ -331,6 +331,23 @@ const TabsetPostScheduling = ({ role }) => {
                         setObs={setObs}
                         observationsId={Number(id)}
                       />
+                      <div className="d-flex flex-wrap align-items-center justify-content-flex-start">
+                        {obs?.meetings?.postObservation?.artifacts?.map(
+                          (item) => (
+                            <div
+                              key={item.id}
+                              style={{ width: "100px", height: "100px" }}
+                              className="rounded m-1"
+                            >
+                              <img
+                                width="100%"
+                                src={item.filename}
+                                alt={item.mimetype}
+                              />
+                            </div>
+                          )
+                        )}
+                      </div>
                     </div>
                   </FormGroup>
                   <Form className="needs-validation user-add" noValidate="">
