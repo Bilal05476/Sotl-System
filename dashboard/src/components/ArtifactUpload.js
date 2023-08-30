@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { uplaodArtifact } from "./Endpoints";
 
-function ArtifactUpload({ postId }) {
+function ArtifactUpload({ postId, setObs, observationsId }) {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -15,7 +15,7 @@ function ArtifactUpload({ postId }) {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      uplaodArtifact(formData, postId);
+      uplaodArtifact(formData, postId, setObs, observationsId, setFile);
     }
   };
 

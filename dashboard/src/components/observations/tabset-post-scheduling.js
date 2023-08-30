@@ -223,6 +223,7 @@ const TabsetPostScheduling = ({ role }) => {
       return true;
     }
   };
+  console.log(obs);
   return (
     <Fragment>
       {role === "Observer" && (
@@ -327,6 +328,8 @@ const TabsetPostScheduling = ({ role }) => {
                     <div className="col-xl-8 col-md-7 d-flex flex-wrap">
                       <ArtifactUpload
                         postId={obs?.meetings?.postObservation?.id}
+                        setObs={setObs}
+                        observationsId={Number(id)}
                       />
                     </div>
                   </FormGroup>
@@ -428,7 +431,6 @@ const TabsetPostScheduling = ({ role }) => {
 };
 
 const TimeSlotSpan = ({ key, onClick, time, slot, cursor, location }) => {
-  console.log(slot);
   return (
     <span
       className="mb-2"

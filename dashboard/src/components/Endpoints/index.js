@@ -248,9 +248,19 @@ export async function fetchDepartments(id, setAllDept) {
   }
 }
 
-export async function uplaodArtifact(formData, id) {
+export async function uplaodArtifact(
+  formData,
+  id,
+  setObs,
+  observationsId,
+  setfile
+) {
   await axios
     .post(`${BASEURL}/upload-artifact/${id}`, formData)
-    .then((res) => successes(res.message))
-    .catch((err) => console.log(err));
+    .then((res) => {
+      successes(res.message);
+      fetchObservation(setObs, observationsId);
+      setfile(null);
+    })
+    .catch((err) => errors(err.response.data));
 }
