@@ -13,6 +13,7 @@ import {
   Loader,
 } from "react-feather";
 import CountUp from "react-countup";
+import { v4 as uuid } from "uuid";
 // import { Chart } from "react-google-charts";
 
 import { Bar, Line } from "react-chartjs-2";
@@ -440,10 +441,23 @@ const Dashboard = () => {
   }
 
   // return <ArtifactUpload />;
+  // const addNoti = () => {
+  //   dispatch({
+  //     type: "SET_NOTIFICATION",
+  //     payload: {
+  //       id: 3,
+  //       title: "Notification 3",
+  //       message: "This is notification message by bilal...",
+  //       open: false,
+  //       route: "/",
+  //     },
+  //   });
+  // };
 
   return (
     <Fragment>
       <Breadcrumb title="Dashboard" parent="Dashboard" />
+      {/* <button onClick={addNoti}>Click</button> */}
 
       <Container fluid={true}>
         {/* <Row>
@@ -808,7 +822,6 @@ const Dashboard = () => {
                       </thead>
                       <tbody>
                         {userData?.observations.map((item) => {
-                          console.log(item.meetings?.postObservation);
                           return (
                             <tr key={item.id}>
                               <td className="digits">

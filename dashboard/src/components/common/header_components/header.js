@@ -1,15 +1,16 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 // import SearchHeader from "./searchHeader";
-// import Notification from "./notification";
+import Notification from "./notification";
 import UserMenu from "./user-menu";
 // import Language from "./language";
 import {
   AlignLeft,
   Maximize2,
-  // Bell,
+  Bell,
   // MessageSquare,
   MoreHorizontal,
 } from "react-feather";
+import { useStateValue } from "../../../StateProvider";
 
 //images
 // import logo from "../../../assets/images/dashboard/blue-version.png";
@@ -18,10 +19,23 @@ const Header = () => {
   const [sidebar, setSidebar] = useState(true);
   const [rightSidebar, setRightSidebar] = useState(true);
   const [navMenus, setNavMenus] = useState(false);
+  const [{ notifications }] = useStateValue();
+  const [unopened, setupoened] = useState(0);
 
   const toggle = () => {
     setNavMenus(!navMenus);
   };
+
+  useEffect(() => {
+    const unopen = () => {
+      let count = 0;
+      notifications.filter((item) => {
+        if (!item.open) count += 1;
+      });
+      return count;
+    };
+    setupoened(unopen());
+  });
 
   const showRightSidebar = () => {
     // if (rightSidebar) {
@@ -103,14 +117,16 @@ const Header = () => {
                 </a>
               </li>
 
-              {/* <li className="onhover-dropdown">
+              <li className="onhover-dropdown">
                 <Bell />
-                <span className="badge rounded-pill badge-primary pull-right notification-badge">
-                  3
-                </span>
-                <span className="dot"></span>
+                {unopened > 0 && (
+                  <span className="badge rounded-pill badge-primary pull-right notification-badge">
+                    {unopened}
+                  </span>
+                )}
+                {/* <span className="dot"></span> */}
                 <Notification />
-              </li> */}
+              </li>
               {/* <li>
                 <a href="#javaScript" onClick={showRightSidebar}>
                   <MessageSquare />

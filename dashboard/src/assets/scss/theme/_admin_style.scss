@@ -40,6 +40,10 @@
   transition: opacity 500ms ease-in !important;
 }
 
+.observation-row:hover{
+  background-color: rgba(211, 211, 211, 0.176);
+  box-shadow: 1px 1px 1px lightgray;
+}
 // Range of Rubric Page Styling
 /* Style for the slider thumb at level 0.5 */
 
@@ -2392,6 +2396,8 @@ $header-size: 80px;
       }
       .notification-dropdown {
         top: 57px;
+        max-height: 500px;
+        overflow-y: auto;
       }
       .language-dropdown {
         width: 160px;
@@ -2474,7 +2480,7 @@ $header-size: 80px;
 .nav-menus {
   .notification-badge {
     position: absolute;
-    right: 10px;
+    right: 8px;
     top: 1px;
     padding: 4px 7px;
   }
@@ -2530,18 +2536,18 @@ ul.notification-dropdown.onhover-show-div {
         margin-right: 10px;
         vertical-align: text-top;
       }
-      .shopping-color {
-        path,
-        line {
-          color: $primary-color;
-        }
-      }
-      .download-color {
-        path,
-        line {
-          color: $success-color;
-        }
-      }
+      // .shopping-color {
+      //   path,
+      //   line {
+      //     color: $primary-color;
+      //   }
+      // }
+      // .download-color {
+      //   path,
+      //   line {
+      //     color: $success-color;
+      //   }
+      // }
       .alert-color {
         path,
         line {
@@ -2557,6 +2563,9 @@ ul.notification-dropdown.onhover-show-div {
         background-color: $light-color;
       }
     }
+  }
+  li.unopen {
+    background-color: $light-color;
   }
 }
 .onhover-show-div {

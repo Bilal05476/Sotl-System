@@ -4,6 +4,7 @@ export const initialState = {
   allObs: [],
   userData: null,
   usersandcourses: null,
+  notifications: [],
 };
 
 const reducer = (state, action) => {
@@ -39,6 +40,24 @@ const reducer = (state, action) => {
       return {
         ...state,
         darkTheme: !state.darkTheme,
+      };
+    case "SET_NOTIFICATION":
+      return {
+        ...state,
+        notifications: [...state.notifications, action.payload],
+      };
+    case "OPEN_NOTIFICATION":
+      const notificationIndex = state.notifications.findIndex(
+        (notification) => notification.id === action.payload
+      );
+      const updatedNotifications = [...state.notifications];
+      updatedNotifications[notificationIndex] = {
+        ...updatedNotifications[notificationIndex],
+        open: true,
+      };
+      return {
+        ...state,
+        notifications: updatedNotifications,
       };
 
     default:

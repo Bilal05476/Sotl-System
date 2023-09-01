@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 // import data from "../../assets/data/listUser";
 // import Datatable from "../common/datatable";
@@ -18,7 +18,7 @@ import {
   Button,
 } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
-import { Eye, Filter, Loader } from "react-feather";
+import { Check, CheckCircle, Eye, Filter, Loader } from "react-feather";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 import { dateFormater } from "../DateFormater";
 import { fetchUserData } from "../Endpoints";
@@ -27,6 +27,7 @@ const URL = process.env.PUBLIC_URL;
 
 const List_observation = () => {
   const [{ user, userData }, dispatch] = useStateValue();
+  const navigate = useNavigate();
   const [observationData, setObservationData] = useState(
     userData?.observations
   );
@@ -156,6 +157,10 @@ const List_observation = () => {
       setObservationData(userData?.observations);
     }
   }, [obsFilter]);
+
+  const detailObs = (path) => {
+    navigate(path);
+  };
 
   return (
     <Fragment>
@@ -305,7 +310,7 @@ const List_observation = () => {
                       <thead>
                         <tr>
                           <th scope="col">Course</th>
-                          <th scope="col">Semester</th>
+                          {/* <th scope="col">Semester</th> */}
                           {user.role !== "Faculty" && (
                             <th scope="col">Faculty</th>
                           )}
@@ -315,7 +320,8 @@ const List_observation = () => {
                           {user.role !== "Head_of_Department" && (
                             <th scope="col">Head of Department</th>
                           )}
-                          <th scope="col">Observation Cycle</th>
+
+                          <th scope="col">Obs Cycle</th>
                           <th scope="col">Starting Date</th>
                           <th scope="col">Ending Date</th>
                           <th scope="col">Progress</th>
@@ -325,11 +331,20 @@ const List_observation = () => {
                       </thead>
                       <tbody>
                         {observationData?.map((item) => (
-                          <tr key={item.id}>
+                          <tr
+                            key={item.id}
+                            onClick={() =>
+                              detailObs(
+                                `${URL}/observations/detail-observation/${item.id}`
+                              )
+                            }
+                            style={{ cursor: "pointer" }}
+                            className="observation-row"
+                          >
                             <td className="digits">
                               {item.course ? item.course.name : "---"}
                             </td>
-                            <td className="digits">{item.semester}</td>
+                            {/* <td className="digits">{item.semester}</td> */}
                             {user.role !== "Faculty" && (
                               <td className="digits">{item.faculty.name}</td>
                             )}
@@ -411,12 +426,34 @@ const List_observation = () => {
                               {item.observationStatus}
                             </td>
                             <td className="digits font-primary">
-                              <NavLink
+                              {/* <NavLink
                                 className="d-flex align-items-center"
                                 to={`${URL}/observations/detail-observation/${item.id}`}
                               >
                                 <Eye size={20} />
-                              </NavLink>
+                              </NavLink> */}
+                              <span className=" d-flex flex-column align-items-center ">
+                                <CheckCircle
+                                  color={
+                                    item.meetings?.postObservation?.status ===
+                                    "Completed"
+                                      ? completeColor
+                                      : "lightgray"
+                                  }
+                                  size={20}
+                                  style={{ margin: "0.1rem 0rem" }}
+                                />
+                                <CheckCircle
+                                  color={
+                                    item.meetings?.uninformedObservation
+                                      ?.status === "Completed"
+                                      ? completeColor
+                                      : "lightgray"
+                                  }
+                                  size={20}
+                                  style={{ margin: "0.1rem 0rem" }}
+                                />{" "}
+                              </span>
                             </td>
                           </tr>
                         ))}
