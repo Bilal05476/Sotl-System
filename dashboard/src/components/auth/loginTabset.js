@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
-import { User, Loader, Eye, EyeOff } from "react-feather";
+import { User } from "react-feather";
+import { Loader } from "../common/Loader";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
-import { info, errors, successes } from "../../constants/Toasters";
+import { info, errors } from "../../constants/Toasters";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 

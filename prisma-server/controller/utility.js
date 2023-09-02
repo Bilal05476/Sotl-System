@@ -26,6 +26,14 @@ export const getDataForHod = asyncHandler(async (req, res) => {
       },
       include: {
         department: true,
+        facultyObs: {
+          where: {
+            OR: [
+              { observationStatus: "Ongoing" },
+              { observationStatus: "Pending" },
+            ],
+          },
+        },
       },
     });
 

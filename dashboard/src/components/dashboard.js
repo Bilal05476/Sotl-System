@@ -10,10 +10,11 @@ import {
   ShoppingCart,
   Calendar,
   Eye,
-  Loader,
+  CheckCircle,
 } from "react-feather";
 import CountUp from "react-countup";
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
+import { Loader } from "./common/Loader";
 // import { Chart } from "react-google-charts";
 
 import { Bar, Line } from "react-chartjs-2";
@@ -39,12 +40,12 @@ import {
   RadialLinearScale,
 } from "chart.js";
 
-// image impoer
-import user2 from "../assets/images/dashboard/user2.jpg";
-import user1 from "../assets/images/dashboard/user1.jpg";
-import man from "../assets/images/dashboard/man.png";
-import user from "../assets/images/dashboard/user.png";
-import designer from "../assets/images/dashboard/designer.jpg";
+// image importer
+// import user2 from "../assets/images/dashboard/user2.jpg";
+// import user1 from "../assets/images/dashboard/user1.jpg";
+// import man from "../assets/images/dashboard/man.png";
+// import user from "../assets/images/dashboard/user.png";
+// import designer from "../assets/images/dashboard/designer.jpg";
 import {
   Card,
   CardBody,
@@ -56,7 +57,7 @@ import {
   Table,
 } from "reactstrap";
 import { useStateValue } from "../StateProvider";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { fetchCoursesAndUsers, fetchUserData } from "./Endpoints";
 import {
   completeColor,
@@ -66,7 +67,6 @@ import {
 } from "./colors";
 // import welcome from "../assets/images/dashboard/welcome_img.svg";
 import { dateFormater, streamDateFormater } from "./DateFormater";
-import ArtifactUpload from "./ArtifactUpload";
 
 ChartJS.register(
   CategoryScale,
@@ -424,8 +424,6 @@ const Dashboard = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // console.log(user.role);
-
   let faculty = 0,
     observer = 0,
     hod = 0;
@@ -454,13 +452,20 @@ const Dashboard = () => {
   //   });
   // };
 
+  const navigate = useNavigate();
+  const detailObs = (path) => {
+    navigate(path);
+  };
+
   return (
     <Fragment>
       <Breadcrumb title="Dashboard" parent="Dashboard" />
       {/* <button onClick={addNoti}>Click</button> */}
 
-      <Container fluid={true}>
-        {/* <Row>
+      {!userData && <Loader />}
+      {userData && (
+        <Container fluid={true}>
+          {/* <Row>
           <Col xl="12 xl-100" md="12" className="">
             <Card
               className=" o-hidden widget-cards"
@@ -489,8 +494,8 @@ const Dashboard = () => {
             </Card>
           </Col>
         </Row> */}
-        <Row>
-          {/* {user.role === "Admin" || user.role === "Campus_Director" ? (
+          <Row>
+            {/* {user.role === "Admin" || user.role === "Campus_Director" ? (
             <>
               <Col xl="3 xl-25" md="6">
                 <Card className=" o-hidden widget-cards">
@@ -536,7 +541,7 @@ const Dashboard = () => {
           ) : (
             <></>
           )} */}
-          {/* <Col
+            {/* <Col
             xl={`3 ${
               user.role === "Campus_Director" || user.role === "Admin"
                 ? "xl-25"
@@ -591,134 +596,134 @@ const Dashboard = () => {
             </Card>
           </Col> */}
 
-          {user.role === "Head_of_Department" && (
-            <>
-              <Col xl="3 xl-25" md="6">
-                <Card className="o-hidden widget-cards">
-                  <CardBody className="bg-primary">
-                    <Media className="static-top-widget row">
-                      <div className="icons-widgets col-4">
-                        <div className="align-self-center text-center">
-                          <Users className="font-primary" />
+            {user.role === "Head_of_Department" && (
+              <>
+                <Col xl="3 xl-25" md="6">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Users className="font-primary" />
+                          </div>
                         </div>
-                      </div>
-                      <Media body className="col-8">
-                        <span className="m-0">Observer(s)</span>
-                        <h3 className="mb-0">
-                          <CountUp className="counter" end={observer} />
-                          <small> Currenlty</small>
-                        </h3>
+                        <Media body className="col-8">
+                          <span className="m-0">Observer(s)</span>
+                          <h3 className="mb-0">
+                            <CountUp className="counter" end={observer} />
+                            <small> Currenlty</small>
+                          </h3>
+                        </Media>
                       </Media>
-                    </Media>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col xl="3 xl-25" md="6">
-                <Card className="o-hidden widget-cards">
-                  <CardBody className="bg-primary">
-                    <Media className="static-top-widget row">
-                      <div className="icons-widgets col-4">
-                        <div className="align-self-center text-center">
-                          <Users className="font-primary" />
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col xl="3 xl-25" md="6">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Users className="font-primary" />
+                          </div>
                         </div>
-                      </div>
-                      <Media body className="col-8">
-                        <span className="m-0">Faculty(s)</span>
-                        <h3 className="mb-0">
-                          <CountUp className="counter" end={faculty} />
-                          <small> Currenlty</small>
-                        </h3>
+                        <Media body className="col-8">
+                          <span className="m-0">Faculty(s)</span>
+                          <h3 className="mb-0">
+                            <CountUp className="counter" end={faculty} />
+                            <small> Currenlty</small>
+                          </h3>
+                        </Media>
                       </Media>
-                    </Media>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col xl="3 xl-50" md="6">
-                <Card className="o-hidden widget-cards">
-                  <CardBody className="bg-primary">
-                    <Media className="static-top-widget row">
-                      <div className="icons-widgets col-4">
-                        <div className="align-self-center text-center">
-                          <Calendar className="font-primary" />
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col xl="3 xl-50" md="6">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Calendar className="font-primary" />
+                          </div>
                         </div>
-                      </div>
-                      <Media body className="col-8">
-                        <span className="m-0">Observation(s)</span>
-                        <h3 className="mb-0">
-                          <CountUp
-                            className="counter"
-                            end={userData?.observations.length}
-                          />
-                          <small> All Time</small>
-                        </h3>
+                        <Media body className="col-8">
+                          <span className="m-0">Observation(s)</span>
+                          <h3 className="mb-0">
+                            <CountUp
+                              className="counter"
+                              end={userData?.observations.length}
+                            />
+                            <small> All Time</small>
+                          </h3>
+                        </Media>
                       </Media>
-                    </Media>
-                  </CardBody>
-                </Card>
-              </Col>
-            </>
-          )}
+                    </CardBody>
+                  </Card>
+                </Col>
+              </>
+            )}
 
-          {user.role === "Faculty" && (
-            <>
-              <Col xl="6 xl-50" md="6" sm="3">
-                <Card className="o-hidden widget-cards">
-                  <CardBody style={{ backgroundColor: completeColor2 }}>
-                    <Media className="static-top-widget row">
-                      <div className="icons-widgets col-4">
-                        <div className="align-self-center text-center">
-                          <Users color={completeColor2} />
+            {user.role === "Faculty" && (
+              <>
+                <Col xl="6 xl-50" md="6" sm="3">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody style={{ backgroundColor: completeColor2 }}>
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Users color={completeColor2} />
+                          </div>
                         </div>
-                      </div>
-                      <Media body className="col-8">
-                        <span
-                          className="m-0"
-                          style={{
-                            color: "#fff",
-                          }}
-                        >
-                          Observations
-                        </span>
+                        <Media body className="col-8">
+                          <span
+                            className="m-0"
+                            style={{
+                              color: "#fff",
+                            }}
+                          >
+                            Observations
+                          </span>
 
-                        <h3 className="mb-0">
-                          <CountUp
-                            className="counter"
-                            end={userData?.observations?.length}
-                          />
-                          <small> All Time</small>
-                        </h3>
+                          <h3 className="mb-0">
+                            <CountUp
+                              className="counter"
+                              end={userData?.observations?.length}
+                            />
+                            <small> All Time</small>
+                          </h3>
+                        </Media>
                       </Media>
-                    </Media>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col xl="6 xl-50" md="6" sm="3">
-                <Card className="o-hidden widget-cards">
-                  <CardBody className="bg-primary">
-                    <Media className="static-top-widget row">
-                      <div className="icons-widgets col-4">
-                        <div className="align-self-center text-center">
-                          <Users className="font-primary" />
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col xl="6 xl-50" md="6" sm="3">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Users className="font-primary" />
+                          </div>
                         </div>
-                      </div>
-                      <Media body className="col-8">
-                        <span className="m-0">Courses</span>
-                        {/* {userData && ( */}
-                        <h3 className="mb-0">
-                          <CountUp
-                            className="counter"
-                            end={userData?.slots?.length}
-                          />
-                          <small> Assinged</small>
-                        </h3>
-                        {/* )} */}
-                        {/* {!userData && <Loader />} */}
+                        <Media body className="col-8">
+                          <span className="m-0">Courses</span>
+                          {/* {userData && ( */}
+                          <h3 className="mb-0">
+                            <CountUp
+                              className="counter"
+                              end={userData?.slots?.length}
+                            />
+                            <small> Assinged</small>
+                          </h3>
+                          {/* )} */}
+                          {/* {!userData && <Loader />} */}
+                        </Media>
                       </Media>
-                    </Media>
-                  </CardBody>
-                </Card>
-              </Col>
-              {/* <Col xl="3 xl-50" md="6">
+                    </CardBody>
+                  </Card>
+                </Col>
+                {/* <Col xl="3 xl-50" md="6">
                 <Card className="o-hidden widget-cards">
                   <CardBody className="bg-primary">
                     <Media className="static-top-widget row">
@@ -755,54 +760,54 @@ const Dashboard = () => {
                   </CardBody>
                 </Card>
               </Col> */}
-            </>
-          )}
+              </>
+            )}
 
-          {user.role !== "Faculty" && (
+            {user.role !== "Faculty" && (
+              <Col xl="12 xl-100">
+                <Card>
+                  <CardHeader className="d-flex align-items-center justify-content-between">
+                    <h5>Observations Stream</h5>
+                    <div>
+                      {["Monthly", "Semesters", "Quarter", "Yearly"].map(
+                        (item) => (
+                          <ObservationStreamFilter
+                            streamFilter={streamFilter}
+                            setStreamFilter={setStreamFilter}
+                            text={item}
+                            ongoingColor={ongoingColor}
+                          />
+                        )
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    <div className="market-chart">
+                      <Bar
+                        data={lineData}
+                        options={lineOptions}
+                        width={778}
+                        height={308}
+                      />
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            )}
+
             <Col xl="12 xl-100">
               <Card>
-                <CardHeader className="d-flex align-items-center justify-content-between">
-                  <h5>Observations Stream</h5>
-                  <div>
-                    {["Monthly", "Semesters", "Quarter", "Yearly"].map(
-                      (item) => (
-                        <ObservationStreamFilter
-                          streamFilter={streamFilter}
-                          setStreamFilter={setStreamFilter}
-                          text={item}
-                          ongoingColor={ongoingColor}
-                        />
-                      )
-                    )}
-                  </div>
+                <CardHeader>
+                  <h5>Observations</h5>
                 </CardHeader>
-                <CardBody>
-                  <div className="market-chart">
-                    <Bar
-                      data={lineData}
-                      options={lineOptions}
-                      width={778}
-                      height={308}
-                    />
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          )}
 
-          <Col xl="12 xl-100">
-            <Card>
-              <CardHeader>
-                <h5>Observations</h5>
-              </CardHeader>
-              {userData && (
                 <CardBody>
                   <div className="user-status table-responsive latest-order-table">
                     <Table borderless>
                       <thead>
                         <tr>
                           <th scope="col">Course</th>
-                          <th scope="col">Semester</th>
+                          {/* <th scope="col">Semester</th> */}
                           {user.role !== "Faculty" && (
                             <th scope="col">Faculty</th>
                           )}
@@ -823,11 +828,20 @@ const Dashboard = () => {
                       <tbody>
                         {userData?.observations.map((item) => {
                           return (
-                            <tr key={item.id}>
+                            <tr
+                              key={item.id}
+                              onClick={() =>
+                                detailObs(
+                                  `${URL}/observations/detail-observation/${item.id}`
+                                )
+                              }
+                              style={{ cursor: "pointer" }}
+                              className="observation-row"
+                            >
                               <td className="digits">
                                 {item.course ? item.course.name : "---"}
                               </td>
-                              <td className="digits">{item.semester}</td>
+                              {/* <td className="digits">{item.semester}</td> */}
                               {user.role !== "Faculty" && (
                                 <td className="digits">{item.faculty.name}</td>
                               )}
@@ -850,10 +864,10 @@ const Dashboard = () => {
                                   ? "Informed Observation"
                                   : item.meetings?.postObservation?.status ===
                                     "Ongoing"
-                                  ? "Post-Informed Observation"
+                                  ? "Post Observation"
                                   : item.meetings?.postObservation?.status ===
                                     "Scheduled"
-                                  ? "Post-Informed Observation"
+                                  ? "Post Observation"
                                   : item.meetings?.uninformedObservation
                                       ?.status === "Ongoing"
                                   ? "Uninformed Observation"
@@ -909,12 +923,34 @@ const Dashboard = () => {
                                 {item.observationStatus}
                               </td>
                               <td className="digits font-primary">
-                                <NavLink
+                                {/* <NavLink
                                   className="d-flex align-items-center"
                                   to={`${URL}/observations/detail-observation/${item.id}`}
                                 >
                                   <Eye size={20} />
-                                </NavLink>
+                                </NavLink> */}
+                                <span className=" d-flex flex-column align-items-center ">
+                                  <CheckCircle
+                                    color={
+                                      item.meetings?.postObservation?.status ===
+                                      "Completed"
+                                        ? completeColor
+                                        : "lightgray"
+                                    }
+                                    size={20}
+                                    style={{ margin: "0.1rem 0rem" }}
+                                  />
+                                  <CheckCircle
+                                    color={
+                                      item.meetings?.uninformedObservation
+                                        ?.status === "Completed"
+                                        ? completeColor
+                                        : "lightgray"
+                                    }
+                                    size={20}
+                                    style={{ margin: "0.1rem 0rem" }}
+                                  />{" "}
+                                </span>
                               </td>
                             </tr>
                           );
@@ -940,77 +976,69 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </CardBody>
-              )}
-
-              {!userData && (
-                <Loader style={{ display: "block", margin: "0.5rem auto" }} />
-              )}
-            </Card>
-          </Col>
-          {user.role === "Faculty" ? (
-            <Col xl="12 xl-100">
-              <Card>
-                <CardHeader>
-                  <h5>Your Courses</h5>
-                </CardHeader>
-                {userData && (
-                  <CardBody>
-                    <div className="user-status table-responsive latest-order-table">
-                      <Table borderless>
-                        <thead>
-                          <tr>
-                            <th scope="col">Course Code</th>
-                            <th scope="col">Section Code</th>
-                            <th scope="col">Course</th>
-                            <th scope="col">Time slot</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Campus</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {userData?.slots?.map((item) => (
-                            <tr key={item.id}>
-                              <td className="digits">
-                                {item.course.courseCode}
-                              </td>
-                              <td className="digits">{item.sectionCode}</td>
-                              <td className="digits">{item.course.name}</td>
-                              <td className="digits">
-                                {item.day} {item.time}
-                              </td>
-                              <td className="digits">{item.location}</td>
-                              <td className="digits">
-                                {item.course.campus?.replaceAll("_", " ")}
-                              </td>
-                            </tr>
-                          ))}
-                          {userData?.slots?.length === 0 && (
-                            <tr>
-                              <td className="text-center" colSpan={7}>
-                                No Courses Slots!
-                              </td>
-                            </tr>
-                          )}
-                        </tbody>
-                      </Table>
-                      {userData?.slots?.length > 0 && (
-                        <a href="#javaScript" className="btn btn-primary">
-                          View All Courses
-                        </a>
-                      )}
-                    </div>
-                  </CardBody>
-                )}
-                {!userData && (
-                  <Loader style={{ display: "block", margin: "0.5rem auto" }} />
-                )}
               </Card>
             </Col>
-          ) : (
-            <></>
-          )}
+            {user.role === "Faculty" ? (
+              <Col xl="12 xl-100">
+                <Card>
+                  <CardHeader>
+                    <h5>Your Courses</h5>
+                  </CardHeader>
+                  {userData && (
+                    <CardBody>
+                      <div className="user-status table-responsive latest-order-table">
+                        <Table borderless>
+                          <thead>
+                            <tr>
+                              <th scope="col">Course Code</th>
+                              <th scope="col">Section Code</th>
+                              <th scope="col">Course</th>
+                              <th scope="col">Time slot</th>
+                              <th scope="col">Location</th>
+                              <th scope="col">Campus</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {userData?.slots?.map((item) => (
+                              <tr key={item.id}>
+                                <td className="digits">
+                                  {item.course.courseCode}
+                                </td>
+                                <td className="digits">{item.sectionCode}</td>
+                                <td className="digits">{item.course.name}</td>
+                                <td className="digits">
+                                  {item.day} {item.time}
+                                </td>
+                                <td className="digits">{item.location}</td>
+                                <td className="digits">
+                                  {item.course.campus?.replaceAll("_", " ")}
+                                </td>
+                              </tr>
+                            ))}
+                            {userData?.slots?.length === 0 && (
+                              <tr>
+                                <td className="text-center" colSpan={7}>
+                                  No Courses Slots!
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </Table>
+                        {userData?.slots?.length > 0 && (
+                          <a href="#javaScript" className="btn btn-primary">
+                            View All Courses
+                          </a>
+                        )}
+                      </div>
+                    </CardBody>
+                  )}
+                </Card>
+              </Col>
+            ) : (
+              <></>
+            )}
 
-          {/* <Col xl="3 xl-50" md="6">
+            {/* <Col xl="3 xl-50" md="6">
             <Card className=" order-graph sales-carousel">
               <CardHeader>
                 <h6>Total Sales</h6>
@@ -1078,7 +1106,7 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-          {/* <Col xl="3 xl-50" md="6">
+            {/* <Col xl="3 xl-50" md="6">
             <Card className=" order-graph sales-carousel">
               <CardHeader>
                 <h6>Total purchase</h6>
@@ -1156,7 +1184,7 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-          {/* <Col xl="3 xl-50" md="6">
+            {/* <Col xl="3 xl-50" md="6">
             <Card className="order-graph sales-carousel">
               <CardHeader>
                 <h6>Total cash transaction</h6>
@@ -1234,7 +1262,7 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-          {/* <Col xl="3 xl-50" md="6">
+            {/* <Col xl="3 xl-50" md="6">
             <Card className="order-graph sales-carousel">
               <CardHeader>
                 <h6>Daily Deposits</h6>
@@ -1312,7 +1340,7 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-          {/* <Col sm="12">
+            {/* <Col sm="12">
             <Card>
               <CardHeader>
                 <h5>Buy / Sell</h5>
@@ -1327,7 +1355,7 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-          {/* <Col xl="6 xl-100">
+            {/* <Col xl="6 xl-100">
             <Card className="height-equal">
               <CardHeader>
                 <h5>Products Cart</h5>
@@ -1392,7 +1420,7 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-          {/* <Col xl="6 xl-100">
+            {/* <Col xl="6 xl-100">
             <Card className="height-equal">
               <CardHeader>
                 <h5>Empolyee Status</h5>
@@ -1600,7 +1628,7 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-          {/* <Col sm="12">
+            {/* <Col sm="12">
             <Card>
               <CardHeader>
                 <h5>Sales Status</h5>
@@ -1753,8 +1781,9 @@ const Dashboard = () => {
               </CardBody>
             </Card>
           </Col> */}
-        </Row>
-      </Container>
+          </Row>
+        </Container>
+      )}
     </Fragment>
   );
 };

@@ -8,7 +8,7 @@ const Post_observation = () => {
   const [{ user }] = useStateValue();
   return (
     <Fragment>
-      <Breadcrumb title="Post Informed Observation" parent="Observations" />
+      <Breadcrumb title="Post Observation" parent="Observations" />
       <Container fluid={true}>
         <Row>
           <Col sm="12">

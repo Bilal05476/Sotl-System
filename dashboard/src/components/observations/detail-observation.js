@@ -2,7 +2,8 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Row, Table } from "reactstrap";
 import { NavLink, useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { Loader, DownloadCloud, Eye, EyeOff } from "react-feather";
+import { DownloadCloud, Eye, EyeOff } from "react-feather";
+import { Loader } from "../common/Loader";
 import { useStateValue } from "../../StateProvider";
 import logo from "../../assets/images/blue-version.png";
 // import { stringify } from "csv-stringify/sync";
@@ -350,10 +351,6 @@ const Detail_observation = () => {
                                   className="d-flex alogn-items-center"
                                   style={{ cursor: "pointer" }}
                                 >
-                                  {/* // <DownloadCloud
-                                        //   color="white"
-                                        //   size={20}
-                                        // /> */}
                                   {teahingTempView && (
                                     <>
                                       <AccordButton
@@ -416,19 +413,9 @@ const Detail_observation = () => {
                             textAlign: "right",
                           }}
                         >
-                          {/* {user.role === "Head_of_Department" ||
-                          user.role === "Observer" ? (
-                            <Button
-                              className="mx-2 btn btn-primary"
-                              // onClick={() => selectCourse()}
-                            >
-                              Sign Template
-                            </Button>
-                          ) : (
-                            <></>
-                          )} */}
                           {user.role === "Faculty" ||
-                          user.role === "Observer" ? (
+                          (user.role === "Observer" &&
+                            obsDetail?.obsRequest?.teachingPlan?.editedBy) ? (
                             <NavLink
                               to={`/observations/observation-scheduling/${obsDetail?.id}`}
                               className="btn btn-primary mx-2"
@@ -575,7 +562,7 @@ const Detail_observation = () => {
                 type="button"
                 aria-expanded="true"
               >
-                Post Informed Observation Meeting Scheduling (Face to Face)
+                Post Observation Meeting Scheduling (Face to Face)
               </button>
               {obsDetail.meetings?.postObservation ? (
                 <>
@@ -772,9 +759,7 @@ const Detail_observation = () => {
           </div> */}
         </Container>
       )}
-      {!obsDetail && (
-        <Loader size={28} style={{ display: "block", margin: "1.5rem auto" }} />
-      )}
+      {!obsDetail && <Loader />}
     </Fragment>
   );
 };

@@ -2,7 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "reactstrap";
 // import { useParams } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
-import { ChevronsDown, ChevronsUp, Loader } from "react-feather";
+import { ChevronsDown, ChevronsUp } from "react-feather";
+import { Loader } from "../common/Loader";
 import { useParams } from "react-router-dom";
 
 import {
@@ -16,7 +17,7 @@ import {
   pendingColor,
 } from "../colors";
 import { Applink, AccordButton } from "../applink";
-import { info } from "../../constants/Toasters";
+import { info, successes } from "../../constants/Toasters";
 import { doneScore, fetchObservation, submitScore } from "../Endpoints";
 import { useStateValue } from "../../StateProvider";
 import { ConfirmModal } from "../PopupModal";
@@ -53,6 +54,12 @@ const Observation_rubric = () => {
         return null;
       });
       info("Saving rubrics scores...");
+      // let count = 0;
+      // rubricsFinal.map((item) => {
+      //   count += item.score;
+      // });
+      // console.log(count);
+      // return;
       submitScore(
         user.role,
         rubricsFinal,
@@ -102,7 +109,6 @@ const Observation_rubric = () => {
     );
   };
 
-  // console.log(obsDetails?.meetings?.informedObservation);
   return (
     <Fragment>
       <Breadcrumb title="Observation Rubrics" parent="Informed Observations" />
@@ -111,142 +117,141 @@ const Observation_rubric = () => {
         setOpen={setOpenConfirm}
         DoneRubricScoring={DoneRubricScoring}
       />
-      <Container fluid={true}>
-        <Row className="mb-2">
-          <Col className="xl-100 d-flex align-items-center justify-content-end">
-            {[
-              {
-                color: completeColor2,
-                text: "SCORE BY FACULTY",
-                score: `${facultySc?.toFixed(1)} / 80.0`,
-              },
-              {
-                color: completeColor2,
-                text: "SCORE BY OBSERVER",
-                score: `${observerSc?.toFixed(1)} / 80.0`,
-              },
-              {
-                color: completeColor,
-                text: "FINAL SCORE",
-                score: `${avgSc?.toFixed(1)} / 80.0`,
-              },
-              {
-                color: completeColor,
-                text: "SCORE PERCENTAGE",
-                score: `${perSc?.toFixed(1)}%`,
-              },
-            ].map((item, index) => (
-              <span
-                key={index}
-                style={{
-                  backgroundColor: item.color,
-                  color: "#fff",
-                  fontSize: "0.8rem",
-                  padding: "0.5rem 0.8rem",
-                  borderRadius: "5px",
-                  marginLeft: "0.3rem",
-                  fontWeight: "500",
-                }}
-              >
-                {item.text}:
+      {obsDetails && (
+        <Container fluid={true}>
+          <Row className="mb-2">
+            <Col className="xl-100 d-flex align-items-center justify-content-end">
+              {[
+                {
+                  color: completeColor2,
+                  text: "SCORE BY FACULTY",
+                  score: `${facultySc?.toFixed(1)} / 80.0`,
+                },
+                {
+                  color: completeColor2,
+                  text: "SCORE BY OBSERVER",
+                  score: `${observerSc?.toFixed(1)} / 80.0`,
+                },
+                {
+                  color: completeColor,
+                  text: "FINAL SCORE",
+                  score: `${avgSc?.toFixed(1)} / 80.0`,
+                },
+                {
+                  color: completeColor,
+                  text: "SCORE PERCENTAGE",
+                  score: `${perSc?.toFixed(1)}%`,
+                },
+              ].map((item, index) => (
                 <span
+                  key={index}
                   style={{
+                    backgroundColor: item.color,
+                    color: "#fff",
+                    fontSize: "0.8rem",
+                    padding: "0.5rem 0.8rem",
+                    borderRadius: "5px",
                     marginLeft: "0.3rem",
-                    fontWeight: "700",
+                    fontWeight: "500",
                   }}
                 >
-                  {item.score}
+                  {item.text}:
+                  <span
+                    style={{
+                      marginLeft: "0.3rem",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {item.score}
+                  </span>
                 </span>
-              </span>
-            ))}
-          </Col>
-        </Row>
+              ))}
+            </Col>
+          </Row>
 
-        <RubricAccordion
-          title="1-A Knowledge of Content"
-          accordCode={"1-A"}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          accordionTab={accordionTab}
-          setaccordionTab={setaccordionTab}
-          obsDetails={obsDetails}
-          role={user.role}
-          loader={loader}
-        />
-        <RubricAccordion
-          title="1-B Knowledge of Pedagogy"
-          accordCode={"1-B"}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          accordionTab={accordionTab}
-          setaccordionTab={setaccordionTab}
-          obsDetails={obsDetails}
-          role={user.role}
-          loader={loader}
-        />
-
-        <RubricAccordion
-          title="1-C Student Assessment"
-          accordCode={"1-C"}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          accordionTab={accordionTab}
-          setaccordionTab={setaccordionTab}
-          obsDetails={obsDetails}
-          role={user.role}
-          loader={loader}
-        />
-
-        <RubricAccordion
-          title="1-D Learning Environment"
-          accordCode={"1-D"}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          accordionTab={accordionTab}
-          setaccordionTab={setaccordionTab}
-          obsDetails={obsDetails}
-          role={user.role}
-          loader={loader}
-        />
-
-        <div className="d-flex align-items-center justify-content-between py-3">
-          <Applink
-            to={`${URL}/observations/detail-observation/${id}`}
-            backgroundColor={completeColor2}
-            text="Back"
+          <RubricAccordion
+            title="1-A Knowledge of Content"
+            accordCode={"1-A"}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            accordionTab={accordionTab}
+            setaccordionTab={setaccordionTab}
+            obsDetails={obsDetails}
+            role={user.role}
+          />
+          <RubricAccordion
+            title="1-B Knowledge of Pedagogy"
+            accordCode={"1-B"}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            accordionTab={accordionTab}
+            setaccordionTab={setaccordionTab}
+            obsDetails={obsDetails}
+            role={user.role}
           />
 
-          {user.role === "Observer" || user.role === "Faculty" ? (
-            <div>
-              {obsDetails?.meetings?.informedObservation?.status !==
-                "Completed" && (
-                <div className="d-flex align-items-center justify-content-between">
-                  <AccordButton
-                    text={loader ? "Submiting..." : "Submit Score"}
-                    backgroundColor={completeColor2}
-                    onClick={() => updateTotal()}
-                    loader={loader}
-                  />
-                  {user.role === "Observer" &&
-                    obsDetails?.meetings?.informedObservation?.facultyScore >
-                      0 &&
-                    obsDetails?.meetings?.informedObservation?.observerScore >
-                      0 && (
-                      <AccordButton
-                        text={loader ? "...." : "Done"}
-                        backgroundColor={completeColor}
-                        onClick={() => setOpenConfirm(!openConfirm)}
-                        loader={loader}
-                      />
-                    )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-      </Container>
+          <RubricAccordion
+            title="1-C Student Assessment"
+            accordCode={"1-C"}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            accordionTab={accordionTab}
+            setaccordionTab={setaccordionTab}
+            obsDetails={obsDetails}
+            role={user.role}
+          />
+
+          <RubricAccordion
+            title="1-D Learning Environment"
+            accordCode={"1-D"}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            accordionTab={accordionTab}
+            setaccordionTab={setaccordionTab}
+            obsDetails={obsDetails}
+            role={user.role}
+          />
+
+          <div className="d-flex align-items-center justify-content-between py-3">
+            <Applink
+              to={`${URL}/observations/detail-observation/${id}`}
+              backgroundColor={completeColor2}
+              text="Back"
+            />
+
+            {user.role === "Observer" || user.role === "Faculty" ? (
+              <div>
+                {obsDetails?.meetings?.informedObservation?.status !== // update after testing !==
+                  "Completed" && (
+                  <div className="d-flex align-items-center justify-content-between">
+                    <AccordButton
+                      text={loader ? <Loader /> : "Submit Score"}
+                      backgroundColor={completeColor2}
+                      onClick={() => updateTotal()}
+                      loader={loader}
+                    />
+                    {user.role === "Observer" &&
+                      obsDetails?.meetings?.informedObservation?.facultyScore >
+                        0 &&
+                      obsDetails?.meetings?.informedObservation?.observerScore >
+                        0 && (
+                        <AccordButton
+                          text={loader ? <Loader /> : "Done"}
+                          backgroundColor={completeColor}
+                          onClick={() => setOpenConfirm(!openConfirm)}
+                          loader={loader}
+                        />
+                      )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        </Container>
+      )}
+      {!obsDetails && <Loader />}
     </Fragment>
   );
 };
@@ -262,15 +267,23 @@ const RubricAccordion = ({
   accordionTab,
   setaccordionTab,
   role,
-  loader,
 }) => {
   const [accordionScore, setAccordionScore] = useState(0);
   const [subSections, setSubSections] = useState([]);
+  const [loader, setLoader] = useState(false);
 
   const updateAccordionscore = () => {
     let count = 0;
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+      if (subSections.length > 0 && subSections.length === 5) {
+        setIsOpen("");
+      }
+    }, 1000);
 
     if (subSections.length > 0 && subSections.length === 5) {
+      successes("Rubrics Point Saved!");
       subSections.map((item) => {
         if (item.code === accordCode) count += item.sc;
       });
@@ -299,6 +312,7 @@ const RubricAccordion = ({
       }
     } else {
       info("Please Select all Rubrics Point!");
+      // setLoader(false);
     }
   };
 
@@ -348,8 +362,8 @@ const RubricAccordion = ({
                       subSections={subSections}
                       setSubSections={setSubSections}
                       accordCode={accordCode}
-                      // fs={item.facultyScore}
-                      // os={item.observerScore}
+                      fs={item.facultyScore}
+                      os={item.observerScore}
                       role={role}
                     />
                   );
@@ -365,7 +379,7 @@ const RubricAccordion = ({
               >
                 <AccordButton
                   backgroundColor={completeColor2}
-                  text="Save Score"
+                  text={loader ? <Loader /> : "Save Score"}
                   onClick={() => updateAccordionscore()}
                   loader={loader}
                 />
@@ -388,11 +402,11 @@ const AccordionSubHeading = ({
   subSections,
   setSubSections,
   accordCode,
-  // fs,
-  // os,
+  fs,
+  os,
   role,
 }) => {
-  const [rubricSc, setRubricSc] = useState(0);
+  const [rubricSc, setRubricSc] = useState(role == "Faculty" ? fs : os);
   // const [scoreSelected, setScoreSelected] = useState([]);
 
   // useEffect(() => {
@@ -447,7 +461,7 @@ const AccordionSubHeading = ({
   const renderBreakpoints = () => {
     const breakpoints = [];
     let scoringDesc = [
-      "Non Demonstrating",
+      "Not Demonstrating",
       "Limiting",
       "Developing",
       "Applying",
@@ -480,26 +494,23 @@ const AccordionSubHeading = ({
     <div
       className="p-4"
       style={{
-        // fontStyle: "italic",
         fontWeight: "500",
-        // marginBottom: "1rem",
         borderBottom: "1px solid #ccc",
-        // background: "pink",
         marginBottom: "1rem",
         boxShadow: "0px 1px 2px #1e1e1e56",
       }}
       key={keys}
     >
-      <h5 className="mb-3">
+      <h5>
         {ind}. {title}
-        <span
+        {/* <span
           style={{
             fontWeight: "600",
             marginLeft: "0.4rem",
           }}
         >
           {rubricSc > 0 && `(${rubricSc})`}
-        </span>
+        </span> */}
       </h5>
       {/* <div className="d-flex align-items-center justify-content-end mb-2 mx-2">
         <small className="mx-2" style={{ fontSize: "0.9rem" }}>
@@ -511,6 +522,21 @@ const AccordionSubHeading = ({
           <span style={{ fontWeight: "800" }}> {os}</span>
         </small>
       </div> */}
+      <div className="d-flex align-items-center justify-content-end my-2">
+        <small
+          style={{
+            fontSize: "0.9rem",
+            backgroundColor: completeColor2,
+            color: "#fff",
+            padding: "0.1rem 2rem",
+            borderTopLeftRadius: "5px",
+            borderBottomLeftRadius: "5px",
+          }}
+        >
+          Rubric Score:
+          <span style={{ fontWeight: "800" }}> {rubricSc}</span>
+        </small>
+      </div>
 
       {role === "Faculty" || role === "Observer" ? (
         // <div className="d-flex align-items-center justify-content-between">

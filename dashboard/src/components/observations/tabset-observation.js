@@ -1,9 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import { Loader } from "../common/Loader";
 import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
-import { successes, errors, info, warning } from "../../constants/Toasters";
+import { successes, errors, info } from "../../constants/Toasters";
 import { useRef } from "react";
 import { completeColor2 } from "../colors";
 import { useNavigate } from "react-router-dom";
@@ -21,9 +22,18 @@ const TabsetObservation = () => {
 
   const toastId = useRef(null);
 
+  const filterOutFaculty = () => {
+    const faculty = usersandcourses?.users.filter(
+      (item) => item.role === "Faculty"
+    );
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    if (usersandcourses) {
+      filterOutFaculty();
+    }
+  }, [usersandcourses]);
 
   const onCreateObservation = () => {
     const obsDetail = {
@@ -61,29 +71,18 @@ const TabsetObservation = () => {
           errors(data.error);
         } else {
           toast.dismiss(toastId.current);
-          setCreateObs({
-            ...createObs,
-            loader: false,
-          });
-
-          if (data.existed.length > 0) {
-            data.existed.map((item) => warning(item.message));
-            if (data.existed.length < faculties.length) {
-              successes("Other Observation(s) initiated successfully!");
-            }
-          } else {
-            successes("Observation(s) initiated successfully!");
-            setTimeout(() => {
-              setCreateObs({
-                ...createObs,
-                facultyId: "Select",
-                observerId: "Select",
-                semester: "Select",
-                faculties: [],
-              });
-              nav("/observations/list-observation");
-            }, 2500);
-          }
+          successes("Observation(s) initiated successfully!");
+          setTimeout(() => {
+            setCreateObs({
+              ...createObs,
+              facultyId: "Select",
+              observerId: "Select",
+              semester: "Select",
+              faculties: [],
+              loader: false,
+            });
+            nav("/observations/list-observation");
+          }, 2500);
         }
       } catch (error) {
         toast.dismiss(toastId.current);
@@ -161,6 +160,7 @@ const TabsetObservation = () => {
 
   return (
     <Fragment>
+      {/* {["Hello", "World"].map((item) => warning(item))} */}
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
           <Tab className="nav-link">Provide Observation Details</Tab>
@@ -226,7 +226,7 @@ const TabsetObservation = () => {
             {faculties.length > 0 && (
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">Selected Faculty</Label>
-                <div className="col-xl-8 col-md-7">
+                <div className="col-xl-8 col-md-7 d-flex flex-wrap">
                   {usersandcourses?.users.map((item) =>
                     item.role === "Faculty" && faculties.includes(item.id) ? (
                       <span
@@ -234,6 +234,7 @@ const TabsetObservation = () => {
                           backgroundColor: completeColor2,
                           padding: "0.2rem 0.6rem",
                           marginRight: "0.3rem",
+                          marginBottom: "0.3rem",
                           borderRadius: "5px",
                           color: "white",
                           boxShadow: "1px 1px 1px #1e1e1e54",
@@ -299,7 +300,7 @@ const TabsetObservation = () => {
                 >
                   <option value="Select">Select</option>
                   <option value="Spring">Spring</option>
-                  {/* <option value="Summer">Summer</option> */}
+                  <option value="Summer">Summer</option>
                   <option value="Fall">Fall</option>
                 </Input>
               </div>
@@ -308,19 +309,15 @@ const TabsetObservation = () => {
         </TabPanel>
       </Tabs>
       <div className="pull-right">
-        {loader ? (
-          <Button type="button" color="primary" style={{ cursor: "progress" }}>
-            Processing...
-          </Button>
-        ) : (
-          <Button
-            onClick={() => onCreateObservation()}
-            type="button"
-            color="primary"
-          >
-            Initiate
-          </Button>
-        )}
+        <Button
+          onClick={() => onCreateObservation()}
+          type="button"
+          color="primary"
+          disabled={loader}
+          style={{ cursor: loader && "progress" }}
+        >
+          {loader ? <Loader /> : "Initiate"}
+        </Button>
       </div>
     </Fragment>
   );

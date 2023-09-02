@@ -18,7 +18,8 @@ import {
   Button,
 } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
-import { Check, CheckCircle, Eye, Filter, Loader } from "react-feather";
+import { Check, CheckCircle, Eye, Filter } from "react-feather";
+import { Loader } from "../common/Loader";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 import { dateFormater } from "../DateFormater";
 import { fetchUserData } from "../Endpoints";
@@ -28,13 +29,17 @@ const URL = process.env.PUBLIC_URL;
 const List_observation = () => {
   const [{ user, userData }, dispatch] = useStateValue();
   const navigate = useNavigate();
-  const [observationData, setObservationData] = useState(
-    userData?.observations
-  );
+  const [observationData, setObservationData] = useState("");
   useEffect(() => {
     fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
+
+  setTimeout(() => {
+    if (!observationData) {
+      setObservationData(userData?.observations);
+    }
+  }, 2000);
 
   const [openFilter, setOpenFilter] = useState(false);
   const [obsFilter, setObsFilter] = useState({
@@ -46,8 +51,6 @@ const List_observation = () => {
     start: "select",
   });
   const { course, semester, faculty, observer, status, start } = obsFilter;
-
-  // console.log(userData?.observations);
 
   const onSelectCourse = (courseId) => {
     setObsFilter({
@@ -165,29 +168,31 @@ const List_observation = () => {
   return (
     <Fragment>
       <Breadcrumb title="Observation List" parent="Observations" />
-      <Container fluid={true}>
-        <Row>
-          <Col xl="12 xl-100">
-            <Card>
-              {user.role === "Head_of_Department" && (
-                <CardHeader className="d-flex align-items-center justify-content-end">
-                  <Link
-                    to="/observations/create-observation"
-                    className="btn btn-primary"
-                  >
-                    Initiate Observation
-                  </Link>
-                  <Filter
-                    color={completeColor}
-                    className="mx-3"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    onClick={() => setOpenFilter(!openFilter)}
-                  />
-                </CardHeader>
-              )}
-              {userData && (
+      {!observationData && <Loader />}
+      {observationData && (
+        <Container fluid={true}>
+          <Row>
+            <Col xl="12 xl-100">
+              <Card>
+                {user.role === "Head_of_Department" && (
+                  <CardHeader className="d-flex align-items-center justify-content-end">
+                    <Link
+                      to="/observations/create-observation"
+                      className="btn btn-primary"
+                    >
+                      Initiate Observation
+                    </Link>
+                    <Filter
+                      color={completeColor}
+                      className="mx-3"
+                      style={{
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setOpenFilter(!openFilter)}
+                    />
+                  </CardHeader>
+                )}
+
                 <CardBody>
                   {openFilter && (
                     <div className="mb-4">
@@ -368,10 +373,10 @@ const List_observation = () => {
                                 ? "Informed Observation"
                                 : item.meetings?.postObservation?.status ===
                                   "Ongoing"
-                                ? "Post-Informed Observation"
+                                ? "Post Observation"
                                 : item.meetings?.postObservation?.status ===
                                   "Scheduled"
-                                ? "Post-Informed Observation"
+                                ? "Post Observation"
                                 : item.meetings?.uninformedObservation
                                     ?.status === "Ongoing"
                                 ? "Uninformed Observation"
@@ -468,14 +473,11 @@ const List_observation = () => {
                     </Table>
                   </div>
                 </CardBody>
-              )}
-              {!userData && (
-                <Loader style={{ display: "block", margin: "0.5rem auto" }} />
-              )}
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      )}
     </Fragment>
   );
 };
