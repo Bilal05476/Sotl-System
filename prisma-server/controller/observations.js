@@ -556,25 +556,24 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 // @access Private (only faculty and observer update scoring)
 export const informedObsCycle = asyncHandler(async (req, res) => {
   const { informedId, rubricsFinal, role, status } = req.body;
-
-  const Find = async (id) => {
-    let findInformed = await prisma.informed.findFirst({
-      where: { id },
-      select: {
-        rubrics: true,
-        facultyScore: role === "Faculty" && true,
-        observerScore: role === "Observer" && true,
-      },
-    });
-    return findInformed;
-  };
+  // const Find = async (id) => {
+  //   let findInformed = await prisma.informed.findFirst({
+  //     where: { id },
+  //     select: {
+  //       rubrics: true,
+  //       facultyScore: role === "Faculty" && true,
+  //       observerScore: role === "Observer" && true,
+  //     },
+  //   });
+  //   return findInformed;
+  // };
 
   // res.status(200).json({ sc: scoreByRole });
-  let getOnlyIds = [];
-  let getOnlyScores = [];
+  // let getOnlyIds = [];
+  let getScores = 0;
   if (rubricsFinal) {
-    rubricsFinal.map((item) => getOnlyIds.push(item.rid));
-    rubricsFinal.map((item) => getOnlyScores.push(item.score));
+    // rubricsFinal.map((item) => getOnlyIds.push(item.rid));
+    rubricsFinal.map((item) => (getScores += item.score));
   }
 
   // return;
@@ -592,27 +591,27 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
         });
       });
 
-      let facultyScore = 0;
+      // let facultyScore = 0;
 
-      let find = await Find();
-      if (find) {
-        // which are not included in coming response
-        const notIncluded = find.rubrics.filter(
-          (item) => !getOnlyIds.includes(item.id)
-        );
-        notIncluded.map((item) => (facultyScore += item.facultyScore));
-        getOnlyScores.map((item) => (facultyScore += item));
+      // let find = await Find();
+      // if (find) {
+      // which are not included in coming response
+      // const notIncluded = find.rubrics.filter(
+      //   (item) => !getOnlyIds.includes(item.id)
+      // );
+      // notIncluded.map((item) => (facultyScore += item.facultyScore));
+      // getOnlyScores.map((item) => (facultyScore += item));
 
-        await prisma.informed.update({
-          where: {
-            id: informedId,
-          },
-          data: {
-            facultyScore,
-            // status: "Draft",
-          },
-        });
-      }
+      await prisma.informed.update({
+        where: {
+          id: informedId,
+        },
+        data: {
+          facultyScore: getScores,
+          // status: "Draft",
+        },
+      });
+      // }
 
       res.status(200).json({
         message: "Rubrics Score Successfully Submitted!",
@@ -636,28 +635,28 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
         });
       });
 
-      let observerScore = 0;
+      // let observerScore = 0;
 
-      let find = await Find(informedId);
+      // let find = await Find(informedId);
 
-      if (find) {
-        // which are not included in coming response
-        const notIncluded = find.rubrics.filter(
-          (item) => !getOnlyIds.includes(item.id)
-        );
-        notIncluded.map((item) => (observerScore += item.observerScore));
-        getOnlyScores.map((item) => (observerScore += item));
+      // if (find) {
+      // which are not included in coming response
+      // const notIncluded = find.rubrics.filter(
+      //   (item) => !getOnlyIds.includes(item.id)
+      // );
+      // notIncluded.map((item) => (observerScore += item.observerScore));
+      // getOnlyScores.map((item) => (observerScore += item));
 
-        await prisma.informed.update({
-          where: {
-            id: informedId,
-          },
-          data: {
-            observerScore,
-            // status: "Draft",
-          },
-        });
-      }
+      await prisma.informed.update({
+        where: {
+          id: informedId,
+        },
+        data: {
+          observerScore: getScores,
+          // status: "Draft",
+        },
+      });
+      // }
 
       res.status(200).json({
         message: "Rubrics Score Successfully Submitted!",
