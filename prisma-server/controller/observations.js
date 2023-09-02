@@ -77,8 +77,9 @@ export const initiate = asyncHandler(async (req, res) => {
         ],
       },
     });
-    if (existed) continue;
-    else
+    if (existed) {
+      continue;
+    } else {
       initiateObs.push(
         await prisma.observations.create({
           data: observationsToCreate[f],
@@ -98,33 +99,32 @@ export const initiate = asyncHandler(async (req, res) => {
           },
         })
       );
+    }
   }
   // }
 
-  // different faculties
-  initiateObs?.map((item) => receiversEmail.push(item.faculty.email));
-  initiateObs?.map((item) => receiversName.push(item.faculty.name));
+  // send emails to observer and faculty if obs initiated
+  if (initiateObs.length > 0) {
+    // different faculties
+    initiateObs?.map((item) => receiversEmail.push(item.faculty.email));
+    initiateObs?.map((item) => receiversName.push(item.faculty.name));
+    // same observer
+    receiversEmail.push(initiateObs[0].observer.email);
+    receiversName.push(initiateObs[0].observer.name);
 
-  // same observer
-  receiversEmail.push(initiateObs[0].observer.email);
-  receiversName.push(initiateObs[0].observer.name);
-
-  // console.log(receiversEmail, receiversName);
-
-  // smtp email transporter
-  const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    auth: {
-      user: process.env.USER,
-      pass: process.env.PASSWORD,
-    },
-  });
-  // async..await is not allowed in global scope, must use a wrapper
-  async function emailSender(em) {
-    // send mail with defined transport object
-
-    const emailTemplate = `Dear ${receiversName[em]}<br /><br />
+    // smtp email transporter
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      auth: {
+        user: process.env.USER,
+        pass: process.env.PASSWORD,
+      },
+    });
+    // async..await is not allowed in global scope, must use a wrapper
+    async function emailSender(em) {
+      // send mail with defined transport object
+      const emailTemplate = `Dear ${receiversName[em]}<br /><br />
       You received this email because your new observation cycle is initiated by your head of department.<br /><br />
       Visit: <a href="https://sotlsystem.tech" target="blank"> SOTL System </a><br />
       Your email: ${receiversEmail[em]}<br />
@@ -133,24 +133,24 @@ export const initiate = asyncHandler(async (req, res) => {
       Kind Regards,<br />
       SOTL System Team`;
 
-    const info = await transporter.sendMail({
-      from: '"SOTL System " <info@sotlsystem.tech>', // sender address
-      to: receiversEmail[em], // list of receivers
-      subject:
-        "Your new observation cycle initiated, visit SOTL system to find out more details!", // Subject line
-      text: emailTemplate, // plain text body
-      html: emailTemplate, // html body
-    });
-    console.log("Message sent: %s", info.messageId);
-  }
+      const info = await transporter.sendMail({
+        from: '"SOTL System " <info@sotlsystem.tech>', // sender address
+        to: receiversEmail[em], // list of receivers
+        subject:
+          "Your new observation cycle initiated, visit SOTL system to find out more details!", // Subject line
+        text: emailTemplate, // plain text body
+        html: emailTemplate, // html body
+      });
+      console.log("Message sent: %s", info.messageId);
+    }
 
-  // if (observationsToCreate.length > 0) {
-  for (let em = 0; em < receiversEmail.length; em++) {
-    emailSender(em);
+    for (let em = 0; em < receiversEmail.length; em++) {
+      emailSender(em);
+    }
+    res.status(200).json({ observations: initiateObs });
+  } else {
+    res.status(200).json({ observations: null });
   }
-  // }
-
-  res.status(200).json({ observations: initiateObs });
 });
 
 // @desc   Get all observations
