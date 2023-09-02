@@ -58,29 +58,48 @@ export const initiate = asyncHandler(async (req, res) => {
       semester,
     }));
 
-  // let initiateObs = null;
+  let initiateObs = [];
+  // res.status(200).json(observationsToCreate);
+  // return;
   // if (observationsToCreate.length > 0) {
-  let initiateObs = await prisma.observations.createMany({
-    data: observationsToCreate,
-    skipDuplicates: true,
-    // include: {
-    //   faculty: {
-    //     select: {
-    //       email: true,
-    //       name: true,
-    //     },
-    //   },
-    //   observer: {
-    //     select: {
-    //       email: true,
-    //       name: true,
-    //     },
-    //   },
-    // },
-  });
+  for (let f = 0; f < facultyIds.length; f++) {
+    const existed = await prisma.observations.findFirst({
+      where: {
+        AND: [
+          {
+            observationStatus: {
+              in: ["Pending", "Ongoing"],
+            },
+          },
+          {
+            facultyId: facultyIds[f],
+          },
+        ],
+      },
+    });
+    if (existed) continue;
+    else
+      initiateObs.push(
+        await prisma.observations.create({
+          data: observationsToCreate[f],
+          include: {
+            faculty: {
+              select: {
+                email: true,
+                name: true,
+              },
+            },
+            observer: {
+              select: {
+                email: true,
+                name: true,
+              },
+            },
+          },
+        })
+      );
+  }
   // }
-  res.status(200).json(initiateObs);
-  return;
 
   // different faculties
   initiateObs?.map((item) => receiversEmail.push(item.faculty.email));
@@ -90,7 +109,7 @@ export const initiate = asyncHandler(async (req, res) => {
   receiversEmail.push(initiateObs[0].observer.email);
   receiversName.push(initiateObs[0].observer.name);
 
-  console.log(receiversEmail, receiversName);
+  // console.log(receiversEmail, receiversName);
 
   // smtp email transporter
   const transporter = nodemailer.createTransport({

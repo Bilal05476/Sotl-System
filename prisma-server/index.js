@@ -78,7 +78,13 @@ app.listen(port, () => {
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 // async function main() {
-// console.log(await prisma.artifact.findMany({}));
+//   console.log(
+//     await prisma.observations.delete({
+//       where: {
+//         id: 28,
+//       },
+//     })
+//   );
 // }
 // main();
 
