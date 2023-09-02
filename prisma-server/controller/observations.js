@@ -16,41 +16,41 @@ export const initiate = asyncHandler(async (req, res) => {
   let receiversName = [];
   // let receiversPassword = [];
 
-  const existedObservation = await prisma.observations.findMany({
-    where: {
-      AND: [
-        {
-          observationStatus: {
-            in: ["Pending", "Ongoing"],
-          },
-        },
-        {
-          facultyId: {
-            in: facultyIds,
-          },
-        },
-      ],
-    },
-    select: {
-      observationStatus: true,
-      course: {
-        select: {
-          name: true,
-        },
-      },
-      faculty: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-  });
+  // const existedObservation = await prisma.observations.findMany({
+  //   where: {
+  //     AND: [
+  //       {
+  //         observationStatus: {
+  //           in: ["Pending", "Ongoing"],
+  //         },
+  //       },
+  //       {
+  //         facultyId: {
+  //           in: facultyIds,
+  //         },
+  //       },
+  //     ],
+  //   },
+  //   select: {
+  //     observationStatus: true,
+  //     course: {
+  //       select: {
+  //         name: true,
+  //       },
+  //     },
+  //     faculty: {
+  //       select: {
+  //         id: true,
+  //         name: true,
+  //       },
+  //     },
+  //   },
+  // });
 
-  let existedIds = existedObservation.map((item) => item.faculty.id);
+  // let existedIds = existedObservation.map((item) => item.faculty.id);
 
   const observationsToCreate = facultyIds
-    .filter((facultyId) => !existedIds.includes(facultyId))
+    // .filter((facultyId) => !existedIds.includes(facultyId))
     .map((facultyId) => ({
       facultyId,
       observerId,
@@ -58,46 +58,39 @@ export const initiate = asyncHandler(async (req, res) => {
       semester,
     }));
 
-  let initiateObs = null;
-  if (observationsToCreate.length > 0) {
-    initiateObs = await prisma.observations.createMany({
-      data: observationsToCreate,
-      include: {
-        faculty: {
-          select: {
-            email: true,
-            name: true,
-          },
-        },
-        observer: {
-          select: {
-            email: true,
-            name: true,
-          },
-        },
-      },
-    });
-  }
+  // let initiateObs = null;
+  // if (observationsToCreate.length > 0) {
+  let initiateObs = await prisma.observations.createMany({
+    data: observationsToCreate,
+    skipDuplicates: true,
+    // include: {
+    //   faculty: {
+    //     select: {
+    //       email: true,
+    //       name: true,
+    //     },
+    //   },
+    //   observer: {
+    //     select: {
+    //       email: true,
+    //       name: true,
+    //     },
+    //   },
+    // },
+  });
+  // }
+  res.status(200).json(initiateObs);
+  return;
 
+  // different faculties
   initiateObs?.map((item) => receiversEmail.push(item.faculty.email));
   initiateObs?.map((item) => receiversName.push(item.faculty.name));
-  // initiateObs?.map((item) => receiversPassword.push(item.faculty.password));
 
-  initiateObs?.map((item) => {
-    if (!receiversEmail.includes(item.observer.email)) {
-      receiversEmail.push(item.observer.email);
-    }
-  });
-  initiateObs?.map((item) => {
-    if (!receiversName.includes(item.observer.name)) {
-      receiversName.push(item.observer.name);
-    }
-  });
-  // initiateObs?.map((item) => {
-  //   if (!receiversPassword.includes(item.observer.password)) {
-  //     receiversPassword.push(item.observer.password);
-  //   }
-  // });
+  // same observer
+  receiversEmail.push(initiateObs[0].observer.email);
+  receiversName.push(initiateObs[0].observer.name);
+
+  console.log(receiversEmail, receiversName);
 
   // smtp email transporter
   const transporter = nodemailer.createTransport({
@@ -132,15 +125,13 @@ export const initiate = asyncHandler(async (req, res) => {
     console.log("Message sent: %s", info.messageId);
   }
 
-  if (observationsToCreate.length > 0) {
-    for (let em = 0; em < receiversEmail.length; em++) {
-      emailSender(em);
-    }
+  // if (observationsToCreate.length > 0) {
+  for (let em = 0; em < receiversEmail.length; em++) {
+    emailSender(em);
   }
+  // }
 
-  res
-    .status(200)
-    .json({ observations: initiateObs, existed: existedObservation });
+  res.status(200).json({ observations: initiateObs });
 });
 
 // @desc   Get all observations

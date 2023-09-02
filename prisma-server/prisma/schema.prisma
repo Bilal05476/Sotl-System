@@ -32,7 +32,7 @@ model User {
     hodObs              Observations[]  @relation("Hod")
     observerObs         Observations[]  @relation("Observer")
     // For Uninformed Observation (Observer is different)
-    uninformedObs       Uninformed[]    @relation("Observer")
+    // uninformedObs       Uninformed[]    @relation("Observer")
     //courses
     courseSlots         CourseSlots[]
     // observerCourses  Courses[]      @relation("Observer")
@@ -165,13 +165,12 @@ model Artifact {
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation
 model Uninformed {
-    id         Int      @id @default(autoincrement()) // auto-inc
-    status     Status   @default(Ongoing)
-    meeting    Meetings @relation(fields: [meetingId], references: [id])
-    meetingId  Int      @unique
-    observer   User     @relation("Observer", fields: [observerId], references: [id])
-    observerId Int
-    rubrics    Rubric[]
+    id        Int      @id @default(autoincrement()) // auto-inc
+    status    Status   @default(Ongoing)
+    meeting   Meetings @relation(fields: [meetingId], references: [id])
+    meetingId Int      @unique
+
+    rubrics Rubric[]
 }
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation

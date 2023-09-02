@@ -4,7 +4,7 @@ import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import { Loader } from "../common/Loader";
 import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
-import { successes, errors, info } from "../../constants/Toasters";
+import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 import { completeColor2 } from "../colors";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 const TabsetObservation = () => {
   const nav = useNavigate();
   const [{ user, usersandcourses }] = useStateValue();
+  const [availableFaculty, setAvailableFaculty] = useState([]);
   const [createObs, setCreateObs] = useState({
     observerId: "Select",
     semester: "Select",
@@ -23,9 +24,12 @@ const TabsetObservation = () => {
   const toastId = useRef(null);
 
   const filterOutFaculty = () => {
+    // find faculty with not ongoing or pending observation
     const faculty = usersandcourses?.users.filter(
-      (item) => item.role === "Faculty"
+      (item) => item.role === "Faculty" && item.facultyObs.length === 0
     );
+
+    setAvailableFaculty(faculty);
   };
 
   useEffect(() => {
@@ -160,7 +164,6 @@ const TabsetObservation = () => {
 
   return (
     <Fragment>
-      {/* {["Hello", "World"].map((item) => warning(item))} */}
       <Tabs>
         <TabList className="nav nav-tabs tab-coupon">
           <Tab className="nav-link">Provide Observation Details</Tab>
@@ -199,7 +202,7 @@ const TabsetObservation = () => {
             </FormGroup>
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
-                <span>*</span> Faculty
+                <span>*</span> Faculty (one atleast)
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input
@@ -211,14 +214,18 @@ const TabsetObservation = () => {
                   onChange={(e) => onSelectFaculty(e.target.value)}
                 >
                   <option value="Select">Select</option>
-                  {usersandcourses?.users.map((item) =>
-                    item.role === "Faculty" && !faculties.includes(item.id) ? (
-                      <option key={item.id} value={item.id}>
-                        {item.name} ({item.id})
-                      </option>
-                    ) : (
-                      ""
-                    )
+                  {availableFaculty.map(
+                    (item) =>
+                      !faculties.includes(item.id) && (
+                        <option key={item.id} value={item.id}>
+                          {item.name} ({item.id})
+                        </option>
+                      )
+                  )}
+                  {availableFaculty.length === 0 && (
+                    <option disabled>
+                      No available faculty for observation at the moment!
+                    </option>
                   )}
                 </Input>
               </div>
@@ -227,28 +234,27 @@ const TabsetObservation = () => {
               <FormGroup className="row">
                 <Label className="col-xl-3 col-md-4">Selected Faculty</Label>
                 <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                  {usersandcourses?.users.map((item) =>
-                    item.role === "Faculty" && faculties.includes(item.id) ? (
-                      <span
-                        style={{
-                          backgroundColor: completeColor2,
-                          padding: "0.2rem 0.6rem",
-                          marginRight: "0.3rem",
-                          marginBottom: "0.3rem",
-                          borderRadius: "5px",
-                          color: "white",
-                          boxShadow: "1px 1px 1px #1e1e1e54",
-                          cursor: "pointer",
-                        }}
-                        key={item.id}
-                        value={item.id}
-                        onClick={() => onSelectFaculty(item.id)}
-                      >
-                        {item.name} ({item.id})
-                      </span>
-                    ) : (
-                      ""
-                    )
+                  {availableFaculty.map(
+                    (item) =>
+                      faculties.includes(item.id) && (
+                        <span
+                          style={{
+                            backgroundColor: completeColor2,
+                            padding: "0.2rem 0.6rem",
+                            marginRight: "0.3rem",
+                            marginBottom: "0.3rem",
+                            borderRadius: "5px",
+                            color: "white",
+                            boxShadow: "1px 1px 1px #1e1e1e54",
+                            cursor: "pointer",
+                          }}
+                          key={item.id}
+                          value={item.id}
+                          onClick={() => onSelectFaculty(item.id)}
+                        >
+                          {item.name} ({item.id})
+                        </span>
+                      )
                   )}
                 </div>
               </FormGroup>
