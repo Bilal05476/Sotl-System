@@ -406,7 +406,7 @@ const AccordionSubHeading = ({
   os,
   role,
 }) => {
-  const [rubricSc, setRubricSc] = useState(role == "Faculty" ? fs : os);
+  const [rubricSc, setRubricSc] = useState(role === "Faculty" ? fs : os);
   // const [scoreSelected, setScoreSelected] = useState([]);
 
   // useEffect(() => {
