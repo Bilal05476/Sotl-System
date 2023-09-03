@@ -14,7 +14,7 @@ const TabsetEditProfile = () => {
     email: user?.email,
     role: user?.role.replaceAll("_", " "),
     campus: user?.campus?.replaceAll("_", " "),
-    department: user?.department.name,
+    department: user?.department?.name,
     dateOfBirth: user?.dateOfBirth ? user?.dateOfBirth : "",
     designation: user?.designation ? user?.designation : "",
     institute: user?.institute ? user?.institute : "",
@@ -42,7 +42,6 @@ const TabsetEditProfile = () => {
 
   const onUpdateUser = () => {
     const userDetail = {
-      // avatar: avatar ? avatar : null,
       dateOfBirth: dateOfBirth ? dateOfBirth : null,
       designation: designation ? designation : null,
       institute: institute ? institute : null,
@@ -60,7 +59,6 @@ const TabsetEditProfile = () => {
           body: JSON.stringify(userDetail),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
-            // Authorization: `Bearer ${user.token}`,
           },
         }
       );
@@ -70,7 +68,7 @@ const TabsetEditProfile = () => {
         errors(data.error);
       } else {
         toast.dismiss(toastId.current);
-        successes("Profile updated successfully");
+        successes("Profile Updated Successfully!");
         dispatch({
           type: "SET_USER",
           payload: data,
@@ -92,7 +90,9 @@ const TabsetEditProfile = () => {
             <FormPoolReadOnly value={fullname} label="Full Name" />
             <FormPoolReadOnly value={email} label="Email" />
             <FormPoolReadOnly value={campus} label="Campus" />
-            <FormPoolReadOnly value={department} label="Department" />
+            {user.role !== "Super_Admin" && (
+              <FormPoolReadOnly value={department} label="Department" />
+            )}
             <FormPoolReadOnly value={role} label="Role" />
             <FormPool
               value={phone}

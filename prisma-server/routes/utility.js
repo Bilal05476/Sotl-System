@@ -2,6 +2,7 @@ import express from "express";
 const utilityRoutes = express.Router();
 import {
   // changeDate,
+  getSuperData,
   getDepartments,
   getDataForHod,
 } from "../controller/utility.js";
@@ -13,6 +14,7 @@ import {
 import { uploadArtifacts } from "../controller/upload.js";
 
 import multer from "multer";
+import { protectSystemData } from "../middleware/protectRoutes.js";
 
 // for upload media files
 const artifactsStorage = multer.memoryStorage();
@@ -34,4 +36,7 @@ utilityRoutes.post(
   uploadArtifacts
 );
 
+// get data for super_admin
+// must be protected with middleWare
+utilityRoutes.route("/data/super-data").get(protectSystemData, getSuperData);
 export default utilityRoutes;

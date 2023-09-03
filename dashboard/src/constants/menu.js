@@ -20,7 +20,17 @@
 //     ]
 // },
 
-import { Home, Clipboard, UserPlus, User, Book, BookOpen } from "react-feather";
+import {
+  Home,
+  Clipboard,
+  UserPlus,
+  User,
+  Book,
+  BookOpen,
+  List,
+  FileText,
+  Mail,
+} from "react-feather";
 
 export const MENUITEMS = [
   {
@@ -68,10 +78,50 @@ export const MENUITEMS = [
         title: "Faculty Members",
         type: "link",
       },
-      { path: "/users/create-user", title: "Create User", type: "link" },
     ],
   },
 
+  {
+    title: "Academic Plans",
+    icon: FileText,
+    type: "sub",
+    active: false,
+    children: [
+      {
+        path: "/plan/teaching-plan",
+        title: "Teaching Plan",
+        type: "link",
+      },
+      {
+        path: "/plan/reflection-plan",
+        title: "Reflection Plan",
+        type: "link",
+      },
+    ],
+  },
+  {
+    title: "Email Templates",
+    icon: Mail,
+    type: "sub",
+    active: false,
+    children: [
+      {
+        path: "/email/new-user",
+        title: "New User",
+        type: "link",
+      },
+      {
+        path: "/email/initiate-observation",
+        title: "Initiate Observation",
+        type: "link",
+      },
+      {
+        path: "/email/update-observation",
+        title: "Update Observation",
+        type: "link",
+      },
+    ],
+  },
   {
     title: "Profile",
     icon: User,
@@ -226,30 +276,6 @@ export const OBSERVERMENU = [
     badgeType: "primary",
     active: false,
   },
-
-  // {
-  //   title: "Templates",
-  //   icon: FileText,
-  //   type: "sub",
-  //   active: false,
-  //   children: [
-  //     {
-  //       path: "/templates/teaching-plan",
-  //       title: "Teaching Plan",
-  //       type: "link",
-  //     },
-  //     {
-  //       path: "/templates/reflection-plan",
-  //       title: "Reflection Plan",
-  //       type: "link",
-  //     },
-  //     {
-  //       path: "/templates/artifacts",
-  //       title: "Artifacts",
-  //       type: "link",
-  //     },
-  //   ],
-  // },
 
   {
     title: "Profile",

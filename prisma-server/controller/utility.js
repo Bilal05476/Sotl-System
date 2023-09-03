@@ -90,6 +90,48 @@ export const getDepartments = asyncHandler(async (req, res) => {
       });
 });
 
+// @desc   Get system data for super admin
+// @route  GET api/data/super-data
+// @access Private (Super_Admin)
+export const getSuperData = asyncHandler(async (req, res) => {
+  // get users
+  const getUsers = await prisma.user.findMany({});
+  // get observations
+  const getObservations = await prisma.observations.findMany({
+    include: {
+      obsRequest: true,
+      faculty: true,
+      observer: true,
+      hod: true,
+      course: true,
+      feedbacks: true,
+      meetings: {
+        include: {
+          informedObservation: true,
+          postObservation: true,
+          uninformedObservation: true,
+          professionalDPlan: true,
+        },
+      },
+    },
+  });
+  // get departments
+  const getDepartments = await prisma.departments.findMany({});
+  // get courses
+  const getCourses = await prisma.courses.findMany({
+    include: {
+      slots: true,
+    },
+  });
+
+  res.status(200).json({
+    users: getUsers,
+    department: getDepartments,
+    observations: getObservations,
+    courses: getCourses,
+  });
+});
+
 // @desc   Dummy Route to change observations createdAt
 // @route  PUT api/updateobs/
 // @access Private (Parent Role Like (Admin, Campus Director, HOd))

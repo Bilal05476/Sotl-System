@@ -86,3 +86,43 @@ export const protectInitiateObs = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+export const protectSystemData = asyncHandler(async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      // Get Token from header
+      token = req.headers.authorization.split(" ")[1];
+
+      //verify token
+      const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+
+      // get user from database
+      const user = await prisma.user.findFirst({
+        where: {
+          id: decoded.id,
+        },
+      });
+
+      // only super_admin have access to system data
+      if (user.role === "Super_Admin") {
+        next();
+      } else {
+        res.status(400).json({
+          error: "You are not authorized person!",
+        });
+      }
+    } catch (err) {
+      res.status(400).json({ error: "Not authorized, invalid token!" });
+    }
+  }
+  if (!token) {
+    res.status(401).json({
+      error:
+        "No authorized, no token, please provide user token in request header!",
+    });
+  }
+});

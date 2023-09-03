@@ -5,6 +5,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
+export async function fetchSotlData(dispatch) {
+  try {
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 export async function fetchUserData(id, dispatch) {
   try {
     const res = await fetch(`${BASEURL}/user/${id}`, {
