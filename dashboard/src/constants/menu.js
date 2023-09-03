@@ -27,7 +27,6 @@ import {
   User,
   Book,
   BookOpen,
-  List,
   FileText,
   Mail,
 } from "react-feather";

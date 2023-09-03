@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useRef } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
-import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
+import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 // import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
-import { successes, errors, info, warning } from "../../constants/Toasters";
+import { successes, errors, info } from "../../constants/Toasters";
 // import FileBase from "react-file-base64";
 const Tabset_Reset_Password = () => {
   const [{ user }] = useStateValue();

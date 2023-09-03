@@ -34,7 +34,6 @@ const List_courses = () => {
     } else fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
-  console.log(userData);
 
   const selectCourse = (slots) => {
     setViewSlots(slots);

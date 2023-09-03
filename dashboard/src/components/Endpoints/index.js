@@ -1,5 +1,5 @@
 // import { toast } from "react-toastify";
-import { successes, errors, info } from "../../constants/Toasters";
+import { successes, errors } from "../../constants/Toasters";
 // import { useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";

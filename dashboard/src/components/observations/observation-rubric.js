@@ -6,16 +6,7 @@ import { ChevronsDown, ChevronsUp } from "react-feather";
 import { Loader } from "../common/Loader";
 import { useParams } from "react-router-dom";
 
-import {
-  blue1,
-  blue2,
-  blue3,
-  blue4,
-  blue5,
-  completeColor,
-  completeColor2,
-  pendingColor,
-} from "../colors";
+import { completeColor, completeColor2 } from "../colors";
 import { Applink, AccordButton } from "../applink";
 import { info, successes } from "../../constants/Toasters";
 import { doneScore, fetchObservation, submitScore } from "../Endpoints";
@@ -127,7 +118,7 @@ const Observation_rubric = () => {
                   text: "SCORE BY FACULTY",
                   score: `${facultySc?.toFixed(1)} / 80.0`,
                 },
-                {
+                user.role !== "Faculty" && {
                   color: completeColor2,
                   text: "SCORE BY OBSERVER",
                   score: `${observerSc?.toFixed(1)} / 80.0`,

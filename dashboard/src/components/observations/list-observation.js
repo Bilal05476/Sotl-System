@@ -11,14 +11,12 @@ import {
   Table,
   Col,
   Row,
-  Label,
   Form,
   FormGroup,
   Input,
-  Button,
 } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
-import { Check, CheckCircle, Eye, Filter } from "react-feather";
+import { CheckCircle, Filter } from "react-feather";
 import { Loader } from "../common/Loader";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 import { dateFormater } from "../DateFormater";

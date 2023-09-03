@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 //images import
-import avatar from "../../../assets/images/dashboard/avatar.png";
+// import avatar from "../../../assets/images/dashboard/avatar.png";
 import { useStateValue } from "../../../StateProvider";
 import { info } from "../../../constants/Toasters";
 import { User } from "react-feather";
