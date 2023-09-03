@@ -5,8 +5,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
-export async function fetchSotlData(dispatch) {
+export async function fetchSotlData(dispatch, token) {
   try {
+    const res = await fetch(`${BASEURL}/data/super-data`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    dispatch({
+      type: "SET_USER_DATA",
+      payload: data,
+    });
   } catch (err) {
     console.log(err.message);
   }

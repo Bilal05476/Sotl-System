@@ -121,6 +121,7 @@ export const getSuperData = asyncHandler(async (req, res) => {
   const getCourses = await prisma.courses.findMany({
     include: {
       slots: true,
+      department: true,
     },
   });
 

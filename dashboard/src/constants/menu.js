@@ -50,6 +50,14 @@ export const MENUITEMS = [
     badgeType: "primary",
     active: false,
   },
+  {
+    path: "/courses/list-courses",
+    title: "Courses",
+    icon: Book,
+    type: "link",
+    badgeType: "primary",
+    active: false,
+  },
 
   {
     title: "Users",

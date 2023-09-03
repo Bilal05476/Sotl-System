@@ -36,11 +36,10 @@ import Createobservation from "../components/observations/create-observation";
 import Detailobservation from "../components/observations/detail-observation";
 import Observationrubric from "../components/observations/observation-rubric";
 import SchedulingPage from "../components/observations/scheuling-page";
-import { useStateValue } from "../StateProvider";
 import EditProfile from "../components/settings/edit-profile";
 import Createcourses from "../components/courses/create-courses";
 import Listcourses from "../components/courses/list-courses";
-import { fetchCoursesAndUsers, fetchUserData } from "../components/Endpoints";
+// import { fetchCoursesAndUsers, fetchUserData } from "../components/Endpoints";
 import Assigncourses from "../components/courses/assign-courses";
 import Teaching from "../components/Templates/Teaching";
 import Reflection from "../components/Templates/Reflection";
@@ -50,17 +49,18 @@ import Artifacts from "../components/Templates/Artifacts";
 import Postobservation from "../components/observations/post-observation";
 import ResetPassword from "../components/settings/reset-password";
 
+// import { useStateValue } from "../StateProvider";
 // import Hello from "../components/Hello";
 
 const URL = process.env.PUBLIC_URL;
 const LayoutRoutes = () => {
-  const [{ user }, dispatch] = useStateValue();
+  // const [{ user }, dispatch] = useStateValue();
 
-  useEffect(() => {
-    if (user.role === "Head_of_Department")
-      fetchCoursesAndUsers(dispatch, user?.department.id, user?.role);
-    fetchUserData(user?.id, dispatch);
-  }, []);
+  // useEffect(() => {
+  //   if (user.role === "Head_of_Department")
+  //     fetchCoursesAndUsers(dispatch, user?.department.id, user?.role);
+  //   fetchUserData(user?.id, dispatch);
+  // }, []);
 
   return (
     <Fragment>

@@ -22,7 +22,11 @@ import { Check, CheckCircle, Eye, Filter } from "react-feather";
 import { Loader } from "../common/Loader";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 import { dateFormater } from "../DateFormater";
-import { fetchUserData } from "../Endpoints";
+import {
+  fetchCoursesAndUsers,
+  fetchSotlData,
+  fetchUserData,
+} from "../Endpoints";
 
 const URL = process.env.PUBLIC_URL;
 
@@ -31,7 +35,11 @@ const List_observation = () => {
   const navigate = useNavigate();
   const [observationData, setObservationData] = useState("");
   useEffect(() => {
-    fetchUserData(user.id, dispatch);
+    if (user.role === "Head_of_Department")
+      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+    else if (user.role === "Super_Admin") {
+      fetchSotlData(dispatch, user.token);
+    } else fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
 

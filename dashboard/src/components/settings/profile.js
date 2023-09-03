@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 
 import avatar from "../../assets/images/dashboard/avatar.png";
 import TabsetProfile from "./tabset-profile";
@@ -10,6 +10,9 @@ import { Edit } from "react-feather";
 
 const Profile = () => {
   const [{ user }] = useStateValue();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Fragment>
       <Breadcrumb title="Profile" parent="Settings" />

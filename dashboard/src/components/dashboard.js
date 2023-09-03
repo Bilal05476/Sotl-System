@@ -425,7 +425,7 @@ const Dashboard = () => {
       const deptId = user.department.id;
       fetchCoursesAndUsers(dispatch, deptId, user.role);
     } else if (user.role === "Super_Admin") {
-      fetchSotlData(dispatch);
+      fetchSotlData(dispatch, user.token);
     } else fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
