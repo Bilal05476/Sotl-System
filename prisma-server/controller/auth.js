@@ -253,3 +253,45 @@ const generateJWT = (id) => {
 //   }
 //   return acc;
 // }, {});
+
+// @desc   Reset User Password
+// @route  PUT api/reset-password
+// @access Public (anyone with their correct old password)
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { email, oldPassword, newPassword } = req.body;
+  // Validate if user exist in our database
+  const validate = await prisma.user.findFirst({
+    where: {
+      email,
+    },
+    select: {
+      id: true,
+      password: true,
+    },
+  });
+
+  if (validate) {
+    // hash password compare database password with plain password
+    const checkPassword = await bcrypt.compare(oldPassword, validate.password);
+    if (checkPassword) {
+      // reset password if old password is correct
+
+      // generate hash password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      // update into database
+      await prisma.user.update({
+        where: {
+          id: validate.id,
+        },
+        data: {
+          password: hashedPassword,
+        },
+      });
+      res.status(200).json({ message: "Password Reset Successfully!" });
+    } else {
+      res.status(400).json({ error: "Provide Correct Old Password!" });
+    }
+  } else {
+    res.status(404).json({ error: "No User Exist" });
+  }
+});
