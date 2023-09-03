@@ -48,6 +48,7 @@ import Artifacts from "../components/Templates/Artifacts";
 // import ParentComponent from "../components/ParentComponent";
 // import ChildComponent from "../components/ChildComponent";
 import Postobservation from "../components/observations/post-observation";
+import ResetPassword from "../components/settings/reset-password";
 
 // import Hello from "../components/Hello";
 
@@ -228,6 +229,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${URL}/settings/edit-profile`}
             element={<EditProfile />}
+          />
+          <Route
+            path={`${URL}/settings/reset-password`}
+            element={<ResetPassword />}
           />
           {/* <Route
             path={`${URL}/invoice`}

@@ -59,6 +59,12 @@ const Profile = () => {
                   >
                     Edit Profile
                   </Link>
+                  <Link
+                    to="/settings/reset-password"
+                    className="btn btn-secondary"
+                  >
+                    Reset Password
+                  </Link>
                 </div>
 
                 {/* <div className="social">

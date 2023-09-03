@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useRef } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Table } from "reactstrap";
-import { XCircle } from "react-feather";
+// import { XCircle } from "react-feather";
 import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
-import FileBase from "react-file-base64";
-
+// import FileBase from "react-file-base64";
 const TabsetEditProfile = () => {
   const [{ user }, dispatch] = useStateValue();
   // console.log(user);
@@ -222,6 +221,7 @@ const FormPool = ({ label, value, onChange, type }) => {
           type={type}
           value={value}
           onChange={onChange}
+          placeholder={label}
         />
       </div>
     </FormGroup>

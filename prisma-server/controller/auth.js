@@ -30,9 +30,10 @@ export const createUser = asyncHandler(async (req, res) => {
       password: hashedPassword,
       role: Role[role],
       campus: Campus[campus],
-      departmentId: department,
     };
-
+    if (department) {
+      newUserData.departmentId = department;
+    }
     // create new user in database
     const newUser = await prisma.user.create({
       data: newUserData,
