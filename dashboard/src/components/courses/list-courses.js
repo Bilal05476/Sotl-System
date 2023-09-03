@@ -46,8 +46,9 @@ const List_courses = () => {
     <Fragment>
       <Breadcrumb title="Courses List" parent="Courses" />
 
-      {!userData && <Loader />}
-      {user.role === "Head_of_Department" && userData && (
+      {!userData && !usersandcourses && <Loader />}
+
+      {user.role === "Head_of_Department" && usersandcourses && (
         <Container fluid={true}>
           <Row>
             <Col xl="12 xl-100">
@@ -87,11 +88,11 @@ const List_courses = () => {
                                 <span
                                   style={{
                                     color:
-                                      dept.id === user.department.id
+                                      dept.id === user.department?.id
                                         ? completeColor2
                                         : "#979797",
                                     fontWeight:
-                                      dept.id === user.department.id
+                                      dept.id === user.department?.id
                                         ? "600"
                                         : "300",
                                   }}
@@ -233,11 +234,11 @@ const List_courses = () => {
                                 <span
                                   style={{
                                     color:
-                                      dept.id === user.department.id
+                                      dept.id === user.department?.id
                                         ? completeColor2
                                         : "#979797",
                                     fontWeight:
-                                      dept.id === user.department.id
+                                      dept.id === user.department?.id
                                         ? "600"
                                         : "300",
                                   }}

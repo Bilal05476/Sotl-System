@@ -95,7 +95,11 @@ export const getDepartments = asyncHandler(async (req, res) => {
 // @access Private (Super_Admin)
 export const getSuperData = asyncHandler(async (req, res) => {
   // get users
-  const getUsers = await prisma.user.findMany({});
+  const getUsers = await prisma.user.findMany({
+    include: {
+      department: true,
+    },
+  });
   // get observations
   const getObservations = await prisma.observations.findMany({
     include: {

@@ -422,8 +422,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user.role === "Head_of_Department") {
-      const deptId = user.department.id;
-      fetchCoursesAndUsers(dispatch, deptId, user.role);
+      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
     } else if (user.role === "Super_Admin") {
       fetchSotlData(dispatch, user.token);
     } else fetchUserData(user.id, dispatch);
