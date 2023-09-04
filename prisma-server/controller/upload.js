@@ -5,7 +5,21 @@ import path from "path";
 import { Storage } from "@google-cloud/storage";
 // Initialize Google Cloud Storage
 const storage = new Storage({
-  keyFilename: "./google-key.json", // Path to your JSON key file
+  // keyFilename: "./google-key.json", // Path to your JSON key file
+  keyFilename: {
+    type: "service_account",
+    project_id: "daring-night-394613",
+    private_key_id: "f1a97bf01cf60d12a5eeeceb5c7263f97cde0087",
+    private_key: process.env.PRIVATEKEY,
+    client_email: "113588280014-compute@developer.gserviceaccount.com",
+    client_id: process.env.CLIENTID,
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url:
+      "https://www.googleapis.com/robot/v1/metadata/x509/113588280014-compute%40developer.gserviceaccount.com",
+    universe_domain: "googleapis.com",
+  }, // Path to your JSON key file
 });
 const bucket = storage.bucket("sotl-system-storage");
 
