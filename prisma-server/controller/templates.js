@@ -2,48 +2,42 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
-// @desc   Add template questionaire
-// @route  POST api/template/create
-// @access Private (Role Like (Observer))
-export const createTemplate = asyncHandler(async (req, res) => {
-  const { steps, type } = req.body;
-
-  const createTemplate = await prisma.templatePlan.create({
+// @desc   Update template questionaire
+// @route  PUR api/template/:type
+// @access Private (Role Like (HOD, Super Admin))
+export const updateTemplate = asyncHandler(async (req, res) => {
+  const { id, field, name } = req.body;
+  // My overall perception of today’s class in ONE word:
+  await prisma.systemTemplatePlanStep.update({
+    where: {
+      id,
+    },
     data: {
-      type,
-      steps: {
-        createMany: {
-          data: steps,
-        },
-      },
+      field,
+      name,
     },
   });
-  res.status(200).json(createTemplate);
-});
-
-// @desc   Get templates
-// @route  POST api/template/
-// @access
-export const getTemplates = asyncHandler(async (req, res) => {
-  const temaplates = await prisma.templatePlan.findMany({
+  const getUpdatedTemplate = await prisma.systemTemplatePlan.findFirst({
+    where: {
+      type: req.params.type,
+    },
     include: {
       steps: true,
     },
   });
-  res.status(200).json(temaplates);
+  res.status(200).json(getUpdatedTemplate);
 });
 
 // @desc   Get templates
-// @route  POST api/template/:id
+// @route  GET api/template/:type
 // @access
 export const getTemplate = asyncHandler(async (req, res) => {
-  const template = await prisma.templatePlan.findFirst({
+  const template = await prisma.systemTemplatePlan.findFirst({
     where: {
-      id: Number(req.params.id),
+      type: req.params.type,
     },
     include: {
       steps: true,
-      assignedTo: true,
     },
   });
   res.status(200).json(template);

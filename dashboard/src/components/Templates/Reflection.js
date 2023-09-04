@@ -1,15 +1,15 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
-import MultiStepForm from "../MultiStep";
-// import { getTemplate } from "../Endpoints";
+// import MultiStepForm from "../MultiStep";
+import { getTemplate } from "../Endpoints";
 
 const Reflection = () => {
   const [reflectionPlan, setReflectionPlan] = useState("");
 
-  // useEffect(() => {
-  //   getTemplate(setReflectionPlan, 2);
-  // }, []);
+  useEffect(() => {
+    getTemplate(setReflectionPlan, "Reflection");
+  }, []);
 
   return (
     <Fragment>
@@ -19,10 +19,10 @@ const Reflection = () => {
           <Col sm="12">
             <Card>
               <CardBody>
-                <MultiStepForm
+                {/* <MultiStepForm
                   tabtitle={"Provide Reflection Plan Details Step By Step"}
                   steps={reflectionPlan}
-                />
+                /> */}
               </CardBody>
             </Card>
           </Col>

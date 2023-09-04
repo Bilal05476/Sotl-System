@@ -182,6 +182,8 @@ model AfterObservation {
     aggrScore Int?
 }
 
+// -> AfterObservation => Strategies / Consultative Plan
+
 // -> User => Courses
 model Courses {
     id              Int            @id @default(autoincrement()) // auto-inc
@@ -264,7 +266,20 @@ model TemplatePlanStep {
     templatePlanId Int?
 }
 
-// -> AfterObservation => Strategies / Consultative Plan
+model SystemTemplatePlan {
+    id    Int                      @id @default(autoincrement())
+    type  TemplateType
+    steps SystemTemplatePlanStep[]
+}
+
+model SystemTemplatePlanStep {
+    id                   Int                 @id @default(autoincrement())
+    SystemTemplatePlan   SystemTemplatePlan? @relation(fields: [SystemTemplatePlanId], references: [id])
+    SystemTemplatePlanId Int?
+    field                String
+    name                 String
+    code                 String?
+}
 
 // Store Mutliple Date Time
 model DateTimes {

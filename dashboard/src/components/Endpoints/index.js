@@ -57,15 +57,15 @@ export async function fetchCoursesAndUsers(dispatch, department, role) {
   }
 }
 
-export async function getTemplate(setPlan, id) {
+export async function getTemplate(setPlan, type) {
   try {
-    const template = await fetch(`${BASEURL}/template/${id}`, {
+    const template = await fetch(`${BASEURL}/template/${type}`, {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
     const data = await template.json();
-    setPlan(data.steps);
+    setPlan(data);
   } catch (err) {
     console.log(err);
   }

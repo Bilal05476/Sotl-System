@@ -76,15 +76,28 @@ app.listen(port, () => {
 // });
 
 // import { PrismaClient } from "@prisma/client";
+// import { ReflectionSteps } from "./rubrics.js";
 // const prisma = new PrismaClient();
 // async function main() {
 //   console.log(
-//     await prisma.observations.delete({
-//       where: {
-//         id: 28,
+//     await prisma.systemTemplatePlan.create({
+//       data: {
+//         type: "Reflection",
+//         steps: {
+//           createMany: {
+//             data: ReflectionSteps,
+//           },
+//         },
 //       },
 //     })
 //   );
+//   // console.log(
+//   //   await prisma.systemTemplatePlan.findMany({
+//   //     include: {
+//   //       steps: true,
+//   //     },
+//   //   })
+//   // );
 // }
 // main();
 

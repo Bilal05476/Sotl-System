@@ -165,12 +165,9 @@ const LayoutRoutes = () => {
             path={`${URL}/courses/assign-courses`}
             element={<Assigncourses />}
           />
+          <Route path={`${URL}/plan/teaching-plan`} element={<Teaching />} />
           <Route
-            path={`${URL}/templates/teaching-plan`}
-            element={<Teaching />}
-          />
-          <Route
-            path={`${URL}/templates/reflection-plan`}
+            path={`${URL}/plan/reflection-plan`}
             element={<Reflection />}
           />
           <Route path={`${URL}/templates/artifacts`} element={<Artifacts />} />
