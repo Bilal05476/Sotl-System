@@ -124,7 +124,7 @@ const Detail_observation = () => {
         </div>
         <div className="mt-4 text-center">
           <h3 className="text-dark" style={{ fontWeight: "600" }}>
-            {type} TEMPLATE
+            {type} PLAN
           </h3>
         </div>
 
