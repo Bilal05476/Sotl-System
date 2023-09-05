@@ -1,14 +1,14 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Row, Table } from "reactstrap";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { DownloadCloud, Eye, EyeOff } from "react-feather";
 import { Loader } from "../common/Loader";
 import { useStateValue } from "../../StateProvider";
 import logo from "../../assets/images/blue-version.png";
-// import { stringify } from "csv-stringify/sync";
 
 import {
+  deleteObservation,
   fetchCoursesAndUsers,
   fetchObservation,
   startScheduling,
@@ -16,19 +16,21 @@ import {
 import { errors, info, successes } from "../../constants/Toasters";
 import { completeColor, completeColor2 } from "../colors";
 import { dateFormater, dateFormater2 } from "../DateFormater";
-import { PopupModal, PostTimeModal } from "../PopupModal";
+import { PopupModal } from "../PopupModal";
 import { useReactToPrint } from "react-to-print";
 
 const BASEURL = process.env.REACT_APP_BASE_URL;
 
 const Detail_observation = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState("open");
   const [obsDetail, setObsDetail] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
   const [cid, setcid] = useState("");
   const [facultycourses, setfacultycourses] = useState([]);
   const toastId = useRef(null);
+  const [loader, setLoader] = useState(false);
 
   const [{ user }, dispatch] = useStateValue();
 
@@ -255,6 +257,26 @@ const Detail_observation = () => {
       {/* <SchedulingModel id="exampleModal" /> */}
       {obsDetail && (
         <Container fluid={true}>
+          {user.role === "Super_Admin" && (
+            <Row className="mb-3 d-flex justify-content-end">
+              <Col className="col-3 d-flex justify-content-end">
+                <Button
+                  disabled={loader}
+                  onClick={() =>
+                    deleteObservation(
+                      Number(id),
+                      setLoader,
+                      navigate,
+                      user.token
+                    )
+                  }
+                  className="btn btn-danger"
+                >
+                  {loader ? <Loader /> : "Delete Observation"}
+                </Button>
+              </Col>
+            </Row>
+          )}
           {/* <Row className="mb-3"> */}
           {/* {user.role !== "Faculty" && (
               <Col className="xl-25">

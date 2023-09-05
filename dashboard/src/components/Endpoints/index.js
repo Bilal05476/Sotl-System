@@ -108,6 +108,32 @@ export async function fetchObservation(setObs, id) {
     errors(err);
   }
 }
+export async function deleteObservation(id, loader, navigate, token) {
+  loader(true);
+  try {
+    const res = await fetch(`${BASEURL}/observation/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      errors(data.error);
+      loader(false);
+    } else {
+      successes(data.message);
+      loader(false);
+      setTimeout(() => {
+        navigate("/observations/list-observation");
+      }, 1500);
+    }
+  } catch (err) {
+    errors(err);
+  }
+}
 
 export async function startScheduling(
   facultyId,

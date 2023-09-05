@@ -52,9 +52,7 @@ export const FormPool = ({ label, value, type, id, setPlan }) => {
             disabled={formField === value && formName === label}
             onClick={() => handleChange()}
             type="button"
-            color={
-              formField === value && formName === label ? "danger" : "primary"
-            }
+            color={"primary"}
           >
             {laoder ? <Loader /> : "Update"}
           </Button>
