@@ -9,20 +9,30 @@ import {
   obsScheduleCycle,
   postScheduleCreate,
   postScheduleCycle,
+  deleteObs,
 } from "../controller/observations.js";
 
-import { protectInitiateObs } from "../middleware/protectRoutes.js";
+import {
+  protectInitiateObs,
+  protectSuperAdmin,
+} from "../middleware/protectRoutes.js";
 
 obsRoutes.route("/initiate").post(protectInitiateObs, initiate);
 obsRoutes.route("/scheduling").post(obsScheduleCreate).put(obsScheduleCycle);
 
-obsRoutes.route("/informed").put(informedObsCycle);
+// obsRoutes.route("/informed").put(informedObsCycle);
+
+// obsRoutes
+//   .route("/post-scheduling")
+//   .post(postScheduleCreate)
+//   .put(postScheduleCycle);
 
 obsRoutes
-  .route("/post-scheduling")
-  .post(postScheduleCreate)
-  .put(postScheduleCycle);
-
-obsRoutes.get("/", getAllObs).get("/:id", getObs);
+  .get("/", getAllObs)
+  .get("/:id", getObs)
+  .post("/post-scheduling", postScheduleCreate)
+  .put("/informed", informedObsCycle)
+  .put("/post-scheduling", postScheduleCycle)
+  .delete("/:id", protectSuperAdmin, deleteObs);
 
 export default obsRoutes;

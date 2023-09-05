@@ -290,6 +290,65 @@ export const getObs = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc   DELETE observation by id
+// @route  Delete api/observation/:id
+// @access Private (Super Admin)
+export const deleteObs = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
+  const find = await prisma.observations.findFirst({
+    where: {
+      id,
+    },
+  });
+  if (find) {
+    await prisma.observations.delete({
+      where: {
+        id,
+      },
+      include: {
+        meetings: {
+          include: {
+            informedObservation: {
+              include: {
+                rubrics: true,
+              },
+            },
+            uninformedObservation: {
+              include: {
+                rubrics: true,
+              },
+            },
+            postObservation: {
+              include: {
+                artifacts: true,
+                reflectionPlan: {
+                  include: {
+                    steps: true,
+                  },
+                },
+                timeSlotsByObserver: true,
+              },
+            },
+          },
+        },
+        obsRequest: {
+          include: {
+            reasons: true,
+            teachingPlan: {
+              include: {
+                steps: true,
+              },
+            },
+          },
+        },
+        feedbacks: true,
+      },
+    });
+    res.status(200).json({ message: "Observation deleted successfully!" });
+  } else {
+    res.status(404).json({ error: "Observation not found!" });
+  }
+});
 // @desc   Create observation scheduling
 // @route  POST api/observation/scheduling
 // @access Private for Observer

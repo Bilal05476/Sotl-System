@@ -61,12 +61,12 @@ model Observations {
     observationProgress Int            @default(0)
     semester            String
     observationScore    Int            @default(0)
-    faculty             User           @relation("Faculty", fields: [facultyId], references: [id])
-    facultyId           Int
-    hod                 User           @relation("Hod", fields: [hodId], references: [id])
-    hodId               Int
-    observer            User           @relation("Observer", fields: [observerId], references: [id])
-    observerId          Int
+    faculty             User?          @relation("Faculty", fields: [facultyId], references: [id])
+    facultyId           Int?
+    hod                 User?          @relation("Hod", fields: [hodId], references: [id])
+    hodId               Int?
+    observer            User?          @relation("Observer", fields: [observerId], references: [id])
+    observerId          Int?
     obsRequest          ObsScheduling?
     meetings            Meetings?
     course              Courses?       @relation(fields: [courseId], references: [id])
@@ -82,8 +82,8 @@ model ObsScheduling {
     timeSlotByObserver CourseSlots[] @relation("Observer")
     scheduledOn        DateTime?
     status             Status        @default(Ongoing)
-    observation        Observations  @relation(fields: [observationsId], references: [id])
-    observationsId     Int           @unique
+    observation        Observations? @relation(fields: [observationsId], references: [id])
+    observationsId     Int?          @unique
     facultyAccepted    Boolean       @default(false)
     observerAccepted   Boolean       @default(false)
     reasons            ObsReasons[]
@@ -110,18 +110,18 @@ model Meetings {
     postObservation       Post?
     uninformedObservation Uninformed?
     professionalDPlan     AfterObservation? // include strategies and consultative plan and observation scoring or analytics
-    observation           Observations      @relation(fields: [observationsId], references: [id])
-    observationsId        Int               @unique
+    observation           Observations?     @relation(fields: [observationsId], references: [id])
+    observationsId        Int?              @unique
 }
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation
 model Informed {
-    id            Int      @id @default(autoincrement()) // auto-inc
-    observerScore Float?   @default(0)
-    facultyScore  Float?   @default(0)
-    status        Status   @default(Ongoing)
-    meeting       Meetings @relation(fields: [meetingId], references: [id])
-    meetingId     Int      @unique
+    id            Int       @id @default(autoincrement()) // auto-inc
+    observerScore Float?    @default(0)
+    facultyScore  Float?    @default(0)
+    status        Status    @default(Ongoing)
+    meeting       Meetings? @relation(fields: [meetingId], references: [id])
+    meetingId     Int?      @unique
     rubrics       Rubric[]
 }
 
@@ -150,8 +150,8 @@ model Post {
     timeSlotByFaculty   DateTime?
     location            String?
     scheduledOn         DateTime?
-    meeting             Meetings      @relation(fields: [meetingId], references: [id])
-    meetingId           Int           @unique
+    meeting             Meetings?     @relation(fields: [meetingId], references: [id])
+    meetingId           Int?          @unique
 }
 
 // -> Post => Artifacts (media, docs)
@@ -165,20 +165,20 @@ model Artifact {
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation
 model Uninformed {
-    id        Int      @id @default(autoincrement()) // auto-inc
-    status    Status   @default(Ongoing)
-    meeting   Meetings @relation(fields: [meetingId], references: [id])
-    meetingId Int      @unique
+    id        Int       @id @default(autoincrement()) // auto-inc
+    status    Status    @default(Ongoing)
+    meeting   Meetings? @relation(fields: [meetingId], references: [id])
+    meetingId Int?      @unique
 
     rubrics Rubric[]
 }
 
 // -> Meetings => Informed/Post/Uninformed/AfterObservation
 model AfterObservation {
-    id        Int      @id @default(autoincrement()) // auto-inc
+    id        Int       @id @default(autoincrement()) // auto-inc
     pdpDoc    String
-    meeting   Meetings @relation(fields: [meetingId], references: [id])
-    meetingId Int      @unique
+    meeting   Meetings? @relation(fields: [meetingId], references: [id])
+    meetingId Int?      @unique
     aggrScore Int?
 }
 
@@ -205,8 +205,8 @@ model CourseSlots {
     time          String
     location      String
     day           String
-    course        Courses        @relation(fields: [courseId], references: [id])
-    courseId      Int
+    course        Courses?       @relation(fields: [courseId], references: [id])
+    courseId      Int?
     faculty       User?          @relation(fields: [facultyId], references: [id])
     facultyId     Int?
     facultyObs    ObsScheduling? @relation("Faculty", fields: [facultyobsId], references: [id])
@@ -217,15 +217,15 @@ model CourseSlots {
 
 // -> User => Feedbacks
 model FeedBacks {
-    id            Int          @id @default(autoincrement()) // auto-inc
+    id            Int           @id @default(autoincrement()) // auto-inc
     comment       String
-    author        User?        @relation("Author", fields: [authorId], references: [id])
+    author        User?         @relation("Author", fields: [authorId], references: [id])
     authorId      Int?
-    receiver      User?        @relation("Receiver", fields: [receiverId], references: [id])
+    receiver      User?         @relation("Receiver", fields: [receiverId], references: [id])
     receiverId    Int?
-    observation   Observations @relation(fields: [observationId], references: [id])
-    observationId Int
-    timeStamp     DateTime     @default(now())
+    observation   Observations? @relation(fields: [observationId], references: [id])
+    observationId Int?
+    timeStamp     DateTime      @default(now())
 }
 
 // -> User => Messages

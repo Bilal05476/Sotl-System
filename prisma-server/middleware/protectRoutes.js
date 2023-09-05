@@ -87,7 +87,7 @@ export const protectInitiateObs = asyncHandler(async (req, res, next) => {
   }
 });
 
-export const protectSystemData = asyncHandler(async (req, res, next) => {
+export const protectSuperAdmin = asyncHandler(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&

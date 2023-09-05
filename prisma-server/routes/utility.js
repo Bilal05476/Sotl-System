@@ -10,7 +10,7 @@ import { updateTemplate, getTemplate } from "../controller/templates.js";
 import { uploadArtifacts } from "../controller/upload.js";
 
 import multer from "multer";
-import { protectSystemData } from "../middleware/protectRoutes.js";
+import { protectSuperAdmin } from "../middleware/protectRoutes.js";
 
 // for upload media files
 const artifactsStorage = multer.memoryStorage();
@@ -33,5 +33,5 @@ utilityRoutes.post(
 
 // get data for super_admin
 // must be protected with middleWare
-utilityRoutes.route("/data/super-data").get(protectSystemData, getSuperData);
+utilityRoutes.route("/data/super-data").get(protectSuperAdmin, getSuperData);
 export default utilityRoutes;
