@@ -42,12 +42,23 @@ export const MENUITEMS = [
   },
 
   {
-    path: "/observations/list-observation",
     title: "Observations",
     icon: Clipboard,
-    type: "link",
+    type: "sub",
     badgeType: "primary",
     active: false,
+    children: [
+      {
+        path: "/observations/list-observation",
+        title: "All Observation",
+        type: "link",
+      },
+      {
+        path: "/observations/prompt-observation",
+        title: "Observation Prompt",
+        type: "link",
+      },
+    ],
   },
   {
     path: "/courses/list-courses",

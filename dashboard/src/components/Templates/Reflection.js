@@ -7,6 +7,7 @@ import { Loader } from "../common/Loader";
 
 // import MultiStepForm from "../MultiStep";
 import { getTemplate } from "../Endpoints";
+import { FormPool } from "./FormPool";
 
 const Reflection = () => {
   const [reflectionPlan, setReflectionPlan] = useState("");
@@ -39,6 +40,8 @@ const Reflection = () => {
                             label={item.name}
                             value={item.field}
                             id={item.id}
+                            type={reflectionPlan?.type}
+                            setPlan={setReflectionPlan}
                           />
                         ))}
                       </Form>
@@ -51,30 +54,6 @@ const Reflection = () => {
         </Container>
       )}
     </Fragment>
-  );
-};
-
-const FormPool = ({ label, value, onChange, type, id }) => {
-  return (
-    <FormGroup className="row">
-      <Label className="col-xl-3 col-md-4">{label}</Label>
-      <div className="col-xl-8 col-md-7">
-        <textarea
-          className="form-control"
-          id="validationCustom0"
-          type={type}
-          value={value}
-          onChange={onChange}
-          placeholder={label}
-          rows={3}
-        />
-        <div className="pull-right mt-2">
-          <Button disabled onClick={() => {}} type="button" color="danger">
-            Update
-          </Button>
-        </div>
-      </div>
-    </FormGroup>
   );
 };
 

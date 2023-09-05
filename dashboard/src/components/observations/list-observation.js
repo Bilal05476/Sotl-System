@@ -328,11 +328,11 @@ const List_observation = () => {
                           {user.role !== "Observer" && (
                             <th scope="col">Observer</th>
                           )}
-                          {user.role !== "Head_of_Department" && (
+                          {/* {user.role !== "Head_of_Department" && (
                             <th scope="col">Head of Department</th>
-                          )}
+                          )} */}
 
-                          <th scope="col">Obs Cycle</th>
+                          <th scope="col">Obsv Cycle</th>
                           <th scope="col">Starting Date</th>
                           <th scope="col">Ending Date</th>
                           <th scope="col">Progress</th>
@@ -362,9 +362,9 @@ const List_observation = () => {
                             {user.role !== "Observer" && (
                               <td className="digits">{item.observer.name}</td>
                             )}
-                            {user.role !== "Head_of_Department" && (
+                            {/* {user.role !== "Head_of_Department" && (
                               <td className="digits">{item.hod.name}</td>
-                            )}
+                            )} */}
 
                             <td
                               className="digits"
@@ -443,28 +443,47 @@ const List_observation = () => {
                               >
                                 <Eye size={20} />
                               </NavLink> */}
-                              <span className=" d-flex flex-column align-items-center ">
-                                <CheckCircle
-                                  color={
-                                    item.meetings?.postObservation?.status ===
-                                    "Completed"
-                                      ? completeColor
-                                      : "lightgray"
-                                  }
-                                  size={20}
-                                  style={{ margin: "0.1rem 0rem" }}
-                                />
-                                <CheckCircle
-                                  color={
-                                    item.meetings?.uninformedObservation
-                                      ?.status === "Completed"
-                                      ? completeColor
-                                      : "lightgray"
-                                  }
-                                  size={20}
-                                  style={{ margin: "0.1rem 0rem" }}
-                                />{" "}
-                              </span>
+
+                              <div className="d-flex flex-column align-items-center ">
+                                {[
+                                  {
+                                    status:
+                                      item.meetings?.postObservation?.status,
+                                    name: "Obsv #1",
+                                  },
+                                  {
+                                    status:
+                                      item.meetings?.uninformedObservation
+                                        ?.status,
+                                    name: "Obsv #2",
+                                  },
+                                ].map((obs) => (
+                                  <span
+                                    key={obs.name}
+                                    className="d-flex w-100 align-items-center"
+                                    style={{
+                                      color:
+                                        obs.status === "Completed"
+                                          ? completeColor
+                                          : "lightgray",
+                                    }}
+                                  >
+                                    <CheckCircle
+                                      color={
+                                        obs.status === "Completed"
+                                          ? "green"
+                                          : "lightgray"
+                                      }
+                                      size={20}
+                                      style={{
+                                        margin: "0.1rem 0rem",
+                                        marginRight: "0.3rem",
+                                      }}
+                                    />
+                                    {obs.name}
+                                  </span>
+                                ))}
+                              </div>
                             </td>
                           </tr>
                         ))}

@@ -171,7 +171,7 @@ const Sidebar = () => {
                     return setNavActive(childrenItem);
                   }}
                 >
-                  <i className="fa fa-circle"></i>
+                  {/* <i className="fa fa-circle"></i> */}
                   {childrenItem.title}{" "}
                   <i className="fa fa-angle-right pull-right"></i>
                 </a>
@@ -185,7 +185,7 @@ const Sidebar = () => {
                   className={childrenItem.active ? "active" : ""}
                   onClick={() => setNavActive(childrenItem)}
                 >
-                  <i className="fa fa-circle"></i>
+                  {/* <i className="fa fa-circle"></i> */}
                   {childrenItem.title}{" "}
                 </Link>
               ) : (

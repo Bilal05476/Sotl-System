@@ -71,6 +71,24 @@ export async function getTemplate(setPlan, type) {
   }
 }
 
+export async function updateTemplate(setPlan, type, body, loader) {
+  try {
+    const template = await fetch(`${BASEURL}/template/${type}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await template.json();
+    setPlan(data);
+    loader(false);
+    successes("Updated Successfully!");
+  } catch (err) {
+    loader(false);
+    console.log(err);
+  }
+}
 export async function fetchObservation(setObs, id) {
   try {
     const res = await fetch(`${BASEURL}/observation/${id}`, {
