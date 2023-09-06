@@ -14,6 +14,7 @@ const EmailTemplate = () => {
   const [email, setEmail] = useState("");
   const [loader, setLoader] = useState(false);
   const params = useParams();
+
   useEffect(() => {
     if (params.slug === "new-user") {
       getEmailTemplate(setEmailTemplate, "CreateUser", user.token, setEmail);
@@ -26,7 +27,7 @@ const EmailTemplate = () => {
 
   const handleChange = () => {
     const obj = {
-      id,
+      id: emailTemplate.id,
       email,
     };
     setLoader(true);
@@ -51,9 +52,19 @@ const EmailTemplate = () => {
       );
     }
   };
+
   return (
     <Fragment>
-      <Breadcrumb title="New User Email" parent="Email Template" />
+      <Breadcrumb
+        title={
+          params.slug === "new-user"
+            ? "New User Email"
+            : params.slug === "initiate-observation"
+            ? "Initiate Observation Email"
+            : ""
+        }
+        parent="Email Template"
+      />
       {!emailTemplate && <Loader />}
       {emailTemplate && (
         <Container fluid={true}>
@@ -69,11 +80,15 @@ const EmailTemplate = () => {
                     </TabList>
                     <TabPanel>
                       <div className="mb-3">
-                        Add:
+                        Insert:{" "}
                         {[
                           { name: "line break", tag: "<br />" },
                           { name: "receiver name", tag: "{{name}}" },
                           { name: "receiver email", tag: "{{email}}" },
+                          {
+                            name: "SOTL link",
+                            tag: "<a href='https://sotlsystem.tech' target='blank'>SOTL System</a>",
+                          },
                         ].map((item) => (
                           <span
                             className="p-2 px-3 mx-2 bg-primary rounded"
@@ -92,8 +107,9 @@ const EmailTemplate = () => {
                               id="validationCustom0"
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
-                              rows={16}
+                              rows={8}
                             />
+
                             <div className="pull-right mt-2">
                               <Button
                                 disabled={emailTemplate?.email === email}
@@ -106,6 +122,10 @@ const EmailTemplate = () => {
                             </div>
                           </div>
                         </FormGroup>
+                        <div className="col-xl-12 col-md-12">
+                          <h4 className="text-dark mb-4">Actual Email:</h4>
+                          <div dangerouslySetInnerHTML={{ __html: email }} />
+                        </div>
                       </Form>
                     </TabPanel>
                   </Tabs>
