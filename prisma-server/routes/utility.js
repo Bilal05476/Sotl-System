@@ -39,6 +39,6 @@ utilityRoutes.route("/data/super-data").get(protectSuperAdmin, getSuperData);
 utilityRoutes
   .route("/email/:type")
   .get(protectSuperAdmin, GetEmailTemplate)
-  .post(protectSuperAdmin, EmailTemplate);
+  .put(protectSuperAdmin, EmailTemplate);
 
 export default utilityRoutes;

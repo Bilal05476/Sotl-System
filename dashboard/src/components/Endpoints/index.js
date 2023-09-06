@@ -326,3 +326,47 @@ export async function uplaodArtifact(
     })
     .catch((err) => errors(err.response.data));
 }
+
+export async function getEmailTemplate(setPlan, type, token, email) {
+  try {
+    const template = await fetch(`${BASEURL}/email/${type}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await template.json();
+    setPlan(data);
+    email(data.email);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function updateEmailTemplate(
+  setPlan,
+  type,
+  token,
+  email,
+  body,
+  loader
+) {
+  try {
+    const template = await fetch(`${BASEURL}/email/${type}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await template.json();
+    setPlan(data);
+    email(data.email);
+    loader(false);
+    successes("Updated Successfully!");
+  } catch (err) {
+    loader(false);
+    console.log(err);
+  }
+}

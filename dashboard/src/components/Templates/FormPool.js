@@ -8,7 +8,7 @@ export const FormPool = ({ label, value, type, id, setPlan }) => {
     formName: label,
     formField: value,
   });
-  const [laoder, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false);
   const { formName, formField } = state;
   const handleChange = () => {
     const obj = {
@@ -54,7 +54,7 @@ export const FormPool = ({ label, value, type, id, setPlan }) => {
             type="button"
             color={"primary"}
           >
-            {laoder ? <Loader /> : "Update"}
+            {loader ? <Loader /> : "Update"}
           </Button>
         </div>
       </div>

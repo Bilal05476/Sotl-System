@@ -48,6 +48,7 @@ import Artifacts from "../components/Templates/Artifacts";
 // import ChildComponent from "../components/ChildComponent";
 import Postobservation from "../components/observations/post-observation";
 import ResetPassword from "../components/settings/reset-password";
+import EmailTemplate from "../components/Email/EmailTemplate";
 
 // import { useStateValue } from "../StateProvider";
 // import Hello from "../components/Hello";
@@ -170,7 +171,7 @@ const LayoutRoutes = () => {
             path={`${URL}/plan/reflection-plan`}
             element={<Reflection />}
           />
-          <Route path={`${URL}/templates/artifacts`} element={<Artifacts />} />
+          <Route path={`${URL}/email/:slug`} element={<EmailTemplate />} />
           <Route
             path={`${URL}/observations/list-observation`}
             element={<Listobservation />}

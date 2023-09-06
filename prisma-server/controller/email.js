@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
-// @desc   Create and Update email template
-// @route  POST / PUT api/email/:type
+// @desc   Update email template
+// @route  PUT api/email/:type
 // @access Private (Role Like (HOD, Super Admin))
 export const EmailTemplate = asyncHandler(async (req, res) => {
   const { id, email } = req.body;
