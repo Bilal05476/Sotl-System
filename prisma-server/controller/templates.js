@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 
 // @desc   Update template questionaire
-// @route  PUR api/template/:type
+// @route  PUT api/template/:type
 // @access Private (Role Like (HOD, Super Admin))
 export const updateTemplate = asyncHandler(async (req, res) => {
   const { id, field, name } = req.body;

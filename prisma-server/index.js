@@ -75,13 +75,25 @@ app.listen(port, () => {
 //   console.log(`Server Running at port: ${port}`);
 // });
 
-// import { PrismaClient } from "@prisma/client";
-// import { ReflectionSteps } from "./rubrics.js";
-// const prisma = new PrismaClient();
-// async function main() {
-//   return "Hello {{name}}, hope you are doing well. This is your email: {{email}}";
-// }
-// console.log(main()?.replace("{{name}}", "Bilal"));
+import { PrismaClient } from "@prisma/client";
+import { ReflectionSteps } from "./rubrics.js";
+const prisma = new PrismaClient();
+async function main() {
+  await prisma.emailTemplate.create({
+    data: {
+      email: `Dear {{name}}<br /><br />
+      You received this email because you are registered on SOTL System by Iqra University.<br /><br />
+      Visit: <a href="https://sotlsystem.tech" target="blank">SOTL System</a><br />
+      Your email: {{email}}<br />
+      Your password: 12345678<br /><br />
+      Please make sure to reset your password ASAP to avoid any inconvenience!<br /><br />
+      Kind Regards,<br />
+      SOTL System Team`,
+      type: "CreateUser",
+    },
+  });
+}
+main();
 // let str =
 //   "Hello {{name}}, hope you are doing well. {{name}} is your email: {{email}}";
 // console.log(

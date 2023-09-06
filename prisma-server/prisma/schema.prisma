@@ -285,7 +285,7 @@ model SystemTemplatePlanStep {
 /// template plans stored in system (updated by super admin)
 model EmailTemplate {
     id    Int       @id @default(autoincrement())
-    email String
+    email String    @db.VarChar(500)
     type  EmailType
 }
 
