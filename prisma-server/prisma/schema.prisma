@@ -266,6 +266,7 @@ model TemplatePlanStep {
     templatePlanId Int?
 }
 
+/// template plans stored in system (updated by super admin)
 model SystemTemplatePlan {
     id    Int                      @id @default(autoincrement())
     type  TemplateType
@@ -279,6 +280,13 @@ model SystemTemplatePlanStep {
     field                String
     name                 String
     code                 String?
+}
+
+/// template plans stored in system (updated by super admin)
+model EmailTemplate {
+    id    Int       @id @default(autoincrement())
+    email String
+    type  EmailType
 }
 
 // Store Mutliple Date Time
@@ -333,10 +341,17 @@ enum Status {
 enum Semester {
     Fall
     Spring
+    Summer
 }
 
 enum TemplateType {
     Teaching
     Reflection
-    Artifacts
+}
+
+enum EmailType {
+    CreateUser
+    InitiateObs
+    UpdateObs
+    ObsPrompt
 }

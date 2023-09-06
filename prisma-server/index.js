@@ -79,27 +79,16 @@ app.listen(port, () => {
 // import { ReflectionSteps } from "./rubrics.js";
 // const prisma = new PrismaClient();
 // async function main() {
-//   console.log(
-//     await prisma.systemTemplatePlan.create({
-//       data: {
-//         type: "Reflection",
-//         steps: {
-//           createMany: {
-//             data: ReflectionSteps,
-//           },
-//         },
-//       },
-//     })
-//   );
-//   // console.log(
-//   //   await prisma.systemTemplatePlan.findMany({
-//   //     include: {
-//   //       steps: true,
-//   //     },
-//   //   })
-//   // );
+//   return "Hello {{name}}, hope you are doing well. This is your email: {{email}}";
 // }
-// main();
+// console.log(main()?.replace("{{name}}", "Bilal"));
+// let str =
+//   "Hello {{name}}, hope you are doing well. {{name}} is your email: {{email}}";
+// console.log(
+//   str
+//     .replaceAll("{{name}}", "Bilal")
+//     .replaceAll("{{email}}", "bilal@iqra.edu.pk")
+// );
 
 // function hello() {
 //   let arr = [1];
