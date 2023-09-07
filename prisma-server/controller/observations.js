@@ -312,7 +312,11 @@ export const getObs = asyncHandler(async (req, res) => {
               artifacts: true,
             },
           },
-          uninformedObservation: true,
+          uninformedObservation: {
+            include: {
+              rubrics: true,
+            },
+          },
           professionalDPlan: true,
         },
       },

@@ -519,7 +519,7 @@ const Detail_observation = () => {
                     </tbody>
                   </Table>
 
-                  <div style={{ textAlign: "right" }}>
+                  <div className="pull-right">
                     <NavLink
                       to={`/observations/observation-rubric/${id}`}
                       className="btn btn-primary mx-2"
@@ -556,8 +556,62 @@ const Detail_observation = () => {
                 Uninformed Observation
               </button>
               {obsDetail.meetings?.uninformedObservation ? (
-                <div className="accordion-body">
-                  <strong>Started!</strong>
+                <div className="accordion-body px-2 user-status table-responsive latest-order-table">
+                  <Table borderless>
+                    <thead>
+                      <tr>
+                        {/* <th scope="col">Id</th> */}
+                        <th scope="col">
+                          Rubrics Score{" "}
+                          <span
+                            style={{ color: "#f1f1f1", fontSize: "0.8rem" }}
+                          >
+                            (avg. observer and faculty)
+                          </span>
+                        </th>
+                        {/* <th scope="col">Schedule on</th> */}
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        {/* <td className={"digits"}>
+                              {obsDetail?.meetings.informedObservation.id}
+                            </td> */}
+                        <td className={"digits "} style={{ fontWeight: "800" }}>
+                          {(
+                            (obsDetail?.meetings.uninformedObservation
+                              .observerScore +
+                              obsDetail?.meetings.uninformedObservation
+                                .facultyScore) /
+                            2
+                          ).toFixed(1)}{" "}
+                          / 80.0
+                        </td>
+                        {/* {dateFormater(obsDetail?.starting)} */}
+                        <td
+                          className={`digits ${
+                            obsDetail?.meetings.uninformedObservation.status ===
+                            "Completed"
+                              ? "text-success"
+                              : "text-primary"
+                          }`}
+                        >
+                          {obsDetail?.meetings.uninformedObservation.status}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                  <div className="pull-right">
+                    {obsDetail?.meetings?.uninformedObservation && (
+                      <NavLink
+                        className="btn btn-primary mt-2 mx-2"
+                        to={`/observations/uninformed-observation-rubric/${id}`}
+                      >
+                        Open Rubrics
+                      </NavLink>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="accordion-body text-center">
@@ -601,14 +655,7 @@ const Detail_observation = () => {
                         </button>
                       </>
                     )}
-                  {obsDetail?.meetings?.uninformedObservation && (
-                    <NavLink
-                      className="btn btn-primary mt-2 mx-2"
-                      to={`/observations/uninformed-observation-rubric/${id}`}
-                    >
-                      Open Rubrics
-                    </NavLink>
-                  )}
+
                   <br />
                   <br />
                   {facultySchedule.length > 0 && (
