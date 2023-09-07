@@ -4,11 +4,7 @@ import Breadcrumb from "../common/breadcrumb";
 import { Card, CardBody, CardHeader, Container, Table } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { Loader } from "../common/Loader";
-import {
-  fetchCoursesAndUsers,
-  fetchSotlData,
-  fetchUserData,
-} from "../Endpoints";
+import { fetchSotlData } from "../Endpoints";
 import { completeColor } from "../colors";
 
 const Roleuser = () => {

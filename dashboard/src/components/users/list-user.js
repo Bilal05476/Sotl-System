@@ -4,11 +4,7 @@ import Breadcrumb from "../common/breadcrumb";
 import { Card, CardBody, CardHeader, Container, Table } from "reactstrap";
 import { useStateValue } from "../../StateProvider";
 import { Loader } from "../common/Loader";
-import {
-  fetchCoursesAndUsers,
-  fetchSotlData,
-  fetchUserData,
-} from "../Endpoints";
+import { fetchHodData, fetchSotlData, fetchUserData } from "../Endpoints";
 import { completeColor } from "../colors";
 
 const List_user = () => {
@@ -21,7 +17,7 @@ const List_user = () => {
 
   useEffect(() => {
     if (user.role === "Head_of_Department") {
-      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+      fetchHodData(dispatch, user.department.id, user.role, user.id);
     } else if (user.role === "Super_Admin") {
       fetchSotlData(dispatch, user.token);
     } else fetchUserData(user.id, dispatch);
@@ -30,7 +26,7 @@ const List_user = () => {
 
   useEffect(() => {
     if (userData) {
-      let getPage = userData.users.length / perSlice;
+      let getPage = userData?.users?.length / perSlice;
       if (getPage > 1) {
         setPagination([1, 2]);
       } else if (getPage > 2) {

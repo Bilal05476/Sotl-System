@@ -10,7 +10,7 @@ import logo from "../../assets/images/blue-version.png";
 import {
   createRubricScoring,
   deleteObservation,
-  fetchCoursesAndUsers,
+  fetchHodData,
   fetchObservation,
   startScheduling,
 } from "../Endpoints";
@@ -34,12 +34,12 @@ const Detail_observation = () => {
   const [loader, setLoader] = useState(false);
   const [facultySchedule, setFacultySchedule] = useState([]);
 
-  const [{ user }] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
     fetchObservation(setObsDetail, Number(id));
-    // if (user.role === "Head_of_Department")
-    //   fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+    if (user.role === "Head_of_Department")
+      fetchHodData(dispatch, user.department.id, user.role, user.id);
     window.scrollTo(0, 0);
   }, []);
 

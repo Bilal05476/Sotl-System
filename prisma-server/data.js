@@ -1,38 +1,44 @@
-export default function sampleUsers() {
+import bcrypt from "bcryptjs";
+
+export default async function sampleUsers() {
   const data = [];
   // Create 25 Faculty objects
   for (let i = 1; i <= 25; i++) {
+    const hashedPassword = await bcrypt.hash("12345678", 10);
     data.push({
       name: `Faculty${i}`,
       email: `faculty${i}@iqra.edu.pk`,
-      password: "12345678",
+      password: hashedPassword,
       campus: "Main_Campus",
       role: "Faculty",
-      department: i < 15 ? 1 : 2,
+      departmentId: i < 15 ? 7 : 8,
     });
   }
 
   // Create 10 Observer objects
   for (let i = 1; i <= 10; i++) {
+    const hashedPassword = await bcrypt.hash("12345678", 10);
+
     data.push({
       name: `Observer${i}`,
       email: `observer${i}@iqra.edu.pk`,
-      password: "12345678",
+      password: hashedPassword,
       campus: "Main_Campus",
       role: "Observer",
-      department: i < 6 ? 1 : 2,
+      departmentId: i < 6 ? 7 : 8,
     });
   }
 
-  // Create 5 Head_of_Department objects
-  for (let i = 1; i <= 5; i++) {
+  // Create 2 Head_of_department objects
+  for (let i = 1; i <= 2; i++) {
+    const hashedPassword = await bcrypt.hash("12345678", 10);
     data.push({
-      name: `Head_of_Department${i}`,
+      name: `Head_of_departmentId${i}`,
       email: `hod${i}@iqra.edu.pk`,
-      password: "12345678",
+      password: hashedPassword,
       campus: "Main_Campus",
       role: "Head_of_Department",
-      department: i,
+      departmentId: 6 + i,
     });
   }
 

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
-import { fetchCoursesAndUsers } from "../Endpoints";
+import { fetchHodData } from "../Endpoints";
 
 const TabsetAssignCourses = () => {
   const [{ usersandcourses, user }, dispatch] = useStateValue();
@@ -127,7 +127,7 @@ const TabsetAssignCourses = () => {
       ...assignCourses,
       slots: [],
     });
-    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+    fetchHodData(dispatch, user.department.id, user.role, user.id);
   }, []);
 
   useEffect(() => {

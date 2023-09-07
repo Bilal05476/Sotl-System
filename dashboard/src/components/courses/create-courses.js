@@ -25,7 +25,7 @@ const Create_courses = () => {
 
 export default Create_courses;
 
-// async function fetchCoursesAndUsers() {
+// async function fetchHodData() {
 //   try {
 //     const usersres = await fetch(`${process.env.REACT_APP_BASE_URL}/users/`, {
 //       headers: {

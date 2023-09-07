@@ -6,7 +6,7 @@ import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { successes, errors, info, warning } from "../../constants/Toasters";
-import { fetchCoursesAndUsers } from "../Endpoints";
+import { fetchHodData } from "../Endpoints";
 import { completeColor2, ongoingColor } from "../colors";
 
 const TabsetUser = () => {
@@ -161,7 +161,8 @@ const TabsetUser = () => {
   };
 
   useEffect(() => {
-    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+    fetchHodData(dispatch, user.department.id, user.role, user.id);
+
     window.scrollTo(0, 0);
   }, []);
 

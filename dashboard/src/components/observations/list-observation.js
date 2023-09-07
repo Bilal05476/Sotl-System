@@ -20,11 +20,7 @@ import { CheckCircle, Filter } from "react-feather";
 import { Loader } from "../common/Loader";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 import { dateFormater } from "../DateFormater";
-import {
-  fetchCoursesAndUsers,
-  fetchSotlData,
-  fetchUserData,
-} from "../Endpoints";
+import { fetchHodData, fetchSotlData, fetchUserData } from "../Endpoints";
 
 const URL = process.env.PUBLIC_URL;
 
@@ -34,18 +30,16 @@ const List_observation = () => {
   const [observationData, setObservationData] = useState("");
   useEffect(() => {
     if (user.role === "Head_of_Department")
-      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+      fetchHodData(dispatch, user.department.id, user.role, user.id);
     else if (user.role === "Super_Admin") {
       fetchSotlData(dispatch, user.token);
     } else fetchUserData(user.id, dispatch);
     window.scrollTo(0, 0);
   }, []);
 
-  setTimeout(() => {
-    if (!observationData) {
-      setObservationData(userData?.observations);
-    }
-  }, 2000);
+  useEffect(() => {
+    setObservationData(userData?.observations);
+  }, [userData]);
 
   const [openFilter, setOpenFilter] = useState(false);
   const [obsFilter, setObsFilter] = useState({

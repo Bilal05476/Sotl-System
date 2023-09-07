@@ -3,12 +3,12 @@ import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
 // import TabsetObservation from "./tabset-observation";
 // import { useStateValue } from "../../StateProvider";
-// import { fetchCoursesAndUsers } from "../Endpoints";
+// import { fetchHodData } from "../Endpoints";
 
 const Artifacts = () => {
   //   const [{}, dispatch] = useStateValue();
   //   useEffect(() => {
-  //     fetchCoursesAndUsers(dispatch);
+  //     fetchHodData(dispatch);
   //   }, []);
   return (
     <Fragment>

@@ -16,11 +16,7 @@ import {
 import { useStateValue } from "../../StateProvider";
 import { Eye } from "react-feather";
 import { Loader } from "../common/Loader";
-import {
-  fetchCoursesAndUsers,
-  fetchSotlData,
-  fetchUserData,
-} from "../Endpoints";
+import { fetchHodData, fetchSotlData, fetchUserData } from "../Endpoints";
 import { completeColor2 } from "../colors";
 
 const List_courses = () => {
@@ -28,7 +24,7 @@ const List_courses = () => {
   const [viewSlots, setViewSlots] = useState([]);
   useEffect(() => {
     if (user.role === "Head_of_Department")
-      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+      fetchHodData(dispatch, user.department.id, user.role, user.id);
     else if (user.role === "Super_Admin") {
       fetchSotlData(dispatch, user.token);
     } else fetchUserData(user.id, dispatch);
@@ -99,7 +95,7 @@ const List_courses = () => {
                                 >
                                   {dept.name}{" "}
                                   {item.department.indexOf(dept) !==
-                                    item.department.length - 1 && ","}{" "}
+                                    item.department?.length - 1 && ","}{" "}
                                 </span>
                               ))}
                             </td>
@@ -123,7 +119,7 @@ const List_courses = () => {
                               {item.isDepthElective ? "Yes" : "No"}
                             </td>
 
-                            <td className="digits">{item.slots.length}</td>
+                            <td className="digits">{item.slots?.length}</td>
                             <td className="digits font-primary">
                               <Button
                                 className="d-flex align-items-center"
@@ -134,7 +130,7 @@ const List_courses = () => {
                             </td>
                           </tr>
                         ))}
-                        {usersandcourses?.courses.length === 0 && (
+                        {usersandcourses?.courses?.length === 0 && (
                           <tr>
                             <td className="text-center" colSpan={10}>
                               No Courses!
@@ -151,7 +147,7 @@ const List_courses = () => {
               </Card>
             </Col>
           </Row>
-          {viewSlots.length > 0 && (
+          {viewSlots?.length > 0 && (
             <Row>
               <Col xl="12 xl-100">
                 <Card>
@@ -224,7 +220,7 @@ const List_courses = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {userData?.courses.map((item) => (
+                        {userData?.courses?.map((item) => (
                           <tr key={item.id}>
                             <td className="digits">{item.courseCode}</td>
                             <td className="digits">{item.name}</td>
@@ -246,7 +242,7 @@ const List_courses = () => {
                                 >
                                   {dept.name}{" "}
                                   {item.department.indexOf(dept) !==
-                                    item.department.length - 1 && ","}{" "}
+                                    item.department?.length - 1 && ","}{" "}
                                 </span>
                               ))}
                             </td>
@@ -270,7 +266,7 @@ const List_courses = () => {
                               {item.isDepthElective ? "Yes" : "No"}
                             </td>
 
-                            <td className="digits">{item.slots.length}</td>
+                            <td className="digits">{item.slots?.length}</td>
                             <td className="digits font-primary">
                               <Button
                                 className="d-flex align-items-center"
@@ -281,7 +277,7 @@ const List_courses = () => {
                             </td>
                           </tr>
                         ))}
-                        {userData?.courses.length === 0 && (
+                        {userData?.courses?.length === 0 && (
                           <tr>
                             <td className="text-center" colSpan={10}>
                               No Courses!
@@ -295,7 +291,7 @@ const List_courses = () => {
               </Card>
             </Col>
           </Row>
-          {viewSlots.length > 0 && (
+          {viewSlots?.length > 0 && (
             <Row>
               <Col xl="12 xl-100">
                 <Card>

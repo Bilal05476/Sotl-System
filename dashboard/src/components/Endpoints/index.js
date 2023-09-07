@@ -41,7 +41,7 @@ export async function fetchUserData(id, dispatch) {
   }
 }
 
-export async function fetchCoursesAndUsers(dispatch, department, role) {
+export async function fetchHodData(dispatch, department, role, userId) {
   try {
     const usercourses = await fetch(`${BASEURL}/data/${role}/${department}`, {
       headers: {
@@ -49,6 +49,7 @@ export async function fetchCoursesAndUsers(dispatch, department, role) {
       },
     });
     const data = await usercourses.json();
+    fetchUserData(userId, dispatch);
     dispatch({
       type: "SET_USERS_COURSES",
       payload: data,

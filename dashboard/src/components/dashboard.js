@@ -58,11 +58,7 @@ import {
 } from "reactstrap";
 import { useStateValue } from "../StateProvider";
 import { NavLink, useNavigate } from "react-router-dom";
-import {
-  fetchCoursesAndUsers,
-  fetchUserData,
-  fetchSotlData,
-} from "./Endpoints";
+import { fetchHodData, fetchUserData, fetchSotlData } from "./Endpoints";
 import {
   completeColor,
   completeColor2,
@@ -422,7 +418,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user.role === "Head_of_Department") {
-      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+      fetchHodData(dispatch, user.department.id, user.role, user.id);
     } else if (user.role === "Super_Admin") {
       fetchSotlData(dispatch, user.token);
     } else fetchUserData(user.id, dispatch);

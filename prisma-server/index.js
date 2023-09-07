@@ -49,7 +49,6 @@ app.use("/api/course", courseRoutes);
 
 // utility
 import utilityRoutes from "./routes/utility.js";
-import { findTemplate } from "./controller/templates.js";
 import sampleUsers from "./data.js";
 app.use("/api", utilityRoutes);
 
@@ -80,16 +79,16 @@ app.listen(port, () => {
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 // async function main() {
-//   return await prisma.observationThreshold.findFirst({
-//     where: {
-//       id: 1,
-//     },
-//     select: {
-//       threshold: true,
-//     },
-//   });
+//   const sampleData = await sampleUsers();
+//   console.log(
+//     await prisma.user.createMany({
+//       data: sampleData,
+//     })
+//   );
+
+//   // console.log(await prisma.user.deleteMany({}));
 // }
-// console.log(await main());
+// main();
 // console.log(sampleUsers());
 // const obj = {
 //   field1: "value1",

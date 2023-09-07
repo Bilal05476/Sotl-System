@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import App from "../components/app";
 // import Datatable from "../components/common/datatable";
@@ -41,7 +41,7 @@ import SchedulingPage from "../components/observations/scheuling-page";
 import EditProfile from "../components/settings/edit-profile";
 import Createcourses from "../components/courses/create-courses";
 import Listcourses from "../components/courses/list-courses";
-// import { fetchCoursesAndUsers, fetchUserData } from "../components/Endpoints";
+// import { fetchHodData, fetchUserData } from "../components/Endpoints";
 import Assigncourses from "../components/courses/assign-courses";
 import Teaching from "../components/Templates/Teaching";
 import Reflection from "../components/Templates/Reflection";
@@ -52,18 +52,19 @@ import ResetPassword from "../components/settings/reset-password";
 import EmailTemplate from "../components/Email/EmailTemplate";
 import PromptObservation from "../components/observations/prompt-observation";
 
-// import { useStateValue } from "../StateProvider";
+import { useStateValue } from "../StateProvider";
+import { fetchHodData, fetchUserData } from "../components/Endpoints";
 // import Hello from "../components/Hello";
 
 const URL = process.env.PUBLIC_URL;
 const LayoutRoutes = () => {
-  // const [{ user }, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
 
-  // useEffect(() => {
-  //   if (user.role === "Head_of_Department")
-  //     fetchCoursesAndUsers(dispatch, user?.department.id, user?.role);
-  //   fetchUserData(user?.id, dispatch);
-  // }, []);
+  useEffect(() => {
+    if (user.role === "Head_of_Department")
+      fetchHodData(dispatch, user?.department.id, user?.role, user?.id);
+    fetchUserData(user?.id, dispatch);
+  }, []);
 
   return (
     <Fragment>

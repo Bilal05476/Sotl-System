@@ -134,12 +134,12 @@ const TabsetPrompt = () => {
                   }
                 >
                   <option value="Select">Select</option>
-                  {userData.department.map((item) => (
+                  {userData?.department?.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
                   ))}
-                  {userData.department.length === 0 && (
+                  {userData?.department?.length === 0 && (
                     <option disabled>
                       No available department at the moment!
                     </option>

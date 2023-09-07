@@ -3,12 +3,13 @@ import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
 import TabsetObservation from "./tabset-observation";
 import { useStateValue } from "../../StateProvider";
-import { fetchCoursesAndUsers } from "../Endpoints";
+import { fetchHodData } from "../Endpoints";
 
 const Create_observation = () => {
   const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
-    fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+    fetchHodData(dispatch, user.department.id, user.role, user.id);
+    window.scrollTo(0, 0);
   }, []);
   return (
     <Fragment>
