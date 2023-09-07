@@ -43,7 +43,6 @@ import Listcourses from "../components/courses/list-courses";
 import Assigncourses from "../components/courses/assign-courses";
 import Teaching from "../components/Templates/Teaching";
 import Reflection from "../components/Templates/Reflection";
-import Artifacts from "../components/Templates/Artifacts";
 // import ParentComponent from "../components/ParentComponent";
 // import ChildComponent from "../components/ChildComponent";
 import Postobservation from "../components/observations/post-observation";

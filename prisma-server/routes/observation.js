@@ -10,6 +10,7 @@ import {
   postScheduleCreate,
   postScheduleCycle,
   deleteObs,
+  prompt,
 } from "../controller/observations.js";
 
 import {
@@ -31,6 +32,7 @@ obsRoutes
   .get("/", getAllObs)
   .get("/:id", getObs)
   .post("/post-scheduling", postScheduleCreate)
+  .post("/prompt", protectSuperAdmin, prompt)
   .put("/informed", informedObsCycle)
   .put("/post-scheduling", postScheduleCycle)
   .delete("/:id", protectSuperAdmin, deleteObs);

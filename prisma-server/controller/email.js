@@ -39,3 +39,12 @@ export const GetEmailTemplate = asyncHandler(async (req, res) => {
     res.status(404).json({ error: "Email Template not found!" });
   }
 });
+
+export const findEmail = async (type) => {
+  const find = await prisma.emailTemplate.findFirst({
+    where: {
+      type,
+    },
+  });
+  return find.email;
+};

@@ -2,7 +2,45 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
 import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
-import nodemailer from "nodemailer";
+import { findEmail } from "./email.js";
+import { emailSender } from "../EmailSmtp/index.js";
+
+// @desc   Observation Prompt by Admin to Head of department
+// @route  POST api/observation/prompt
+// @access Private (Only Admin will prompt)
+export const prompt = asyncHandler(async (req, res) => {
+  const { departmentId, campus } = req.body;
+  const findHodOfCampus = await prisma.user.findMany({
+    where: {
+      campus,
+      department: {
+        id: departmentId,
+      },
+      role: "Head_of_Department",
+    },
+    select: {
+      name: true,
+      email: true,
+    },
+  });
+
+  if (findHodOfCampus.length > 0) {
+    // send email to head of departments for observation prompt
+    let emailString = await findEmail("ObsPrompt");
+    for (let em = 0; em < findHodOfCampus.length; em++) {
+      emailSender(
+        emailString
+          .replaceAll("{{name}}", findHodOfCampus[em].name)
+          .replaceAll("{{email}}", findHodOfCampus[em].email),
+        "Observation Prompt from SOTL System CTeli!",
+        findHodOfCampus[em].email
+      );
+    }
+    res.status(200).json({ message: "Emails send to head of departments!" });
+  } else {
+    res.status(404).json({ error: "No head of departments found!" });
+  }
+});
 
 // @desc   Initiate Observation by Head of department
 // @route  POST api/observation/initiate
@@ -112,40 +150,16 @@ export const initiate = asyncHandler(async (req, res) => {
     receiversEmail.push(initiateObs[0].observer.email);
     receiversName.push(initiateObs[0].observer.name);
 
-    // smtp email transporter
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      auth: {
-        user: process.env.USER,
-        pass: process.env.PASSWORD,
-      },
-    });
-    // async..await is not allowed in global scope, must use a wrapper
-    async function emailSender(em) {
-      // send mail with defined transport object
-      const emailTemplate = `Dear ${receiversName[em]}<br /><br />
-      You received this email because your new observation cycle is initiated by your head of department.<br /><br />
-      Visit: <a href="https://sotlsystem.tech" target="blank"> SOTL System </a><br />
-      Your email: ${receiversEmail[em]}<br />
-      Your password: 12345678<br /><br />
-      Please make sure to reset your password ASAP to avoid any inconvenience!<br /><br />
-      Kind Regards,<br />
-      SOTL System Team`;
-
-      const info = await transporter.sendMail({
-        from: '"SOTL System " <info@sotlsystem.tech>', // sender address
-        to: receiversEmail[em], // list of receivers
-        subject:
-          "Your new observation cycle initiated, visit SOTL system to find out more details!", // Subject line
-        text: emailTemplate, // plain text body
-        html: emailTemplate, // html body
-      });
-      console.log("Message sent: %s", info.messageId);
-    }
-
+    // send email after observation initiating to observer and faculty
+    let emailString = await findEmail("InitiateObs");
     for (let em = 0; em < receiversEmail.length; em++) {
-      emailSender(em);
+      emailSender(
+        emailString
+          .replaceAll("{{name}}", receiversName[em])
+          .replaceAll("{{email}}", receiversEmail[em]),
+        "Your new observation just initiate by your head of department on SOTL System!",
+        receiversEmail[em]
+      );
     }
     res.status(200).json({ observations: initiateObs });
   } else {

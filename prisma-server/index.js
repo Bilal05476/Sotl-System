@@ -49,6 +49,7 @@ app.use("/api/course", courseRoutes);
 
 // utility
 import utilityRoutes from "./routes/utility.js";
+import { findEmail } from "./controller/email.js";
 app.use("/api", utilityRoutes);
 
 app.use("/", (req, res) => {
@@ -75,25 +76,24 @@ app.listen(port, () => {
 //   console.log(`Server Running at port: ${port}`);
 // });
 
-import { PrismaClient } from "@prisma/client";
-import { ReflectionSteps } from "./rubrics.js";
-const prisma = new PrismaClient();
-async function main() {
-  await prisma.emailTemplate.create({
-    data: {
-      email: `Dear {{name}}<br /><br />
-      You received this email because you are registered on SOTL System by Iqra University.<br /><br />
-      Visit: <a href="https://sotlsystem.tech" target="blank">SOTL System</a><br />
-      Your email: {{email}}<br />
-      Your password: 12345678<br /><br />
-      Please make sure to reset your password ASAP to avoid any inconvenience!<br /><br />
-      Kind Regards,<br />
-      SOTL System Team`,
-      type: "CreateUser",
-    },
-  });
-}
-main();
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+// async function main() {
+//   console.log(
+//     await prisma.user.findMany({
+//       where: {
+//         campus: "Bahria_Campus",
+//         department: {
+//           id: 2,
+//         },
+//         role: "Head_of_Department",
+//       },
+//     })
+//   );
+// }
+// main();
+// let emailString = await findEmail("CreateUser");
+// console.log(emailString);
 // let str =
 //   "Hello {{name}}, hope you are doing well. {{name}} is your email: {{email}}";
 // console.log(

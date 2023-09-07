@@ -3,6 +3,8 @@ const prisma = new PrismaClient();
 import bcrypt from "bcryptjs";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
+import { emailSender } from "../EmailSmtp/index.js";
+import { findEmail } from "./email.js";
 
 // @desc   Register or Add any Role
 // @route  POST api/create
@@ -57,6 +59,16 @@ export const createUser = asyncHandler(async (req, res) => {
         },
       });
     }
+    // send email to new user
+    let emailString = await findEmail("CreateUser");
+    emailSender(
+      emailString
+        .replaceAll("{{name}}", newUser.name)
+        .replaceAll("{{email}}", newUser.email),
+      "You are registered on SOTL System by Iqra university!",
+      newUser.email
+    );
+
     // create user session token
     const token = generateJWT(newUser.id);
     newUser.token = token;
