@@ -789,20 +789,16 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
 // @access Private (only faculty and observer update scoring)
 export const uninformedObsCreate = asyncHandler(async (req, res) => {
   const { observationsId } = req.body;
-  await prisma.observations.update({
+  await prisma.meetings.update({
     where: {
-      id: observationsId,
+      observationsId,
     },
     data: {
-      meetings: {
+      uninformedObservation: {
         create: {
-          uninformedObservation: {
-            create: {
-              rubrics: {
-                createMany: {
-                  data: Rubrics,
-                },
-              },
+          rubrics: {
+            createMany: {
+              data: Rubrics,
             },
           },
         },

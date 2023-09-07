@@ -25,7 +25,7 @@ const BASEURL = process.env.REACT_APP_BASE_URL;
 const Detail_observation = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState("open");
+  // const [isOpen, setIsOpen] = useState("open");
   const [obsDetail, setObsDetail] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
   const [cid, setcid] = useState("");
@@ -34,12 +34,12 @@ const Detail_observation = () => {
   const [loader, setLoader] = useState(false);
   const [facultySchedule, setFacultySchedule] = useState([]);
 
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   useEffect(() => {
     fetchObservation(setObsDetail, Number(id));
-    if (user.role === "Head_of_Department")
-      fetchCoursesAndUsers(dispatch, user.department.id, user.role);
+    // if (user.role === "Head_of_Department")
+    //   fetchCoursesAndUsers(dispatch, user.department.id, user.role);
     window.scrollTo(0, 0);
   }, []);
 
@@ -266,6 +266,8 @@ const Detail_observation = () => {
       setFacultySchedule([]);
     }
   };
+
+  console.log(obsDetail);
 
   return (
     <Fragment>
@@ -588,7 +590,11 @@ const Detail_observation = () => {
                           disabled={loader}
                           className="btn btn-primary mt-2 mx-2"
                           onClick={() =>
-                            createRubricScoring(obsDetail.id, setLoader)
+                            createRubricScoring(
+                              obsDetail.id,
+                              setLoader,
+                              setObsDetail
+                            )
                           }
                         >
                           {loader ? <Loader /> : "Start Rubric Scoring"}

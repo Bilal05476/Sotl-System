@@ -372,7 +372,7 @@ export async function updateEmailTemplate(
   }
 }
 
-export async function createRubricScoring(id, loader) {
+export async function createRubricScoring(id, loader, setObs) {
   loader(true);
   try {
     const template = await fetch(`${BASEURL}/observation/uninformed`, {
@@ -385,6 +385,7 @@ export async function createRubricScoring(id, loader) {
     const data = await template.json();
     loader(false);
     successes(data.message);
+    fetchObservation(setObs, id);
   } catch (err) {
     loader(false);
     console.log(err);
