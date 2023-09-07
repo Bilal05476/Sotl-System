@@ -10,7 +10,7 @@ import { findTemplate } from "./templates.js";
 // @route  POST api/observation/prompt
 // @access Private (Only Admin will prompt)
 export const prompt = asyncHandler(async (req, res) => {
-  const { departmentId, campus } = req.body;
+  const { departmentId, campus, threshold } = req.body;
   const findHodOfCampus = await prisma.user.findMany({
     where: {
       campus,
@@ -26,6 +26,14 @@ export const prompt = asyncHandler(async (req, res) => {
   });
 
   if (findHodOfCampus.length > 0) {
+    await prisma.observationThreshold.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        threshold,
+      },
+    });
     // send email to head of departments for observation prompt
     let emailString = await findEmail("ObsPrompt");
     for (let em = 0; em < findHodOfCampus.length; em++) {
@@ -37,6 +45,7 @@ export const prompt = asyncHandler(async (req, res) => {
         findHodOfCampus[em].email
       );
     }
+
     res.status(200).json({ message: "Emails send to head of departments!" });
   } else {
     res.status(404).json({ error: "No head of departments found!" });
@@ -88,6 +97,16 @@ export const initiate = asyncHandler(async (req, res) => {
 
   // let existedIds = existedObservation.map((item) => item.faculty.id);
 
+  // observation threshold
+  const obsthreshold = await prisma.observationThreshold.findFirst({
+    where: {
+      id: 1,
+    },
+    select: {
+      threshold: true,
+    },
+  });
+
   const observationsToCreate = facultyIds
     // .filter((facultyId) => !existedIds.includes(facultyId))
     .map((facultyId) => ({
@@ -95,6 +114,7 @@ export const initiate = asyncHandler(async (req, res) => {
       observerId,
       hodId,
       semester,
+      threshold: obsthreshold.threshold,
     }));
 
   let initiateObs = [];

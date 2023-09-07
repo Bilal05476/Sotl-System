@@ -50,6 +50,7 @@ app.use("/api/course", courseRoutes);
 // utility
 import utilityRoutes from "./routes/utility.js";
 import { findTemplate } from "./controller/templates.js";
+import sampleUsers from "./data.js";
 app.use("/api", utilityRoutes);
 
 app.use("/", (req, res) => {
@@ -76,21 +77,20 @@ app.listen(port, () => {
 //   console.log(`Server Running at port: ${port}`);
 // });
 
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
-// async function main() {
-//   console.log(
-//     await prisma.user.deleteMany({
-//       where: {
-//         email: {
-//           contains: "bilal.48480",
-//         },
-//       },
-//     })
-//   );
-// }
-// main();
-
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+async function main() {
+  return await prisma.observationThreshold.findFirst({
+    where: {
+      id: 1,
+    },
+    select: {
+      threshold: true,
+    },
+  });
+}
+console.log(await main());
+// console.log(sampleUsers());
 // const obj = {
 //   field1: "value1",
 //   field2: "value2",

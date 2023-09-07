@@ -73,6 +73,7 @@ model Observations {
     courseId            Int?
     feedbacks           FeedBacks[]
     createdAt           DateTime       @default(now())
+    threshold           Int?
 }
 
 // -> Observations => ObsScheduling
@@ -287,6 +288,12 @@ model EmailTemplate {
     id    Int       @id @default(autoincrement())
     email String    @db.VarChar(500)
     type  EmailType
+}
+
+// observation threshold store by admin
+model ObservationThreshold {
+    id        Int @id @default(autoincrement())
+    threshold Int
 }
 
 // Store Mutliple Date Time

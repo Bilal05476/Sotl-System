@@ -277,47 +277,7 @@ const Detail_observation = () => {
               </Col>
             </Row>
           )}
-          {/* <Row className="mb-3"> */}
-          {/* {user.role !== "Faculty" && (
-              <Col className="xl-25">
-                <span style={{ fontWeight: "200" }}>Faculty:</span>{" "}
-                {obsDetail?.faculty.name}
-              </Col>
-            )} */}
-          {/* {user.role !== "Observer" && (
-              <Col className="xl-25">
-                <span style={{ fontWeight: "200" }}>Observer:</span>{" "}
-                {obsDetail?.observer.name}
-              </Col>
-            )} */}
-          {/* {user.role !== "Head_of_Department" && (
-              <Col className="xl-25 text-right">
-                <span style={{ fontWeight: "200" }}>Head of Department:</span>{" "}
-                {obsDetail?.hod.name}
-              </Col>
-            )} */}
-          {/* <Col className="xl-25 text-right">
-              <span style={{ fontWeight: "200" }}>Progress:</span>{" "}
-              {obsDetail?.observationProgress}%
-              <span style={{ marginLeft: "1rem", fontWeight: "200" }}>
-                Status:
-              </span>{" "}
-              {obsDetail?.observationStatus}
-            </Col> */}
-          {/* </Row> */}
-          {/* <Row className="mb-3"> */}
-          {/* <Col className="xl-50 text-right">
-              <span style={{ fontWeight: "200" }}>Course:</span>{" "}
-              {obsDetail?.course.name}
-            </Col> */}
-          {/* <Col className="xl-25 text-right">
-              <span style={{ fontWeight: "200" }}>(F):</span> Faculty
-              <span style={{ marginLeft: "1rem", fontWeight: "200" }}>
-                (O):
-              </span>{" "}
-              Observer
-            </Col> */}
-          {/* </Row> */}
+
           <div className="accordion">
             <div className="accordion-item overflow-hidden mb-5">
               <button
@@ -338,137 +298,128 @@ const Detail_observation = () => {
                 Informed Observation Scheduling
               </button>
               {obsDetail.obsRequest ? (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body px-2 user-status table-responsive latest-order-table">
-                      <Table borderless>
-                        <thead>
-                          <tr>
-                            <th scope="col">Slot By Observer</th>
-                            <th scope="col">Slots By Faculty</th>
-                            <th scope="col">Teaching Plan</th>
-                            <th scope="col">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="digits">
-                              {obsDetail?.obsRequest?.timeSlotByObserver?.map(
-                                (item) => (
-                                  <Spanner day={item.day} time={item.time} />
-                                )
-                              )}
-                            </td>
-                            <td className="digits">
-                              {obsDetail?.obsRequest?.timeSlotsByFaculty?.map(
-                                (item) => (
-                                  <Spanner day={item.day} time={item.time} />
-                                )
-                              )}
-                            </td>
-                            <td className="digits">
-                              {obsDetail?.obsRequest?.teachingPlan
-                                ?.editedBy && (
-                                <span
-                                  className="d-flex alogn-items-center"
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  {teahingTempView && (
-                                    <>
-                                      <AccordButton
-                                        onClick={() =>
-                                          downloadCsv(
-                                            obsDetail?.obsRequest?.teachingPlan
-                                              .steps,
-                                            obsDetail?.obsRequest?.teachingPlan
-                                              .editedBy.name
-                                          )
-                                        }
-                                        icon=".CSV"
-                                      />
-                                      <AccordButton
-                                        onClick={() => printTemplatePlan()}
-                                        icon=".PDF"
-                                      />
-                                    </>
-                                  )}
-                                  {teahingTempView ? (
-                                    <AccordButton
-                                      onClick={() => setTeachingTempView(false)}
-                                      icon={<EyeOff color="white" size={20} />}
-                                    />
-                                  ) : (
-                                    <AccordButton
-                                      onClick={() => setTeachingTempView(true)}
-                                      icon={<Eye color="white" size={20} />}
-                                    />
-                                  )}
-                                </span>
-                              )}
-                            </td>
-
-                            <td
-                              className={`digits ${
-                                obsDetail?.obsRequest.status === "Completed"
-                                  ? "text-success"
-                                  : "text-danger"
-                              }`}
-                            >
-                              {obsDetail.obsRequest?.status}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                      {teahingTempView && (
-                        <TemplatePrint
-                          ref={componentRef}
-                          template={obsDetail?.obsRequest?.teachingPlan.steps}
-                          obsId={obsDetail?.id}
-                          type={"TEACHING"}
-                          faculty={obsDetail?.faculty.name}
-                          observer={obsDetail?.observer.name}
-                        />
-                      )}
-                      {obsDetail.obsRequest?.status !== "Completed" && (
-                        <div
-                          style={{
-                            textAlign: "right",
-                          }}
-                        >
-                          {user.role === "Faculty" ||
-                          (user.role === "Observer" &&
-                            obsDetail?.obsRequest?.teachingPlan?.editedBy) ? (
-                            <NavLink
-                              to={`/observations/observation-scheduling/${obsDetail?.id}`}
-                              className="btn btn-primary mx-2"
-                            >
-                              Edit Scheduling
-                            </NavLink>
-                          ) : (
-                            <></>
+                <div className="accordion-body px-2 user-status table-responsive latest-order-table">
+                  <Table borderless>
+                    <thead>
+                      <tr>
+                        <th scope="col">Slot By Observer</th>
+                        <th scope="col">Slots By Faculty</th>
+                        <th scope="col">Teaching Plan</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="digits">
+                          {obsDetail?.obsRequest?.timeSlotByObserver?.map(
+                            (item) => (
+                              <Spanner day={item.day} time={item.time} />
+                            )
                           )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body text-center">
-                      <strong>Not started!</strong>
-                      <br />
-                      {user.role === "Observer" && (
-                        <button
-                          className="mt-2 btn btn-primary"
-                          onClick={() => selectCourse()}
+                        </td>
+                        <td className="digits">
+                          {obsDetail?.obsRequest?.timeSlotsByFaculty?.map(
+                            (item) => (
+                              <Spanner day={item.day} time={item.time} />
+                            )
+                          )}
+                        </td>
+                        <td className="digits">
+                          {obsDetail?.obsRequest?.teachingPlan?.editedBy && (
+                            <span
+                              className="d-flex alogn-items-center"
+                              style={{ cursor: "pointer" }}
+                            >
+                              {teahingTempView && (
+                                <>
+                                  <AccordButton
+                                    onClick={() =>
+                                      downloadCsv(
+                                        obsDetail?.obsRequest?.teachingPlan
+                                          .steps,
+                                        obsDetail?.obsRequest?.teachingPlan
+                                          .editedBy.name
+                                      )
+                                    }
+                                    icon=".CSV"
+                                  />
+                                  <AccordButton
+                                    onClick={() => printTemplatePlan()}
+                                    icon=".PDF"
+                                  />
+                                </>
+                              )}
+                              {teahingTempView ? (
+                                <AccordButton
+                                  onClick={() => setTeachingTempView(false)}
+                                  icon={<EyeOff color="white" size={20} />}
+                                />
+                              ) : (
+                                <AccordButton
+                                  onClick={() => setTeachingTempView(true)}
+                                  icon={<Eye color="white" size={20} />}
+                                />
+                              )}
+                            </span>
+                          )}
+                        </td>
+
+                        <td
+                          className={`digits ${
+                            obsDetail?.obsRequest.status === "Completed"
+                              ? "text-success"
+                              : "text-danger"
+                          }`}
                         >
-                          Select Course
-                        </button>
+                          {obsDetail.obsRequest?.status}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                  {teahingTempView && (
+                    <TemplatePrint
+                      ref={componentRef}
+                      template={obsDetail?.obsRequest?.teachingPlan.steps}
+                      obsId={obsDetail?.id}
+                      type={"TEACHING"}
+                      faculty={obsDetail?.faculty.name}
+                      observer={obsDetail?.observer.name}
+                    />
+                  )}
+                  {obsDetail.obsRequest?.status !== "Completed" && (
+                    <div
+                      style={{
+                        textAlign: "right",
+                      }}
+                    >
+                      {user.role === "Faculty" ||
+                      (user.role === "Observer" &&
+                        obsDetail?.obsRequest?.teachingPlan?.editedBy) ? (
+                        <NavLink
+                          to={`/observations/observation-scheduling/${obsDetail?.id}`}
+                          className="btn btn-primary mx-2"
+                        >
+                          Edit Scheduling
+                        </NavLink>
+                      ) : (
+                        <></>
                       )}
                     </div>
                   )}
-                </>
+                </div>
+              ) : (
+                <div className="accordion-body text-center">
+                  <strong>Not started!</strong>
+                  <br />
+                  {user.role === "Observer" && (
+                    <button
+                      className="mt-2 btn btn-primary"
+                      onClick={() => selectCourse()}
+                    >
+                      Select Course
+                    </button>
+                  )}
+                </div>
               )}
             </div>
           </div>
@@ -493,80 +444,101 @@ const Detail_observation = () => {
                 Informed Observation
               </button>
               {obsDetail.meetings?.informedObservation ? (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body px-2 user-status table-responsive latest-order-table">
-                      <Table borderless>
-                        <thead>
-                          <tr>
-                            {/* <th scope="col">Id</th> */}
-                            <th scope="col">
-                              Rubrics Score{" "}
-                              <span
-                                style={{ color: "#f1f1f1", fontSize: "0.8rem" }}
-                              >
-                                (avg. observer and faculty)
-                              </span>
-                            </th>
-                            <th scope="col">Schedule on</th>
-                            <th scope="col">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            {/* <td className={"digits"}>
+                <div className="accordion-body px-2 user-status table-responsive latest-order-table">
+                  <Table borderless>
+                    <thead>
+                      <tr>
+                        {/* <th scope="col">Id</th> */}
+                        <th scope="col">
+                          Rubrics Score{" "}
+                          <span
+                            style={{ color: "#f1f1f1", fontSize: "0.8rem" }}
+                          >
+                            (avg. observer and faculty)
+                          </span>
+                        </th>
+                        <th scope="col">Schedule on</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        {/* <td className={"digits"}>
                               {obsDetail?.meetings.informedObservation.id}
                             </td> */}
-                            <td
-                              className={"digits "}
-                              style={{ fontWeight: "800" }}
-                            >
-                              {(
-                                (obsDetail?.meetings.informedObservation
-                                  .observerScore +
-                                  obsDetail?.meetings.informedObservation
-                                    .facultyScore) /
-                                2
-                              ).toFixed(1)}{" "}
-                              / 80.0
-                            </td>
-                            {dateFormater(obsDetail?.starting)}
-                            <td
-                              className={`digits ${
-                                obsDetail?.meetings.informedObservation
-                                  .status === "Completed"
-                                  ? "text-success"
-                                  : "text-primary"
-                              }`}
-                            >
-                              {obsDetail?.meetings.informedObservation.status}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </Table>
-
-                      <div style={{ textAlign: "right" }}>
-                        <NavLink
-                          to={`/observations/observation-rubric/${id}`}
-                          className="btn btn-primary mx-2"
+                        <td className={"digits "} style={{ fontWeight: "800" }}>
+                          {(
+                            (obsDetail?.meetings.informedObservation
+                              .observerScore +
+                              obsDetail?.meetings.informedObservation
+                                .facultyScore) /
+                            2
+                          ).toFixed(1)}{" "}
+                          / 80.0
+                        </td>
+                        {dateFormater(obsDetail?.starting)}
+                        <td
+                          className={`digits ${
+                            obsDetail?.meetings.informedObservation.status ===
+                            "Completed"
+                              ? "text-success"
+                              : "text-primary"
+                          }`}
                         >
-                          Open Rubrics
-                        </NavLink>
-                      </div>
-                    </div>
-                  )}
-                </>
+                          {obsDetail?.meetings.informedObservation.status}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+
+                  <div style={{ textAlign: "right" }}>
+                    <NavLink
+                      to={`/observations/observation-rubric/${id}`}
+                      className="btn btn-primary mx-2"
+                    >
+                      Open Rubrics
+                    </NavLink>
+                  </div>
+                </div>
               ) : (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body text-center">
-                      <strong>Not started!</strong>
-                    </div>
-                  )}
-                </>
+                <div className="accordion-body text-center">
+                  <strong>Not started!</strong>
+                </div>
               )}
             </div>
           </div>
+
+          <div className="accordion">
+            <div className="accordion-item overflow-hidden mb-5">
+              <button
+                className="btn btn-block text-light"
+                // onClick={() => handleAccordion("uninformed")}
+                style={{
+                  backgroundColor: completeColor,
+                  outline: "none",
+                  boxShadow: "none",
+                  padding: "15px",
+                  width: "100%",
+                  borderBottomLeftRadius: "0",
+                  borderBottomRightRadius: "0",
+                }}
+                type="button"
+                aria-expanded="true"
+              >
+                Uninformed Observation
+              </button>
+              {obsDetail.meetings?.uninformedObservation ? (
+                <div className="accordion-body">
+                  <strong>Started!</strong>
+                </div>
+              ) : (
+                <div className="accordion-body text-center">
+                  <strong>Not started!</strong>
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="accordion">
             <div className="accordion-item overflow-hidden mb-5">
               <button
@@ -587,198 +559,121 @@ const Detail_observation = () => {
                 Post Observation Meeting Scheduling (Face to Face)
               </button>
               {obsDetail.meetings?.postObservation ? (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body px-2 user-status table-responsive latest-order-table">
-                      <Table borderless>
-                        <thead>
-                          <tr>
-                            {/* <th scope="col">Id</th> */}
-                            <th scope="col">Reflection Plan</th>
-                            <th scope="col">Artifacts</th>
-                            <th scope="col">Schedule On</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="digits">
-                              {obsDetail?.meetings?.postObservation
-                                ?.reflectionPlan?.editedBy && (
-                                <span
-                                  className="d-flex alogn-items-center"
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  {refTempView ? (
-                                    <AccordButton
-                                      onClick={() => printTemplatePlan()}
-                                      icon={
-                                        <DownloadCloud
-                                          color="white"
-                                          size={20}
-                                        />
-                                      }
-                                    />
-                                  ) : (
-                                    <AccordButton
-                                      onClick={() => setRefTempView(true)}
-                                      icon={<Eye color="white" size={20} />}
-                                    />
-                                  )}
-                                  {refTempView && (
-                                    <AccordButton
-                                      onClick={() => setRefTempView(false)}
-                                      icon={<EyeOff color="white" size={20} />}
-                                    />
-                                  )}
-                                </span>
-                              )}
-                            </td>
-                            <td className="digits"></td>
-                            <td>
-                              {dateFormater2(
-                                obsDetail?.meetings?.postObservation
-                                  ?.scheduledOn
-                              )}
-                            </td>
-                            <td>
-                              {obsDetail?.meetings?.postObservation?.location}
-                            </td>
-                            <td
-                              className={`digits ${
-                                obsDetail?.meetings.postObservation.status ===
-                                "Completed"
-                                  ? "text-success"
-                                  : "text-primary"
-                              }`}
+                <div className="accordion-body px-2 user-status table-responsive latest-order-table">
+                  <Table borderless>
+                    <thead>
+                      <tr>
+                        {/* <th scope="col">Id</th> */}
+                        <th scope="col">Reflection Plan</th>
+                        <th scope="col">Artifacts</th>
+                        <th scope="col">Schedule On</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="digits">
+                          {obsDetail?.meetings?.postObservation?.reflectionPlan
+                            ?.editedBy && (
+                            <span
+                              className="d-flex alogn-items-center"
+                              style={{ cursor: "pointer" }}
                             >
-                              {obsDetail?.meetings.postObservation.status}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </Table>
-
-                      {refTempView && (
-                        <TemplatePrint
-                          ref={componentRef}
-                          template={
-                            obsDetail?.meetings?.postObservation?.reflectionPlan
-                              ?.steps
-                          }
-                          obsId={obsDetail?.id}
-                          type={"REFLECTION"}
-                          faculty={obsDetail?.faculty.name}
-                          observer={obsDetail?.observer.name}
-                          // obsSign={}
-                          // headSign={}
-                        />
-                      )}
-
-                      <div style={{ textAlign: "right" }}>
-                        {/* {user.role === "Head_of_Department" ||
-                        user.role === "Observer" ? (
-                          <Button
-                            className="mx-2 btn btn-primary"
-                            // onClick={() => selectCourse()}
-                          >
-                            Sign Template
-                          </Button>
-                        ) : (
-                          <></>
-                        )} */}
-                        {obsDetail?.meetings.postObservation.status ===
-                          "Ongoing" &&
-                          (user.role === "Observer" ||
-                            user.role === "Faculty") && (
-                            <NavLink
-                              to={`/observations/post-observation-meeting/${id}`}
-                              className="btn btn-primary mx-2"
-                            >
-                              Edit Scheduling
-                            </NavLink>
+                              {refTempView ? (
+                                <AccordButton
+                                  onClick={() => printTemplatePlan()}
+                                  icon={
+                                    <DownloadCloud color="white" size={20} />
+                                  }
+                                />
+                              ) : (
+                                <AccordButton
+                                  onClick={() => setRefTempView(true)}
+                                  icon={<Eye color="white" size={20} />}
+                                />
+                              )}
+                              {refTempView && (
+                                <AccordButton
+                                  onClick={() => setRefTempView(false)}
+                                  icon={<EyeOff color="white" size={20} />}
+                                />
+                              )}
+                            </span>
                           )}
-                        {/* {obsDetail?.meetings.postObservation.status ===
-                          "Scheduled" &&
-                          user.role === "Observer" && (
-                            <Button
-                              onClick={() => onPosObsDone()}
-                              type="button"
-                              color="primary"
-                              className="mx-2"
-                            >
-                              Mark Completed
-                            </Button>
-                          )} */}
-                      </div>
-                    </div>
+                        </td>
+                        <td className="digits"></td>
+                        <td>
+                          {dateFormater2(
+                            obsDetail?.meetings?.postObservation?.scheduledOn
+                          )}
+                        </td>
+                        <td>
+                          {obsDetail?.meetings?.postObservation?.location}
+                        </td>
+                        <td
+                          className={`digits ${
+                            obsDetail?.meetings.postObservation.status ===
+                            "Completed"
+                              ? "text-success"
+                              : "text-primary"
+                          }`}
+                        >
+                          {obsDetail?.meetings.postObservation.status}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+
+                  {refTempView && (
+                    <TemplatePrint
+                      ref={componentRef}
+                      template={
+                        obsDetail?.meetings?.postObservation?.reflectionPlan
+                          ?.steps
+                      }
+                      obsId={obsDetail?.id}
+                      type={"REFLECTION"}
+                      faculty={obsDetail?.faculty.name}
+                      observer={obsDetail?.observer.name}
+                      // obsSign={}
+                      // headSign={}
+                    />
                   )}
-                </>
-              ) : (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body text-center">
-                      <strong>Not started!</strong>
-                      <br />
-                      {obsDetail?.meetings?.informedObservation &&
-                      obsDetail?.meetings?.informedObservation?.facultyScore !==
-                        0 &&
-                      obsDetail?.meetings?.informedObservation
-                        ?.observerScore !== 0 &&
-                      user.role === "Observer" ? (
+
+                  <div style={{ textAlign: "right" }}>
+                    {obsDetail?.meetings.postObservation.status === "Ongoing" &&
+                      (user.role === "Observer" || user.role === "Faculty") && (
                         <NavLink
                           to={`/observations/post-observation-meeting/${id}`}
-                          className="btn btn-primary mt-2 mx-2"
+                          className="btn btn-primary mx-2"
                         >
-                          Schedule Post Observation
+                          Edit Scheduling
                         </NavLink>
-                      ) : (
-                        <></>
                       )}
-                    </div>
-                  )}
-                </>
+                  </div>
+                </div>
+              ) : (
+                <div className="accordion-body text-center">
+                  <strong>Not started!</strong>
+                  <br />
+                  {!obsDetail?.meetings?.postObservation &&
+                    obsDetail?.meetings?.informedObservation?.status ===
+                      "Completed" &&
+                    obsDetail?.meetings?.uninformedObservation?.status ===
+                      "Completed" &&
+                    user.role === "Observer" && (
+                      <NavLink
+                        to={`/observations/post-observation-meeting/${id}`}
+                        className="btn btn-primary mt-2 mx-2"
+                      >
+                        Schedule Post Observation
+                      </NavLink>
+                    )}
+                </div>
               )}
             </div>
           </div>
-          {/* <div className="accordion">
-            <div className="accordion-item overflow-hidden mb-5">
-              <button
-                className="btn btn-block text-light"
-                // onClick={() => handleAccordion("uninformed")}
-                style={{
-                  backgroundColor: completeColor,
-                  outline: "none",
-                  boxShadow: "none",
-                  padding: "15px",
-                  width: "100%",
-                  borderBottomLeftRadius: "0",
-                  borderBottomRightRadius: "0",
-                }}
-                type="button"
-                aria-expanded="true"
-              >
-                Uninformed Observation
-              </button>
-              {obsDetail.meetings?.uninformedObservation ? (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body">
-                      <strong>Ruko zara, sabar karo!</strong>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  {isOpen === "open" && (
-                    <div className="accordion-body text-center">
-                      <strong>Not started!</strong>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          </div> */}
         </Container>
       )}
       {!obsDetail && <Loader />}

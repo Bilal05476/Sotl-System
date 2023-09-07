@@ -13,9 +13,10 @@ const TabsetPrompt = () => {
   const [createPrompt, setCreatePrompt] = useState({
     departmentId: "Select",
     campus: "Select",
+    threshold: "",
     loader: false,
   });
-  const { departmentId, loader, campus } = createPrompt;
+  const { departmentId, loader, campus, threshold } = createPrompt;
 
   const toastId = useRef(null);
 
@@ -69,10 +70,13 @@ const TabsetPrompt = () => {
     }
     if (departmentId === "Select" || campus === "Select") {
       info("Provide select campus and department both!");
+    } else if (threshold < 50) {
+      info("Provide minimum 50 threshold!");
     } else {
       const obsDetail = {
         departmentId: Number(departmentId),
         campus,
+        threshold: Number(threshold),
       };
       postObs(obsDetail);
       //   console.log(obsDetail);
@@ -140,6 +144,27 @@ const TabsetPrompt = () => {
                     </option>
                   )}
                 </Input>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Observation Threshold
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom4"
+                  placeholder="50-100"
+                  type="number"
+                  required={true}
+                  value={threshold}
+                  onChange={(e) =>
+                    setCreatePrompt({
+                      ...createPrompt,
+                      threshold: e.target.value,
+                    })
+                  }
+                />
               </div>
             </FormGroup>
           </Form>
