@@ -647,7 +647,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc   Informed Observation rubrics scoring
+// @desc   Informed observation rubrics scoring
 // @route  PUT api/observation/informed
 // @access Private (only faculty and observer update scoring)
 export const informedObsCycle = asyncHandler(async (req, res) => {
@@ -775,6 +775,128 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
       });
       res.status(200).json({
         message: "Informed Rubrics Observation Successfully Completed!",
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err,
+      });
+    }
+  }
+});
+
+// @desc   Create Un-informed observation rubrics scoring
+// @route  POST api/observation/uninformed
+// @access Private (only faculty and observer update scoring)
+export const uninformedObsCreate = asyncHandler(async (req, res) => {
+  const { observationsId } = req.body;
+  await prisma.observations.update({
+    where: {
+      id: observationsId,
+    },
+    data: {
+      meetings: {
+        create: {
+          uninformedObservation: {
+            create: {
+              rubrics: {
+                createMany: {
+                  data: Rubrics,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  res.status(200).json({ message: "Rubrics generated, start scoring now!" });
+});
+
+// @desc   Un-informed observation rubrics scoring
+// @route  PUT api/observation/uninformed
+// @access Private (only faculty and observer update scoring)
+export const uninformedObsCycle = asyncHandler(async (req, res) => {
+  const { uninformedId, rubricsFinal, role, status } = req.body;
+
+  let getScores = 0;
+  if (rubricsFinal) {
+    // rubricsFinal.map((item) => getOnlyIds.push(item.rid));
+    rubricsFinal.map((item) => (getScores += item.score));
+  }
+
+  if (role === "Faculty") {
+    try {
+      rubricsFinal.map(async (item) => {
+        await prisma.rubric.update({
+          where: {
+            id: item.rid,
+          },
+          data: {
+            facultyScore: item.score,
+          },
+        });
+      });
+      await prisma.uninformed.update({
+        where: {
+          id: uninformedId,
+        },
+        data: {
+          facultyScore: getScores,
+        },
+      });
+
+      res.status(200).json({
+        message: "Rubrics Score Successfully Submitted!",
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: err,
+      });
+    }
+  }
+  if (role === "Observer") {
+    try {
+      rubricsFinal.map(async (item) => {
+        await prisma.rubric.update({
+          where: {
+            id: item.rid,
+          },
+          data: {
+            observerScore: item.score,
+          },
+        });
+      });
+
+      await prisma.uninformed.update({
+        where: {
+          id: uninformedId,
+        },
+        data: {
+          observerScore: getScores,
+        },
+      });
+
+      res.status(200).json({
+        message: "Rubrics Score Successfully Submitted!",
+      });
+    } catch (err) {
+      res.status(400).json({
+        err,
+      });
+    }
+  }
+  if (status) {
+    try {
+      await prisma.uninformed.update({
+        where: {
+          id: uninformedId,
+        },
+        data: {
+          status,
+        },
+      });
+      res.status(200).json({
+        message: "Un-informed Rubrics Observation Successfully Completed!",
       });
     } catch (err) {
       res.status(400).json({

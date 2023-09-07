@@ -15,7 +15,7 @@ import { ConfirmModal } from "../PopupModal";
 // import DiscreteSlider from "../DiscreteSlider";
 const URL = process.env.PUBLIC_URL;
 
-const Observation_rubric = () => {
+const Observation_rubric2 = () => {
   const [{ user }] = useStateValue();
   const [isOpen, setIsOpen] = useState("");
   const [accordionTab, setaccordionTab] = useState([]);
@@ -55,7 +55,7 @@ const Observation_rubric = () => {
         user.role,
         rubricsFinal,
         setLoader,
-        obsDetails?.meetings?.informedObservation?.id,
+        obsDetails?.meetings?.uninformedObservation?.id,
         obsDetails?.meetings?.observationsId,
         setObsDetail
       );
@@ -65,26 +65,26 @@ const Observation_rubric = () => {
   };
 
   const facultySc = obsDetails
-    ? obsDetails?.meetings?.informedObservation?.facultyScore
+    ? obsDetails?.meetings?.uninformedObservation?.facultyScore
     : 0;
   const observerSc = obsDetails
-    ? obsDetails?.meetings?.informedObservation?.observerScore
+    ? obsDetails?.meetings?.uninformedObservation?.observerScore
     : 0;
 
   // avgSc = true && true ? (12 + 12) / 2 : 0;
   const avgSc =
-    obsDetails?.meetings?.informedObservation?.observerScore &&
-    obsDetails?.meetings?.informedObservation?.facultyScore
-      ? (obsDetails?.meetings?.informedObservation?.observerScore +
-          obsDetails?.meetings?.informedObservation?.facultyScore) /
+    obsDetails?.meetings?.uninformedObservation?.observerScore &&
+    obsDetails?.meetings?.uninformedObservation?.facultyScore
+      ? (obsDetails?.meetings?.uninformedObservation?.observerScore +
+          obsDetails?.meetings?.uninformedObservation?.facultyScore) /
         2
       : 0;
 
   const perSc =
-    obsDetails?.meetings?.informedObservation?.observerScore &&
-    obsDetails?.meetings?.informedObservation?.facultyScore
-      ? ((obsDetails?.meetings?.informedObservation?.observerScore +
-          obsDetails?.meetings?.informedObservation?.facultyScore) /
+    obsDetails?.meetings?.uninformedObservation?.observerScore &&
+    obsDetails?.meetings?.uninformedObservation?.facultyScore
+      ? ((obsDetails?.meetings?.uninformedObservation?.observerScore +
+          obsDetails?.meetings?.uninformedObservation?.facultyScore) /
           160) *
         100
       : 0;
@@ -93,7 +93,7 @@ const Observation_rubric = () => {
     setOpenConfirm(!openConfirm);
     info("Locking rubrics scores...");
     doneScore(
-      obsDetails?.meetings?.informedObservation?.id,
+      obsDetails?.meetings?.uninformedObservation?.id,
       setLoader,
       obsDetails?.meetings?.observationsId,
       setObsDetail
@@ -102,7 +102,10 @@ const Observation_rubric = () => {
 
   return (
     <Fragment>
-      <Breadcrumb title="Observation Rubrics" parent="Informed Observation" />
+      <Breadcrumb
+        title="Observation Rubrics"
+        parent="Un-informed Observation"
+      />
       <ConfirmModal
         open={openConfirm}
         setOpen={setOpenConfirm}
@@ -212,7 +215,7 @@ const Observation_rubric = () => {
 
             {user.role === "Observer" || user.role === "Faculty" ? (
               <div>
-                {obsDetails?.meetings?.informedObservation?.status !== // update after testing !==
+                {obsDetails?.meetings?.uninformedObservation?.status !== // update after testing !==
                   "Completed" && (
                   <div className="d-flex align-items-center justify-content-between">
                     <AccordButton
@@ -222,10 +225,10 @@ const Observation_rubric = () => {
                       loader={loader}
                     />
                     {user.role === "Observer" &&
-                      obsDetails?.meetings?.informedObservation?.facultyScore >
-                        0 &&
-                      obsDetails?.meetings?.informedObservation?.observerScore >
-                        0 && (
+                      obsDetails?.meetings?.uninformedObservation
+                        ?.facultyScore > 0 &&
+                      obsDetails?.meetings?.uninformedObservation
+                        ?.observerScore > 0 && (
                         <AccordButton
                           text={loader ? <Loader /> : "Done"}
                           backgroundColor={completeColor}
@@ -247,7 +250,7 @@ const Observation_rubric = () => {
   );
 };
 
-export default Observation_rubric;
+export default Observation_rubric2;
 
 const RubricAccordion = ({
   title,
@@ -341,7 +344,7 @@ const RubricAccordion = ({
 
         {isOpen === accordCode && (
           <div className="accordion-body" style={{ padding: "2rem" }}>
-            {obsDetails?.meetings?.informedObservation?.rubrics.map(
+            {obsDetails?.meetings?.uninformedObservation?.rubrics.map(
               (item, ind) => {
                 if (item.code === accordCode)
                   return (
@@ -398,35 +401,6 @@ const AccordionSubHeading = ({
   role,
 }) => {
   const [rubricSc, setRubricSc] = useState(role === "Faculty" ? fs : os);
-  // const [scoreSelected, setScoreSelected] = useState([]);
-
-  // useEffect(() => {
-  //   let score = 0;
-  //   let sclen = 0;
-  //   if (scoreSelected[0]?.sc) {
-  //     scoreSelected[0]?.sc.map((obj) => {
-  //       score += obj;
-  //       sclen += 1;
-  //       return null;
-  //     });
-  //     setRubricSc(score / sclen);
-  //     if (subSections.some((obj) => obj.rid === rid)) {
-  //       const updatedArray = subSections.map((obj) => {
-  //         if (obj.rid === rid) {
-  //           return { ...obj, sc: score / sclen };
-  //         }
-  //         return obj;
-  //       });
-  //       setSubSections(updatedArray);
-  //     } else {
-  //       setSubSections([
-  //         ...subSections,
-  //         { rid: scoreSelected[0].rid, sc: score / sclen, code: accordCode },
-  //       ]);
-  //     }
-  //   }
-  // }, [scoreSelected]);
-
   // range input
   const handleChange = (event) => {
     setRubricSc(Number(event.target.value));
@@ -494,25 +468,8 @@ const AccordionSubHeading = ({
     >
       <h5>
         {ind}. {title}
-        {/* <span
-          style={{
-            fontWeight: "600",
-            marginLeft: "0.4rem",
-          }}
-        >
-          {rubricSc > 0 && `(${rubricSc})`}
-        </span> */}
       </h5>
-      {/* <div className="d-flex align-items-center justify-content-end mb-2 mx-2">
-        <small className="mx-2" style={{ fontSize: "0.9rem" }}>
-          Score by Faculty:
-          <span style={{ fontWeight: "800" }}> {fs}</span>
-        </small>
-        <small style={{ fontSize: "0.9rem" }}>
-          Score by Observer:
-          <span style={{ fontWeight: "800" }}> {os}</span>
-        </small>
-      </div> */}
+
       <div className="d-flex align-items-center justify-content-end my-2">
         <small
           style={{
@@ -530,19 +487,6 @@ const AccordionSubHeading = ({
       </div>
 
       {role === "Faculty" || role === "Observer" ? (
-        // <div className="d-flex align-items-center justify-content-between">
-        //   {ScoringPlot.map((item) => (
-        //     <RubricPoints
-        //       scorePlot={item}
-        //       rubricSc={rubricSc}
-        //       setRubricSc={setRubricSc}
-        //       scoreSelected={scoreSelected}
-        //       setScoreSelected={setScoreSelected}
-        //       rid={rid}
-        //       k={item.score}
-        //     />
-        //   ))}
-        // </div>
         <div className="range-container">
           <div className="breakpoints d-flex justify-content-between">
             {renderBreakpoints()}
@@ -563,112 +507,3 @@ const AccordionSubHeading = ({
     </div>
   );
 };
-
-// const ScoringPlot = [
-//   {
-//     score: 0,
-//     text: "Non Demonstrating",
-//   },
-//   {
-//     score: 1,
-//     text: "Limiting",
-//   },
-//   {
-//     score: 2,
-//     text: "Developing",
-//   },
-//   {
-//     score: 3,
-//     text: "Applying",
-//   },
-//   {
-//     score: 4,
-//     text: "Innovating",
-//   },
-// ];
-
-// const RubricPoints = ({
-//   scorePlot,
-//   // rubricSc,
-//   // setRubricSc,
-//   scoreSelected,
-//   setScoreSelected,
-//   rid,
-//   k,
-// }) => {
-//   const toggleSelected = (sc) => {
-//     const ridExists = scoreSelected.findIndex((obj) => obj.rid === rid);
-//     if (ridExists !== -1) {
-//       const scoreExists = scoreSelected[ridExists].sc.includes(sc);
-//       if (scoreExists) {
-//         const updatedArray = scoreSelected.map((obj) => {
-//           if (obj.rid === rid) {
-//             const popScore = obj.sc.filter((sco) => sco !== sc);
-//             return { ...obj, sc: popScore };
-//           }
-//           return obj;
-//         });
-//         setScoreSelected(updatedArray);
-//       } else {
-//         const updatedArray = scoreSelected.map((obj) => {
-//           if (obj.rid === rid && obj.sc.length < 2) {
-//             return { ...obj, sc: [...obj.sc, sc] };
-//           } else {
-//             info("You can only select any two of the rubric sub points...");
-//             return obj;
-//           }
-//         });
-//         setScoreSelected(updatedArray);
-//       }
-//     } else {
-//       setScoreSelected([...scoreSelected, { rid, sc: [sc] }]);
-//     }
-//   };
-//   return (
-//     <div
-//       key={k}
-//       className="rubric-points d-flex align-items-start my-1 mx-1"
-//       style={{
-//         backgroundColor:
-//           scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-//           scorePlot.score === 1
-//             ? blue3
-//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-//               scorePlot.score === 2
-//             ? blue2
-//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-//               scorePlot.score === 3
-//             ? blue1
-//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-//               scorePlot.score === 4
-//             ? blue4
-//             : scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-//               scorePlot.score === 0
-//             ? blue5
-//             : "",
-//         boxShadow:
-//           scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) &&
-//           "0.1rem 0.1rem 0.2rem rgba(109, 158, 207, 0.823)",
-//       }}
-//       onClick={() => toggleSelected(scorePlot.score)}
-//     >
-//       <input
-//         type="radio"
-//         className="mt-1"
-//         checked={
-//           scoreSelected.some((obj) => obj.sc.includes(scorePlot.score)) && true
-//         }
-//         style={{ marginRight: "0.5rem" }}
-//         readOnly={true}
-//       />
-
-//       <span
-//         style={{
-//           textAlign: "left",
-//         }}
-//       >
-//         {scorePlot.text}
-//       </span>
-//     </div>
-//   );
-// };

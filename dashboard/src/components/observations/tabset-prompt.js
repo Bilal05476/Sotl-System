@@ -56,6 +56,7 @@ const TabsetPrompt = () => {
               ...createPrompt,
               departmentId: "Select",
               campus: "Select",
+              threshold: "",
             });
           }, 2500);
         }

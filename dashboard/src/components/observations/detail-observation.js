@@ -8,6 +8,7 @@ import { useStateValue } from "../../StateProvider";
 import logo from "../../assets/images/blue-version.png";
 
 import {
+  createRubricScoring,
   deleteObservation,
   fetchCoursesAndUsers,
   fetchObservation,
@@ -31,6 +32,7 @@ const Detail_observation = () => {
   const [facultycourses, setfacultycourses] = useState([]);
   const toastId = useRef(null);
   const [loader, setLoader] = useState(false);
+  const [facultySchedule, setFacultySchedule] = useState([]);
 
   const [{ user }, dispatch] = useStateValue();
 
@@ -241,6 +243,30 @@ const Detail_observation = () => {
       fetchObservation(setObsDetail, Number(id));
     }
   };
+  const showFacultySchedule = async (id) => {
+    const BASEURL = process.env.REACT_APP_BASE_URL;
+
+    if (facultySchedule.length === 0) {
+      setLoader(true);
+      try {
+        const res = await fetch(`${BASEURL}/user/${id}`, {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+        setLoader(false);
+
+        const data = await res.json();
+        setFacultySchedule(data.slots);
+      } catch (error) {
+        console.log(error.message);
+        setLoader(false);
+      }
+    } else {
+      setFacultySchedule([]);
+    }
+  };
+
   return (
     <Fragment>
       <Breadcrumb title="Detail Observation" parent="Observations" />
@@ -534,6 +560,85 @@ const Detail_observation = () => {
               ) : (
                 <div className="accordion-body text-center">
                   <strong>Not started!</strong>
+                  <br />
+
+                  {!obsDetail?.meetings?.uninformedObservation &&
+                    obsDetail?.meetings?.informedObservation?.status ===
+                      "Completed" &&
+                    user.role === "Observer" && (
+                      <>
+                        <button
+                          disabled={loader}
+                          className="btn btn-primary mt-2 mx-2"
+                          onClick={() =>
+                            showFacultySchedule(obsDetail.facultyId)
+                          }
+                        >
+                          {loader ? (
+                            <Loader />
+                          ) : (
+                            <>
+                              {facultySchedule.length > 0
+                                ? "Hide Faculty Schedule"
+                                : "Show Faculty Schedule"}
+                            </>
+                          )}
+                        </button>
+                        <button
+                          disabled={loader}
+                          className="btn btn-primary mt-2 mx-2"
+                          onClick={() =>
+                            createRubricScoring(obsDetail.id, setLoader)
+                          }
+                        >
+                          {loader ? <Loader /> : "Start Rubric Scoring"}
+                        </button>
+                      </>
+                    )}
+                  {obsDetail?.meetings?.uninformedObservation && (
+                    <NavLink
+                      className="btn btn-primary mt-2 mx-2"
+                      to={`/observations/uninformed-observation-rubric/${id}`}
+                    >
+                      Open Rubrics
+                    </NavLink>
+                  )}
+                  <br />
+                  <br />
+                  {facultySchedule.length > 0 && (
+                    <Table borderless>
+                      <thead>
+                        <tr>
+                          {/* <th scope="col">Id</th> */}
+                          <th scope="col">Course code</th>
+                          <th scope="col">Course</th>
+                          <th scope="col">Time slot</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {facultySchedule.map((item) => (
+                          <tr>
+                            <td style={{ width: "33.33%" }} className="digits">
+                              {item.course.courseCode}
+                            </td>
+                            <td
+                              style={{
+                                width: "33.33%",
+                                borderRight: "1px solid #ccc",
+                                borderLeft: "1px solid #ccc",
+                              }}
+                              className="digits"
+                            >
+                              {item.course.name}
+                            </td>
+                            <td style={{ width: "33.33%" }} className="digits">
+                              {item.day}-{item.time}-{item.location}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  )}
                 </div>
               )}
             </div>

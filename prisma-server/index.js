@@ -77,19 +77,19 @@ app.listen(port, () => {
 //   console.log(`Server Running at port: ${port}`);
 // });
 
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
-async function main() {
-  return await prisma.observationThreshold.findFirst({
-    where: {
-      id: 1,
-    },
-    select: {
-      threshold: true,
-    },
-  });
-}
-console.log(await main());
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+// async function main() {
+//   return await prisma.observationThreshold.findFirst({
+//     where: {
+//       id: 1,
+//     },
+//     select: {
+//       threshold: true,
+//     },
+//   });
+// }
+// console.log(await main());
 // console.log(sampleUsers());
 // const obj = {
 //   field1: "value1",

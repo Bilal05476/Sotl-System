@@ -371,3 +371,22 @@ export async function updateEmailTemplate(
     console.log(err);
   }
 }
+
+export async function createRubricScoring(id, loader) {
+  loader(true);
+  try {
+    const template = await fetch(`${BASEURL}/observation/uninformed`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({ observationsId: id }),
+    });
+    const data = await template.json();
+    loader(false);
+    successes(data.message);
+  } catch (err) {
+    loader(false);
+    console.log(err);
+  }
+}

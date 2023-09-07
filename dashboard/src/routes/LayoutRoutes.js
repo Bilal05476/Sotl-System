@@ -36,6 +36,7 @@ import Listobservation from "../components/observations/list-observation";
 import Createobservation from "../components/observations/create-observation";
 import Detailobservation from "../components/observations/detail-observation";
 import Observationrubric from "../components/observations/observation-rubric";
+import Observationrubric2 from "../components/observations/observation-rubric2";
 import SchedulingPage from "../components/observations/scheuling-page";
 import EditProfile from "../components/settings/edit-profile";
 import Createcourses from "../components/courses/create-courses";
@@ -185,6 +186,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${URL}/observations/observation-rubric/:id`}
             element={<Observationrubric />}
+          />
+          <Route
+            path={`${URL}/observations/uninformed-observation-rubric/:id`}
+            element={<Observationrubric2 />}
           />
           <Route
             path={`${URL}/observations/create-observation`}
