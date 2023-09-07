@@ -29,6 +29,7 @@ import Dashboard from "../components/dashboard";
 import Profile from "../components/settings/profile";
 import Createuser from "../components/users/create-user";
 import Listuser from "../components/users/list-user";
+import Roleuser from "../components/users/role-user";
 // import Createvendors from "../components/vendors/create.vendors";
 // import Listvendors from "../components/vendors/list-vendors";
 import Listobservation from "../components/observations/list-observation";
@@ -48,6 +49,7 @@ import Reflection from "../components/Templates/Reflection";
 import Postobservation from "../components/observations/post-observation";
 import ResetPassword from "../components/settings/reset-password";
 import EmailTemplate from "../components/Email/EmailTemplate";
+import PromptObservation from "../components/observations/prompt-observation";
 
 // import { useStateValue } from "../StateProvider";
 // import Hello from "../components/Hello";
@@ -152,6 +154,7 @@ const LayoutRoutes = () => {
           /> */}
 
           <Route path={`${URL}/users/list-user`} element={<Listuser />} />
+          <Route path={`${URL}/user/:slug`} element={<Roleuser />} />
           <Route path={`${URL}/users/create-user`} element={<Createuser />} />
           <Route
             path={`${URL}/courses/list-courses`}
@@ -196,6 +199,10 @@ const LayoutRoutes = () => {
             element={<Postobservation />}
           />
 
+          <Route
+            path={`${URL}/observations/prompt-observation`}
+            element={<PromptObservation />}
+          />
           {/* <Route
             path={`${URL}/vendors/list_vendors`}
             element={<Listvendors />}

@@ -25,7 +25,7 @@ const List_user = () => {
     } else if (user.role === "Super_Admin") {
       fetchSotlData(dispatch, user.token);
     } else fetchUserData(user.id, dispatch);
-    // window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -200,6 +200,7 @@ const List_user = () => {
                       cursor: "pointer",
                     }}
                     onClick={() => ChangeSlice(item)}
+                    key={item}
                   >
                     {item}
                   </span>

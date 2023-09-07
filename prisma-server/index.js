@@ -49,7 +49,7 @@ app.use("/api/course", courseRoutes);
 
 // utility
 import utilityRoutes from "./routes/utility.js";
-import { findEmail } from "./controller/email.js";
+import { findTemplate } from "./controller/templates.js";
 app.use("/api", utilityRoutes);
 
 app.use("/", (req, res) => {
@@ -80,20 +80,28 @@ app.listen(port, () => {
 // const prisma = new PrismaClient();
 // async function main() {
 //   console.log(
-//     await prisma.user.findMany({
+//     await prisma.user.deleteMany({
 //       where: {
-//         campus: "Bahria_Campus",
-//         department: {
-//           id: 2,
+//         email: {
+//           contains: "bilal.48480",
 //         },
-//         role: "Head_of_Department",
 //       },
 //     })
 //   );
 // }
 // main();
-// let emailString = await findEmail("CreateUser");
-// console.log(emailString);
+
+// const obj = {
+//   field1: "value1",
+//   field2: "value2",
+//   field3: "value3",
+// };
+
+// // To exclude 'field2' from the object
+// delete obj.field2;
+// console.log(obj);
+// let templateSteps = await findTemplate("Re");
+// console.log(templateSteps);
 // let str =
 //   "Hello {{name}}, hope you are doing well. {{name}} is your email: {{email}}";
 // console.log(

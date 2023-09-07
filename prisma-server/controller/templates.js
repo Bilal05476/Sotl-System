@@ -42,3 +42,21 @@ export const getTemplate = asyncHandler(async (req, res) => {
   });
   res.status(200).json(template);
 });
+
+export const findTemplate = async (type) => {
+  const find = await prisma.systemTemplatePlan.findFirst({
+    where: {
+      type,
+    },
+    include: {
+      steps: {
+        select: {
+          field: true,
+          name: true,
+          code: type === "Reflection" ? true : false,
+        },
+      },
+    },
+  });
+  return find.steps;
+};

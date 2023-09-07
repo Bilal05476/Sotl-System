@@ -77,23 +77,23 @@ export const MENUITEMS = [
     children: [
       { path: "/users/list-user", title: "All Users", type: "link" },
       {
-        path: "/users/campus-directors",
+        path: "/user/campus-directors",
         title: "Campus Directors",
         type: "link",
       },
       {
-        path: "/users/head-of-departments",
+        path: "/user/head-of-departments",
         title: "Head of Departments",
         type: "link",
       },
       {
-        path: "/users/observers",
-        title: "Faculty Observers",
+        path: "/user/observers",
+        title: "Observers",
         type: "link",
       },
       {
-        path: "/users/faculty",
-        title: "Faculty Members",
+        path: "/user/faculty",
+        title: "Faculties",
         type: "link",
       },
     ],
@@ -136,6 +136,11 @@ export const MENUITEMS = [
       {
         path: "/email/update-observation",
         title: "Update Observation",
+        type: "link",
+      },
+      {
+        path: "/email/observation-prompt",
+        title: "Observation Prompt",
         type: "link",
       },
     ],

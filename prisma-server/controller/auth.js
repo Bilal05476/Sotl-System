@@ -46,7 +46,7 @@ export const createUser = asyncHandler(async (req, res) => {
 
     let ids = [];
 
-    if (newUser?.role === "Faculty") {
+    if (newUser?.role === "Faculty" && courses.length > 0) {
       courses.map((item) => ids.push({ id: item }));
       await prisma.user.update({
         where: {
@@ -72,6 +72,7 @@ export const createUser = asyncHandler(async (req, res) => {
     // create user session token
     const token = generateJWT(newUser.id);
     newUser.token = token;
+    delete newUser.password;
     res.status(200).json(newUser);
   }
 });
@@ -111,27 +112,10 @@ export const loginUser = asyncHandler(async (req, res) => {
     if (checkPassword) {
       // create user session token
       const token = generateJWT(validate.id);
-
-      const loginUser = {
-        id: validate.id,
-        name: validate.name,
-        email: validate.email,
-        phone: validate.phone,
-        avatar: validate.avatar,
-        designation: validate.designation,
-        dateOfBirth: validate.dateOfBirth,
-        institute: validate.institute,
-        degree: validate.degree,
-        starting: validate.starting,
-        ending: validate.ending,
-        role: validate.role,
-        campus: validate.campus,
-        department: validate.department,
-        token,
-      };
-
+      validate.token = token;
+      delete validate.password;
       /// send user data to client side
-      res.status(200).json(loginUser);
+      res.status(200).json(validate);
     } else {
       res.status(400).json({ error: "Invalid Credentials" });
     }

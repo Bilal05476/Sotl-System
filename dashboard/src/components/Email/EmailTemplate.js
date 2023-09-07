@@ -22,6 +22,12 @@ const EmailTemplate = () => {
     if (params.slug === "initiate-observation") {
       getEmailTemplate(setEmailTemplate, "InitiateObs", user.token, setEmail);
     }
+    if (params.slug === "update-observation") {
+      getEmailTemplate(setEmailTemplate, "UpdateObs", user.token, setEmail);
+    }
+    if (params.slug === "observation-prompt") {
+      getEmailTemplate(setEmailTemplate, "ObsPrompt", user.token, setEmail);
+    }
     window.scrollTo(0, 0);
   }, []);
 
@@ -51,6 +57,26 @@ const EmailTemplate = () => {
         setLoader
       );
     }
+    if (params.slug === "update-observation") {
+      updateEmailTemplate(
+        setEmailTemplate,
+        "UpdateObs",
+        user.token,
+        setEmail,
+        obj,
+        setLoader
+      );
+    }
+    if (params.slug === "observation-prompt") {
+      updateEmailTemplate(
+        setEmailTemplate,
+        "ObsPrompt",
+        user.token,
+        setEmail,
+        obj,
+        setLoader
+      );
+    }
   };
 
   return (
@@ -61,6 +87,10 @@ const EmailTemplate = () => {
             ? "New User Email"
             : params.slug === "initiate-observation"
             ? "Initiate Observation Email"
+            : params.slug === "update-observation"
+            ? "Update Observation Email"
+            : params.slug === "observation-prompt"
+            ? "Observation Prompt Email"
             : ""
         }
         parent="Email Template"
@@ -87,7 +117,7 @@ const EmailTemplate = () => {
                           { name: "receiver email", tag: "{{email}}" },
                           {
                             name: "SOTL link",
-                            tag: "<a href='https://sotlsystem.tech' target='blank'>SOTL System</a>",
+                            tag: "<a href='https://sotlsystem.tech' target='_blank'>SOTL System</a>",
                           },
                         ].map((item) => (
                           <span

@@ -85,6 +85,7 @@ const List_courses = () => {
                             <td className="digits">
                               {item.department.map((dept) => (
                                 <span
+                                  key={dept?.id}
                                   style={{
                                     color:
                                       dept.id === user.department?.id
@@ -231,6 +232,7 @@ const List_courses = () => {
                             <td className="digits">
                               {item.department.map((dept) => (
                                 <span
+                                  key={dept?.id}
                                   style={{
                                     color:
                                       dept.id === user.department?.id

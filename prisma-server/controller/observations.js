@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import asyncHandler from "express-async-handler";
-import { TeachingSteps, Rubrics, ReflectionSteps } from "../rubrics.js";
+import { Rubrics } from "../rubrics.js";
 import { findEmail } from "./email.js";
 import { emailSender } from "../EmailSmtp/index.js";
+import { findTemplate } from "./templates.js";
 
 // @desc   Observation Prompt by Admin to Head of department
 // @route  POST api/observation/prompt
@@ -381,6 +382,8 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
         "Already have an ongoing observation for that course of this faculty!",
     });
   } else {
+    let templateSteps = await findTemplate("Teaching");
+
     const createdReq = await prisma.observations.update({
       where: {
         id: observationsId,
@@ -394,7 +397,7 @@ export const obsScheduleCreate = asyncHandler(async (req, res) => {
                 type: "Teaching",
                 steps: {
                   createMany: {
-                    data: TeachingSteps,
+                    data: templateSteps,
                   },
                 },
                 assignedId: facultyId,
@@ -770,7 +773,7 @@ export const postScheduleCreate = asyncHandler(async (req, res) => {
   let odates = [];
   timeSlotsByObserver.map((item) => odates.push({ dateTime: item }));
   // [{dateTime: "2023-07-09:00:00:00Z", dateTime: "2023-07-10:00:00:00Z"}]
-
+  let templateSteps = await findTemplate("Reflection");
   const createPostObs = await prisma.meetings.update({
     where: {
       observationsId,
@@ -789,7 +792,7 @@ export const postScheduleCreate = asyncHandler(async (req, res) => {
               type: "Reflection",
               steps: {
                 createMany: {
-                  data: ReflectionSteps,
+                  data: templateSteps,
                 },
               },
               assignedId: facultyId,
