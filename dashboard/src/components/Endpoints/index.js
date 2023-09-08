@@ -242,6 +242,7 @@ export async function submitScore(
   setObs
 ) {
   const response = {
+    observationsId,
     informedId,
     rubricsFinal,
     role,
@@ -272,6 +273,7 @@ export async function submitScore(
 }
 export async function doneScore(informedId, loader, observationsId, setObs) {
   const response = {
+    observationsId,
     informedId,
     status: "Completed",
   };
