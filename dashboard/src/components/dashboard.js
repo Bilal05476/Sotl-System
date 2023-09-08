@@ -429,8 +429,15 @@ const Dashboard = () => {
     observer = 0,
     hod = 0;
 
-  {
-    usersandcourses?.users.map((item) => {
+  if (user?.role === "Head_of_Department") {
+    usersandcourses?.users?.map((item) => {
+      if (item.role === "Faculty") faculty += 1;
+      if (item.role === "Observer") observer += 1;
+      return null;
+    });
+  }
+  if (user?.role === "Super_Admin") {
+    userData?.users?.map((item) => {
       if (item.role === "Faculty") faculty += 1;
       if (item.role === "Observer") observer += 1;
       if (item.role === "Head_of_Department") hod += 1;
@@ -496,107 +503,93 @@ const Dashboard = () => {
           </Col>
         </Row> */}
           <Row>
-            {/* {user.role === "Admin" || user.role === "Campus_Director" ? (
-            <>
-              <Col xl="3 xl-25" md="6">
-                <Card className=" o-hidden widget-cards">
-                  <CardBody className="bg-warning">
-                    <Media className="static-top-widget row">
-                      <div className="icons-widgets col-4">
-                        <div className="align-self-center text-center">
-                          <Users className="font-warning" />
+            {user.role === "Super_Admin" && (
+              <>
+                <Col xl="3 xl-25" md="6">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Users className="font-primary" />
+                          </div>
                         </div>
-                      </div>
-                      <Media body className="col-8">
-                        <span className="m-0">Campus Directors</span>
-                        <h3 className="mb-0">
-                          <CountUp className="counter" end={5} />
-                          <small> Currently</small>
-                        </h3>
+                        <Media body className="col-8">
+                          <span className="m-0">Observer(s)</span>
+                          <h3 className="mb-0">
+                            <CountUp className="counter" end={observer} />
+                            <small> Currenlty</small>
+                          </h3>
+                        </Media>
                       </Media>
-                    </Media>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col xl="3 xl-25" md="6">
-                <Card className=" o-hidden  widget-cards">
-                  <CardBody className="bg-secondary ">
-                    <Media className="static-top-widget row">
-                      <div className="-widgets col-4">
-                        <div className="align-self-center text-center">
-                          <Users className="font-secondary" />
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col xl="3 xl-25" md="6">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Users className="font-primary" />
+                          </div>
                         </div>
-                      </div>
-                      <Media body className="col-8">
-                        <span className="m-0">Head of Departments</span>
-                        <h3 className="mb-0">
-                          <CountUp className="counter" end={18} />
-                          <small> Currently</small>
-                        </h3>
+                        <Media body className="col-8">
+                          <span className="m-0">Faculty(s)</span>
+                          <h3 className="mb-0">
+                            <CountUp className="counter" end={faculty} />
+                            <small> Currenlty</small>
+                          </h3>
+                        </Media>
                       </Media>
-                    </Media>
-                  </CardBody>
-                </Card>
-              </Col>
-            </>
-          ) : (
-            <></>
-          )} */}
-            {/* <Col
-            xl={`3 ${
-              user.role === "Campus_Director" || user.role === "Admin"
-                ? "xl-25"
-                : "xl-50"
-            }`}
-            md="6"
-          >
-            <Card className="o-hidden widget-cards">
-              <CardBody className="bg-primary">
-                <Media className="static-top-widget row">
-                  <div className="icons-widgets col-4">
-                    <div className="align-self-center text-center">
-                      <Users className="font-primary" />
-                    </div>
-                  </div>
-                  <Media body className="col-8">
-                    <span className="m-0">Faculty Observers</span>
-                    <h3 className="mb-0">
-                      <CountUp className="counter" end={20} />
-                      <small> Currently</small>
-                    </h3>
-                  </Media>
-                </Media>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col
-            xl={`3 ${
-              user.role === "Campus_Director" || user.role === "Admin"
-                ? "xl-25"
-                : "xl-50"
-            }`}
-            md="6"
-          >
-            <Card className=" o-hidden widget-cards">
-              <CardBody className="bg-danger ">
-                <Media className="static-top-widget row">
-                  <div className="icons-widgets col-4">
-                    <div className="align-self-center text-center">
-                      <Users className="font-danger" />
-                    </div>
-                  </div>
-                  <Media body className="col-8">
-                    <span className="m-0">Faculty Members</span>
-                    <h3 className="mb-0">
-                      <CountUp className="counter" end={40} />
-                      <small> Currently</small>
-                    </h3>
-                  </Media>
-                </Media>
-              </CardBody>
-            </Card>
-          </Col> */}
-
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col xl="3 xl-25" md="6">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Users className="font-primary" />
+                          </div>
+                        </div>
+                        <Media body className="col-8">
+                          <span className="m-0">Head of Dept(s)</span>
+                          <h3 className="mb-0">
+                            <CountUp className="counter" end={hod} />
+                            <small> Currenlty</small>
+                          </h3>
+                        </Media>
+                      </Media>
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col xl="3 xl-25" md="6">
+                  <Card className="o-hidden widget-cards">
+                    <CardBody className="bg-primary">
+                      <Media className="static-top-widget row">
+                        <div className="icons-widgets col-4">
+                          <div className="align-self-center text-center">
+                            <Calendar className="font-primary" />
+                          </div>
+                        </div>
+                        <Media body className="col-8">
+                          <span className="m-0">Observation(s)</span>
+                          <h3 className="mb-0">
+                            <CountUp
+                              className="counter"
+                              end={userData?.observations.length}
+                            />
+                            <small> All Time</small>
+                          </h3>
+                        </Media>
+                      </Media>
+                    </CardBody>
+                  </Card>
+                </Col>
+              </>
+            )}
             {user.role === "Head_of_Department" && (
               <>
                 <Col xl="3 xl-25" md="6">
@@ -897,14 +890,14 @@ const Dashboard = () => {
                                     <div
                                       className="progress-bar"
                                       style={{
-                                        width: item.observationProgress,
+                                        width: `${item.observationProgress}%`,
                                         backgroundColor:
                                           item.observationStatus === "Ongoing"
                                             ? ongoingColor
                                             : completeColor,
                                       }}
                                       role="progressbar"
-                                      aria-valuenow="50"
+                                      aria-valuenow={`${item.observationProgress}`}
                                       aria-valuemin="0"
                                       aria-valuemax="100"
                                     ></div>
@@ -934,7 +927,8 @@ const Dashboard = () => {
                                   {[
                                     {
                                       status:
-                                        item.meetings?.postObservation?.status,
+                                        item.meetings?.informedObservation
+                                          ?.status,
                                       name: "Obsv #1",
                                     },
                                     {
@@ -950,7 +944,7 @@ const Dashboard = () => {
                                       style={{
                                         color:
                                           obs.status === "Completed"
-                                            ? completeColor
+                                            ? "green"
                                             : "lightgray",
                                       }}
                                     >

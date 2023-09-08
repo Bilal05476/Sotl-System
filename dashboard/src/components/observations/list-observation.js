@@ -404,14 +404,14 @@ const List_observation = () => {
                                   <div
                                     className="progress-bar"
                                     style={{
-                                      width: item.observationProgress,
+                                      width: `${item.observationProgress}%`,
                                       backgroundColor:
                                         item.observationStatus === "Ongoing"
                                           ? ongoingColor
                                           : completeColor,
                                     }}
                                     role="progressbar"
-                                    aria-valuenow="50"
+                                    aria-valuenow={`${item.observationProgress}`}
                                     aria-valuemin="0"
                                     aria-valuemax="100"
                                   ></div>
@@ -442,7 +442,8 @@ const List_observation = () => {
                                 {[
                                   {
                                     status:
-                                      item.meetings?.postObservation?.status,
+                                      item.meetings?.informedObservation
+                                        ?.status,
                                     name: "Obsv #1",
                                   },
                                   {
@@ -458,7 +459,7 @@ const List_observation = () => {
                                     style={{
                                       color:
                                         obs.status === "Completed"
-                                          ? completeColor
+                                          ? "green"
                                           : "lightgray",
                                     }}
                                   >

@@ -397,7 +397,9 @@ const AccordionSubHeading = ({
   os,
   role,
 }) => {
-  const [rubricSc, setRubricSc] = useState(role === "Faculty" ? fs : os);
+  const [rubricSc, setRubricSc] = useState(
+    role === "Faculty" ? fs : role === "Observer" ? os : (os + fs) / 2
+  );
   // const [scoreSelected, setScoreSelected] = useState([]);
 
   // useEffect(() => {
@@ -494,14 +496,6 @@ const AccordionSubHeading = ({
     >
       <h5>
         {ind}. {title}
-        {/* <span
-          style={{
-            fontWeight: "600",
-            marginLeft: "0.4rem",
-          }}
-        >
-          {rubricSc > 0 && `(${rubricSc})`}
-        </span> */}
       </h5>
       {/* <div className="d-flex align-items-center justify-content-end mb-2 mx-2">
         <small className="mx-2" style={{ fontSize: "0.9rem" }}>
@@ -524,25 +518,15 @@ const AccordionSubHeading = ({
             borderBottomLeftRadius: "5px",
           }}
         >
-          Rubric Score:
+          {role === "Faculty" || role === "Observer"
+            ? "Rubric Score:"
+            : "Aggregate Score:"}
+
           <span style={{ fontWeight: "800" }}> {rubricSc}</span>
         </small>
       </div>
 
       {role === "Faculty" || role === "Observer" ? (
-        // <div className="d-flex align-items-center justify-content-between">
-        //   {ScoringPlot.map((item) => (
-        //     <RubricPoints
-        //       scorePlot={item}
-        //       rubricSc={rubricSc}
-        //       setRubricSc={setRubricSc}
-        //       scoreSelected={scoreSelected}
-        //       setScoreSelected={setScoreSelected}
-        //       rid={rid}
-        //       k={item.score}
-        //     />
-        //   ))}
-        // </div>
         <div className="range-container">
           <div className="breakpoints d-flex justify-content-between">
             {renderBreakpoints()}

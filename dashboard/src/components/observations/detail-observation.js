@@ -267,7 +267,7 @@ const Detail_observation = () => {
     }
   };
 
-  console.log(obsDetail);
+  // console.log(obsDetail);
 
   return (
     <Fragment>
@@ -604,12 +604,31 @@ const Detail_observation = () => {
                   </Table>
                   <div className="pull-right">
                     {obsDetail?.meetings?.uninformedObservation && (
-                      <NavLink
-                        className="btn btn-primary mt-2 mx-2"
-                        to={`/observations/uninformed-observation-rubric/${id}`}
-                      >
-                        Open Rubrics
-                      </NavLink>
+                      <>
+                        <button
+                          disabled={loader}
+                          className="btn btn-primary mt-2 mx-2"
+                          onClick={() =>
+                            showFacultySchedule(obsDetail.facultyId)
+                          }
+                        >
+                          {loader ? (
+                            <Loader />
+                          ) : (
+                            <>
+                              {facultySchedule.length > 0
+                                ? "Hide Faculty Schedule"
+                                : "Show Faculty Schedule"}
+                            </>
+                          )}
+                        </button>
+                        <NavLink
+                          className="btn btn-primary mt-2 mx-2"
+                          to={`/observations/uninformed-observation-rubric/${id}`}
+                        >
+                          Open Rubrics
+                        </NavLink>
+                      </>
                     )}
                   </div>
                 </div>
@@ -655,45 +674,44 @@ const Detail_observation = () => {
                         </button>
                       </>
                     )}
-
-                  <br />
-                  <br />
-                  {facultySchedule.length > 0 && (
-                    <Table borderless>
-                      <thead>
-                        <tr>
-                          {/* <th scope="col">Id</th> */}
-                          <th scope="col">Course code</th>
-                          <th scope="col">Course</th>
-                          <th scope="col">Time slot</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {facultySchedule.map((item) => (
-                          <tr>
-                            <td style={{ width: "33.33%" }} className="digits">
-                              {item.course.courseCode}
-                            </td>
-                            <td
-                              style={{
-                                width: "33.33%",
-                                borderRight: "1px solid #ccc",
-                                borderLeft: "1px solid #ccc",
-                              }}
-                              className="digits"
-                            >
-                              {item.course.name}
-                            </td>
-                            <td style={{ width: "33.33%" }} className="digits">
-                              {item.day}-{item.time}-{item.location}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  )}
                 </div>
               )}
+              <div className="accordion-body text-center">
+                {facultySchedule.length > 0 && (
+                  <Table borderless>
+                    <thead>
+                      <tr>
+                        {/* <th scope="col">Id</th> */}
+                        <th scope="col">Course code</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Time slot</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {facultySchedule.map((item) => (
+                        <tr>
+                          <td style={{ width: "33.33%" }} className="digits">
+                            {item.course.courseCode}
+                          </td>
+                          <td
+                            style={{
+                              width: "33.33%",
+                              borderRight: "1px solid #ccc",
+                              borderLeft: "1px solid #ccc",
+                            }}
+                            className="digits"
+                          >
+                            {item.course.name}
+                          </td>
+                          <td style={{ width: "33.33%" }} className="digits">
+                            {item.day}-{item.time}-{item.location}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
+              </div>
             </div>
           </div>
 

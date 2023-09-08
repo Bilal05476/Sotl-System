@@ -27,19 +27,26 @@ const List_user = () => {
   useEffect(() => {
     if (userData) {
       let getPage = userData?.users?.length / perSlice;
+
       if (getPage > 1) {
         setPagination([1, 2]);
-      } else if (getPage > 2) {
+      }
+      if (getPage > 2) {
         setPagination([1, 2, 3]);
-      } else if (getPage > 3) {
+      }
+      if (getPage > 3) {
         setPagination([1, 2, 3, 4]);
-      } else if (getPage > 4) {
+      }
+      if (getPage > 4) {
         setPagination([1, 2, 3, 4, 5]);
-      } else {
+      }
+      if (getPage < 1) {
         setPagination([]);
       }
     }
   }, [userData]);
+
+  // console.log(pagination);
 
   const ChangeSlice = (slice) => {
     setOpen(slice);
@@ -110,7 +117,7 @@ const List_user = () => {
                         </td>
                       </tr>
                     ))}
-                    {usersandcourses.users.length === 0 && (
+                    {usersandcourses.users?.length === 0 && (
                       <tr>
                         <td className="text-center" colSpan={10}>
                           No Users!
@@ -127,60 +134,60 @@ const List_user = () => {
       {user.role === "Super_Admin" && userData && (
         <Container fluid={true}>
           <Card>
-            {userData && (
-              <CardBody>
-                <div className="user-status table-responsive latest-order-table">
-                  <Table borderless>
-                    <thead>
+            {/* {userData && ( */}
+            <CardBody>
+              <div className="user-status table-responsive latest-order-table">
+                <Table borderless>
+                  <thead>
+                    <tr>
+                      {/* <th scope="col">Id</th> */}
+                      {/* <th scope="col">Avatar</th> */}
+                      <th scope="col">Full Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Campus</th>
+                      <th scope="col">Department</th>
+                      <th scope="col">Role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userData.users
+                      ?.slice(startSlice, userSlice)
+                      ?.map((item) => {
+                        if (item.role !== "Super_Admin") {
+                          return (
+                            <tr key={item.id}>
+                              {/* <td>{item.id}</td> */}
+                              {/* <td className="digits">{item?.avatar}</td> */}
+                              <td className="digits">
+                                {item.name} ({item.id})
+                              </td>
+                              <td className="digits">{item.email}</td>
+                              {/* // font-danger */}
+                              <td className="digits">
+                                {item.campus.replaceAll("_", " ")}
+                              </td>
+                              <td className="digits">
+                                {item?.department?.name}
+                              </td>
+                              <td className="digits">
+                                {item.role.replaceAll("_", " ")}
+                              </td>
+                            </tr>
+                          );
+                        }
+                      })}
+                    {userData.users?.length === 0 && (
                       <tr>
-                        {/* <th scope="col">Id</th> */}
-                        {/* <th scope="col">Avatar</th> */}
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Campus</th>
-                        <th scope="col">Department</th>
-                        <th scope="col">Role</th>
+                        <td className="text-center" colSpan={10}>
+                          No Users!
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {userData.users
-                        .slice(startSlice, userSlice)
-                        .map((item) => {
-                          if (item.role !== "Super_Admin") {
-                            return (
-                              <tr key={item.id}>
-                                {/* <td>{item.id}</td> */}
-                                {/* <td className="digits">{item?.avatar}</td> */}
-                                <td className="digits">
-                                  {item.name} ({item.id})
-                                </td>
-                                <td className="digits">{item.email}</td>
-                                {/* // font-danger */}
-                                <td className="digits">
-                                  {item.campus.replaceAll("_", " ")}
-                                </td>
-                                <td className="digits">
-                                  {item?.department?.name}
-                                </td>
-                                <td className="digits">
-                                  {item.role.replaceAll("_", " ")}
-                                </td>
-                              </tr>
-                            );
-                          }
-                        })}
-                      {userData.users.length === 0 && (
-                        <tr>
-                          <td className="text-center" colSpan={10}>
-                            No Users!
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </Table>
-                </div>
-              </CardBody>
-            )}
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+            </CardBody>
+            {/* )} */}
             {pagination.length > 1 && (
               <div className="bg-light d-flex align-items-center justify-content-end p-2 px-4">
                 {pagination.map((item) => (

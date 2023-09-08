@@ -2070,7 +2070,7 @@ input {
 /**=====================
     Header CSS Start
 ==========================**/
-$header-size: 80px;
+$header-size: 200px;
 %common {
   color: $theme-body-font-color;
   border-left-color: $dark-color;
@@ -2132,7 +2132,7 @@ $header-size: 80px;
 .page-wrapper {
   .page-main-header {
     background-color: $main-header-bg-color;
-    height: $header-size;
+    height: 80px;
     position: $main-header-position;
     top: $main-header-top;
     z-index: $main-header-z-index;
@@ -2151,7 +2151,7 @@ $header-size: 80px;
   .page-body-wrapper {
     .page-body {
       min-height: calc(100vh - #{$header-size});
-      margin-top: $header-size;
+      margin-top: 80px;
       padding: $page-body-padding;
       position: relative;
       background-color: $light-color;
@@ -2626,6 +2626,7 @@ ul.notification-dropdown.onhover-show-div {
   .page-body-wrapper {
     .sidebar {
       height: calc(100vh - #{$header-size});
+      // height: auto;
       overflow: auto;
       box-shadow: $sidebar-shadow;
     }
@@ -2649,8 +2650,8 @@ ul.notification-dropdown.onhover-show-div {
       .main-header-left {
         display: inline-flex;
         width: 100%;
-        // height: $header-size;
-        height: auto;
+        height: $header-size;
+        // height: auto;
         padding: $main-header-padding;
         align-items: center;
         // background-color: $main-header-left-bg-color;

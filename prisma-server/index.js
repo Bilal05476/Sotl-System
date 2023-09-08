@@ -76,19 +76,29 @@ app.listen(port, () => {
 //   console.log(`Server Running at port: ${port}`);
 // });
 
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
-// async function main() {
-//   const sampleData = await sampleUsers();
-//   console.log(
-//     await prisma.user.createMany({
-//       data: sampleData,
-//     })
-//   );
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+async function main() {
+  [
+    { id: 41, createdAt: "2023-09-08T04:09:52.721Z" },
+    { id: 42, createdAt: "2023-07-08T04:09:52.721Z" },
+    { id: 43, createdAt: "2023-08-08T04:09:52.721Z" },
+  ].map(
+    async (item) =>
+      await prisma.observations.update({
+        where: {
+          id: item.id,
+        },
+        data: {
+          createdAt: item.createdAt,
+          semester: "Spring",
+        },
+      })
+  );
 
-//   // console.log(await prisma.user.deleteMany({}));
-// }
-// main();
+  // console.log(await prisma.user.deleteMany({}));
+}
+main();
 // console.log(sampleUsers());
 // const obj = {
 //   field1: "value1",

@@ -79,6 +79,15 @@ const EmailTemplate = () => {
     }
   };
 
+  function countWords(inputString) {
+    // Use a regular expression to split the string into words
+    const words = inputString.split(/\s+/);
+    // Filter out empty strings (e.g., multiple spaces)
+    const filteredWords = words.filter((word) => word !== "");
+    // Return the count of filtered words
+    return filteredWords.length;
+  }
+
   return (
     <Fragment>
       <Breadcrumb
@@ -130,6 +139,9 @@ const EmailTemplate = () => {
                         ))}
                       </div>
                       <Form className="needs-validation user-add" noValidate="">
+                        <div style={{ textAlign: "right" }}>
+                          Word count: {countWords(email)}
+                        </div>
                         <FormGroup className="row">
                           <div className="col-xl-12 col-md-12">
                             <textarea

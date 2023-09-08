@@ -400,7 +400,9 @@ const AccordionSubHeading = ({
   os,
   role,
 }) => {
-  const [rubricSc, setRubricSc] = useState(role === "Faculty" ? fs : os);
+  const [rubricSc, setRubricSc] = useState(
+    role === "Faculty" ? fs : role === "Observer" ? os : (os + fs) / 2
+  );
   // range input
   const handleChange = (event) => {
     setRubricSc(Number(event.target.value));
@@ -481,7 +483,9 @@ const AccordionSubHeading = ({
             borderBottomLeftRadius: "5px",
           }}
         >
-          Rubric Score:
+          {role === "Faculty" || role === "Observer"
+            ? "Rubric Score:"
+            : "Aggregate Score:"}
           <span style={{ fontWeight: "800" }}> {rubricSc}</span>
         </small>
       </div>

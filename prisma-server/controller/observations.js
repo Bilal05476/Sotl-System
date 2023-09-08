@@ -6,6 +6,18 @@ import { findEmail } from "./email.js";
 import { emailSender } from "../EmailSmtp/index.js";
 import { findTemplate } from "./templates.js";
 
+const updateProgress = async (id, observationProgress, observationStatus) => {
+  await prisma.observations.update({
+    where: {
+      id,
+    },
+    data: {
+      observationProgress,
+      observationStatus,
+    },
+  });
+};
+
 // @desc   Observation Prompt by Admin to Head of department
 // @route  POST api/observation/prompt
 // @access Private (Only Admin will prompt)
@@ -655,7 +667,7 @@ export const obsScheduleCycle = asyncHandler(async (req, res) => {
 // @route  PUT api/observation/informed
 // @access Private (only faculty and observer update scoring)
 export const informedObsCycle = asyncHandler(async (req, res) => {
-  const { informedId, rubricsFinal, role, status } = req.body;
+  const { observationsId, informedId, rubricsFinal, role, status } = req.body;
   // const Find = async (id) => {
   //   let findInformed = await prisma.informed.findFirst({
   //     where: { id },
@@ -777,6 +789,7 @@ export const informedObsCycle = asyncHandler(async (req, res) => {
           status,
         },
       });
+      updateProgress(observationsId, 50, "Ongoing");
       res.status(200).json({
         message: "Informed Rubrics Observation Successfully Completed!",
       });
@@ -816,7 +829,7 @@ export const uninformedObsCreate = asyncHandler(async (req, res) => {
 // @route  PUT api/observation/uninformed
 // @access Private (only faculty and observer update scoring)
 export const uninformedObsCycle = asyncHandler(async (req, res) => {
-  const { uninformedId, rubricsFinal, role, status } = req.body;
+  const { observationsId, uninformedId, rubricsFinal, role, status } = req.body;
 
   let getScores = 0;
   if (rubricsFinal) {
@@ -895,6 +908,7 @@ export const uninformedObsCycle = asyncHandler(async (req, res) => {
           status,
         },
       });
+      updateProgress(observationsId, 80, "Ongoing");
       res.status(200).json({
         message: "Un-informed Rubrics Observation Successfully Completed!",
       });
@@ -1048,6 +1062,7 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
             postObservation: true,
           },
         });
+        updateProgress(observationsId, 80, "Ongoing");
         res.status(200).json({ message: "Post Observation Scheduling Done!" });
       } else {
         res
@@ -1091,4 +1106,13 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
       .status(400)
       .json({ error: "Post observation scheduling already completed!" });
   }
+});
+
+// @desc   Complete observation
+// @route  POST api/observation/completed
+// @access Private for Observer
+export const observationComplete = asyncHandler(async (req, res) => {
+  const { observationsId } = req.body;
+  updateProgress(observationsId, 100, "Completed");
+  res.status(200).json({ message: "Observation Completed" });
 });
