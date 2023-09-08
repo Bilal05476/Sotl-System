@@ -118,7 +118,7 @@ const Observation_rubric = () => {
                   text: "SCORE BY FACULTY",
                   score: `${facultySc?.toFixed(1)} / 80.0`,
                 },
-                user.role !== "Faculty" && {
+                {
                   color: completeColor2,
                   text: "SCORE BY OBSERVER",
                   score: `${observerSc?.toFixed(1)} / 80.0`,
@@ -133,30 +133,39 @@ const Observation_rubric = () => {
                   text: "SCORE PERCENTAGE",
                   score: `${perSc?.toFixed(1)}%`,
                 },
-              ].map((item, index) => (
-                <span
-                  key={index}
-                  style={{
-                    backgroundColor: item.color,
-                    color: "#fff",
-                    fontSize: "0.8rem",
-                    padding: "0.5rem 0.8rem",
-                    borderRadius: "5px",
-                    marginLeft: "0.3rem",
-                    fontWeight: "500",
-                  }}
-                >
-                  {item.text}:
-                  <span
-                    style={{
-                      marginLeft: "0.3rem",
-                      fontWeight: "700",
-                    }}
-                  >
-                    {item.score}
-                  </span>
-                </span>
-              ))}
+              ].map((item, index) => {
+                if (
+                  user.role === "Faculty" &&
+                  item.text === "SCORE BY OBSERVER"
+                ) {
+                  return;
+                } else {
+                  return (
+                    <span
+                      key={index}
+                      style={{
+                        backgroundColor: item.color,
+                        color: "#fff",
+                        fontSize: "0.8rem",
+                        padding: "0.5rem 0.8rem",
+                        borderRadius: "5px",
+                        marginLeft: "0.3rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {item.text}:
+                      <span
+                        style={{
+                          marginLeft: "0.3rem",
+                          fontWeight: "700",
+                        }}
+                      >
+                        {item.score}
+                      </span>
+                    </span>
+                  );
+                }
+              })}
             </Col>
           </Row>
 

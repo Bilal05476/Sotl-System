@@ -605,23 +605,25 @@ const Detail_observation = () => {
                   <div className="pull-right">
                     {obsDetail?.meetings?.uninformedObservation && (
                       <>
-                        <button
-                          disabled={loader}
-                          className="btn btn-primary mt-2 mx-2"
-                          onClick={() =>
-                            showFacultySchedule(obsDetail.facultyId)
-                          }
-                        >
-                          {loader ? (
-                            <Loader />
-                          ) : (
-                            <>
-                              {facultySchedule.length > 0
-                                ? "Hide Faculty Schedule"
-                                : "Show Faculty Schedule"}
-                            </>
-                          )}
-                        </button>
+                        {user.role !== "Faculty" && (
+                          <button
+                            disabled={loader}
+                            className="btn btn-primary mt-2 mx-2"
+                            onClick={() =>
+                              showFacultySchedule(obsDetail.facultyId)
+                            }
+                          >
+                            {loader ? (
+                              <Loader />
+                            ) : (
+                              <>
+                                {facultySchedule.length > 0
+                                  ? "Hide Faculty Schedule"
+                                  : "Show Faculty Schedule"}
+                              </>
+                            )}
+                          </button>
+                        )}
                         <NavLink
                           className="btn btn-primary mt-2 mx-2"
                           to={`/observations/uninformed-observation-rubric/${id}`}
@@ -676,12 +678,11 @@ const Detail_observation = () => {
                     )}
                 </div>
               )}
-              <div className="accordion-body text-center">
+              <div className="px-3 text-center">
                 {facultySchedule.length > 0 && (
                   <Table borderless>
                     <thead>
                       <tr>
-                        {/* <th scope="col">Id</th> */}
                         <th scope="col">Course code</th>
                         <th scope="col">Course</th>
                         <th scope="col">Time slot</th>

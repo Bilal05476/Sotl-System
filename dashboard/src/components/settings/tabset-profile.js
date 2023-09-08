@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { User, Settings } from "react-feather";
-import { Button, Col, Input, Label, Row, Table } from "reactstrap";
+import { Table } from "reactstrap";
 
 const TabsetProfile = ({ user, personal, academic }) => {
   return (

@@ -34,7 +34,7 @@ const Profile = () => {
                       }}
                       className="img-fluid my-0 rounded-circle blur-up lazyloaded mx-3"
                     />
-                    <Edit
+                    {/* <Edit
                       style={{
                         position: "absolute",
                         top: 20,
@@ -47,7 +47,7 @@ const Profile = () => {
                         cursor: "pointer",
                       }}
                       size={32}
-                    />
+                    /> */}
                     <div>
                       <h5 className="f-w-600 f-16 mb-0">{user.name}</h5>
                       <p className="m-0">{user.email}</p>
@@ -56,18 +56,20 @@ const Profile = () => {
                       </span>
                     </div>
                   </div>
-                  <Link
-                    to="/settings/edit-profile"
-                    className=" btn btn-primary"
-                  >
-                    Edit Profile
-                  </Link>
-                  <Link
-                    to="/settings/reset-password"
-                    className="btn btn-secondary"
-                  >
-                    Reset Password
-                  </Link>
+                  <div className="d-flex flex-wrap justify-content-end">
+                    <Link
+                      to="/settings/edit-profile"
+                      className="mb-2 mx-2 btn btn-primary"
+                    >
+                      Edit Profile
+                    </Link>
+                    <Link
+                      to="/settings/reset-password"
+                      className="mb-2 mx-2 btn btn-secondary"
+                    >
+                      Reset Password
+                    </Link>
+                  </div>
                 </div>
 
                 {/* <div className="social">

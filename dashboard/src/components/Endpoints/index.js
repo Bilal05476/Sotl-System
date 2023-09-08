@@ -233,6 +233,7 @@ export async function submitTemplate(
   }
 }
 
+// informed
 export async function submitScore(
   role,
   rubricsFinal,
@@ -301,7 +302,79 @@ export async function doneScore(informedId, loader, observationsId, setObs) {
     loader(false);
   }
 }
+// un informed
+export async function submitScore2(
+  role,
+  rubricsFinal,
+  loader,
+  uninformedId,
+  observationsId,
+  setObs
+) {
+  const response = {
+    observationsId,
+    uninformedId,
+    rubricsFinal,
+    role,
+  };
 
+  // console.log(response);
+  // loader(false);
+  // return;
+
+  try {
+    const res = await fetch(`${BASEURL}/observation/uninformed`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(response),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      errors(data.error);
+      loader(false);
+    } else {
+      loader(false);
+      successes(data.message);
+      fetchObservation(setObs, observationsId);
+    }
+  } catch (err) {
+    errors(err);
+    loader(false);
+  }
+}
+export async function doneScore2(uninformedId, loader, observationsId, setObs) {
+  const response = {
+    observationsId,
+    uninformedId,
+    status: "Completed",
+  };
+
+  try {
+    const res = await fetch(`${BASEURL}/observation/uninformed`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(response),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      errors(data.error);
+      loader(false);
+    } else {
+      loader(false);
+      successes(data.message);
+      fetchObservation(setObs, observationsId);
+    }
+  } catch (err) {
+    errors(err);
+    loader(false);
+  }
+}
 export async function fetchDepartments(id, setAllDept) {
   const res = await fetch(`${BASEURL}/department`, {
     headers: {

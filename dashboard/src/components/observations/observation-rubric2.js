@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { completeColor, completeColor2 } from "../colors";
 import { Applink, AccordButton } from "../applink";
 import { info, successes } from "../../constants/Toasters";
-import { doneScore, fetchObservation, submitScore } from "../Endpoints";
+import { doneScore2, fetchObservation, submitScore2 } from "../Endpoints";
 import { useStateValue } from "../../StateProvider";
 import { ConfirmModal } from "../PopupModal";
 // import DiscreteSlider from "../DiscreteSlider";
@@ -51,7 +51,7 @@ const Observation_rubric2 = () => {
       // });
       // console.log(count);
       // return;
-      submitScore(
+      submitScore2(
         user.role,
         rubricsFinal,
         setLoader,
@@ -92,7 +92,7 @@ const Observation_rubric2 = () => {
   const DoneRubricScoring = () => {
     setOpenConfirm(!openConfirm);
     info("Locking rubrics scores...");
-    doneScore(
+    doneScore2(
       obsDetails?.meetings?.uninformedObservation?.id,
       setLoader,
       obsDetails?.meetings?.observationsId,
@@ -121,7 +121,7 @@ const Observation_rubric2 = () => {
                   text: "SCORE BY FACULTY",
                   score: `${facultySc?.toFixed(1)} / 80.0`,
                 },
-                user.role !== "Faculty" && {
+                {
                   color: completeColor2,
                   text: "SCORE BY OBSERVER",
                   score: `${observerSc?.toFixed(1)} / 80.0`,
@@ -136,30 +136,39 @@ const Observation_rubric2 = () => {
                   text: "SCORE PERCENTAGE",
                   score: `${perSc?.toFixed(1)}%`,
                 },
-              ].map((item, index) => (
-                <span
-                  key={index}
-                  style={{
-                    backgroundColor: item.color,
-                    color: "#fff",
-                    fontSize: "0.8rem",
-                    padding: "0.5rem 0.8rem",
-                    borderRadius: "5px",
-                    marginLeft: "0.3rem",
-                    fontWeight: "500",
-                  }}
-                >
-                  {item.text}:
-                  <span
-                    style={{
-                      marginLeft: "0.3rem",
-                      fontWeight: "700",
-                    }}
-                  >
-                    {item.score}
-                  </span>
-                </span>
-              ))}
+              ].map((item, index) => {
+                if (
+                  user.role === "Faculty" &&
+                  item.text === "SCORE BY OBSERVER"
+                ) {
+                  return;
+                } else {
+                  return (
+                    <span
+                      key={index}
+                      style={{
+                        backgroundColor: item.color,
+                        color: "#fff",
+                        fontSize: "0.8rem",
+                        padding: "0.5rem 0.8rem",
+                        borderRadius: "5px",
+                        marginLeft: "0.3rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {item.text}:
+                      <span
+                        style={{
+                          marginLeft: "0.3rem",
+                          fontWeight: "700",
+                        }}
+                      >
+                        {item.score}
+                      </span>
+                    </span>
+                  );
+                }
+              })}
             </Col>
           </Row>
 
