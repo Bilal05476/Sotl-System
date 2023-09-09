@@ -397,7 +397,7 @@ export async function uplaodArtifact(
   await axios
     .post(`${BASEURL}/upload-artifact/${id}`, formData)
     .then((res) => {
-      successes(res.message);
+      successes(res.data.message);
       fetchObservation(setObs, observationsId);
       setfile(null);
     })

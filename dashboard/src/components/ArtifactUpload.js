@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { uplaodArtifact } from "./Endpoints";
+import { info } from "../constants/Toasters";
 
 function ArtifactUpload({ postId, setObs, observationsId }) {
   const [file, setFile] = useState(null);
@@ -13,6 +14,8 @@ function ArtifactUpload({ postId, setObs, observationsId }) {
   const handleUpload = (e) => {
     e.preventDefault();
     if (file) {
+      info("Artifact Uploading...");
+
       const formData = new FormData();
       formData.append("file", file);
       uplaodArtifact(formData, postId, setObs, observationsId, setFile);
