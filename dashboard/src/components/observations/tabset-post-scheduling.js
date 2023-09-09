@@ -214,7 +214,7 @@ const TabsetPostScheduling = ({ role }) => {
 
   const checkRole = (role) => {
     if (role === "Faculty") {
-      if (obs?.meetings?.postObservation?.reflectionPlan?.editedById) {
+      if (obs?.meetings?.postObservation?.reflectionPlan?.editedBy) {
         return true;
       } else {
         return false;
@@ -227,85 +227,108 @@ const TabsetPostScheduling = ({ role }) => {
   return (
     <Fragment>
       {role === "Observer" && (
-        <>
-          <Tabs>
-            <TabList className="nav nav-tabs tab-coupon">
-              <Tab className="nav-link">Scheduling Timings</Tab>
-            </TabList>
-            <TabPanel>
-              <Form className="needs-validation user-add" noValidate="">
-                {obs?.meetings?.postObservation?.timeSlotsByObserver?.length >
-                  0 && (
-                  <FormGroup className="row">
-                    <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Provided Slots
-                    </Label>
-                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                      {obs?.meetings?.postObservation?.timeSlotsByObserver.map(
-                        (item) => (
-                          <TimeSlotSpan
-                            key={item.id}
-                            location={obs?.meetings?.postObservation?.location}
-                            time={item.dateTime}
-                            slot={timeSlotsByObserver}
-                            cursor={false}
-                          />
-                        )
-                      )}
-                    </div>
-                  </FormGroup>
-                )}
-                {obs?.meetings?.postObservation?.timeSlotByFaculty && (
-                  <FormGroup className="row">
-                    <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Select By Faculty
-                    </Label>
-                    <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                      <TimeSlotSpan
-                        location={obs?.meetings?.postObservation?.location}
-                        time={obs?.meetings?.postObservation?.timeSlotByFaculty}
-                        cursor={false}
-                      />
-                    </div>
-                  </FormGroup>
-                )}
-
-                <FormPool
-                  required={true}
-                  label={"Provide Date(s)"}
-                  value={providedDate}
-                  timeSlotsByObserver={timeSlotsByObserver}
-                  onChange={(e) =>
-                    setObsSchedule({
-                      ...obsSchedule,
-                      providedDate: e.target.value,
-                    })
-                  }
-                  type={"dateTime-local"}
-                  addProvidedDate={addProvidedDate}
-                  deleteProvidedDate={deleteProvidedDate}
-                />
-                <FormPool
-                  required={true}
-                  label={"Provide Location"}
-                  value={location}
-                  timeSlotsByObserver={timeSlotsByObserver}
-                  onChange={(e) =>
-                    setObsSchedule({
-                      ...obsSchedule,
-                      location: e.target.value,
-                    })
-                  }
-                  type="text"
-                />
-              </Form>
-            </TabPanel>
-          </Tabs>
-        </>
+        <Tabs>
+          <TabList className="nav nav-tabs tab-coupon">
+            <Tab className="nav-link">Scheduling Timings</Tab>
+          </TabList>
+          <TabPanel>
+            <Form className="needs-validation user-add" noValidate="">
+              {obs?.meetings?.postObservation?.timeSlotsByObserver?.length >
+                0 && (
+                <FormGroup className="row">
+                  <Label className="col-xl-3 col-md-4">
+                    <span>*</span> Provided Slots
+                  </Label>
+                  <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                    {obs?.meetings?.postObservation?.timeSlotsByObserver.map(
+                      (item) => (
+                        <TimeSlotSpan
+                          key={item.id}
+                          location={obs?.meetings?.postObservation?.location}
+                          time={item.dateTime}
+                          slot={timeSlotsByObserver}
+                          cursor={false}
+                        />
+                      )
+                    )}
+                  </div>
+                </FormGroup>
+              )}
+              {obs?.meetings?.postObservation?.timeSlotByFaculty && (
+                <FormGroup className="row">
+                  <Label className="col-xl-3 col-md-4">
+                    <span>*</span> Select By Faculty
+                  </Label>
+                  <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                    <TimeSlotSpan
+                      location={obs?.meetings?.postObservation?.location}
+                      time={obs?.meetings?.postObservation?.timeSlotByFaculty}
+                      cursor={false}
+                    />
+                  </div>
+                </FormGroup>
+              )}
+              <FormGroup className="row">
+                <Label className="col-xl-3 col-md-4">
+                  Uploaded Artifacts by Faculty
+                </Label>
+                <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                  <div className="d-flex flex-wrap align-items-center justify-content-flex-start">
+                    {obs?.meetings?.postObservation?.artifacts?.map((item) => (
+                      <div
+                        key={item.id}
+                        style={{ width: "100px", height: "100px" }}
+                        className="rounded m-1"
+                      >
+                        <img
+                          width="100%"
+                          src={item.filename}
+                          alt={item.mimetype}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </FormGroup>
+              {obs?.meetings?.postObservation?.status === "Ongoing" && (
+                <>
+                  <FormPool
+                    required={true}
+                    label={"Provide Date(s)"}
+                    value={providedDate}
+                    timeSlotsByObserver={timeSlotsByObserver}
+                    onChange={(e) =>
+                      setObsSchedule({
+                        ...obsSchedule,
+                        providedDate: e.target.value,
+                      })
+                    }
+                    type={"dateTime-local"}
+                    addProvidedDate={addProvidedDate}
+                    deleteProvidedDate={deleteProvidedDate}
+                  />
+                  <FormPool
+                    required={true}
+                    label={"Provide Location"}
+                    value={location}
+                    timeSlotsByObserver={timeSlotsByObserver}
+                    onChange={(e) =>
+                      setObsSchedule({
+                        ...obsSchedule,
+                        location: e.target.value,
+                      })
+                    }
+                    type="text"
+                  />
+                </>
+              )}
+            </Form>
+          </TabPanel>
+        </Tabs>
       )}
       {role === "Faculty" && (
         <>
-          {!obs?.meetings?.postObservation?.reflectionPlan?.editedById ? (
+          {!obs?.meetings?.postObservation?.reflectionPlan?.editedBy ? (
             <MultiStepForm
               tabtitle={"Provide Relfection Plan Details"}
               steps={obs?.meetings?.postObservation?.reflectionPlan?.steps}
@@ -318,91 +341,76 @@ const TabsetPostScheduling = ({ role }) => {
               tempType={"Reflection"}
             />
           ) : (
-            <>
-              <Tabs>
-                <TabPanel>
+            <Tabs>
+              <TabPanel>
+                <FormGroup className="row">
+                  <Label className="col-xl-3 col-md-4">
+                    Upload Artifacts (.docs, .pdf, .jpeg/.png)
+                  </Label>
+                  <div className="col-xl-8 col-md-7 d-flex flex-wrap">
+                    <ArtifactUpload
+                      postId={obs?.meetings?.postObservation?.id}
+                      setObs={setObs}
+                      observationsId={Number(id)}
+                    />
+                    <div className="d-flex flex-wrap align-items-center justify-content-flex-start">
+                      {obs?.meetings?.postObservation?.artifacts?.map(
+                        (item) => (
+                          <div
+                            key={item.id}
+                            style={{ width: "100px", height: "100px" }}
+                            className="rounded m-1"
+                          >
+                            <img
+                              width="100%"
+                              src={item.filename}
+                              alt={item.mimetype}
+                            />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </FormGroup>
+                <Form className="needs-validation user-add" noValidate="">
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
-                      Upload Artifacts (.docs, .pdf, .jpeg/.png)
+                      <span>*</span> Select One Available Slot
                     </Label>
                     <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                      <ArtifactUpload
-                        postId={obs?.meetings?.postObservation?.id}
-                        setObs={setObs}
-                        observationsId={Number(id)}
-                      />
-                      <div className="d-flex flex-wrap align-items-center justify-content-flex-start">
-                        {obs?.meetings?.postObservation?.artifacts?.map(
-                          (item) => (
-                            <div
-                              key={item.id}
-                              style={{ width: "100px", height: "100px" }}
-                              className="rounded m-1"
-                            >
-                              <img
-                                width="100%"
-                                src={item.filename}
-                                alt={item.mimetype}
-                              />
-                            </div>
-                          )
-                        )}
-                      </div>
+                      {obs?.meetings?.postObservation?.timeSlotsByObserver.map(
+                        (item) => (
+                          <TimeSlotSpan
+                            key={item.id}
+                            time={item.dateTime}
+                            cursor={true}
+                            location={obs?.meetings?.postObservation?.location}
+                            onClick={() => SlotSelectFaculty(item.id)}
+                            slot={facultySelect}
+                          />
+                        )
+                      )}
                     </div>
                   </FormGroup>
-                  <Form className="needs-validation user-add" noValidate="">
+                  {obs?.meetings?.postObservation?.timeSlotByFaculty && (
                     <FormGroup className="row">
                       <Label className="col-xl-3 col-md-4">
-                        <span>*</span> Select One Available Slot
+                        <span>*</span> Selected Slot
                       </Label>
                       <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                        {obs?.meetings?.postObservation?.timeSlotsByObserver.map(
-                          (item) => (
-                            <TimeSlotSpan
-                              key={item.id}
-                              time={item.dateTime}
-                              cursor={true}
-                              location={
-                                obs?.meetings?.postObservation?.location
-                              }
-                              onClick={() => SlotSelectFaculty(item.id)}
-                              slot={facultySelect}
-                            />
-                          )
-                        )}
+                        <TimeSlotSpan
+                          location={obs?.meetings?.postObservation?.location}
+                          time={
+                            obs?.meetings?.postObservation?.timeSlotByFaculty
+                          }
+                          cursor={false}
+                        />
                       </div>
                     </FormGroup>
-                    {obs?.meetings?.postObservation?.timeSlotByFaculty && (
-                      <FormGroup className="row">
-                        <Label className="col-xl-3 col-md-4">
-                          <span>*</span> Selected Slot
-                        </Label>
-                        <div className="col-xl-8 col-md-7 d-flex flex-wrap">
-                          <TimeSlotSpan
-                            location={obs?.meetings?.postObservation?.location}
-                            time={
-                              obs?.meetings?.postObservation?.timeSlotByFaculty
-                            }
-                            cursor={false}
-                          />
-                        </div>
-                      </FormGroup>
-                    )}
-                  </Form>
-                </TabPanel>
-              </Tabs>
-              {/* <div className="pull-right">
-                {obs?.meetings?.postObservation?.status === "Ongoing" && (
-                  <Button
-                    onClick={() => updatePostObsSlots()}
-                    type="button"
-                    color="primary"
-                  >
-                    Update
-                  </Button>
-                )}
-              </div> */}
-            </>
+                  )}
+                </Form>
+              </TabPanel>
+            </Tabs>
           )}
         </>
       )}

@@ -291,14 +291,14 @@ export const OBSERVERMENU = [
     active: false,
     path: "/observations/list-observation",
   },
-  {
-    path: "/",
-    title: "Courses",
-    icon: BookOpen,
-    type: "link",
-    badgeType: "primary",
-    active: false,
-  },
+  // {
+  //   path: "/",
+  //   title: "Courses",
+  //   icon: BookOpen,
+  //   type: "link",
+  //   badgeType: "primary",
+  //   active: false,
+  // },
 
   {
     title: "Profile",

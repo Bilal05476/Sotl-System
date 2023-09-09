@@ -267,7 +267,7 @@ const Detail_observation = () => {
     }
   };
 
-  console.log(obsDetail);
+  console.log(obsDetail?.meetings?.postObservation?.reflectionPlan?.editedBy);
 
   return (
     <Fragment>
@@ -776,10 +776,15 @@ const Detail_observation = () => {
                                   />
                                 </>
                               )}
-                              {refTempView && (
+                              {refTempView ? (
                                 <AccordButton
                                   onClick={() => setRefTempView(false)}
                                   icon={<EyeOff color="white" size={20} />}
+                                />
+                              ) : (
+                                <AccordButton
+                                  onClick={() => setRefTempView(true)}
+                                  icon={<Eye color="white" size={20} />}
                                 />
                               )}
                             </span>
@@ -832,6 +837,16 @@ const Detail_observation = () => {
                           className="btn btn-primary mx-2"
                         >
                           Edit Scheduling
+                        </NavLink>
+                      )}
+                    {obsDetail?.meetings.postObservation.status ===
+                      "Scheduled" &&
+                      user.role === "Observer" && (
+                        <NavLink
+                          to={`/observations/post-observation-meeting/${id}`}
+                          className="btn btn-primary mx-2"
+                        >
+                          Complete Observation
                         </NavLink>
                       )}
                   </div>
