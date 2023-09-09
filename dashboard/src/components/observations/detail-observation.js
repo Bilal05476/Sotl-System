@@ -267,7 +267,7 @@ const Detail_observation = () => {
     }
   };
 
-  // console.log(obsDetail);
+  console.log(obsDetail);
 
   return (
     <Fragment>
@@ -742,7 +742,7 @@ const Detail_observation = () => {
                       <tr>
                         {/* <th scope="col">Id</th> */}
                         <th scope="col">Reflection Plan</th>
-                        <th scope="col">Artifacts</th>
+                        {/* <th scope="col">Artifacts</th> */}
                         <th scope="col">Schedule On</th>
                         <th scope="col">Location</th>
                         <th scope="col">Status</th>
@@ -757,18 +757,24 @@ const Detail_observation = () => {
                               className="d-flex alogn-items-center"
                               style={{ cursor: "pointer" }}
                             >
-                              {refTempView ? (
-                                <AccordButton
-                                  onClick={() => printTemplatePlan()}
-                                  icon={
-                                    <DownloadCloud color="white" size={20} />
-                                  }
-                                />
-                              ) : (
-                                <AccordButton
-                                  onClick={() => setRefTempView(true)}
-                                  icon={<Eye color="white" size={20} />}
-                                />
+                              {refTempView && (
+                                <>
+                                  <AccordButton
+                                    onClick={() =>
+                                      downloadCsv(
+                                        obsDetail?.meetings?.postObservation
+                                          ?.reflectionPlan.steps,
+                                        obsDetail?.meetings?.postObservation
+                                          ?.reflectionPlan.editedBy.name
+                                      )
+                                    }
+                                    icon=".CSV"
+                                  />
+                                  <AccordButton
+                                    onClick={() => printTemplatePlan()}
+                                    icon=".PDF"
+                                  />
+                                </>
                               )}
                               {refTempView && (
                                 <AccordButton
@@ -779,7 +785,7 @@ const Detail_observation = () => {
                             </span>
                           )}
                         </td>
-                        <td className="digits"></td>
+                        {/* <td className="digits"></td> */}
                         <td>
                           {dateFormater2(
                             obsDetail?.meetings?.postObservation?.scheduledOn

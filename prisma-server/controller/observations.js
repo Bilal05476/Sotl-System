@@ -317,8 +317,20 @@ export const getObs = asyncHandler(async (req, res) => {
             include: {
               timeSlotsByObserver: true,
               reflectionPlan: {
-                include: {
+                select: {
                   steps: true,
+                  assignedTo: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
+                  editedBy: {
+                    select: {
+                      name: true,
+                      email: true,
+                    },
+                  },
                 },
               },
               artifacts: true,
