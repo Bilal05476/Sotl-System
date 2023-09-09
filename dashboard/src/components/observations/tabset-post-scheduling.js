@@ -290,7 +290,7 @@ const TabsetPostScheduling = ({ role }) => {
                   </div>
                 </div>
               </FormGroup>
-              {obs?.meetings?.postObservation?.status === "Ongoing" && (
+              {obs?.meetings?.postObservation?.status !== "Scheduled" && (
                 <>
                   <FormPool
                     required={true}
