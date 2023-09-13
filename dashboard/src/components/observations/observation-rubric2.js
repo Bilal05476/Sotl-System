@@ -12,7 +12,6 @@ import { info, successes } from "../../constants/Toasters";
 import { doneScore2, fetchObservation, submitScore2 } from "../Endpoints";
 import { useStateValue } from "../../StateProvider";
 import { ConfirmModal } from "../PopupModal";
-// import DiscreteSlider from "../DiscreteSlider";
 const URL = process.env.PUBLIC_URL;
 
 const Observation_rubric2 = () => {
