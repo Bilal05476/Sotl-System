@@ -49,7 +49,6 @@ app.use("/api/course", courseRoutes);
 
 // utility
 import utilityRoutes from "./routes/utility.js";
-import sampleUsers from "./data.js";
 app.use("/api", utilityRoutes);
 
 app.use("/", (req, res) => {
@@ -78,11 +77,19 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
+// import bcrypt from "bcryptjs";
+// import sampleUsers from "./data.js";
 // async function main() {
-//   let users = await sampleUsers();
+//   const hashedPassword = await bcrypt.hash("12345678", 10);
 //   console.log(
-//     await prisma.user.createMany({
-//       data: users,
+//     await prisma.user.create({
+//       data: {
+//         name: "Fariha Hayat",
+//         email: "fariha.hayat@iqra.edu.pk",
+//         password: hashedPassword,
+//         campus: "Main_Campus",
+//         role: "Super_Admin",
+//       },
 //     })
 //   );
 // }
