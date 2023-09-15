@@ -80,16 +80,15 @@ app.listen(port, () => {
 // import bcrypt from "bcryptjs";
 // import sampleUsers from "./data.js";
 // async function main() {
-//   const hashedPassword = await bcrypt.hash("12345678", 10);
+//   // const hashedPassword = await bcrypt.hash("12345678", 10);
 //   console.log(
-//     await prisma.user.create({
-//       data: {
-//         name: "Fariha Hayat",
-//         email: "fariha.hayat@iqra.edu.pk",
-//         password: hashedPassword,
-//         campus: "Main_Campus",
-//         role: "Super_Admin",
-//       },
+//     await prisma.emailTemplate.createMany({
+//       data: [
+//         { type: "CreateUser", email: "Dear" },
+//         { type: "InitiateObs", email: "Dear" },
+//         { type: "ObsPrompt", email: "Dear" },
+//         { type: "UpdateObs", email: "Dear" },
+//       ],
 //     })
 //   );
 // }
