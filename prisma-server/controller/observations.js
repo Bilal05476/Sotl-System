@@ -38,14 +38,29 @@ export const prompt = asyncHandler(async (req, res) => {
   });
 
   if (findHodOfCampus.length > 0) {
-    await prisma.observationThreshold.update({
+    const findThreshold = await prisma.observationThreshold.findFirst({
       where: {
-        id: 1,
-      },
-      data: {
-        threshold,
-      },
-    });
+        id: 1
+      }
+    })
+    if(findThreshold){
+      await prisma.observationThreshold.update({
+        where: {
+          id: 1,
+        },
+        data: {
+          threshold,
+        },
+      });
+    }
+    else{
+      await prisma.observationThreshold.create({
+        data: {
+          threshold,
+        },
+      });
+    }
+    
     // send email to head of departments for observation prompt
     let emailString = await findEmail("ObsPrompt");
     for (let em = 0; em < findHodOfCampus.length; em++) {
