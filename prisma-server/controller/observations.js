@@ -141,7 +141,7 @@ export const initiate = asyncHandler(async (req, res) => {
       observerId,
       hodId,
       semester,
-      threshold: obsthreshold.threshold,
+      threshold: obsthreshold?.threshold ? obsthreshold?.threshold : 50,
     }));
 
   let initiateObs = [];
