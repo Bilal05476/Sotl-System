@@ -78,19 +78,11 @@ app.listen(port, () => {
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
 // import bcrypt from "bcryptjs";
-// import sampleUsers from "./data.js";
+// import { sampleObservations } from "./data.js";
 // async function main() {
 //   // const hashedPassword = await bcrypt.hash("12345678", 10);
-//   console.log(
-//     await prisma.emailTemplate.createMany({
-//       data: [
-//         { type: "CreateUser", email: "Dear" },
-//         { type: "InitiateObs", email: "Dear" },
-//         { type: "ObsPrompt", email: "Dear" },
-//         { type: "UpdateObs", email: "Dear" },
-//       ],
-//     })
-//   );
+//   const data = await sampleObservations();
+
 // }
 // main();
 // const obj = {
