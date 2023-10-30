@@ -111,6 +111,7 @@ const MultiStepForm = ({
 
     const submitTemplateReposne = () => {
       const tempResponses = handleNextStep();
+
       if (tempResponses) {
         setLoader(true);
         submitTemplate(
@@ -350,6 +351,7 @@ const MultiStepForm = ({
 
     const submitTemplateReposne = () => {
       const tempResponses = handleNextStep();
+
       if (tempResponses) {
         setLoader(true);
         submitTemplate(

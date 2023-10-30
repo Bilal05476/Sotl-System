@@ -56,6 +56,7 @@ const TabsetCourses = () => {
       credits: Number(credits),
       slots: createSlots,
     };
+    console.log(courseDetails);
     async function addCourse() {
       info("Course creating...");
       setCreateCourse({

@@ -77,11 +77,8 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
-// import { Rubrics } from "./rubrics.js";
 // async function main() {
-//   const success = await prisma.rubric.createMany({
-//     data: Rubrics,
-//   });
+//   const success = await prisma.artifact.deleteMany({});
 //   console.log(success);
 // }
 // main();

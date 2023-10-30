@@ -226,12 +226,19 @@ const Observation_rubric2 = () => {
                 {obsDetails?.meetings?.uninformedObservation?.status !== // update after testing !==
                   "Completed" && (
                   <div className="d-flex align-items-center justify-content-between">
-                    <AccordButton
-                      text={loader ? <Loader /> : "Submit Score"}
-                      backgroundColor={completeColor2}
-                      onClick={() => updateTotal()}
-                      loader={loader}
-                    />
+                    {user.role === "Faculty" &&
+                    obsDetails?.meetings?.uninformedObservation?.facultyScore >
+                      0 ? (
+                      <></>
+                    ) : (
+                      <AccordButton
+                        text={loader ? <Loader /> : "Submit Score"}
+                        backgroundColor={completeColor2}
+                        onClick={() => updateTotal()}
+                        loader={loader}
+                      />
+                    )}
+
                     {user.role === "Observer" &&
                       obsDetails?.meetings?.uninformedObservation
                         ?.facultyScore > 0 &&

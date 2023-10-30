@@ -836,16 +836,20 @@ const Detail_observation = () => {
                   )}
 
                   <div style={{ textAlign: "right" }}>
-                    {obsDetail?.meetings.postObservation.status === "Ongoing" &&
+                    {obsDetail?.meetings.postObservation.status !==
+                      "Completed" &&
                       (user.role === "Observer" || user.role === "Faculty") && (
                         <NavLink
                           to={`/observations/post-observation-meeting/${id}`}
                           className="btn btn-primary mx-2"
                         >
-                          Edit Scheduling
+                          {obsDetail?.meetings.postObservation.status ===
+                          "Ongoing"
+                            ? "Edit Scheduling"
+                            : "View Scheduling"}
                         </NavLink>
                       )}
-                    {obsDetail?.meetings.postObservation.status ===
+                    {/* {obsDetail?.meetings.postObservation.status ===
                       "Scheduled" &&
                       user.role === "Observer" && (
                         <NavLink
@@ -854,7 +858,7 @@ const Detail_observation = () => {
                         >
                           Complete Observation
                         </NavLink>
-                      )}
+                      )} */}
                   </div>
                 </div>
               ) : (

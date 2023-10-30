@@ -40,10 +40,10 @@ export const prompt = asyncHandler(async (req, res) => {
   if (findHodOfCampus.length > 0) {
     const findThreshold = await prisma.observationThreshold.findFirst({
       where: {
-        id: 1
-      }
-    })
-    if(findThreshold){
+        id: 1,
+      },
+    });
+    if (findThreshold) {
       await prisma.observationThreshold.update({
         where: {
           id: 1,
@@ -52,15 +52,14 @@ export const prompt = asyncHandler(async (req, res) => {
           threshold,
         },
       });
-    }
-    else{
+    } else {
       await prisma.observationThreshold.create({
         data: {
           threshold,
         },
       });
     }
-    
+
     // send email to head of departments for observation prompt
     let emailString = await findEmail("ObsPrompt");
     for (let em = 0; em < findHodOfCampus.length; em++) {
@@ -1071,26 +1070,48 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
     if (status) {
       // scheduledOn === timeslotByFaculty
       if (existed.postObservation.timeSlotByFaculty) {
-        await prisma.meetings.update({
-          where: {
-            observationsId,
-          },
-          data: {
-            postObservation: {
-              update: {
-                facultyAccepted: true,
-                observerAccepted: true,
-                scheduledOn: existed.postObservation.timeSlotByFaculty,
-                status,
+        if (status === "Completed") {
+          updateProgress(observationsId, 100, status);
+          await prisma.meetings.update({
+            where: {
+              observationsId,
+            },
+            data: {
+              postObservation: {
+                update: {
+                  status,
+                },
               },
             },
-          },
-          include: {
-            postObservation: true,
-          },
-        });
-        updateProgress(observationsId, 80, "Ongoing");
-        res.status(200).json({ message: "Post Observation Scheduling Done!" });
+            include: {
+              postObservation: true,
+            },
+          });
+          res.status(200).json({ message: "Observation Compeleted!" });
+        } else {
+          await prisma.meetings.update({
+            where: {
+              observationsId,
+            },
+            data: {
+              postObservation: {
+                update: {
+                  facultyAccepted: true,
+                  observerAccepted: true,
+                  scheduledOn: existed.postObservation.timeSlotByFaculty,
+                  status,
+                },
+              },
+            },
+            include: {
+              postObservation: true,
+            },
+          });
+          updateProgress(observationsId, 80, status);
+          res
+            .status(200)
+            .json({ message: "Post Observation Scheduling Done!" });
+        }
       } else {
         res
           .status(400)
@@ -1133,13 +1154,4 @@ export const postScheduleCycle = asyncHandler(async (req, res) => {
       .status(400)
       .json({ error: "Post observation scheduling already completed!" });
   }
-});
-
-// @desc   Complete observation
-// @route  POST api/observation/completed
-// @access Private for Observer
-export const observationComplete = asyncHandler(async (req, res) => {
-  const { observationsId } = req.body;
-  updateProgress(observationsId, 100, "Completed");
-  res.status(200).json({ message: "Observation Completed" });
 });

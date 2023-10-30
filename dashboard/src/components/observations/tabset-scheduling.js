@@ -11,6 +11,7 @@ import { Frown } from "react-feather";
 import MultiStepForm from "../MultiStep";
 import { toast } from "react-toastify";
 import { dateFormater2 } from "../DateFormater";
+import { Loader } from "../common/Loader";
 
 const BASEURL =
   process.env.NODE_ENV === "development"
@@ -210,6 +211,8 @@ const TabsetScheduling = ({ role }) => {
     fetchObservation(setObs, Number(id));
     window.scrollTo(0, 0);
   }, []);
+
+  if (!obs) return <Loader />;
 
   return (
     <Fragment>

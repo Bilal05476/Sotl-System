@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { uplaodArtifact } from "./Endpoints";
 import { info } from "../constants/Toasters";
 
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
+
 function ArtifactUpload({ postId, setObs, observationsId }) {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState("");
 
   const handleFileChange = (event) => {
     if (event.target.files) {
@@ -11,14 +14,42 @@ function ArtifactUpload({ postId, setObs, observationsId }) {
     }
   };
 
-  const handleUpload = (e) => {
-    e.preventDefault();
-    if (file) {
-      info("Artifact Uploading...");
+  // const handleUpload = (e) => {
+  //   e.preventDefault();
+  //   if (file) {
+  //     info("Artifact Uploading...");
 
-      const formData = new FormData();
-      formData.append("file", file);
-      uplaodArtifact(formData, postId, setObs, observationsId, setFile);
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+  //     uplaodArtifact(formData, postId, setObs, observationsId, setFile);
+  //   }
+  // };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    info("Uploading...");
+
+    if (file) {
+      const name = file.name;
+      const type = file.type;
+      const storageRef = ref(storage, "artifacts/" + file.name);
+      try {
+        await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(storageRef);
+        uplaodArtifact(
+          url,
+          name,
+          type,
+          postId,
+          setObs,
+          observationsId,
+          setFile
+        );
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+    } else {
+      console.warn("No file selected");
     }
   };
 

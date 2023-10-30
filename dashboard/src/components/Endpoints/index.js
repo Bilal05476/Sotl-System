@@ -391,20 +391,33 @@ export async function fetchDepartments(id, setAllDept) {
 }
 
 export async function uplaodArtifact(
-  formData,
+  fileURL,
+  name,
+  type,
   id,
   setObs,
   observationsId,
   setfile
 ) {
-  await axios
-    .post(`${BASEURL}/upload-artifact/${id}`, formData)
-    .then((res) => {
-      successes(res.data.message);
-      fetchObservation(setObs, observationsId);
-      setfile(null);
-    })
-    .catch((err) => errors(err.response.data));
+  try {
+    const res = await fetch(`${BASEURL}/upload-artifact/${id}`, {
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        fileURL,
+        name,
+        type,
+      }),
+    });
+    const data = await res.json();
+    successes(data.message);
+    fetchObservation(setObs, observationsId);
+    setfile("");
+  } catch (err) {
+    errors(err.message);
+  }
 }
 
 export async function getEmailTemplate(setPlan, type, token, email) {

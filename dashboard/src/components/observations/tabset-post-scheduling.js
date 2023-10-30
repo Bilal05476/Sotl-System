@@ -1,16 +1,17 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
-import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
-import { errors, successes, info, warning } from "../../constants/Toasters";
+import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import { errors, successes, info } from "../../constants/Toasters";
 import { completeColor, completeColor2 } from "../colors";
 import { fetchObservation } from "../Endpoints";
-import { Frown, PlusCircle } from "react-feather";
+import { PlusCircle } from "react-feather";
 import MultiStepForm from "../MultiStep";
 import { toast } from "react-toastify";
 import { dateFormater2 } from "../DateFormater";
 import { useStateValue } from "../../StateProvider";
 import ArtifactUpload from "../ArtifactUpload";
+import { Loader } from "../common/Loader";
 
 const BASEURL =
   process.env.NODE_ENV === "development"
@@ -183,6 +184,30 @@ const TabsetPostScheduling = ({ role }) => {
     }
   };
 
+  const onObsCompeleted = async () => {
+    const finalObsDetails = {
+      observationsId: Number(id),
+      status: "Completed",
+    };
+
+    info("Observation Completing...");
+    const res = await fetch(`${BASEURL}/observation/post-scheduling`, {
+      method: "PUT",
+      body: JSON.stringify(finalObsDetails),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      errors(data.error);
+    } else {
+      successes(data.message);
+      fetchObservation(setObs, Number(id));
+    }
+  };
+
   const SlotSelectFaculty = (id) => {
     const [findTime] =
       obs?.meetings?.postObservation?.timeSlotsByObserver.filter(
@@ -217,7 +242,10 @@ const TabsetPostScheduling = ({ role }) => {
 
   const checkRole = (role) => {
     if (role === "Faculty") {
-      if (obs?.meetings?.postObservation?.reflectionPlan?.editedBy) {
+      if (
+        obs?.meetings?.postObservation?.reflectionPlan?.editedBy &&
+        obs?.meetings?.postObservation?.artifacts.length > 0
+      ) {
         return true;
       } else {
         return false;
@@ -226,7 +254,9 @@ const TabsetPostScheduling = ({ role }) => {
       return true;
     }
   };
-  console.log(obs);
+
+  if (!obs) return <Loader />;
+
   return (
     <Fragment>
       {role === "Observer" && (
@@ -280,20 +310,34 @@ const TabsetPostScheduling = ({ role }) => {
                     {obs?.meetings?.postObservation?.artifacts?.map((item) => (
                       <div
                         key={item.id}
-                        style={{ width: "100px", height: "100px" }}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          overflow: "hidden",
+                        }}
                         className="rounded m-1"
                       >
-                        <img
-                          width="100%"
-                          src={item.filename}
-                          alt={item.mimetype}
-                        />
+                        {item.type === "application/pdf" ||
+                        item.type ===
+                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ? (
+                          <a href={item.fileURL} target="blank">
+                            {item.name}
+                          </a>
+                        ) : item.type === "video/mp4" ? (
+                          <video width="100%" src={item.fileURL} />
+                        ) : (
+                          <img
+                            width="100%"
+                            src={item.fileURL}
+                            alt={item?.name}
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
               </FormGroup>
-              {obs?.meetings?.postObservation?.status !== "Scheduled" && (
+              {obs?.meetings?.postObservation?.status === "Ongoing" && (
                 <>
                   <FormPool
                     required={true}
@@ -361,14 +405,28 @@ const TabsetPostScheduling = ({ role }) => {
                         (item) => (
                           <div
                             key={item.id}
-                            style={{ width: "100px", height: "100px" }}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              overflow: "hidden",
+                            }}
                             className="rounded m-1"
                           >
-                            <img
-                              width="100%"
-                              src={item.filename}
-                              alt={item.mimetype}
-                            />
+                            {item.type === "application/pdf" ||
+                            item.type ===
+                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ? (
+                              <a href={item.fileURL} target="blank">
+                                {item.name}
+                              </a>
+                            ) : item.type === "video/mp4" ? (
+                              <video width="100%" src={item.fileURL} />
+                            ) : (
+                              <img
+                                width="100%"
+                                src={item.fileURL}
+                                alt={item?.name}
+                              />
+                            )}
                           </div>
                         )
                       )}
@@ -451,6 +509,17 @@ const TabsetPostScheduling = ({ role }) => {
               color="primary"
             >
               Mark Scheduled
+            </Button>
+          )}
+        {obs?.meetings?.postObservation?.status === "Scheduled" &&
+          user.role === "Observer" && (
+            <Button
+              onClick={() => onObsCompeleted()}
+              type="button"
+              color="primary"
+              className="mx-2"
+            >
+              Complete Observation
             </Button>
           )}
       </div>
