@@ -9,6 +9,11 @@ import { successes, errors, info, warning } from "../../constants/Toasters";
 import { fetchHodData } from "../Endpoints";
 import { completeColor2, ongoingColor } from "../colors";
 
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
+
 const TabsetUser = () => {
   const [{ usersandcourses, user }, dispatch] = useStateValue();
   const [slots, setSlots] = useState([]);
@@ -56,7 +61,7 @@ const TabsetUser = () => {
     };
     async function postUser() {
       info("User Creating...");
-      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/auth/create`, {
+      const res = await fetch(`${BASEURL}/auth/create`, {
         method: "POST",
         body: JSON.stringify(userDetail),
         headers: {

@@ -12,7 +12,10 @@ import { dateFormater2 } from "../DateFormater";
 import { useStateValue } from "../../StateProvider";
 import ArtifactUpload from "../ArtifactUpload";
 
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
 
 const TabsetPostScheduling = ({ role }) => {
   const { id } = useParams();

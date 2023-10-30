@@ -9,6 +9,11 @@ import { SelectInput, TextInput, TextInputReadOnly } from "../Input";
 import { PlusCircle } from "react-feather";
 import { fetchDepartments } from "../Endpoints";
 
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
+
 const TabsetCourses = () => {
   const [{ user }] = useStateValue();
   const [slotsLength, setSlotsLength] = useState([1]);
@@ -58,7 +63,7 @@ const TabsetCourses = () => {
         loader: true,
       });
       try {
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/course`, {
+        const res = await fetch(`${BASEURL}/course`, {
           method: "POST",
           body: JSON.stringify(courseDetails),
           headers: {

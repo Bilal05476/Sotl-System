@@ -6,6 +6,12 @@ import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import { successes, errors, info } from "../../constants/Toasters";
 // import FileBase from "react-file-base64";
+
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
+
 const Tabset_Reset_Password = () => {
   const [{ user }] = useStateValue();
   const [updateUser, setUpdateUser] = useState({
@@ -27,16 +33,13 @@ const Tabset_Reset_Password = () => {
 
     async function resetPassword() {
       info("Password Reseting...");
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/auth/reset-password`,
-        {
-          method: "PUT",
-          body: JSON.stringify(userDetail),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
+      const res = await fetch(`${BASEURL}/auth/reset-password`, {
+        method: "PUT",
+        body: JSON.stringify(userDetail),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
       const data = await res.json();
       if (data.error) {
         toast.dismiss(toastId.current);

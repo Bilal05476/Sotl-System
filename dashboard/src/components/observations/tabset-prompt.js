@@ -8,6 +8,11 @@ import { successes, errors, info, warning } from "../../constants/Toasters";
 import { useRef } from "react";
 // import { completeColor2 } from "../colors";
 
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
+
 const TabsetPrompt = () => {
   const [{ user, userData }] = useStateValue();
   const [createPrompt, setCreatePrompt] = useState({
@@ -29,17 +34,14 @@ const TabsetPrompt = () => {
       });
 
       try {
-        const res = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/observation/prompt`,
-          {
-            method: "POST",
-            body: JSON.stringify(obsDetail),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
+        const res = await fetch(`${BASEURL}/observation/prompt`, {
+          method: "POST",
+          body: JSON.stringify(obsDetail),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         const data = await res.json();
         if (data.error) {
           toast.dismiss(toastId.current);

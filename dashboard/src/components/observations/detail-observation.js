@@ -20,7 +20,10 @@ import { dateFormater, dateFormater2 } from "../DateFormater";
 import { PopupModal } from "../PopupModal";
 import { useReactToPrint } from "react-to-print";
 
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
 
 const Detail_observation = () => {
   const { id } = useParams();
@@ -244,7 +247,10 @@ const Detail_observation = () => {
     }
   };
   const showFacultySchedule = async (id) => {
-    const BASEURL = process.env.REACT_APP_BASE_URL;
+    const BASEURL =
+      process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_DEV_URL
+        : process.env.REACT_APP_PROD_URL;
 
     if (facultySchedule.length === 0) {
       setLoader(true);

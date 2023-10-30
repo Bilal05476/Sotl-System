@@ -12,7 +12,10 @@ import MultiStepForm from "../MultiStep";
 import { toast } from "react-toastify";
 import { dateFormater2 } from "../DateFormater";
 
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
 
 const TabsetScheduling = ({ role }) => {
   const [{ user }] = useStateValue();

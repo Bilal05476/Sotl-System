@@ -6,6 +6,12 @@ import { useStateValue } from "../../StateProvider";
 import { toast } from "react-toastify";
 import { successes, errors, info, warning } from "../../constants/Toasters";
 // import FileBase from "react-file-base64";
+
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
+
 const TabsetEditProfile = () => {
   const [{ user }, dispatch] = useStateValue();
   // console.log(user);
@@ -52,16 +58,13 @@ const TabsetEditProfile = () => {
     };
     async function putUser() {
       info("Profile Updating...");
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/user/update/${user.id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(userDetail),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }
-      );
+      const res = await fetch(`${BASEURL}/user/update/${user.id}`, {
+        method: "PUT",
+        body: JSON.stringify(userDetail),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
       const data = await res.json();
       if (data.error) {
         toast.dismiss(toastId.current);

@@ -8,6 +8,11 @@ import { info, errors } from "../../constants/Toasters";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
+
 const LoginTabset = () => {
   const navigate = useNavigate();
 
@@ -27,16 +32,13 @@ const LoginTabset = () => {
   const handleSignin = () => {
     async function fetchData() {
       try {
-        const res = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/auth/login`,
-          {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          }
-        );
+        const res = await fetch(`${BASEURL}/auth/login`, {
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
         const data = await res.json();
         if (data.error) {
           setLoginState({ ...loginState, loader: false });

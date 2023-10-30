@@ -77,12 +77,12 @@ app.listen(port, () => {
 
 // import { PrismaClient } from "@prisma/client";
 // const prisma = new PrismaClient();
-// import bcrypt from "bcryptjs";
-// import { sampleObservations } from "./data.js";
+// import { Rubrics } from "./rubrics.js";
 // async function main() {
-//   // const hashedPassword = await bcrypt.hash("12345678", 10);
-//   const data = await sampleObservations();
-
+//   const success = await prisma.rubric.createMany({
+//     data: Rubrics,
+//   });
+//   console.log(success);
 // }
 // main();
 // const obj = {

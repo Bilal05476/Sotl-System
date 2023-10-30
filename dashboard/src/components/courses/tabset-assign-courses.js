@@ -8,6 +8,11 @@ import { useRef } from "react";
 import { completeColor, ongoingColor, pendingColor } from "../colors";
 import { fetchHodData } from "../Endpoints";
 
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
+
 const TabsetAssignCourses = () => {
   const [{ usersandcourses, user }, dispatch] = useStateValue();
   const [selectedCourse, setselectedCourse] = useState([]);
@@ -33,17 +38,14 @@ const TabsetAssignCourses = () => {
         loader: true,
       });
       try {
-        const res = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/course/user/${facultyId}`,
-          {
-            method: "PUT",
-            body: JSON.stringify(courseDetails),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-              // Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
+        const res = await fetch(`${BASEURL}/course/user/${facultyId}`, {
+          method: "PUT",
+          body: JSON.stringify(courseDetails),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            // Authorization: `Bearer ${user.token}`,
+          },
+        });
         const data = await res.json();
         if (data.error) {
           toast.dismiss(toastId.current);
@@ -84,15 +86,12 @@ const TabsetAssignCourses = () => {
     info("Slots loading...");
 
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/course/${courseId}`,
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            // Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${BASEURL}/course/${courseId}`, {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          // Authorization: `Bearer ${user.token}`,
+        },
+      });
       const data = await res.json();
       // console.log(data);
       if (data.error) {

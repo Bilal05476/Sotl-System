@@ -3,7 +3,10 @@ import { successes, errors } from "../../constants/Toasters";
 // import { useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_URL
+    : process.env.REACT_APP_PROD_URL;
 
 export async function fetchSotlData(dispatch, token) {
   try {
