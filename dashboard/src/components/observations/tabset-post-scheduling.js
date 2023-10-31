@@ -256,7 +256,7 @@ const TabsetPostScheduling = ({ role }) => {
   };
 
   if (!obs) return <Loader />;
-
+  // alert(obs?.meetings?.postObservation?.status);
   return (
     <Fragment>
       {role === "Observer" && (
@@ -337,7 +337,8 @@ const TabsetPostScheduling = ({ role }) => {
                   </div>
                 </div>
               </FormGroup>
-              {obs?.meetings?.postObservation?.status === "Ongoing" && (
+              {obs?.meetings?.postObservation?.status === "Ongoing" ||
+              !obs?.meetings?.postObservation?.status ? (
                 <>
                   <FormPool
                     required={true}
@@ -368,6 +369,8 @@ const TabsetPostScheduling = ({ role }) => {
                     type="text"
                   />
                 </>
+              ) : (
+                <></>
               )}
             </Form>
           </TabPanel>
